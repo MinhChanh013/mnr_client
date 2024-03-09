@@ -1,0 +1,11 @@
+build
+node_modules
+.git
+package.json.bak20052020
+debug.log
+webpack.config.js
+
+## Fix Security issue: .DS_Store File Found
+**/.DS_Store
+webpack.config.js
+*.config.js
