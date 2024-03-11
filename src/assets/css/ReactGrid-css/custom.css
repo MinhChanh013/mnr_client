@@ -1,9 +1,15 @@
+@import '@silevis/reactgrid/styles.css';
 
 .b-table {
     width: 100%;
     overflow: auto;
     color: 'red';
-    height: 45vh;
+    height: 400px;
+}
+
+.b-table .rg-header-cell {
+    justify-content: center;
+    background: rgba(134, 229, 255, 0.5) !important;
 }
 
 .b-field {
@@ -20,8 +26,8 @@
     border-color: #dededede;
 }
 
-.b-card{
-    .ant-card-body{
+.b-card {
+    .ant-card-body {
         padding: 16px;
     }
 }

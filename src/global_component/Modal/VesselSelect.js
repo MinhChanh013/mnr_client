@@ -21,7 +21,7 @@ class VesselSelect extends React.Component {
                     <Col span={24} style={{ justifyContent: 'center' }}>
                         <Button type='primary' style={{ marginTop: '1vh' }} block>Chọn chuyến tàu</Button>
                     </Col>
-                    <Col span={24} style={this.borderStyle}>
+                    <Col span={23} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 Tên tàu:
@@ -31,7 +31,7 @@ class VesselSelect extends React.Component {
                             </Typography>
                         </Space>
                     </Col>
-                    <Col span={24} style={this.borderStyle}>
+                    <Col span={23} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 Chuyến N/X:
@@ -41,7 +41,7 @@ class VesselSelect extends React.Component {
                             </Typography>
                         </Space>
                     </Col>
-                    <Col span={12} style={this.borderStyle}>
+                    <Col span={11} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 ETA:
@@ -51,7 +51,8 @@ class VesselSelect extends React.Component {
                             </Typography>
                         </Space>
                     </Col>
-                    <Col span={12} style={this.borderStyle}>
+                    /
+                    <Col span={11} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 ETD:

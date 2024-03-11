@@ -1,18 +1,19 @@
 import * as React from "react";
 import Table from '../../global_component/dataTable/customTable.js'
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { Button, Card, Col, Divider, Input, Radio, Row, Space, Select, Typography } from 'antd';
+import { Button, Card, Col, Divider, Input, Radio, Row, Space, Typography } from 'antd';
 import { CloudDownloadOutlined, SendOutlined } from '@ant-design/icons';
-
+const { Text } = Typography;
 class Msg3668Container extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataTable: [{ tentau: '', imo: '', sovandon: '', sodinhdanh: '', socontainer: '', ngaygetin: '', abc: '', chuyentau: '', nhapxuat: '' }],
+            dataTable: [{ chon: 'select', tentau: '', imo: '', sovandon: '', sodinhdanh: '', socontainer: '', ngaygetin: '', abc: '', chuyentau: '', nhapxuat: '' }],
 
         };
         this.style = { borderColor: '#ffb13d', color: '#ffb13d', marginBottom: '2px' };
         this.columns = [
+            { columnId: 'select', width: 150 },
             { columnId: 'tentau', width: 150 },
             { columnId: 'imo', width: 150 },
             { columnId: 'sovandon', width: 150 },
@@ -27,6 +28,7 @@ class Msg3668Container extends React.Component {
             rowId: 'header',
             cells:
                 [
+                    { type: 'header', text: 'Chọn' },
                     { type: 'header', text: 'Tên Tàu' },
                     { type: 'header', text: 'Số IMO' },
                     { type: 'header', text: 'Số Vận Đơn' },
@@ -48,9 +50,15 @@ class Msg3668Container extends React.Component {
         return (
             <>
                 <Row gutter={[16, 16]} style={{ marginTop: '15px' }}>
-                    <Col span={6}>
+                    <Col span={7}>
                         <Card title='366.8 - GỬI GETIN CONTAINER' style={{ borderRadius: '0px' }} className='b-card'>
                             <Row>
+                                <Col span={24}>
+                                    <Space style={{justifyContent: 'center', width: '100%'}}>
+                                        <Button type="primary" icon={<CloudDownloadOutlined />} style={{ backgroundColor: '#50a81d' }}>Nạp dữ liệu</Button>
+                                        <Button type="primary" icon={<SendOutlined />} style={{ backgroundColor: '#f5a442' }}>Gửi thông điệp</Button>
+                                    </Space>
+                                </Col>
                                 <Col span={24}>
                                     <VesselSelect />
                                 </Col>
@@ -58,13 +66,7 @@ class Msg3668Container extends React.Component {
                                 <Col span={24}>
                                     <Row gutter={[8, 8]}>
                                         <Col span={24}>
-                                            <Space style={{ width: '100%' }}>
-                                            <Typography>Số cont:</Typography>
-                                                <Input style={{ width: '100%' }} />
-                                            </Space>
-                                        </Col>
-                                        <Col span={24}>
-                                            <Typography>Hướng</Typography>
+                                            <Text strong={true}>Hướng</Text>
                                         </Col>
                                         <Col span={24}>
                                             <Radio.Group>
@@ -74,8 +76,9 @@ class Msg3668Container extends React.Component {
                                                 <Radio value={4}>Nội địa</Radio>
                                             </Radio.Group>
                                         </Col>
+                                        <Divider style={{ marginTop: '1px', marginBottom: '1px', borderColor: '#d1cccc' }} />
                                         <Col span={24}>
-                                            <Typography>Hàng Nội / Ngoại</Typography>
+                                            <Text strong={true}>Hàng Nội / Ngoại</Text>
                                         </Col>
                                         <Col span={24}>
                                             <Radio.Group>
@@ -83,8 +86,9 @@ class Msg3668Container extends React.Component {
                                                 <Radio value={2}>Hàng nội</Radio>
                                             </Radio.Group>
                                         </Col>
+                                        <Divider style={{ marginTop: '1px', marginBottom: '1px', borderColor: '#d1cccc' }} />
                                         <Col span={24}>
-                                            <Typography>Hàng / Rỗng</Typography>
+                                            <Text strong={true}>Hàng / Rỗng</Text>
                                         </Col>
                                         <Col span={24} >
                                             <Radio.Group>
@@ -92,8 +96,9 @@ class Msg3668Container extends React.Component {
                                                 <Radio value={'E'}>Rỗng</Radio>
                                             </Radio.Group>
                                         </Col>
+                                        <Divider style={{ marginTop: '1px', marginBottom: '1px', borderColor: '#d1cccc' }} />
                                         <Col span={24}>
-                                            <Typography>Trạng thái thông điệp</Typography>
+                                            <Text strong={true}>Trạng thái thông điệp</Text>
                                         </Col>
                                         <Col span={24}>
                                             <Radio.Group>
@@ -103,8 +108,9 @@ class Msg3668Container extends React.Component {
                                                 <Radio value={'n'}>Chưa gửi</Radio>
                                             </Radio.Group>
                                         </Col>
+                                        <Divider style={{ marginTop: '1px', marginBottom: '1px', borderColor: '#d1cccc' }} />
                                         <Col span={24}>
-                                            <Typography>Trạng thái cont</Typography>
+                                            <Text strong={true}>Trạng thái container ra khỏi cảng</Text>
                                         </Col>
                                         <Col span={24}>
                                             <Radio.Group>
@@ -113,16 +119,14 @@ class Msg3668Container extends React.Component {
                                                 <Radio value={'c'}>Đã ra </Radio>
                                             </Radio.Group>
                                         </Col>
-                                        <Divider style={this.style} />
                                         <Col style={{ margin: 'auto' }}>
-                                            <Button type="primary" icon={<CloudDownloadOutlined />} style={{ backgroundColor: '#50a81d' }}>Nạp dữ liệu</Button>
                                         </Col>
                                     </Row>
                                 </Col>
                             </Row>
                         </Card>
                     </Col>
-                    <Col span={18}>
+                    <Col span={17}>
                         <Card style={{ borderRadius: '0px', height: '100%' }} className="b-card">
                             <Row gutter={[8, 8]}>
                                 <Col span={24} style={{ justifyContent: 'space-between' }}>
@@ -134,15 +138,12 @@ class Msg3668Container extends React.Component {
                                             </Space>
                                         </Col>
                                         <Col>
-                                            <Button type="primary" icon={<SendOutlined />} style={{ backgroundColor: '#f5a442' }}>Gửi thông điệp</Button>
                                         </Col>
                                     </Row>
                                 </Col>
                                 <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede ' }} />
                                 <Col span={24}>
-                                    <div className="b-table">
-                                        <Table config={{ columns: this.columns, header: this.header, dataSource: this.state.dataTable }} />
-                                    </div>
+                                    <Table config={{ columns: this.columns, header: this.header, dataSource: this.state.dataTable }} />
                                 </Col>
                                 <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede' }} />
                                 <Col span={24} style={{ textAlign: 'right' }}>
