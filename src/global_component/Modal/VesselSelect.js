@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Col, Divider, Input, Row, Space, Typography } from 'antd';
+import { Button, Col, Row, Space, Typography } from 'antd';
 
 class VesselSelect extends React.Component {
     constructor(props) {

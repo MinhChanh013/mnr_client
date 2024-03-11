@@ -2,7 +2,7 @@ import * as React from "react";
 import Table from '../../global_component/dataTable/customTable.js'
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Card, Row, Col, Space, Input, Divider, Button } from 'antd';
-import { CloudDownloadOutlined, SendOutlined } from '@ant-design/icons';
+import {  SendOutlined } from '@ant-design/icons';
 
 class Msg212Container extends React.Component {
     constructor(props) {
