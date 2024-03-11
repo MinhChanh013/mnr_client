@@ -18,10 +18,10 @@ class VesselSelect extends React.Component {
         return (
             <>
                 <Row gutter={[24, 24]} style={{ alignItems: 'center' }}>
-                    <Col span={3} style={{ justifyContent: 'center' }}>
+                    <Col span={24} style={{ justifyContent: 'center' }}>
                         <Button type='primary' style={{ marginTop: '1vh' }} block>Chọn chuyến tàu</Button>
                     </Col>
-                    <Col span={8} style={this.borderStyle}>
+                    <Col span={24} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 Tên tàu:
@@ -31,10 +31,7 @@ class VesselSelect extends React.Component {
                             </Typography>
                         </Space>
                     </Col>
-                    <Col>
-                        <Typography>/</Typography>
-                    </Col>
-                    <Col span={4} style={this.borderStyle}>
+                    <Col span={24} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 Chuyến N/X:
@@ -44,10 +41,7 @@ class VesselSelect extends React.Component {
                             </Typography>
                         </Space>
                     </Col>
-                    <Col>
-                        <Typography>/</Typography>
-                    </Col>
-                    <Col span={3} style={this.borderStyle}>
+                    <Col span={12} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 ETA:
@@ -57,10 +51,7 @@ class VesselSelect extends React.Component {
                             </Typography>
                         </Space>
                     </Col>
-                    <Col>
-                        <Typography>/</Typography>
-                    </Col>
-                    <Col span={3} style={this.borderStyle}>
+                    <Col span={12} style={this.borderStyle}>
                         <Space>
                             <Typography>
                                 ETD:
