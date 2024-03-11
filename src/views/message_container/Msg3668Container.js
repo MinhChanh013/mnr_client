@@ -1,7 +1,7 @@
 import * as React from "react";
 import Table from '../../global_component/dataTable/customTable.js'
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { Button, Card, Col, Divider, Input, Radio, Row, Space, Select, Typography } from 'antd';
+import { Button, Card, Col, Divider, Input, Radio, Row, Space, Select } from 'antd';
 import { CloudDownloadOutlined, SendOutlined } from '@ant-design/icons';
 
 class Msg3668Container extends React.Component {

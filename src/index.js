@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
-import { RouterProvider } from "react-router-dom";
 import Header from "./global_component/header/header";
 import Router from "./Router";
 import '../src/assets/css/ReactGrid-css/custom.css';
