@@ -1,12 +1,12 @@
 import React from 'react';
 import { ConfigProvider, Menu } from 'antd';
-import { BookOutlined, BoxPlotOutlined, GoldOutlined, InboxOutlined, QrcodeOutlined, ReconciliationOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, BookOutlined, BoxPlotOutlined, ClusterOutlined, DotChartOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, UnorderedListOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
 
 const items = [
     {
         label: 'Danh mục',
-        key: 'SubMenu',
-        icon: <QrcodeOutlined />,
+        key: 'Directory',
+        icon: <AppstoreOutlined />,
         children: [
             {
                 type: 'group',
@@ -15,17 +15,17 @@ const items = [
                     {
                         label: 'Manifest - Loading list',
                         icon: <BoxPlotOutlined />,
-                        key: 'setting:1',
+                        key: 'directory:1',
                     },
                     {
                         icon: <BoxPlotOutlined />,
                         label: 'Thông tin container biến động',
-                        key: 'setting:2',
+                        key: 'directory:2',
                     },
                     {
                         icon: <BoxPlotOutlined />,
                         label: 'Loại và kích cỡ container',
-                        key: 'setting:3',
+                        key: 'directory:3',
                     },
                 ],
             },
@@ -35,17 +35,17 @@ const items = [
                 children: [
                     {
                         label: 'Manifest - Loading list',
-                        key: 'setting:4',
+                        key: 'directory:4',
                         icon: <InboxOutlined />
                     },
                     {
                         label: 'Thông tin hàng kiện getin',
-                        key: 'setting:5',
+                        key: 'directory:5',
                         icon: <InboxOutlined />
                     },
                     {
                         label: 'Thông tin hàng kiện getout',
-                        key: 'setting:6',
+                        key: 'directory:6',
                         icon: <InboxOutlined />
                     },
                 ],
@@ -56,17 +56,17 @@ const items = [
                 children: [
                     {
                         label: 'Manifest - Loading list',
-                        key: 'setting:7',
+                        key: 'directory:7',
                         icon: <GoldOutlined />
                     },
                     {
                         label: 'Thông tin hàng rời getin',
-                        key: 'setting:8',
+                        key: 'directory:8',
                         icon: <GoldOutlined />
                     },
                     {
                         label: 'Thông tin hàng rời getout',
-                        key: 'setting:9',
+                        key: 'directory:9',
                         icon: <GoldOutlined />
                     },
                 ],
@@ -77,20 +77,20 @@ const items = [
                 children: [
                     {
                         label: 'Manifest - Loading list',
-                        key: 'setting:10',
+                        key: 'directory:10',
                         icon: <ReconciliationOutlined />
                     },
                     {
                         label: 'Thông tin hàng lỏng getin',
-                        key: 'setting:11',
+                        key: 'directory:11',
                         icon: <ReconciliationOutlined />
                     }, {
                         label: 'Thông tin hàng lỏng getout',
-                        key: 'setting:12',
+                        key: 'directory:12',
                         icon: <ReconciliationOutlined />
                     }, {
                         label: 'Loại hàng lỏng',
-                        key: 'setting:13',
+                        key: 'directory:13',
                         icon: <ReconciliationOutlined />
                     },
                 ],
@@ -101,12 +101,12 @@ const items = [
                 children: [
                     {
                         label: 'Thông tin chuyến tàu',
-                        key: 'setting:14',
+                        key: 'directory:14',
                         icon: <BookOutlined />
                     },
                     {
                         label: 'Đồng bộ thông tin tàu',
-                        key: 'setting:15',
+                        key: 'directory:15',
                         icon: <BookOutlined />
                     },
                 ],
@@ -117,24 +117,62 @@ const items = [
                 children: [
                     {
                         label: 'Danh mục phương án',
-                        key: 'setting:16',
+                        key: 'directory:16',
                         icon: <UnorderedListOutlined />
                     },
                     {
                         label: 'Danh mục đơn vị tính',
-                        key: 'setting:17',
+                        key: 'directory:17',
                         icon: <UnorderedListOutlined />
                     },
                     {
                         label: 'Danh mục Chi cục Hải quan',
-                        key: 'setting:18',
+                        key: 'directory:18',
                         icon: <UnorderedListOutlined />
                     },
                 ],
             },
         ],
     },
-
+    {
+        label: 'Thống kê',
+        key: 'Statistic',
+        icon: <DotChartOutlined />,
+        children: [
+            {
+                label: 'Tờ Khai HQ',
+                icon: <FileTextOutlined />,
+                key: 'statistic:1',
+            },
+            {
+                icon: <RadarChartOutlined />,
+                label: 'Thống kê sản lượng',
+                key: 'statistic:2',
+            },
+            {
+                icon: <ReconciliationOutlined />,
+                label: 'Báo cáo container nhập khẩu',
+                key: 'statistic:3',
+            },
+        ]
+    },
+    {
+        label: 'Người dùng',
+        key: 'User',
+        icon: <UserSwitchOutlined />,
+        children: [
+            {
+                label: 'Quản lý người dùng',
+                icon: <UserOutlined />,
+                key: 'user:1',
+            },
+            {
+                icon: <ClusterOutlined />,
+                label: 'Phân quyền người dùng',
+                key: 'user:2',
+            },
+        ]
+    }
 ];
 
 const Nav = () => {
@@ -143,15 +181,13 @@ const Nav = () => {
             theme={{
                 components: {
                     Menu: {
-                        // itemSelectedColor: "#fff",
-                        // itemColor: "#000",
                     },
                 },
             }}
         >
-            <Menu className='b-nav' mode='horizontal' style={{
-                width: "150px",
+            <Menu triggerSubMenuAction="click" className='b-nav' mode='horizontal' style={{
                 backgroundColor: "#3367D6",
+                borderColor: "transparent"
             }} items={items} />
         </ConfigProvider>
     );
