@@ -1,0 +1,27 @@
+
+.b-table {
+    width: 100%;
+    overflow: auto;
+    color: 'red';
+    height: 45vh;
+}
+
+.b-field {
+    width: 100%;
+}
+
+.b-vertical-divider {
+    height: 5vh;
+    border-color: #ffb13d;
+}
+
+.b-horizontal-divider {
+    margin: 5px 0 5px;
+    border-color: #dededede;
+}
+
+.b-card{
+    .ant-card-body{
+        padding: 16px;
+    }
+}
