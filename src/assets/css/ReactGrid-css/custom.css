@@ -25,3 +25,7 @@
         padding: 16px;
     }
 }
+
+.b-nav .ant-menu-submenu-title{
+    color: #fff !important;
+}
