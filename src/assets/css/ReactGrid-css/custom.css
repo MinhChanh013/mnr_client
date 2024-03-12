@@ -1,37 +1,55 @@
-@import '@silevis/reactgrid/styles.css';
+@import "@silevis/reactgrid/styles.css";
 
 .b-table {
-    width: 100%;
-    overflow: auto;
-    color: 'red';
-    height: 400px;
+  width: 100%;
+  overflow: auto;
+  color: "red";
+  height: 400px;
 }
 
 .b-table .rg-header-cell {
-    justify-content: center;
-    background: rgba(134, 229, 255, 0.5) !important;
+  justify-content: center;
+  background: rgba(134, 229, 255, 0.5) !important;
 }
 
 .b-field {
-    width: 100%;
+  width: 100%;
 }
 
 .b-vertical-divider {
-    height: 5vh;
-    border-color: #ffb13d;
+  height: 5vh;
+  border-color: #ffb13d;
 }
 
 .b-horizontal-divider {
-    margin: 5px 0 5px;
-    border-color: #dededede;
+  margin: 5px 0 5px;
+  border-color: #dededede;
 }
 
 .b-card {
-    .ant-card-body {
-        padding: 16px;
-    }
+  .ant-card-body {
+    padding: 16px;
+  }
 }
 
-.b-nav .ant-menu-submenu-title{
-    color: #fff !important;
+.b-nav .ant-menu-item-selected::after,
+.b-nav .ant-menu-item-active::after {
+  border-bottom-color: #fff !important;
+}
+
+.b-nav .ant-menu-item-icon svg {
+  font-size: 20px;
+}
+
+.b-sub__nav:hover {
+  background-color: rgba(186, 185, 185, 0.308);
+  transition: all 0.2s ease-in;
+}
+
+.b-header .ant-card-body {
+  padding-bottom: 15px;
+}
+
+.b-drawer__menu .ant-drawer-body{
+  overflow: unset !important;
 }
