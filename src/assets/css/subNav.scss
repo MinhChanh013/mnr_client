@@ -1,0 +1,25 @@
+.b__sub {
+  margin-top: 15px;
+  height: 100%;
+
+  .b__nav-sub {
+    background-color: #3f72e0ad;
+    max-height: 270px;
+    overflow-y: auto;
+    border-inline-color: #fff;
+    height: 100%;
+    border-radius: 4px;
+  }
+
+  .b__subnav-item {
+    color: #fff;
+    border-color: rgb(232 211 211);
+    cursor: pointer;
+    padding: 12px 5px;
+
+    &:hover {
+      background-color: rgba(186, 185, 185, 0.308);
+      transition: all 0.2s ease-in;
+    }
+  }
+}

@@ -38,77 +38,23 @@ class Header extends React.Component {
   render() {
     return (
       <>
-        <Card
-          className="b-header"
-          style={{
-            backgroundColor: "#3367D6",
-            borderRadius: "0px",
-            border: "0px",
-            borderBottom: "1px solid #bfb6b6",
-            zIndex: 40,
-            width: "calc(100% + 17px)",
-          }}
-        >
+        <Card className="b-header">
           <Space
             style={{
               flexDirection: "column",
               alignItems: "unset",
-              justifyContent: "space-between",
-              gap: 10,
               width: "100%",
             }}
           >
-            <Space
-              style={{
-                justifyContent: "space-between",
-                width: "100%",
-                alignItems: "center",
-                height: 0,
-                paddingTop: "10px",
-              }}
-            >
-              <Space
-                size={50}
-                style={{ marginLeft: "15px", alignItems: "center" }}
-              >
-                <Typography.Link
-                  href={window.location.hostname}
-                  style={{
-                    fontSize: "20px",
-                    letterSpacing: "5px",
-                    color: "white",
-                  }}
-                >
-                  <img
-                    src="./logo_transt.png"
-                    alt=""
-                    style={{
-                      width: "125px",
-                      height: "36px",
-                      marginTop: "10px",
-                    }}
-                  />
+            <Space className="b__header-container">
+              <Space size={50} className="b__header-left">
+                <Typography.Link href={window.location.hostname}>
+                  <img src="./logo_transt.png" alt="" />
                 </Typography.Link>
                 <Nav />
               </Space>
 
-              <Space size={50} style={{ marginRight: "20px", gap: "25px" }}>
-                {/* <Button
-                  onClick={() => {
-                    if (this.state.drawer === true) {
-                      this.setState({ drawer: false });
-                    } else {
-                      this.setState({ drawer: true });
-                    }
-                  }}
-                  style={{
-                    backgroundColor: "#3367D6",
-                    borderColor: "#3367D6",
-                    color: "white",
-                    marginTop: "2px",
-                  }}
-                  icon={<UnorderedListOutlined />}
-                /> */}
+              <Space size={50} className="b__header-right">
                 <Dropdown
                   menu={{ items }}
                   trigger={["click"]}
@@ -120,18 +66,6 @@ class Header extends React.Component {
                     {this.state.lang || "Đổi ngôn ngữ"}
                   </Space>
                 </Dropdown>
-                {/* <Dropdown
-                  menu={{ items: itemsSetting }}
-                  trigger={["click"]}
-                  style={{ zIndex: 50 }}
-                  arrow={true}
-                >
-                  <Space style={{ color: "white", cursor: "pointer" }}>
-                    <SettingOutlined
-                      style={{ color: "white", cursor: "pointer" }}
-                    />
-                  </Space>
-                </Dropdown> */}
                 <Dropdown
                   menu={{ items: itemsMenu }}
                   trigger={["click"]}
