@@ -3,13 +3,13 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import Header from "./global_component/header/header";
 import Router from "./Router";
-import '../src/assets/css/ReactGrid-css/custom.css';
+import "../src/assets/css/ReactGrid-css/custom.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  < React.StrictMode >
+  <React.StrictMode>
     <Header />
     <Router />
-  </React.StrictMode >,
+  </React.StrictMode>
 );
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
