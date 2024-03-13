@@ -1,195 +1,292 @@
-import React from 'react';
-import { ConfigProvider, Menu } from 'antd';
-import { AppstoreOutlined, BookOutlined, BoxPlotOutlined, ClusterOutlined, DotChartOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, UnorderedListOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { ConfigProvider, Drawer, Menu } from 'antd';
+import { BookOutlined, BoxPlotOutlined, ClusterOutlined, DotChartOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import lottie from "lottie-web";
+import { defineElement } from "@lordicon/element";
+import SubNav from '../SubNav/SubNav';
+defineElement(lottie.loadAnimation);
 
 const items = [
     {
         label: 'Danh mục',
         key: 'Directory',
-        icon: <AppstoreOutlined />,
-        children: [
+        icon: <lord-icon
+            className="Directory"
+            colors="outline:#fff,primary:#fff"
+            src="https://cdn.lordicon.com/nizfqlnk.json"
+            trigger="loop-on-hover"
+            delay="200"
+        >
+        </lord-icon>,
+        child: [
             {
-                type: 'group',
                 label: 'Container',
-                children: [
+                key: "container1",
+                icon: <BoxPlotOutlined />,
+                child: [
                     {
                         label: 'Manifest - Loading list',
-                        icon: <BoxPlotOutlined />,
                         key: 'directory:1',
                     },
                     {
-                        icon: <BoxPlotOutlined />,
                         label: 'Thông tin container biến động',
                         key: 'directory:2',
                     },
                     {
-                        icon: <BoxPlotOutlined />,
                         label: 'Loại và kích cỡ container',
                         key: 'directory:3',
                     },
                 ],
             },
             {
-                type: 'group',
+
                 label: 'Hàng kiện',
-                children: [
+                key: "container2",
+                icon: <InboxOutlined />,
+                child: [
                     {
                         label: 'Manifest - Loading list',
                         key: 'directory:4',
-                        icon: <InboxOutlined />
                     },
                     {
                         label: 'Thông tin hàng kiện getin',
                         key: 'directory:5',
-                        icon: <InboxOutlined />
                     },
                     {
                         label: 'Thông tin hàng kiện getout',
                         key: 'directory:6',
-                        icon: <InboxOutlined />
                     },
                 ],
             },
             {
-                type: 'group',
+
                 label: 'Hàng rời',
-                children: [
+                key: "container3",
+                icon: <GoldOutlined />,
+                child: [
                     {
                         label: 'Manifest - Loading list',
                         key: 'directory:7',
-                        icon: <GoldOutlined />
                     },
                     {
                         label: 'Thông tin hàng rời getin',
                         key: 'directory:8',
-                        icon: <GoldOutlined />
                     },
                     {
                         label: 'Thông tin hàng rời getout',
                         key: 'directory:9',
-                        icon: <GoldOutlined />
                     },
                 ],
             },
             {
-                type: 'group',
                 label: 'Hàng lỏng',
-                children: [
+                key: "container4",
+                icon: <ReconciliationOutlined />,
+                child: [
                     {
                         label: 'Manifest - Loading list',
                         key: 'directory:10',
-                        icon: <ReconciliationOutlined />
                     },
                     {
                         label: 'Thông tin hàng lỏng getin',
                         key: 'directory:11',
-                        icon: <ReconciliationOutlined />
                     }, {
                         label: 'Thông tin hàng lỏng getout',
                         key: 'directory:12',
-                        icon: <ReconciliationOutlined />
                     }, {
                         label: 'Loại hàng lỏng',
                         key: 'directory:13',
-                        icon: <ReconciliationOutlined />
                     },
                 ],
             },
             {
-                type: 'group',
+
                 label: 'Thông tin tàu',
-                children: [
+                key: "infor",
+                icon: <BookOutlined />,
+                child: [
                     {
                         label: 'Thông tin chuyến tàu',
                         key: 'directory:14',
-                        icon: <BookOutlined />
                     },
                     {
                         label: 'Đồng bộ thông tin tàu',
                         key: 'directory:15',
-                        icon: <BookOutlined />
                     },
                 ],
             },
             {
-                type: 'group',
+
                 label: 'Danh mục',
-                children: [
+                key: "list",
+                icon: <UnorderedListOutlined />,
+                child: [
                     {
                         label: 'Danh mục phương án',
                         key: 'directory:16',
-                        icon: <UnorderedListOutlined />
                     },
                     {
                         label: 'Danh mục đơn vị tính',
                         key: 'directory:17',
-                        icon: <UnorderedListOutlined />
                     },
                     {
                         label: 'Danh mục Chi cục Hải quan',
                         key: 'directory:18',
-                        icon: <UnorderedListOutlined />
                     },
                 ],
             },
         ],
     },
     {
-        label: 'Thống kê',
+        label: 'Báo cáo - Thống kê',
         key: 'Statistic',
-        icon: <DotChartOutlined />,
-        children: [
+        icon: <lord-icon
+            className="Statistic"
+            colors="outline:#fff,primary:#fff"
+            src="https://cdn.lordicon.com/whrxobsb.json"
+            trigger="loop-on-hover"
+            delay="200"
+        >
+        </lord-icon>,
+        child: [
             {
-                label: 'Tờ Khai HQ',
+                label: 'Thống kê',
                 icon: <FileTextOutlined />,
                 key: 'statistic:1',
+                child: [
+                    {
+                        label: "Tờ khai HQ"
+                    },
+                    {
+                        label: "Thống kê sản lượng"
+                    },
+                    {
+                        label: "Báo cáo container nhập xuất"
+                    },
+                ]
             },
             {
                 icon: <RadarChartOutlined />,
-                label: 'Thống kê sản lượng',
+                label: 'Báo cáo cảng',
                 key: 'statistic:2',
+                child: []
             },
             {
                 icon: <ReconciliationOutlined />,
-                label: 'Báo cáo container nhập khẩu',
+                label: 'Báo cáo hải quan',
                 key: 'statistic:3',
+                child: []
             },
         ]
     },
     {
-        label: 'Người dùng',
+        label: 'Hệ thống',
         key: 'User',
-        icon: <UserSwitchOutlined />,
-        children: [
+        icon: <lord-icon
+            className="User"
+            colors="outline:#fff,primary:#fff"
+            src="https://cdn.lordicon.com/lecprnjb.json"
+            trigger="loop-on-hover"
+            delay="200"
+        >
+        </lord-icon>,
+        child: [
             {
-                label: 'Quản lý người dùng',
+                label: 'Người dùng',
                 icon: <UserOutlined />,
                 key: 'user:1',
+                child: [
+                    { label: "Quản lý người dùng" },
+                    { label: "Phân quyền người dùng" },
+                ]
             },
             {
                 icon: <ClusterOutlined />,
-                label: 'Phân quyền người dùng',
+                label: 'Cấu hình',
                 key: 'user:2',
+                child: []
+            },
+            {
+                icon: <SettingOutlined />,
+                label: 'Cài đặt',
+                key: 'user:3',
+                child: [
+                    {
+                        label: "Lịch sử đăng nhập",
+                        key: "history",
+                    },
+                    {
+                        label: "Quản lý thông điệp",
+                        key: "manage",
+                    },
+                    {
+                        label: "Cấu hình hệ thống",
+                        key: "system",
+                    },
+                    {
+                        label: "Cấu hình gửi thông điệp",
+                        key: "logout",
+                    },
+                ]
             },
         ]
     }
 ];
 
 const Nav = () => {
+    const [activeNav, setActiveNav] = useState(false)
+    const [navSelected, setNavSelected] = useState()
+
+    const handleActiveNav = (itemNav) => {
+        setActiveNav(true)
+        setNavSelected(items[items.findIndex((item) => item.key === itemNav.key)])
+    }
+
+    const handlePlayIcon = (itemNav) => {
+        console.log("click");
+        const element = document.querySelectorAll("lord-icon");
+        if (element) {
+            element[items.findIndex((item) => item.key === itemNav.key)].playerInstance.playFromBeginning()
+        }
+    }
     return (
-        <ConfigProvider
-            theme={{
-                components: {
-                    Menu: {
+        <>
+            <ConfigProvider
+                theme={{
+                    components: {
+                        Menu: {
+                            itemColor: "#fff",
+                            itemHoverColor: "#fff",
+                            itemSelectedColor: "#fff !important"
+                        },
                     },
-                },
-            }}
-        >
-            <Menu triggerSubMenuAction="click" className='b-nav' mode='horizontal' style={{
-                backgroundColor: "#3367D6",
-                borderColor: "transparent"
-            }} items={items} />
-        </ConfigProvider>
+                }}
+            >
+                <Menu
+                    onDeselect={() => setActiveNav(!activeNav)}
+                    onSelect={item => handleActiveNav(item)}
+                    triggerSubMenuAction="click"
+                    className='b-nav'
+                    onClick={(item) => handlePlayIcon(item)}
+                    mode='horizontal'
+                    items={items} />
+            </ConfigProvider>
+            <Drawer
+                className='b__nav-drawer'
+                height={385}
+                zIndex={30}
+                placement={"top"}
+                closable={true}
+                closeIcon={null}
+                onClose={() => {
+                    setActiveNav(false)
+                }}
+                open={activeNav}
+                key={"top"}
+            >
+                <SubNav itemMenu={navSelected} />
+            </Drawer>
+        </>
     );
 };
 

@@ -1,26 +1,11 @@
-import * as React from "react";
-import "@silevis/reactgrid/styles.css";
 import {
-  Button,
-  Card,
-  Dropdown,
-  Space,
-  Typography,
-  Avatar,
-  Drawer,
-  Breadcrumb,
-  ConfigProvider,
-} from "antd";
-import {
-  UnorderedListOutlined,
   GlobalOutlined,
-  UserOutlined,
   LogoutOutlined,
-  SettingOutlined,
-  HistoryOutlined,
-  MessageOutlined,
-  ControlOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
+import "@silevis/reactgrid/styles.css";
+import { Avatar, Card, Dropdown, Space, Typography } from "antd";
+import * as React from "react";
 import Nav from "../Nav/Nav";
 
 const items = [
@@ -42,104 +27,34 @@ const itemsMenu = [
   },
 ];
 
-const itemsSetting = [
-  {
-    label: "Lịch sử đăng nhập",
-    key: "history",
-    icon: <HistoryOutlined />,
-  },
-  {
-    label: "Quản lý thông điệp",
-    key: "manage",
-    icon: <MessageOutlined />,
-  },
-  {
-    label: "Cấu hình hệ thống",
-    key: "system",
-    icon: <ControlOutlined />,
-  },
-  {
-    label: "Cấu hình gửi thông điệp",
-    key: "logout",
-    icon: <LogoutOutlined />,
-  },
-];
-
-const classNames = {
-  header: { display: "none" },
-  body: { height: "8vh" },
-};
-
 class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      drawer: false,
+      // drawer: false,
     };
   }
 
   render() {
     return (
       <>
-        <Card
-          style={{
-            backgroundColor: "#3367D6",
-            borderRadius: "0px",
-            borderColor: "white",
-            zIndex: 40,
-          }}
-        >
+        <Card className="b-header">
           <Space
             style={{
               flexDirection: "column",
               alignItems: "unset",
-              justifyContent: "space-between",
-              gap: 12,
               width: "100%",
             }}
           >
-            <Space
-              style={{
-                justifyContent: "space-between",
-                width: "100%",
-                alignItems: "center",
-                height: 0,
-              }}
-            >
-              <Space
-                size={50}
-                style={{ marginLeft: "15px", alignItems: "center" }}
-              >
-                <Typography.Link
-                  href={window.location.hostname}
-                  style={{
-                    fontSize: "20px",
-                    letterSpacing: "5px",
-                    color: "white",
-                  }}
-                >
-                  C.A.S
+            <Space className="b__header-container">
+              <Space size={50} className="b__header-left">
+                <Typography.Link href={window.location.hostname}>
+                  <img src="./logo_transt.png" alt="" />
                 </Typography.Link>
                 <Nav />
               </Space>
 
-              <Space size={50} style={{ marginRight: "20px", gap: "25px" }}>
-                <Button
-                  onClick={() => {
-                    if (this.state.drawer === true) {
-                      this.setState({ drawer: false });
-                    } else {
-                      this.setState({ drawer: true });
-                    }
-                  }}
-                  style={{
-                    backgroundColor: "#3367D6",
-                    borderColor: "#3367D6",
-                    color: "white",
-                    marginTop: "2px",
-                  }}
-                  icon={<UnorderedListOutlined />}
-                />
+              <Space size={50} className="b__header-right">
                 <Dropdown
                   menu={{ items }}
                   trigger={["click"]}
@@ -149,18 +64,6 @@ class Header extends React.Component {
                   <Space style={{ color: "white", cursor: "pointer" }}>
                     <GlobalOutlined />
                     {this.state.lang || "Đổi ngôn ngữ"}
-                  </Space>
-                </Dropdown>
-                <Dropdown
-                  menu={{ items: itemsSetting }}
-                  trigger={["click"]}
-                  style={{ zIndex: 50 }}
-                  arrow={true}
-                >
-                  <Space style={{ color: "white", cursor: "pointer" }}>
-                    <SettingOutlined
-                      style={{ color: "white", cursor: "pointer" }}
-                    />
                   </Space>
                 </Dropdown>
                 <Dropdown
@@ -179,7 +82,7 @@ class Header extends React.Component {
                 </Dropdown>
               </Space>
             </Space>
-            <Space>
+            {/* <Space>
               <ConfigProvider
                 theme={{
                   components: {
@@ -211,29 +114,8 @@ class Header extends React.Component {
                   ]}
                 />
               </ConfigProvider>
-            </Space>
+            </Space> */}
           </Space>
-          <Drawer
-            style={{
-              backgroundColor: "#3367D6",
-              color: "white",
-              paddingTop: "30px",
-            }}
-            classNames={classNames}
-            zIndex={30}
-            placement={"top"}
-            closable={true}
-            closeIcon={null}
-            onClose={() => {
-              this.setState({ drawer: false });
-            }}
-            open={this.state.drawer}
-            key={"top"}
-          >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-          </Drawer>
         </Card>
       </>
     );

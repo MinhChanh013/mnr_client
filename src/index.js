@@ -4,6 +4,7 @@ import reportWebVitals from "./reportWebVitals";
 import Header from "./global_component/header/header";
 import Router from "./Router";
 import "../src/assets/css/ReactGrid-css/custom.css";
+import "./styles/global.scss";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

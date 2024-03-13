@@ -1,0 +1,36 @@
+.b-header {
+  background-color: $primary-color;
+  border-radius: 0px;
+  border: 0px;
+  border-bottom: 1px solid #bfb6b6;
+  z-index: 40;
+  width: calc(100% + 17px);
+
+  .ant-card-body {
+    padding-bottom: 12px;
+  }
+}
+
+.b__header-container {
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  height: 0;
+  padding-top: 10px;
+
+  .b__header-left {
+    margin-left: 15px;
+    align-items: center;
+
+    img {
+      width: 125px;
+      height: 36px;
+      margin-top: 10px;
+    }
+  }
+
+  .b__header-right {
+    margin-right: 20px;
+    gap: 25px !important;
+  }
+}
