@@ -2,7 +2,6 @@ import { Col, ConfigProvider, Empty, List, Menu, Row, } from 'antd'
 import chunk from 'lodash.chunk';
 import React, { useMemo, useState } from 'react'
 
-
 const SubNav = (props) => {
     const { itemMenu } = props
     const [itemSelected, settItemSelected] = useState()
@@ -13,7 +12,7 @@ const SubNav = (props) => {
         return itemMenu.child
     }, [itemMenu])
     return (
-        <Row gutter={[16, 16]} style={{ marginTop: "15px", height: "100%" }}>
+        <Row className='b__sub' gutter={[16, 16]} >
             <Col xl={4} lg={5} md={6}>
                 <ConfigProvider
                     theme={{
@@ -26,15 +25,7 @@ const SubNav = (props) => {
                     }}
                 >
                     <Menu
-                        className="b-nav"
-                        style={{
-                            backgroundColor: "#3f72e0ad",
-                            maxHeight: "270px",
-                            overflowY: "auto",
-                            borderInlineColor: "#fff",
-                            height: "100%",
-                            borderRadius: "4px"
-                        }}
+                        className='b__nav-sub'
                         selectedKeys={keySelected}
                         mode="inline"
                         items={items}
@@ -54,11 +45,7 @@ const SubNav = (props) => {
                                     <List
                                         dataSource={item}
                                         renderItem={(item) => (
-                                            <List.Item className='b-sub__nav'
-                                                style={{
-                                                    color: "#fff", borderColor: "rgb(232 211 211)",
-                                                    cursor: "pointer", padding: "12px 5px"
-                                                }}>
+                                            <List.Item className='b__subnav-item'>
                                                 {item.label ?? ""}
                                             </List.Item>
                                         )}
@@ -72,8 +59,8 @@ const SubNav = (props) => {
                         imageStyle={{ height: 60 }}
                         description={
                             <span style={{ color: "#fff" }}>
-                                {itemSelected && itemSelected.child && itemSelected.child.length === 0 ? "Đang phát triển" : "No Selected"}
-
+                                {itemSelected && itemSelected.child && itemSelected.child.length === 0 ?
+                                    "Đang phát triển" : "No Selected"}
                             </span>
                         }
                     />

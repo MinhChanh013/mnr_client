@@ -233,19 +233,13 @@ const Nav = () => {
                 <Menu
                     onDeselect={() => setActiveNav(!activeNav)}
                     onSelect={item => handleActiveNav(item)}
-                    triggerSubMenuAction="click" className='b-nav' mode='horizontal' style={{
-                        backgroundColor: "#3367D6",
-                        borderColor: "transparent",
-                        width: "500px"
-                    }} items={items} />
+                    triggerSubMenuAction="click"
+                    className='b-nav'
+                    mode='horizontal'
+                    items={items} />
             </ConfigProvider>
             <Drawer
-                style={{
-                    backgroundColor: "#3367D6",
-                    color: "white",
-                    overflowY: "auto"
-                }}
-                className='b-drawer__menu'
+                className='b__nav-drawer'
                 height={385}
                 zIndex={30}
                 placement={"top"}

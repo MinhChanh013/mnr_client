@@ -32,24 +32,6 @@
   }
 }
 
-.b-nav .ant-menu-item-selected::after,
-.b-nav .ant-menu-item-active::after {
-  border-bottom-color: #fff !important;
-}
-
-.b-nav .ant-menu-item-icon svg {
-  font-size: 20px;
-}
-
-.b-sub__nav:hover {
-  background-color: rgba(186, 185, 185, 0.308);
-  transition: all 0.2s ease-in;
-}
-
-.b-header .ant-card-body {
-  padding-bottom: 15px;
-}
-
-.b-drawer__menu .ant-drawer-body{
+.b-drawer__menu .ant-drawer-body {
   overflow: unset !important;
 }
