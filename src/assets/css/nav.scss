@@ -11,6 +11,17 @@
   .ant-menu-item-icon svg {
     font-size: 20px;
   }
+
+  .ant-menu-item {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    lord-icon {
+      width: 26px;
+      height: 26px;
+    }
+  }
 }
 
 .b__nav-drawer {

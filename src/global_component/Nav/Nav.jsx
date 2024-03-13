@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import { ConfigProvider, Drawer, Menu } from 'antd';
-import { AppstoreOutlined, BookOutlined, BoxPlotOutlined, ClusterOutlined, DotChartOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import { BookOutlined, BoxPlotOutlined, ClusterOutlined, DotChartOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import lottie from "lottie-web";
+import { defineElement } from "@lordicon/element";
 import SubNav from '../SubNav/SubNav';
+defineElement(lottie.loadAnimation);
 
 const items = [
     {
         label: 'Danh mục',
         key: 'Directory',
-        icon: <AppstoreOutlined />,
+        icon: <lord-icon
+            className="Directory"
+            colors="outline:#fff,primary:#fff"
+            src="https://cdn.lordicon.com/nizfqlnk.json"
+            trigger="loop-on-hover"
+            delay="200"
+        >
+        </lord-icon>,
         child: [
             {
                 label: 'Container',
@@ -130,7 +140,14 @@ const items = [
     {
         label: 'Báo cáo - Thống kê',
         key: 'Statistic',
-        icon: <DotChartOutlined />,
+        icon: <lord-icon
+            className="Statistic"
+            colors="outline:#fff,primary:#fff"
+            src="https://cdn.lordicon.com/whrxobsb.json"
+            trigger="loop-on-hover"
+            delay="200"
+        >
+        </lord-icon>,
         child: [
             {
                 label: 'Thống kê',
@@ -165,7 +182,14 @@ const items = [
     {
         label: 'Hệ thống',
         key: 'User',
-        icon: <UserSwitchOutlined />,
+        icon: <lord-icon
+            className="User"
+            colors="outline:#fff,primary:#fff"
+            src="https://cdn.lordicon.com/lecprnjb.json"
+            trigger="loop-on-hover"
+            delay="200"
+        >
+        </lord-icon>,
         child: [
             {
                 label: 'Người dùng',
@@ -217,6 +241,14 @@ const Nav = () => {
         setActiveNav(true)
         setNavSelected(items[items.findIndex((item) => item.key === itemNav.key)])
     }
+
+    const handlePlayIcon = (itemNav) => {
+        console.log("click");
+        const element = document.querySelectorAll("lord-icon");
+        if (element) {
+            element[items.findIndex((item) => item.key === itemNav.key)].playerInstance.playFromBeginning()
+        }
+    }
     return (
         <>
             <ConfigProvider
@@ -235,6 +267,7 @@ const Nav = () => {
                     onSelect={item => handleActiveNav(item)}
                     triggerSubMenuAction="click"
                     className='b-nav'
+                    onClick={(item) => handlePlayIcon(item)}
                     mode='horizontal'
                     items={items} />
             </ConfigProvider>
