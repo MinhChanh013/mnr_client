@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import { BookOutlined, BoxPlotOutlined, ClusterOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
 import { ConfigProvider, Drawer, Menu } from 'antd';
-import { BookOutlined, BoxPlotOutlined, ClusterOutlined, DotChartOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
-import lottie from "lottie-web";
-import { defineElement } from "@lordicon/element";
+import React, { useState } from 'react';
 import SubNav from '../SubNav/SubNav';
-defineElement(lottie.loadAnimation);
 
 const items = [
     {
@@ -243,7 +240,6 @@ const Nav = () => {
     }
 
     const handlePlayIcon = (itemNav) => {
-        console.log("click");
         const element = document.querySelectorAll("lord-icon");
         if (element) {
             element[items.findIndex((item) => item.key === itemNav.key)].playerInstance.playFromBeginning()

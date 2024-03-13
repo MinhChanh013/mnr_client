@@ -31,7 +31,3 @@
     padding: 16px;
   }
 }
-
-.b-drawer__menu .ant-drawer-body {
-  overflow: unset !important;
-}
