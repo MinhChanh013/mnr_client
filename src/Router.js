@@ -5,6 +5,9 @@ import "./assets/css/ReactGrid-css/custom.css";
 import Msg253 from "./views/message_common/Msg253.js";
 import Msg217 from "./views/message_common/Msg217.js";
 import Login from "./views/login/Login.js";
+import Msg227 from "./views/message_common/Msg227.js";
+import Msg252 from "./views/message_common/Msg252.js";
+import Msg367point8 from "./views/message_common/Msg367point8.js";
 
 // let RouterLink = {
 //     Msg3668_container
