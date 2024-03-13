@@ -18,6 +18,9 @@ function Router() {
         <Route index path="/msg212_container" element={<Msg212Container />} />
         <Route index path="/msg253" element={<Msg253 />} />
         <Route index path="/msg217" element={<Msg217 />} />
+        <Route index path="/msg227" element={<Msg227 />} />
+        <Route index path="/msg252" element={<Msg252 />} />
+        <Route index path="/msg367point8" element={<Msg367point8 />} />
         <Route index path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
