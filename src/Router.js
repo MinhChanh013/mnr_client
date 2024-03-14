@@ -11,6 +11,9 @@ import Msg227 from "./views/message_common/Msg227.js";
 import Msg252 from "./views/message_common/Msg252.js";
 import Msg367point8 from "./views/message_common/Msg367point8.js";
 import Msg213 from "./views/message_container/Msg213Container.js";
+import Msg214 from "./views/message_container/Msg214Container.js";
+import Msg237 from "./views/message_container/Msg237Container.js";
+import Msg247Container from "./views/message_container/Msg247Container.js";
 
 function Router() {
   return (
@@ -26,7 +29,10 @@ function Router() {
         <Route index path="/msg252" element={<Msg252 />} />
         <Route index path="/msg367point8" element={<Msg367point8 />} />
         <Route index path="/login" element={<Login />} />
-        <Route index path="/msg213" element={<Msg213 />} />
+        <Route index path="/msg213_container" element={<Msg213 />} />
+        <Route index path="/msg214_container" element={<Msg214 />} />
+        <Route index path="/msg237_container" element={<Msg237 />} />
+        <Route index path="/msg247_container" element={<Msg247Container />} />
       </Routes>
     </BrowserRouter>
   );
