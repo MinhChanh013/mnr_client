@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import Msg3668Container from "./views/message_container/Msg3668Container.js";
 import Msg212Container from "./views/message_container/Msg212Container.js";
 import "./assets/css/ReactGrid-css/custom.css";
@@ -15,26 +16,30 @@ import Msg214 from "./views/message_container/Msg214Container.js";
 import Msg237 from "./views/message_container/Msg237Container.js";
 import Msg247Container from "./views/message_container/Msg247Container.js";
 
-function Router() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route index path="/msg3668_container" element={<Msg3668Container />} />
-        <Route index path="/msg212_container" element={<Msg212Container />} />
-        <Route index path="/msg253" element={<Msg253 />} />
-        <Route index path="/msg217" element={<Msg217 />} />
-        <Route index path="/msg901" element={<Msg901 />} />
-        <Route index path="/msg_history" element={<MsgHistory />} />
-        <Route index path="/msg227" element={<Msg227 />} />
-        <Route index path="/msg252" element={<Msg252 />} />
-        <Route index path="/msg367point8" element={<Msg367point8 />} />
-        <Route index path="/login" element={<Login />} />
-        <Route index path="/msg213_container" element={<Msg213 />} />
-        <Route index path="/msg214_container" element={<Msg214 />} />
-        <Route index path="/msg237_container" element={<Msg237 />} />
-        <Route index path="/msg247_container" element={<Msg247Container />} />
-      </Routes>
-    </BrowserRouter>
-  );
+import Layout from "./global_component/Layout/Layout.js";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "/msg3668_container", element: <Msg3668Container /> },
+      { path: "/msg212_container", element: <Msg212Container /> },
+      { path: "/msg253", element: <Msg253 /> },
+      { path: "/msg217", element: <Msg217 /> },
+      { path: "/msg901", element: <Msg901 /> },
+      { path: "/msg_history", element: <MsgHistory /> },
+      { path: "/msg227", element: <Msg227 /> },
+      { path: "/msg252", element: <Msg252 /> },
+      { path: "/msg367point8", element: <Msg367point8 /> },
+      { path: "/msg213_container", element: <Msg213 /> },
+      { path: "/msg214_container", element: <Msg214 /> },
+      { path: "/msg237_container", element: <Msg237 /> },
+      { path: "/msg247_container", element: <Msg247Container /> },
+    ],
+  },
+  { path: "/login", element: <Login /> },
+]);
+
+export default function Router() {
+  return <RouterProvider router={router} />;
 }
-export default Router;
