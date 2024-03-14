@@ -12,6 +12,9 @@ import Msg227 from "./views/message_common/Msg227.js";
 import Msg252 from "./views/message_common/Msg252.js";
 import Msg367point8 from "./views/message_common/Msg367point8.js";
 import Msg213 from "./views/message_container/Msg213Container.js";
+import Msg214 from "./views/message_container/Msg214Container.js";
+import Msg237 from "./views/message_container/Msg237Container.js";
+import Msg247Container from "./views/message_container/Msg247Container.js";
 
 import Layout from "./global_component/Layout/Layout.js";
 const router = createBrowserRouter([
@@ -28,7 +31,10 @@ const router = createBrowserRouter([
       { path: "/msg227", element: <Msg227 /> },
       { path: "/msg252", element: <Msg252 /> },
       { path: "/msg367point8", element: <Msg367point8 /> },
-      { path: "/msg213", element: <Msg213 /> },
+      { path: "/msg213_container", element: <Msg213 /> },
+      { path: "/msg214_container", element: <Msg214 /> },
+      { path: "/msg237_container", element: <Msg237 /> },
+      { path: "/msg247_container", element: <Msg247Container /> },
     ],
   },
   { path: "/login", element: <Login /> },

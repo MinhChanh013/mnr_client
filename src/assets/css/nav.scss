@@ -1,7 +1,6 @@
 .b-nav {
   background-color: $primary-color;
   border-color: transparent;
-  width: 500px;
 
   .ant-menu-item-selected::after,
   .ant-menu-item-active::after {
@@ -16,6 +15,7 @@
     display: flex;
     gap: 5px;
     align-items: center;
+    font-weight: 500;
 
     lord-icon {
       width: 26px;
@@ -26,7 +26,6 @@
 
 .b__nav-drawer {
   background-color: $primary-sub-color !important;
-  overflow-y: auto !important;
 
   .ant-drawer-body {
     overflow: unset !important;

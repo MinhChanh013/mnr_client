@@ -1,8 +1,9 @@
 import * as React from "react";
 import Table from '../../global_component/dataTable/customTable.js'
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { Button, Card, Col, Divider, Input, Radio, Row, Space, Typography } from 'antd';
-import { CloudDownloadOutlined, SendOutlined } from '@ant-design/icons';
+import { Card, Col, Divider, Radio, Row, Typography } from 'antd';
+import { ButtonType } from "../../global_component/EventButton/ButtonType.js";
+import { EventButtons } from "../../global_component/EventButton/buttons.js";
 const { Text } = Typography;
 class Msg3668Container extends React.Component {
     constructor(props) {
@@ -54,10 +55,8 @@ class Msg3668Container extends React.Component {
                         <Card title='366.8 - GỬI GETIN CONTAINER' style={{ borderRadius: '0px' }} className='b-card'>
                             <Row>
                                 <Col span={24}>
-                                    <Space style={{justifyContent: 'center', width: '100%'}}>
-                                        <Button type="primary" icon={<CloudDownloadOutlined />} style={{ backgroundColor: '#50a81d' }}>Nạp dữ liệu</Button>
-                                        <Button type="primary" icon={<SendOutlined />} style={{ backgroundColor: '#f5a442' }}>Gửi thông điệp</Button>
-                                    </Space>
+                                    <EventButtons config={{ type: ButtonType.LOAD }} />
+                                    <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede' }} />
                                 </Col>
                                 <Col span={24}>
                                     <VesselSelect />
@@ -82,8 +81,9 @@ class Msg3668Container extends React.Component {
                                         </Col>
                                         <Col span={24}>
                                             <Radio.Group>
-                                                <Radio value={1}>Hàng ngoại</Radio>
-                                                <Radio value={2}>Hàng nội</Radio>
+                                                <Radio value={1}>Tất cả</Radio>
+                                                <Radio value={2}>Hàng ngoại</Radio>
+                                                <Radio value={3}>Hàng nội</Radio>
                                             </Radio.Group>
                                         </Col>
                                         <Divider style={{ marginTop: '1px', marginBottom: '1px', borderColor: '#d1cccc' }} />
@@ -92,6 +92,7 @@ class Msg3668Container extends React.Component {
                                         </Col>
                                         <Col span={24} >
                                             <Radio.Group>
+                                                <Radio value={'A'}>Tất cả</Radio>
                                                 <Radio value={'F'}>Hàng</Radio>
                                                 <Radio value={'E'}>Rỗng</Radio>
                                             </Radio.Group>
@@ -128,27 +129,7 @@ class Msg3668Container extends React.Component {
                     </Col>
                     <Col span={17}>
                         <Card style={{ borderRadius: '0px', height: '100%' }} className="b-card">
-                            <Row gutter={[8, 8]}>
-                                <Col span={24} style={{ justifyContent: 'space-between' }}>
-                                    <Row style={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Col>
-                                            <Space>
-                                                <p>Tìm:</p>
-                                                <Input />
-                                            </Space>
-                                        </Col>
-                                        <Col>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                                <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede ' }} />
-                                <Col span={24}>
-                                    <Table config={{ columns: this.columns, header: this.header, dataSource: this.state.dataTable }} />
-                                </Col>
-                                <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede' }} />
-                                <Col span={24} style={{ textAlign: 'right' }}>
-                                </Col>
-                            </Row>
+                            <Table config={{ columns: this.columns, header: this.header, dataSource: this.state.dataTable, footer: true }} />
                         </Card>
                     </Col>
                 </Row>

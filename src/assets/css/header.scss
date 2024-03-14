@@ -21,16 +21,25 @@
   .b__header-left {
     margin-left: 15px;
     align-items: center;
+    width: 100% !important;
 
     img {
       width: 125px;
       height: 36px;
       margin-top: 10px;
     }
+
+    > .ant-space-item:nth-child(2) {
+      width: 100%;
+    }
   }
 
   .b__header-right {
     margin-right: 20px;
     gap: 25px !important;
+  }
+
+  > .ant-space-item:nth-child(1) {
+    flex: 1 !important;
   }
 }
