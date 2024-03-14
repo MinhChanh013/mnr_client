@@ -3,7 +3,8 @@
   height: 100%;
 
   .b__nav-sub {
-    background-color: #3f72e0ad;
+    // background-color: #3f72e0ad;
+    background-color: #2e7895c9;
     max-height: 230px;
     overflow-y: auto;
     border-inline-color: #fff;
@@ -13,18 +14,22 @@
 
     &::-webkit-scrollbar {
       width: 5px;
-      background-color: #f5f5f5;
+      background-color: #7796de;
       border-radius: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: #6382cac4;
+      background-color: #f5f5f5;
       border-radius: 4px;
     }
 
-    svg{
+    svg {
       width: 18px;
       height: 18px;
+    }
+
+    .ant-menu-item-selected {
+      color: $primary-color;
     }
   }
 
@@ -43,12 +48,13 @@
       align-items: center;
       justify-content: flex-start;
       gap: 10px;
-      background-color: rgba(167, 218, 212, 0.132);
+      background-color: rgba(146, 194, 188, 0.096);
       border-radius: 4px;
 
       animation: slide_left 0.15s linear forwards;
-      animation-delay: calc(0.1s*var(--i));
+      animation-delay: calc(0.1s * var(--i));
       opacity: 0;
+      transition: background .2s ease-in-out;
       font-weight: 500;
 
       lord-icon {
@@ -57,7 +63,25 @@
       }
 
       &:hover {
-        background-color: rgba(186, 185, 185, 0.336);
+        background-color: #2d738f6d;
+      }
+    }
+  }
+
+  > .ant-col {
+    &:nth-child(2) {
+      height: 97%;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 5px;
+        background-color: #7796de;
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #f5f5f5;
+        border-radius: 4px;
       }
     }
   }

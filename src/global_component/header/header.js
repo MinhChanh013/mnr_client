@@ -82,39 +82,6 @@ class Header extends React.Component {
                 </Dropdown>
               </Space>
             </Space>
-            {/* <Space>
-              <ConfigProvider
-                theme={{
-                  components: {
-                    Breadcrumb: {
-                      lastItemColor: "#fff",
-                      itemColor: "rgb(210 206 206)",
-                      separatorColor: "rgb(210 206 206)",
-                    },
-                  },
-                }}
-              >
-                <Breadcrumb
-                  style={{
-                    marginLeft: "15px",
-                  }}
-                  items={[
-                    {
-                      title: "Home",
-                    },
-                    {
-                      title: "Application Center",
-                    },
-                    {
-                      title: "Application List",
-                    },
-                    {
-                      title: "An Application",
-                    },
-                  ]}
-                />
-              </ConfigProvider>
-            </Space> */}
           </Space>
         </Card>
       </>

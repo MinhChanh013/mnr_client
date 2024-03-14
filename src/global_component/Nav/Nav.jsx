@@ -1,9 +1,567 @@
-import { BookOutlined, BoxPlotOutlined, ClusterOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, BoxPlotOutlined, ClusterOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, ShareAltOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
 import { ConfigProvider, Drawer, Menu } from 'antd';
 import React, { useState } from 'react';
 import SubNav from '../SubNav/SubNav';
 
 const items = [
+    {
+        label: 'Thông điệp',
+        key: 'Message',
+        icon: <lord-icon
+            className="User"
+            colors="outline:#fff,primary:#fff"
+            src="https://cdn.lordicon.com/zrtfxghu.json"
+            trigger="loop-on-hover"
+            delay="200"
+        >
+        </lord-icon>,
+        child: [
+            {
+                label: 'Dùng chung',
+                icon: <ShareAltOutlined />,
+                key: 'message:1',
+                child: [
+                    {
+                        label: "Sơ đồ vị trí xếp dỡ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/gyblqrqz.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "253- Tàu xuất/ nhập cảnh", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "217- Container rút hàng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "252 - Hàng hóa vào kho qua TKVC", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "367 - Tờ khai hàng hóa chưa getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/lyrrgrsl.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "901 - Thông tin biên lai thu phí", icon: <lord-icon
+                            src="https://cdn.lordicon.com/lyrrgrsl.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "Truy vấn thông điệp", icon: <lord-icon
+                            src="https://cdn.lordicon.com/lyrrgrsl.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                ]
+            },
+            {
+                label: 'Hàng Container',
+                icon: <BoxPlotOutlined />,
+                key: 'message:2',
+                child: [
+                    {
+                        label: "212 - Container được dỡ xuống cảng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "566 - Xin số định danh hàng container", icon: <lord-icon
+                            src="https://cdn.lordicon.com/lyrrgrsl.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "214 - Danh sách container sai khác", icon: <lord-icon
+                            src="https://cdn.lordicon.com/lyrrgrsl.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "213 - Danh sách Container soi chiếu trước", icon: <lord-icon
+                            src="https://cdn.lordicon.com/lyrrgrsl.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "366.8 - Container Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "366.5 - Hiệu chỉnh Container Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/pflszboa.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "366.1 - Hủy Container Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/wpyrrmcq.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "237 - Thay đổi chì niêm phong Container", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "247 - Điều hướng Container", icon: <lord-icon
+                            src="https://cdn.lordicon.com/swcqkzdc.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "363 - Container đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "367 - TK đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "365 - Container Getout có TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "465 - Container Getout không TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "[CSHT].214 - Tờ khai chưa nộp phí", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "[CSHT].365 - Container Getout", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                ]
+            },
+            {
+                label: 'Hàng kiện',
+                icon: <InboxOutlined />,
+                key: 'message:3',
+                child: [
+                    {
+                        label: "212 - Hàng kiện được dỡ xuống cảng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "566 - Xin số định danh cho hàng kiện", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "215 - Danh sách hàng kiện sai khác", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "266.8 - Hàng kiện Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "207 - Xác nhận getin hết hàng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "266.5 - Hiệu chỉnh hàng kiện Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/pflszboa.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "266.1 - Hủy hàng kiện Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/wpyrrmcq.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "257 - Điều hướng hàng kiện", icon: <lord-icon
+                            src="https://cdn.lordicon.com/rsbokaso.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "297 - Chỉ định tờ khai xuất khẩu", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "367 - TK đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "223 - Hàng kiện đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "321 - Hàng kiện Getout có TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "341 - Hàng kiện Getout không TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "215[CSHT] - TK chưa nộp phí", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "321[CSHT] - Hàng kiện Getout có TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                ]
+            },
+            {
+                label: 'Hàng rời',
+                icon: <GoldOutlined />,
+                key: 'message:4',
+                child: [
+                    {
+                        label: "212 - Hàng kiện được dỡ xuống cảng", icon: <lord-icon
+                            src="https://lordicon.com/icons/system/regular?group=free&categoryId=144"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "566 - Xin số định danh cho hàng rời", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "216 - Danh sách hàng rời sai khác", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "466.8 - Hàng rời Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "207 - Xác nhận getin hết hàng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "466.5 - Hiệu chỉnh hàng rời Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/pflszboa.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "466.1 - Hủy Getin hàng rời", icon: <lord-icon
+                            src="https://cdn.lordicon.com/wpyrrmcq.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "267 - Điều hướng hàng rời", icon: <lord-icon
+                            src="https://cdn.lordicon.com/rsbokaso.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "297 - Chỉ định tờ khai xuất khẩu", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "367 - TK đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "223 - Hàng kiện đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "421 - Hàng rời Getout có TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "441 - Hàng rời Getout không TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "216[CSHT] - TK chưa nộp phí", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "421[CSHT] - Hàng rời Getout có TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                ]
+            },
+            {
+                label: 'Hàng lỏng',
+                icon: <ReconciliationOutlined />,
+                key: 'message:5',
+                child: [
+                    {
+                        label: "212 - Hàng kiện được dỡ xuống cảng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "566 - Xin số định danh cho hàng lỏng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "226 - Danh sách hàng lỏng sai khác", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "166.8 - Hàng lỏng Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/tzdwqlbp.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "207 - Xác nhận getin hết hàng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "166.5 - Hiệu chỉnh hàng lỏng Getin", icon: <lord-icon
+                            src="https://cdn.lordicon.com/pflszboa.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "166.1 - Hủy Getin hàng lỏng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/wpyrrmcq.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    }, {
+                        label: "277 - Điều hướng hàng lỏng", icon: <lord-icon
+                            src="https://cdn.lordicon.com/pflszboa.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "297 - Chỉ định tờ khai xuất khẩu", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "367 - TK đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "223 - Hàng lỏng đủ điều kiện qua KVGS", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "121 - Hàng lỏng Getout có TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                    {
+                        label: "141 - Hàng rời Getout không TKHQ", icon: <lord-icon
+                            src="https://cdn.lordicon.com/vdjwmfqs.json"
+                            colors="outline:#fff,primary:#fff"
+                            trigger="loop-on-hover"
+                            delay="200"
+                        />
+                    },
+                ]
+            },
+        ]
+    },
     {
         label: 'Danh mục',
         key: 'Directory',
@@ -56,7 +614,6 @@ const items = [
                 ],
             },
             {
-
                 label: 'Hàng kiện',
                 key: "container2",
                 icon: <InboxOutlined />,

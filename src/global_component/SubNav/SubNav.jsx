@@ -41,7 +41,7 @@ const SubNav = (props) => {
                 {itemSelected && itemSelected.child && itemSelected.child.length > 0 ?
                     <Row style={{ width: "100%" }} className="b__subnav-item">
                         {itemSelected.child.map((sub, index) => (
-                            <Col style={{ '--i': index + 1 }} span={5} key={sub.key + generateString(5)}>
+                            <Col style={{ '--i': index + 1 }} xl={5} lg={7} md={11} key={sub.key + generateString(5)}>
                                 {sub.icon}
                                 {sub.label ?? ""}
                             </Col>
