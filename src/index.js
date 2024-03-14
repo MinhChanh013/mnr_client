@@ -6,12 +6,13 @@ import Router from "./Router";
 import "../src/assets/css/ReactGrid-css/custom.css";
 import "./styles/global.scss";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  ReactDOM.render(
+    <React.StrictMode>
     <Header />
     <Router />
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+    document.getElementById("root")
+  );
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
