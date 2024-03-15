@@ -17,10 +17,13 @@ import Msg237 from "./views/message_container/Msg237Container.js";
 import Msg247Container from "./views/message_container/Msg247Container.js";
 
 import Layout from "./global_component/Layout/Layout.js";
+import NotFound from "./views/not_found/NotFound.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <NotFound />,
     children: [
       { path: "/msg3668_container", element: <Msg3668Container /> },
       { path: "/msg212_container", element: <Msg212Container /> },
