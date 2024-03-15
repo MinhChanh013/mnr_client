@@ -1,3 +1,5 @@
+import isString from "lodash.isstring";
+
 const characters =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -22,4 +24,21 @@ export const convertChildToChildren = (obj) => {
     newObj[newKey] = convertChildToChildren(value);
   }
   return newObj;
+};
+
+export const ensureString = (value) => {
+  try {
+    if (value !== undefined && value !== null) {
+      if (isString(value)) {
+        return value;
+      } else if (typeof value === "object") {
+        return JSON.stringify(value);
+      } else {
+        return `${value}`;
+      }
+    }
+  } catch (error) {
+    return "";
+  }
+  return "";
 };
