@@ -4,9 +4,10 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import "@silevis/reactgrid/styles.css";
-import { Avatar, Card, Dropdown, Space, Typography } from "antd";
+import { Avatar, Card, Dropdown, Space, Typography, Drawer } from "antd";
 import * as React from "react";
 import Nav from "../Nav/Nav";
+import NavMobile from "../Nav/NavMobile";
 
 const items = [
   {
@@ -32,6 +33,7 @@ class Header extends React.Component {
     super(props);
     this.state = {
       // drawer: false,
+      activeMenuMobile: false,
     };
   }
 
@@ -53,7 +55,6 @@ class Header extends React.Component {
                 </Typography.Link>
                 <Nav />
               </Space>
-
               <Space size={50} className="b__header-right">
                 <Dropdown
                   menu={{ items }}
@@ -61,9 +62,14 @@ class Header extends React.Component {
                   style={{ zIndex: 50 }}
                   arrow={true}
                 >
-                  <Space style={{ color: "white", cursor: "pointer" }}>
+                  <Space
+                    className="b-language"
+                    style={{ color: "white", cursor: "pointer" }}
+                  >
                     <GlobalOutlined />
-                    {this.state.lang || "Đổi ngôn ngữ"}
+                    <span className="language__content">
+                      {this.state.lang || "Đổi ngôn ngữ"}
+                    </span>
                   </Space>
                 </Dropdown>
                 <Dropdown
@@ -80,6 +86,36 @@ class Header extends React.Component {
                     />
                   </Space>
                 </Dropdown>
+                <Space>
+                  <Space
+                    className="btn__nav-mobile"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <lord-icon
+                      src="https://cdn.lordicon.com/ipnwkgdy.json"
+                      colors="outline:#fff,primary:#fff"
+                      trigger="loop-on-hover"
+                      delay="200"
+                      onClick={() =>
+                        this.setState({
+                          activeMenuMobile: !this.state.activeMenuMobile,
+                        })
+                      }
+                    ></lord-icon>
+                  </Space>
+                  <Drawer
+                    className="b__nav-mobile"
+                    title="Menu"
+                    onClose={() =>
+                      this.setState({
+                        activeMenuMobile: false,
+                      })
+                    }
+                    open={this.state.activeMenuMobile}
+                  >
+                    <NavMobile />
+                  </Drawer>
+                </Space>
               </Space>
             </Space>
           </Space>

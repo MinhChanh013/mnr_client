@@ -1,12 +1,11 @@
 import { Col, ConfigProvider, Empty, Menu, Row, } from 'antd';
-import React, { useId, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { generateString } from '../../utils';
 
 const SubNav = (props) => {
     const { itemMenu } = props
     const [itemSelected, settItemSelected] = useState()
     const [keySelected, setKeySelected] = useState("")
-    const id = useId()
     const items = useMemo(() => {
         settItemSelected()
         setKeySelected("")
