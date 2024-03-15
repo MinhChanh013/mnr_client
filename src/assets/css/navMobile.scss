@@ -1,0 +1,47 @@
+.b-navMobile {
+  background-color: $primary-color !important;
+
+  .ant-menu-submenu-title {
+    gap: 8px !important;
+    color: #fff !important;
+    font-weight: 500;
+
+    lord-icon {
+      width: 26px;
+      height: 26px;
+    }
+    svg {
+      width: 23px;
+      height: 23px;
+    }
+  }
+
+  .ant-menu-sub.ant-menu-inline {
+    .ant-menu-item {
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .ant-menu-item-selected {
+      lord-icon,
+      span {
+        color: #1c6a9a !important;
+      }
+
+      background-color: #95b6cf;
+
+      lord-icon .body.ready{
+        --lord-icon-primary-base: #6666 !important
+      }
+    }
+
+    .ant-menu-title-content {
+      color: #fff !important;
+    }
+
+    lord-icon {
+      width: 26px;
+      height: 26px;
+    }
+  }
+}

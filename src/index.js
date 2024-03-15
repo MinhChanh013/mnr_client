@@ -6,6 +6,7 @@ import Router from "./Router";
 
 import "../src/assets/css/ReactGrid-css/custom.css";
 import "./styles/global.scss";
+import "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
