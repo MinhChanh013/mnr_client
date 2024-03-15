@@ -30,7 +30,6 @@ const Nav = () => {
 
     return (
         <>
-            <button>Login</button>
             <ConfigProvider
                 theme={{
                     components: {
