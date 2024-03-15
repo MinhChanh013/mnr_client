@@ -1,5 +1,5 @@
 import { ConfigProvider, Drawer, Menu } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SubNav from '../SubNav/SubNav';
 import { itemsMenu } from '../../constants';
 
@@ -18,6 +18,15 @@ const Nav = () => {
             element[itemsMenu.findIndex((item) => item.key === itemNav.key)].playerInstance.playFromBeginning()
         }
     }
+
+    useEffect(() => {
+        window.addEventListener("resize", () => {
+            const width = document.body.clientWidth;
+            if (width <= 1169) {
+                setActiveNav(false)
+            }
+        })
+    }, [])
     return (
         <>
             <ConfigProvider
@@ -38,7 +47,8 @@ const Nav = () => {
                     className='b-nav'
                     onClick={(item) => handlePlayIcon(item)}
                     mode='horizontal'
-                    items={itemsMenu} />
+                    items={itemsMenu}
+                />
             </ConfigProvider>
             <Drawer
                 className='b__nav-drawer'
