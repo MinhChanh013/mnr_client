@@ -34,9 +34,9 @@ class VesselSelect extends React.Component {
                                 </Text>
                             </Space>
                             <Button
-                                style={{ backgroundColor: '#f3f3f3', width: '2vw' }}
+                                style={{ backgroundColor: '#f3f3f3', width: '2vw', marginBottom: '2px', height: '3vh', padding: 0 }}
                                 block
-                                icon={<UnorderedListOutlined />}>
+                                icon={<UnorderedListOutlined style={{fontSize: '13px'}} />}>
                             </Button>
                         </Space>
                     </Col>
