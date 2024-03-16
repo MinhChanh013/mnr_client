@@ -1,35 +1,79 @@
-import { Flex, Input, Typography } from "antd";
+import * as React from "react";
+import { Button, Col, Row, Space, Typography } from 'antd';
+import { UnorderedListOutlined } from "@ant-design/icons";
+import '../../assets/scss/component.scss'
+const { Text } = Typography
 
-const { Text } = Typography;
+class VesselSelect extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataTable: [],
+    };
+    this.borderStyle = { borderBottom: '1px dashed' };
+    this.textStyle = { fontSize: '16px' }
+  }
 
-function VesselLabel({ children }) {
-  return <Text style={{ minWidth: "100px" }}>{children}</Text>;
-}
-function VesselInput({ value }) {
-  return <Input readOnly style={{ flex: 1 }} size="middle" value={value} />;
-}
+  // rowid: text & cells [{}]
+  componentDidMount() {
+  }
 
-export default function VesselSelect() {
-  return (
-    <Flex style={{ flexDirection: "column", gap: "10px" }}>
-      <label style={{ width: "100%" }}>
-        <Flex align="center">
-          <VesselLabel>Tên Tàu</VesselLabel>
-          <VesselInput value="" />
-        </Flex>
-      </label>
-      <label style={{ width: "100%" }}>
-        <Flex align="center">
-          <VesselLabel>Chuyến N/X</VesselLabel>
-          <VesselInput value="" />
-        </Flex>
-      </label>
-      <label style={{ width: "100%" }}>
-        <Flex align="center">
-          <VesselLabel>ETA/ETD</VesselLabel>
-          <VesselInput value="" />
-        </Flex>
-      </label>
-    </Flex>
-  );
+  render() {
+    return (
+      <>
+        <Row gutter={[4, 4]} style={{ alignItems: 'center' }}>
+          <Col span={24} style={{ justifyContent: 'center' }}>
+          </Col>
+          <Col span={23} style={this.borderStyle}>
+            <Space style={{ justifyContent: 'space-between', width: '100%' }}>
+              <Space>
+                <Text style={this.textStyle}>
+                  Tên tàu:
+                </Text>
+                <Text style={this.textStyle}>
+                  HAC
+                </Text>
+              </Space>
+              <Button
+                className="b-vessel-button"
+                block
+                icon={<UnorderedListOutlined style={{ fontSize: '13px' }} />}>
+              </Button>
+            </Space>
+          </Col>
+          <Col span={23} style={this.borderStyle}>
+            <Space>
+              <Text style={this.textStyle}>
+                Chuyến N/X:
+              </Text>
+              <Text style={this.textStyle}>
+                0024E / 0024W
+              </Text>
+            </Space>
+          </Col>
+          <Col span={11} style={this.borderStyle}>
+            <Space>
+              <Text style={this.textStyle}>
+                ETA:
+              </Text>
+              <Text style={this.textStyle}>
+                27/02/2024
+              </Text>
+            </Space>
+          </Col>
+          <Col span={11} style={this.borderStyle}>
+            <Space>
+              <Text style={this.textStyle}>
+                ETD:
+              </Text>
+              <Text style={this.textStyle}>
+                29/02/2024
+              </Text>
+            </Space>
+          </Col>
+        </Row>
+      </>
+    );
+  }
 }
+export default VesselSelect;
