@@ -58,6 +58,8 @@ class Table extends React.Component {
                         <Space >
                             <p>Tìm:</p>
                             <Input />
+                            <Divider type="vertical" style={this.dividerStyle} />
+                            <SearchOutlined />
                         </Space>
                         {
                             this.state.dataTable.filter(p => p.selected === true).length > 0
@@ -67,7 +69,29 @@ class Table extends React.Component {
                                 </Space>
                                 : ''
                         }
-                        <Button icon={<SearchOutlined />}>Tìm kiếm nâng cao</Button>
+                        {
+                            this.props.config.footer === true ?
+                                <Col span={24}>
+                                    <Space style={{ justifyContent: 'space-between', width: '100%' }}>
+                                        <Space>
+                                            <Space size={5} style={{ fontWeight: 'bold', fontSize: '13px' }}>
+                                                Số dòng: &nbsp; {this.state.dataTable.filter(p => p.rowId !== 'header').length || 0}
+                                                <Divider type="vertical" style={this.dividerStyle} />
+                                                Thành công: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'SUCCESS').length || 0}
+                                                <Divider type="vertical" style={this.dividerStyle} />
+
+                                                Thất bại: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'FAIL').length || 0}
+                                                <Divider type="vertical" style={this.dividerStyle} />
+                                                Chưa gửi: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'READY').length || 0}
+
+                                                <Divider type="vertical" style={this.dividerStyle} />
+                                                <Button icon={<FileExcelTwoTone />} size='small' />
+                                            </Space>
+                                        </Space>
+                                    </Space>
+                                </Col>
+                                : ''
+                        }
                     </Space>
                 </Col>
                 <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede' }} />
@@ -92,30 +116,7 @@ class Table extends React.Component {
                         />
                     </div>
                     <Divider style={this.dividerStyle} />
-                    {
-                        this.props.config.footer === true ?
-                            <Col span={24}>
-                                <Space style={{ justifyContent: 'space-between', width: '100%' }}>
-                                    <Space>
-                                        <Button icon={<FileExcelTwoTone />} size='small'>Xuất Excel</Button>
-                                        <Space size={20} style={{ fontWeight: 'bold', fontSize: '13px' }}>
-                                            Chưa gửi: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'READY').length || 0}
-                                            <Divider type="vertical" style={this.dividerStyle} />
 
-                                            Thành công: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'SUCCESS').length || 0}
-                                            <Divider type="vertical" style={this.dividerStyle} />
-
-                                            Thất bại: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'FAIL').length || 0}
-                                        </Space>
-                                    </Space>
-                                    <Space style={{ fontWeight: 'bold', fontSize: '13px' }}>
-                                        Số dòng: &nbsp; {this.state.dataTable.filter(p => p.rowId !== 'header').length || 0}
-                                    </Space>
-                                </Space>
-                                <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede' }} />
-                            </Col>
-                            : ''
-                    }
                 </Col>
             </Row>
 
