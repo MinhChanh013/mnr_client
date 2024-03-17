@@ -61,19 +61,18 @@ class Table extends React.Component {
                             <Divider type="vertical" style={this.dividerStyle} />
                             <SearchOutlined />
                         </Space>
-                        {
-                            this.state.dataTable.filter(p => p.selected === true).length > 0
-                                ?
-                                <Space style={{ fontSize: '13px' }}>
-                                    Đã chọn: {this.state.dataTable.filter(p => p.selected === true).length || 0}
-                                </Space>
-                                : ''
-                        }
+
                         {
                             this.props.config.footer === true ?
                                 <Col span={24}>
                                     <Space style={{ justifyContent: 'space-between', width: '100%' }}>
                                         <Space>
+                                            {
+                                                this.state.dataTable.filter(p => p.selected === true).length > 0
+                                                    ?
+                                                        'Đã chọn:' `${this.state.dataTable.filter(p => p.selected === true).length || 0}`
+                                                    : ''
+                                            }
                                             <Space size={5} style={{ fontWeight: 'bold', fontSize: '13px' }}>
                                                 Số dòng: &nbsp; {this.state.dataTable.filter(p => p.rowId !== 'header').length || 0}
                                                 <Divider type="vertical" style={this.dividerStyle} />
