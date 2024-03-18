@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 
 import { Button, Modal, Typography, Flex } from "antd";
 import {
+  CloseOutlined,
   CloudDownloadOutlined,
   ExclamationCircleOutlined,
   SendOutlined,
@@ -9,29 +10,29 @@ import {
 
 export const buttonTypes = {
   Load: {
-    children: "Nạp",
+    children: "Nạp dữ liệu",
     backgroundColor: "#2399fa",
     icon: <CloudDownloadOutlined />,
   },
   Send: {
-    children: "Gửi",
+    children: "Gởi thông điệp",
     backgroundColor: "#f5a442",
     icon: <SendOutlined />,
   },
   Cancel: {
     children: "Hủy gửi",
     backgroundColor: "#f54f40",
-    icon: <SendOutlined />,
+    icon: <CloseOutlined />,
   },
   CancelGetin: {
-    children: "Hủy Getin",
+    children: "Hủy getin",
     backgroundColor: "#f54f40",
-    icon: <SendOutlined />,
+    icon: <CloseOutlined />,
   },
   Save: {
-    children: "Lưu",
+    children: "Lưu dữ liệu",
     backgroundColor: "#50a81d",
-    icon: <SendOutlined />,
+    icon: <CloudDownloadOutlined />,
   },
 };
 
@@ -49,16 +50,7 @@ function ModalConfirmEvent({ isModalOpen, actionText, onOk, onCancel }) {
             style={{ fontSize: "150%", color: "#f5a442" }}
           />
           <Typography style={{ color: "#f5a442", textAlign: "center" }}>
-            Xác nhận{" "}
-            <Typography
-              style={{
-                display: "inline",
-                color: "#1B618C",
-                textAlign: "center",
-              }}
-            >
-              {actionText}
-            </Typography>
+            Xác nhận {actionText}
           </Typography>
         </Flex>
       }
@@ -115,10 +107,16 @@ function EventButton({ children, backgroundColor, icon, action = () => {} }) {
   return (
     <Fragment>
       <Button
-        size="small"
+        size="middle"
         type="primary"
         icon={icon}
-        style={{ backgroundColor }}
+        style={{
+          backgroundColor: "#fff",
+          color: backgroundColor,
+          borderRadius: "0",
+          border: `1px solid ${backgroundColor}`,
+          boxShadow: "none",
+        }}
         onClick={showModal}
       >
         {children}
