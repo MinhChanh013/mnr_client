@@ -98,6 +98,7 @@ class Table extends React.Component {
                 <Col span={24}>
                     <div className="b-table">
                         <ReactGrid
+                         ref={this.props.tableRef}
                             enableRangeSelection
                             rows={this.state.dataTable}
                             columns={this.columns}
