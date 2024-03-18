@@ -378,10 +378,15 @@
 
 .rg-text-celleditor {
   height: 35px !important;
-  top: 210.2px !important;
+  top: 25.9vh !important;
 }
 
 .rg-cell-focus {
   height: 35px !important;
   top: 30px !important;
+}
+
+.rg-partial-area-selected-range {
+  top: 30px !important;
+  height: 35px !important;
 }/*# sourceMappingURL=custom-table.css.map */

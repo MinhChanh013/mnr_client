@@ -9,15 +9,15 @@ export default function Msg3668Container() {
   const dataTable = [
     {
       chon: "select",
-      tentau: "",
-      imo: "",
-      sovandon: "",
+      tentau: "HAC",
+      imo: "120",
+      sovandon: "SIK20123112",
       sodinhdanh: "",
-      socontainer: "",
-      ngaygetin: "",
+      socontainer: "GMDU0981345",
+      ngaygetin: "12/03/2024",
       abc: "",
-      chuyentau: "",
-      nhapxuat: "",
+      chuyentau: "012W",
+      nhapxuat: "NHAP",
     },
   ];
   const style = {
@@ -54,7 +54,7 @@ export default function Msg3668Container() {
   };
 
   return (
-    <Row gutter={[16, 16]} style={{ marginTop: "15px" }}>
+    <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
       <Col span={7}>
         <Card
           title="366.8 - GỬI GETIN CONTAINER"
