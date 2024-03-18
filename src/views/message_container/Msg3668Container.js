@@ -3,11 +3,9 @@ import Table from "../../global_component/dataTable/customTable.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Card, Col, Divider, Radio, Row, Typography } from "antd";
 import {
-  LoadButton,
   buttonTypes,
   renderEventButtons,
 } from "../../global_component/EventButtons/index.jsx";
-import { load, sendmsg, clear } from "../../apis/message_container/3668.js";
 
 const { Text } = Typography;
 
@@ -20,6 +18,18 @@ export default function Msg3668Container() {
       sovandon: "SIK20123112",
       sodinhdanh: "",
       socontainer: "GMDU0981345",
+      ngaygetin: "12/03/2024",
+      abc: "",
+      chuyentau: "012W",
+      nhapxuat: "NHAP",
+    },
+    {
+      chon: "select",
+      tentau: "HAC",
+      imo: "12000",
+      sovandon: "SIK2012909123",
+      sodinhdanh: "",
+      socontainer: "GMDU0981009",
       ngaygetin: "12/03/2024",
       abc: "",
       chuyentau: "012W",
@@ -78,7 +88,7 @@ export default function Msg3668Container() {
                   <Text strong={true}>Hướng</Text>
                 </Col>
                 <Col span={24}>
-                  <Radio.Group>
+                  <Radio.Group defaultValue={1}>
                     <Radio value={1}>Tất cả</Radio>
                     <Radio value={2}>Nhập</Radio>
                     <Radio value={3}>Xuất</Radio>
@@ -96,7 +106,7 @@ export default function Msg3668Container() {
                   <Text strong={true}>Hàng Nội / Ngoại</Text>
                 </Col>
                 <Col span={24}>
-                  <Radio.Group>
+                  <Radio.Group defaultValue={1}>
                     <Radio value={1}>Tất cả</Radio>
                     <Radio value={2}>Hàng ngoại</Radio>
                     <Radio value={3}>Hàng nội</Radio>
@@ -113,7 +123,7 @@ export default function Msg3668Container() {
                   <Text strong={true}>Hàng / Rỗng</Text>
                 </Col>
                 <Col span={24}>
-                  <Radio.Group>
+                  <Radio.Group defaultValue={'A'}>
                     <Radio value={"A"}>Tất cả</Radio>
                     <Radio value={"F"}>Hàng</Radio>
                     <Radio value={"E"}>Rỗng</Radio>
@@ -130,8 +140,8 @@ export default function Msg3668Container() {
                   <Text strong={true}>Trạng thái thông điệp</Text>
                 </Col>
                 <Col span={24}>
-                  <Radio.Group>
-                    <Radio value={"all"}>Tất cả</Radio>
+                  <Radio.Group defaultValue={'A'}>
+                    <Radio value={"A"}>Tất cả</Radio>
                     <Radio value={"s"}>Thành công</Radio>
                     <Radio value={"c"}>Thất bại</Radio>
                     <Radio value={"n"}>Chưa gửi</Radio>
@@ -148,8 +158,8 @@ export default function Msg3668Container() {
                   <Text strong={true}>Trạng thái container ra khỏi cảng</Text>
                 </Col>
                 <Col span={24}>
-                  <Radio.Group>
-                    <Radio value={"all"}>Tất cả</Radio>
+                  <Radio.Group defaultValue={'A'}>
+                    <Radio value={"A"}>Tất cả</Radio>
                     <Radio value={"s"}>Chưa ra </Radio>
                     <Radio value={"c"}>Đã ra </Radio>
                   </Radio.Group>
@@ -165,6 +175,9 @@ export default function Msg3668Container() {
           style={{ borderRadius: "0px", height: "100%" }}
           className="b-card"
         >
+          {
+            renderEventButtons([{ type: buttonTypes.Load }, { type: buttonTypes.CancelGetin }, { type: buttonTypes.Send }])
+          }
           <Table
             config={{
               columns: columns,
