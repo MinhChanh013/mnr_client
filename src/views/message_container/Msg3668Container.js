@@ -2,6 +2,11 @@ import * as React from "react";
 import Table from "../../global_component/dataTable/customTable.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Card, Col, Divider, Radio, Row, Typography } from "antd";
+import {
+  LoadButton,
+  buttonTypes,
+  renderEventButtons,
+} from "../../global_component/EventButtons/index.jsx";
 
 const { Text } = Typography;
 
@@ -62,6 +67,18 @@ export default function Msg3668Container() {
           className="b-card"
         >
           <Row>
+            <Col span={24}>
+              {renderEventButtons([
+                { type: buttonTypes.Load, action: () => {} },
+                { type: buttonTypes.Send, action: () => {} },
+                { type: buttonTypes.Cancel, action: () => {} },
+                { type: buttonTypes.CancelGetin, action: () => {} },
+                { type: buttonTypes.Save, action: () => {} },
+              ])}
+              <Divider
+                style={{ margin: "5px 0 5px", borderColor: "#dededede" }}
+              />
+            </Col>
             <Col span={24}>
               <VesselSelect />
             </Col>

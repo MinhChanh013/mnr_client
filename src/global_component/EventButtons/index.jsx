@@ -2,7 +2,6 @@ import React, { Fragment, useState } from "react";
 
 import { Button, Modal, Typography, Flex } from "antd";
 import {
-  CloseOutlined,
   CloudDownloadOutlined,
   ExclamationCircleOutlined,
   SendOutlined,
@@ -10,29 +9,29 @@ import {
 
 export const buttonTypes = {
   Load: {
-    children: "Nạp dữ liệu",
+    children: "Nạp",
     backgroundColor: "#2399fa",
     icon: <CloudDownloadOutlined />,
   },
   Send: {
-    children: "Gởi thông điệp",
+    children: "Gửi",
     backgroundColor: "#f5a442",
     icon: <SendOutlined />,
   },
   Cancel: {
     children: "Hủy gửi",
     backgroundColor: "#f54f40",
-    icon: <CloseOutlined />,
+    icon: <SendOutlined />,
   },
   CancelGetin: {
-    children: "Hủy getin",
+    children: "Hủy Getin",
     backgroundColor: "#f54f40",
-    icon: <CloseOutlined />,
+    icon: <SendOutlined />,
   },
   Save: {
-    children: "Lưu dữ liệu",
+    children: "Lưu",
     backgroundColor: "#50a81d",
-    icon: <CloudDownloadOutlined />,
+    icon: <SendOutlined />,
   },
 };
 
@@ -50,7 +49,16 @@ function ModalConfirmEvent({ isModalOpen, actionText, onOk, onCancel }) {
             style={{ fontSize: "150%", color: "#f5a442" }}
           />
           <Typography style={{ color: "#f5a442", textAlign: "center" }}>
-            Xác nhận {actionText}
+            Xác nhận{" "}
+            <Typography
+              style={{
+                display: "inline",
+                color: "#1B618C",
+                textAlign: "center",
+              }}
+            >
+              {actionText}
+            </Typography>
           </Typography>
         </Flex>
       }
@@ -107,16 +115,10 @@ function EventButton({ children, backgroundColor, icon, action = () => {} }) {
   return (
     <Fragment>
       <Button
-        size="middle"
+        size="small"
         type="primary"
         icon={icon}
-        style={{
-          backgroundColor: "#fff",
-          color: backgroundColor,
-          borderRadius: "0",
-          border: `1px solid ${backgroundColor}`,
-          boxShadow: "none",
-        }}
+        style={{ backgroundColor }}
         onClick={showModal}
       >
         {children}
