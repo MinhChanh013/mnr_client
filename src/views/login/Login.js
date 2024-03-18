@@ -34,6 +34,7 @@ const { Title } = Typography;
 function Login() {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const success = () => {
@@ -49,28 +50,28 @@ function Login() {
       content: message,
     });
   };
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/");
-    }
-  });
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     navigate("/");
+  //   }
+  // });
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!Email || !Password) {
-    } else {
-      let res = await loginApi({
-        username: Email,
-        password: Password,
-      });
-      if (res && res.access_token) {
-        localStorage.setItem("token", res.access_token);
-        success();
-        navigate("/");
-      } else if (res && res.status === 400) {
-        error(res.message);
-      }
-    }
+    // e.preventDefault();
+    // if (!Email || !Password) return;
+    // setIsLoading(true);
+    // const res = await loginApi({
+    //   username: Email,
+    //   password: Password,
+    // });
+    // if (res && res.access_token) {
+    //   localStorage.setItem("token", res.access_token);
+    //   success();
+    //   navigate("/");
+    // } else if (res && res.status === 400) {
+    //   error(res.message);
+    // }
+    // setIsLoading(false);
   };
   return (
     <>
@@ -181,6 +182,7 @@ function Login() {
 
                         <Form.Item>
                           <Button
+                            disabled={isLoading}
                             className={cx("btnLogin")}
                             type="default"
                             htmlType="submit"

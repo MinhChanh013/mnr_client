@@ -29,15 +29,15 @@ const itemsMenu = [
 ];
 
 const Header = () => {
-  const [activeMenuMobile, setActiveMenuMobile] = React.useState(false)
+  const [activeMenuMobile, setActiveMenuMobile] = React.useState(false);
   React.useEffect(() => {
     window.addEventListener("resize", () => {
       const width = document.body.clientWidth;
       if (width >= 1169) {
-        setActiveMenuMobile(false)
+        setActiveMenuMobile(false);
       }
-    })
-  }, [])
+    });
+  }, []);
 
   return (
     <>
@@ -68,9 +68,7 @@ const Header = () => {
                   style={{ color: "white", cursor: "pointer" }}
                 >
                   <GlobalOutlined />
-                  <span className="language__content">
-                    Đổi ngôn ngữ
-                  </span>
+                  <span className="language__content">Đổi ngôn ngữ</span>
                 </Space>
               </Dropdown>
               <Dropdown
@@ -88,10 +86,7 @@ const Header = () => {
                 </Space>
               </Dropdown>
               <Space>
-                <Space
-                  className="btn__nav-mobile"
-                  style={{ marginTop: "6px" }}
-                >
+                <Space className="btn__nav-mobile" style={{ marginTop: "6px" }}>
                   <lord-icon
                     src="https://cdn.lordicon.com/ipnwkgdy.json"
                     colors="outline:#fff,primary:#fff"
@@ -103,9 +98,7 @@ const Header = () => {
                 <Drawer
                   className="b__nav-mobile"
                   title="Menu"
-                  onClose={() =>
-                    setActiveMenuMobile(false)
-                  }
+                  onClose={() => setActiveMenuMobile(false)}
                   open={activeMenuMobile}
                 >
                   <NavMobile />
@@ -117,5 +110,5 @@ const Header = () => {
       </Card>
     </>
   );
-}
+};
 export default Header;
