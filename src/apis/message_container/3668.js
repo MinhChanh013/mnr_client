@@ -4,18 +4,19 @@ const validateLoad = (GroupID) => {
   throw new Error();
 };
 
-export const load = async (
-  GroupID,
-  voyagekey,
-  cntrnos,
-  imextype,
-  isLF,
-  fromdate,
-  todate,
-  marker,
-  getout,
-  fe
-) => {
+export const load = async (params) => {
+  const {
+    GroupID,
+    voyagekey,
+    cntrnos,
+    imextype,
+    isLF,
+    fromdate,
+    todate,
+    marker,
+    getout,
+    fe,
+  } = params;
   validateLoad(GroupID);
 
   let arrCont = cntrnos
@@ -27,7 +28,6 @@ export const load = async (
   }
 
   const formData = {
-    action: "view",
     voyagekey: voyagekey,
     cntrNo: arrCont,
     imextype: imextype,
@@ -39,28 +39,29 @@ export const load = async (
     fe: fe,
   };
 
-  const data = await poster("CHANGE_URL", formData);
+  const data = await poster("/msg/cont/3668/view", formData);
   return data;
 };
 
 const validateSend = () => {
   throw new Error();
 };
+
 export const send = async (rows = []) => {
   validateSend();
 
   const formData = {
-    action: "sendmsg",
     datas: rows,
   };
 
-  const data = await poster("CHANGE_URL", formData);
+  const data = await poster("/msg/cont/3668/send", formData);
   return data;
 };
 
 const validateClearGetin = () => {
   throw new Error();
 };
+
 export const clearGetin = async (rows = []) => {
   validateClearGetin();
 
@@ -70,32 +71,31 @@ export const clearGetin = async (rows = []) => {
   }
 
   const formData = {
-    actions: "clear",
     IDRefs: idRefs,
   };
 
-  const data = await poster("CHANGE_URL", formData);
+  const data = await poster("/msg/cont/3668/del-getin", formData);
   return data;
 };
 
 const validateCancelSending = () => {
   throw new Error();
 };
+
 export const cancelSending = async (rows = []) => {
   validateCancelSending();
 
   const formData = { msgId: "3668" };
 
-  const data = await poster("CHANGE_URL", formData);
+  const data = await poster("/msg/cont/3668/send-cancel", formData);
   return data;
 };
 
 export const searchVessels = async ({ vesselName }) => {
   const formData = {
-    actions: "search_vsl",
     vslname: vesselName,
   };
 
-  const data = await poster("CHANGE_URL", formData);
+  const data = await poster("/msg/cont/3668/search", formData);
   return data;
 };
