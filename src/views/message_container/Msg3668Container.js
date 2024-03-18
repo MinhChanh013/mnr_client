@@ -15,15 +15,15 @@ export default function Msg3668Container() {
   const dataTable = [
     {
       chon: "select",
-      tentau: "",
-      imo: "",
-      sovandon: "",
+      tentau: "HAC",
+      imo: "120",
+      sovandon: "SIK20123112",
       sodinhdanh: "",
-      socontainer: "",
-      ngaygetin: "",
+      socontainer: "GMDU0981345",
+      ngaygetin: "12/03/2024",
       abc: "",
-      chuyentau: "",
-      nhapxuat: "",
+      chuyentau: "012W",
+      nhapxuat: "NHAP",
     },
   ];
   const style = {
@@ -60,7 +60,7 @@ export default function Msg3668Container() {
   };
 
   return (
-    <Row gutter={[16, 16]} style={{ marginTop: "15px" }}>
+    <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
       <Col span={7}>
         <Card
           title="366.8 - GỬI GETIN CONTAINER"
@@ -68,18 +68,6 @@ export default function Msg3668Container() {
           className="b-card"
         >
           <Row>
-            <Col span={24}>
-              {renderEventButtons([
-                { type: buttonTypes.Load, action: () => {} },
-                { type: buttonTypes.Send, action: () => {} },
-                { type: buttonTypes.Cancel, action: () => {} },
-                { type: buttonTypes.CancelGetin, action: () => {} },
-                { type: buttonTypes.Save, action: () => {} },
-              ])}
-              <Divider
-                style={{ margin: "5px 0 5px", borderColor: "#dededede" }}
-              />
-            </Col>
             <Col span={24}>
               <VesselSelect />
             </Col>
