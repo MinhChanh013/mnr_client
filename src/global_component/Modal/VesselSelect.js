@@ -2,7 +2,6 @@ import {
   Button,
   Card,
   Col,
-  Divider,
   Flex,
   Input,
   Modal,
@@ -10,11 +9,7 @@ import {
   Space,
   Typography,
 } from "antd";
-import {
-  DeleteOutlined,
-  SearchOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import Draggable from "react-draggable";
 import { useRef, useState } from "react";
 import { ReactGrid } from "@silevis/reactgrid";
