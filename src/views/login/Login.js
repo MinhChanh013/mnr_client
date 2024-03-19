@@ -8,6 +8,7 @@ import { loginApi } from "../../apis/Login";
 
 import logo1 from "../../assets/images/logo.png";
 import logo2 from "../../assets/images/logo2.png";
+import Thumb from "../../assets/images/Thumb.png";
 import {
   UserOutlined,
   LockOutlined,
@@ -32,8 +33,6 @@ const cx = classNames.bind(styles);
 const { Title } = Typography;
 
 function Login() {
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
@@ -50,47 +49,75 @@ function Login() {
       content: message,
     });
   };
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     navigate("/");
-  //   }
-  // });
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  });
+
   const handleSubmit = async (e) => {
-    // e.preventDefault();
-    // if (!Email || !Password) return;
-    // setIsLoading(true);
-    // const res = await loginApi({
-    //   username: Email,
-    //   password: Password,
-    // });
-    // if (res && res.access_token) {
-    //   localStorage.setItem("token", res.access_token);
-    //   success();
-    //   navigate("/");
-    // } else if (res && res.status === 400) {
-    //   error(res.message);
-    // }
-    // setIsLoading(false);
+    try {
+      setIsLoading(true);
+      console.log(e);
+      const res = await loginApi({
+        username: e.username,
+        password: e.password,
+      });
+      console.log(res);
+      if (res && res.access_token) {
+        localStorage.setItem("token", res.access_token);
+        success();
+        navigate("/");
+      } else if (res && res.status === 400) {
+        error(res.message);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
       {contextHolder}
       <Flex className={cx("Wrapper")} align="center" justify="center">
         <Flex className={cx("Content")} align="center" justify="center">
-          <Card className={cx("Loginform")}>
-            <Row gutter={[4, 40]} justify={"center"} align={"middle"}>
-              <img src={logo2} className={cx("logo2")} alt="logo"></img>
-              <Col>
-                <Title level={5} style={{ color: "#2D328D", margin: "0px" }}>
-                  Công ty cổ phần càng Sài Gòn
-                </Title>
-                <Title level={5} style={{ color: "#2D328D", margin: "0px" }}>
-                  Chi nhánh Tân Thuận
-                </Title>
-              </Col>
-              <Col span={24} className={cx("Col")}>
-                <Row>
+          <Row justify={"center"} align={"middle"} className={cx("Chilren")}>
+            <Col span={12}>
+              <Row justify={"center"} align={"middle"}>
+                {/* <img src={logo2} className={cx("logo2")} alt="logo"></img>
+                <Col>
+                  <Title level={5} style={{ color: "#2D328D", margin: "0px" }}>
+                    Công ty cổ phần càng Sài Gòn
+                  </Title>
+                  <Title level={5} style={{ color: "#2D328D", margin: "0px" }}>
+                    Chi nhánh Tân Thuận
+                  </Title>
+                </Col> */}
+                <Col span={24} className={cx("Col")}>
+                  <img src={logo1} className={cx("logo")} alt="thumb"></img>
+                </Col>
+                <Col span={24} className={cx("Col")}>
+                  <img src={Thumb} style={{ width: "90%" }}></img>
+                </Col>
+                <Col span={24} className={cx("Col")}>
+                  {/* <img src={logo1} className={cx("logo")} alt="thumb"></img> */}
+                  <Title
+                    level={5}
+                    style={{
+                      margin: "0",
+                      paddingLeft: "10px",
+                      color: "#3b4bc2",
+                    }}
+                  >
+                    copyright by Ceh software version 1.2 2023
+                  </Title>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={12} className={cx("Col")}>
+              <Card className={cx("Loginform")}>
+                <Row gutter={[4, 30]} justify={"center"} align={"middle"}>
                   <Col span={24} className={cx("Col")}>
                     <Flex vertical align="center">
                       <img
@@ -98,37 +125,33 @@ function Login() {
                         className={cx("Mainlogo")}
                         alt="logo"
                       ></img>
-                      <Typography className={cx("Title")}>
-                        Custom Automatic Systems
-                      </Typography>
                     </Flex>
                   </Col>
                   <Col span={24} className={cx("Col")}>
-                    <Flex style={{ width: "80%" }}>
+                    <Flex style={{ width: "90%" }}>
                       <Form
                         style={{ width: "100%" }}
                         wrapperCol={{ span: 24 }}
                         name="basic"
                         initialValues={{
-                          remember: true,
+                          remember: false,
                         }}
                         autoComplete="off"
+                        onFinish={handleSubmit}
                       >
                         <Form.Item
                           name="username"
                           rules={[
                             {
                               required: true,
-                              message: "Please input your username!",
+                              message: "Vui lòng nhập tên đăng nhập!",
                             },
                           ]}
                         >
                           <Input
                             className={cx("ipInfor")}
                             placeholder="Tên người dùng"
-                            value={Email}
                             prefix={<UserOutlined className={cx("Icon")} />}
-                            onChange={(e) => setEmail(e.target.value)}
                           />
                         </Form.Item>
 
@@ -137,7 +160,7 @@ function Login() {
                           rules={[
                             {
                               required: true,
-                              message: "Please input your password!",
+                              message: "Vui lòng nhập mật khẩu!",
                             },
                           ]}
                         >
@@ -152,8 +175,6 @@ function Login() {
                                 <EyeOutlined />
                               )
                             }
-                            value={Password}
-                            onChange={(e) => setPassword(e.target.value)}
                           />
                         </Form.Item>
 
@@ -187,7 +208,7 @@ function Login() {
                             type="default"
                             htmlType="submit"
                             icon={<LoginOutlined />}
-                            onClick={handleSubmit}
+                            // onClick={handleSubmit}
                           >
                             Đăng nhập
                           </Button>
@@ -196,18 +217,9 @@ function Login() {
                     </Flex>
                   </Col>
                 </Row>
-              </Col>
-              <Col span={24} className={cx("Col")}>
-                <img src={logo1} className={cx("logo")} alt="thumb"></img>
-                <Title
-                  level={5}
-                  style={{ margin: "0", paddingLeft: "10px", color: "#2C86FF" }}
-                >
-                  copyright by Ceh software version 1.2 2023
-                </Title>
-              </Col>
-            </Row>
-          </Card>
+              </Card>
+            </Col>
+          </Row>
         </Flex>
       </Flex>
     </>
