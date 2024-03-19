@@ -3,7 +3,6 @@ import Table from "../../global_component/dataTable/customTable.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Card, Col, Divider, Radio, Row, Typography } from "antd";
 import {
-  LoadButton,
   buttonTypes,
   renderEventButtons,
 } from "../../global_component/EventButtons/index.jsx";
@@ -21,6 +20,18 @@ export default function Msg3668Container() {
       sovandon: "SIK20123112",
       sodinhdanh: "",
       socontainer: "GMDU0981345",
+      ngaygetin: "12/03/2024",
+      abc: "",
+      chuyentau: "012W",
+      nhapxuat: "NHAP",
+    },
+    {
+      chon: "select",
+      tentau: "HAC",
+      imo: "12000",
+      sovandon: "SIK2012909123",
+      sodinhdanh: "",
+      socontainer: "GMDU0981009",
       ngaygetin: "12/03/2024",
       abc: "",
       chuyentau: "012W",
