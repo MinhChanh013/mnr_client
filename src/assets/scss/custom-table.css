@@ -361,32 +361,6 @@
 }
 
 .b-table .rg-header-cell {
-  height: 30px !important;
   justify-content: center;
   background: rgba(134, 229, 255, 0.5) !important;
-}
-
-.rg-checkbox-cell {
-  height: 35px !important;
-  top: 30px !important;
-}
-
-.rg-text-cell {
-  height: 35px !important;
-  top: 30px !important;
-}
-
-.rg-text-celleditor {
-  height: 35px !important;
-  top: 25.9vh !important;
-}
-
-.rg-cell-focus {
-  height: 35px !important;
-  top: 30px !important;
-}
-
-.rg-partial-area-selected-range {
-  top: 30px !important;
-  height: 35px !important;
 }/*# sourceMappingURL=custom-table.css.map */

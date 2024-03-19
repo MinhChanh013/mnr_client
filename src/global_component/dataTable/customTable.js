@@ -5,51 +5,50 @@ import "../../assets/css/ReactGrid-css/custom.css";
 import "../../assets/scss/custom-table.scss";
 import { Col, Row, Space, Input, Divider, Button } from "antd";
 import { FileExcelTwoTone, SearchOutlined } from "@ant-design/icons";
-import { buttonTypes, renderEventButtons } from "../EventButtons";
 
 class Table extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataTable: [],
-    };
-    this.dividerStyle = { margin: "5px 0 5px", borderColor: "#dededede" };
-    this.columns = this.props.config?.columns || [];
-  }
-
-  // rowid: text & cells: [{}]
-  componentDidMount() {
-    let row;
-    let loadedData = this.props.config?.dataSource;
-    let header = this.props.config?.header;
-    let temp = loadedData?.map((item, idx) => ({
-      rowId: idx,
-      cells: Object.values(item)?.map((values, i) => {
-        if (values === "select") {
-          let obj = {};
-          obj["type"] = "checkbox";
-          obj["checked"] = false;
-          obj["index"] = i;
-          return obj;
-        } else {
-          let obj = {};
-          obj["type"] = "text";
-          obj["text"] = values;
-          obj["index"] = i;
-          return obj;
-        }
-      }),
-    }));
-    if (temp) {
-      row = [header, ...temp];
-    } else {
-      row = [header];
+    constructor(props) {
+        super(props);
+        this.state = {
+            dataTable: [],
+        };
+        this.dividerStyle = { margin: "5px 0 5px", borderColor: "#dededede" };
+        this.columns = this.props.config?.columns || [];
     }
-    console.log(row);
-    this.setState({
-      dataTable: row,
-    });
-  }
+
+    // rowid: text & cells: [{}]
+    componentDidMount() {
+        let row;
+        let loadedData = this.props.config?.dataSource;
+        let header = this.props.config?.header;
+        let temp = loadedData?.map((item, idx) => ({
+            rowId: idx,
+            cells: Object.values(item)?.map((values, i) => {
+                if (values === "select") {
+                    let obj = {};
+                    obj["type"] = "checkbox";
+                    obj["checked"] = false;
+                    obj["index"] = i;
+                    return obj;
+                } else {
+                    let obj = {};
+                    obj["type"] = "text";
+                    obj["text"] = values;
+                    obj["index"] = i;
+                    return obj;
+                }
+            }),
+        }));
+        if (temp) {
+            row = [header, ...temp];
+        } else {
+            row = [header];
+        }
+        console.log(row);
+        this.setState({
+            dataTable: row,
+        });
+    }
 
     render() {
         return (
@@ -71,7 +70,7 @@ class Table extends React.Component {
                                             {
                                                 this.state.dataTable.filter(p => p.selected === true).length > 0
                                                     ?
-                                                        'Đã chọn:' `${this.state.dataTable.filter(p => p.selected === true).length || 0}`
+                                                    'Đã chọn:' `${this.state.dataTable.filter(p => p.selected === true).length || 0}`
                                                     : ''
                                             }
                                             <Space size={5} style={{ fontWeight: 'bold', fontSize: '13px' }}>
@@ -105,11 +104,17 @@ class Table extends React.Component {
                             onCellsChanged={(changedCell) => {
                                 let tempTable = [...this.state.dataTable];
                                 tempTable.map((item) => {
+                                    if (changedCell[0].columnId === 'select') {
+                                        if (item.rowId === changedCell[0]?.rowId) {
+                                            item.cells[changedCell[0]?.newCell.index].checked = changedCell[0]?.newCell.checked;
+                                        }
+                                    }
                                     if (item.rowId === changedCell[0]?.rowId) {
                                         item.cells[changedCell[0]?.newCell.index].text = changedCell[0]?.newCell.text;
                                     }
                                     return item;
                                 });
+                                console.log(tempTable);
                                 this.setState({
                                     dataTable: tempTable
                                 });
