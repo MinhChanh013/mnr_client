@@ -6,6 +6,8 @@ import {
   buttonTypes,
   renderEventButtons,
 } from "../../global_component/EventButtons/index.jsx";
+import { load, sendmsg, clear } from "../../apis/message_container/3668.js";
+import { ProviderMessage3668Context } from "../../contexts/Message3668Container.js";
 
 const { Text } = Typography;
 
@@ -70,124 +72,127 @@ export default function Msg3668Container() {
   };
 
   return (
-    <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-      <Col span={7}>
-        <Card
-          title="366.8 - GỬI GETIN CONTAINER"
-          style={{ borderRadius: "0px" }}
-          className="b-card"
-        >
-          <Row>
-            <Col span={24}>
-              <VesselSelect />
-            </Col>
-            <Divider style={style}> Lọc dữ liệu </Divider>
-            <Col span={24}>
-              <Row gutter={[8, 8]}>
+    <>
+      <ProviderMessage3668Context>
+        <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+          <Col span={7}>
+            <Card
+              title="366.8 - GỬI GETIN CONTAINER"
+              style={{ borderRadius: "0px" }}
+              className="b-card"
+            >
+              <Row>
                 <Col span={24}>
-                  <Text strong={true}>Hướng</Text>
+                  <VesselSelect />
                 </Col>
+                <Divider style={style}> Lọc dữ liệu </Divider>
                 <Col span={24}>
-                  <Radio.Group defaultValue={1}>
-                    <Radio value={1}>Tất cả</Radio>
-                    <Radio value={2}>Nhập</Radio>
-                    <Radio value={3}>Xuất</Radio>
-                    <Radio value={4}>Nội địa</Radio>
-                  </Radio.Group>
+                  <Row gutter={[8, 8]}>
+                    <Col span={24}>
+                      <Text strong={true}>Hướng</Text>
+                    </Col>
+                    <Col span={24}>
+                      <Radio.Group>
+                        <Radio value={1}>Tất cả</Radio>
+                        <Radio value={2}>Nhập</Radio>
+                        <Radio value={3}>Xuất</Radio>
+                        <Radio value={4}>Nội địa</Radio>
+                      </Radio.Group>
+                    </Col>
+                    <Divider
+                      style={{
+                        marginTop: "1px",
+                        marginBottom: "1px",
+                        borderColor: "#d1cccc",
+                      }}
+                    />
+                    <Col span={24}>
+                      <Text strong={true}>Hàng Nội / Ngoại</Text>
+                    </Col>
+                    <Col span={24}>
+                      <Radio.Group>
+                        <Radio value={1}>Tất cả</Radio>
+                        <Radio value={2}>Hàng ngoại</Radio>
+                        <Radio value={3}>Hàng nội</Radio>
+                      </Radio.Group>
+                    </Col>
+                    <Divider
+                      style={{
+                        marginTop: "1px",
+                        marginBottom: "1px",
+                        borderColor: "#d1cccc",
+                      }}
+                    />
+                    <Col span={24}>
+                      <Text strong={true}>Hàng / Rỗng</Text>
+                    </Col>
+                    <Col span={24}>
+                      <Radio.Group>
+                        <Radio value={"A"}>Tất cả</Radio>
+                        <Radio value={"F"}>Hàng</Radio>
+                        <Radio value={"E"}>Rỗng</Radio>
+                      </Radio.Group>
+                    </Col>
+                    <Divider
+                      style={{
+                        marginTop: "1px",
+                        marginBottom: "1px",
+                        borderColor: "#d1cccc",
+                      }}
+                    />
+                    <Col span={24}>
+                      <Text strong={true}>Trạng thái thông điệp</Text>
+                    </Col>
+                    <Col span={24}>
+                      <Radio.Group>
+                        <Radio value={"all"}>Tất cả</Radio>
+                        <Radio value={"s"}>Thành công</Radio>
+                        <Radio value={"c"}>Thất bại</Radio>
+                        <Radio value={"n"}>Chưa gửi</Radio>
+                      </Radio.Group>
+                    </Col>
+                    <Divider
+                      style={{
+                        marginTop: "1px",
+                        marginBottom: "1px",
+                        borderColor: "#d1cccc",
+                      }}
+                    />
+                    <Col span={24}>
+                      <Text strong={true}>
+                        Trạng thái container ra khỏi cảng
+                      </Text>
+                    </Col>
+                    <Col span={24}>
+                      <Radio.Group>
+                        <Radio value={"all"}>Tất cả</Radio>
+                        <Radio value={"s"}>Chưa ra </Radio>
+                        <Radio value={"c"}>Đã ra </Radio>
+                      </Radio.Group>
+                    </Col>
+                    <Col style={{ margin: "auto" }}></Col>
+                  </Row>
                 </Col>
-                <Divider
-                  style={{
-                    marginTop: "1px",
-                    marginBottom: "1px",
-                    borderColor: "#d1cccc",
-                  }}
-                />
-                <Col span={24}>
-                  <Text strong={true}>Hàng Nội / Ngoại</Text>
-                </Col>
-                <Col span={24}>
-                  <Radio.Group defaultValue={1}>
-                    <Radio value={1}>Tất cả</Radio>
-                    <Radio value={2}>Hàng ngoại</Radio>
-                    <Radio value={3}>Hàng nội</Radio>
-                  </Radio.Group>
-                </Col>
-                <Divider
-                  style={{
-                    marginTop: "1px",
-                    marginBottom: "1px",
-                    borderColor: "#d1cccc",
-                  }}
-                />
-                <Col span={24}>
-                  <Text strong={true}>Hàng / Rỗng</Text>
-                </Col>
-                <Col span={24}>
-                  <Radio.Group defaultValue={'A'}>
-                    <Radio value={"A"}>Tất cả</Radio>
-                    <Radio value={"F"}>Hàng</Radio>
-                    <Radio value={"E"}>Rỗng</Radio>
-                  </Radio.Group>
-                </Col>
-                <Divider
-                  style={{
-                    marginTop: "1px",
-                    marginBottom: "1px",
-                    borderColor: "#d1cccc",
-                  }}
-                />
-                <Col span={24}>
-                  <Text strong={true}>Trạng thái thông điệp</Text>
-                </Col>
-                <Col span={24}>
-                  <Radio.Group defaultValue={'A'}>
-                    <Radio value={"A"}>Tất cả</Radio>
-                    <Radio value={"s"}>Thành công</Radio>
-                    <Radio value={"c"}>Thất bại</Radio>
-                    <Radio value={"n"}>Chưa gửi</Radio>
-                  </Radio.Group>
-                </Col>
-                <Divider
-                  style={{
-                    marginTop: "1px",
-                    marginBottom: "1px",
-                    borderColor: "#d1cccc",
-                  }}
-                />
-                <Col span={24}>
-                  <Text strong={true}>Trạng thái container ra khỏi cảng</Text>
-                </Col>
-                <Col span={24}>
-                  <Radio.Group defaultValue={'A'}>
-                    <Radio value={"A"}>Tất cả</Radio>
-                    <Radio value={"s"}>Chưa ra </Radio>
-                    <Radio value={"c"}>Đã ra </Radio>
-                  </Radio.Group>
-                </Col>
-                <Col style={{ margin: "auto" }}></Col>
               </Row>
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-      <Col span={17}>
-        <Card
-          style={{ borderRadius: "0px", height: "100%" }}
-          className="b-card"
-        >
-          {
-            renderEventButtons([{ type: buttonTypes.Load }, { type: buttonTypes.CancelGetin }, { type: buttonTypes.Send }])
-          }
-          <Table
-            config={{
-              columns: columns,
-              header: header,
-              dataSource: dataTable,
-              footer: true,
-            }}
-          />
-        </Card>
-      </Col>
-    </Row>
+            </Card>
+          </Col>
+          <Col span={17}>
+            <Card
+              style={{ borderRadius: "0px", height: "100%" }}
+              className="b-card"
+            >
+              <Table
+                config={{
+                  columns: columns,
+                  header: header,
+                  dataSource: dataTable,
+                  footer: true,
+                }}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </ProviderMessage3668Context>
+    </>
   );
 }
