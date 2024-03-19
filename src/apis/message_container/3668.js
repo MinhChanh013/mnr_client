@@ -7,7 +7,7 @@ const cpath = (action) => {
 
 ///---validate
 const validateLoad = (GroupID) => {
-  throw new Error();
+  // throw new Error();
 };
 const validateSend = () => {
   throw new Error();

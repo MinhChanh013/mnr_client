@@ -6,10 +6,10 @@ const http = axios.create({
 });
 
 http.interceptors.request.use(async (config) => {
-  const auth = localStorage.getItem("auth");
+  const token = localStorage.getItem("token");
   const header = {
     Accept: "application/json",
-    Authorization: `Bearer ${auth ? JSON.parse(auth)["jwt"] : ""}`,
+    Authorization: `Bearer ${token ?? ""}`,
   };
 
   config.headers = header;

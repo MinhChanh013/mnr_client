@@ -1,28 +1,24 @@
-import * as React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FileExcelTwoTone, SearchOutlined } from "@ant-design/icons";
 import { ReactGrid } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
+import { Button, Col, Divider, Input, Row, Space } from "antd";
+import * as React from "react";
 import "../../assets/css/ReactGrid-css/custom.css";
 import "../../assets/scss/custom-table.scss";
-import { Col, Row, Space, Input, Divider, Button } from "antd";
-import { FileExcelTwoTone, SearchOutlined } from "@ant-design/icons";
 
-class Table extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataTable: [],
-      filterData: ''
-    };
-    this.dividerStyle = { margin: "5px 0 5px", borderColor: "#dededede" };
-    this.columns = this.props.config?.columns || [];
-  }
+const dividerStyle = { margin: "5px 0 5px", borderColor: "#dededede" };
 
-  // rowid: text & cells: [{}]
-  componentDidMount() {
-    let row;
-    let loadedData = this.props.config?.dataSource;
-    let header = this.props.config?.header;
-    let temp = loadedData?.map((item, idx) => ({
+const Table = ({ config, tableRef }) => {
+  const { dataSource, header, footer, columns } = config
+  const [dataTable, setDataTable] = React.useState([])
+
+  React.useEffect(() => {
+    handleGetDataTable(dataSource)
+  }, [dataSource])
+
+  const handleGetDataTable = (dataTable) => {
+    const temp = dataTable?.map((item, idx) => ({
       rowId: idx,
       cells: Object.values(item)?.map((values, i) => {
         if (values === "select") {
@@ -40,92 +36,90 @@ class Table extends React.Component {
         }
       }),
     }));
+
+    let row
     if (temp) {
       row = [header, ...temp];
     } else {
       row = [header];
     }
-    console.log(row);
-    this.setState({
-      dataTable: row,
-    });
+    setDataTable(row)
   }
 
+  const handelSearch = (valueText) => {
+    const dataTableSearch = dataSource.filter((data) => {
+      return Object.values(data).some(value => value.toLowerCase().includes(valueText.toLowerCase()));
+    })
 
-  render() {
-    return (
-      <Row>
-        <Col span={24} >
-          <Space style={{ justifyContent: 'space-between', width: '100%' }}>
-            <Space >
-              <p>Tìm:</p>
-              <Input
-                onChange={(e) => {
-                  this.setState({
-                    filterData: e.target.value
-                  })
-                }} />
-              <Divider type="vertical" style={this.dividerStyle} />
-              <SearchOutlined />
-            </Space>
-            {
-              this.props.config.footer === true ?
-                <Col span={24}>
-                  <Space style={{ justifyContent: 'space-between', width: '100%' }}>
-                    <Space>
-                      {
-                        this.state.dataTable.filter(p => p.selected === true).length > 0
-                          ?
-                          'Đã chọn:' `${this.state.dataTable.filter(p => p.selected === true).length || 0}`
-                          : ''
-                      }
-                      <Space size={5} style={{ fontWeight: 'bold', fontSize: '13px' }}>
-                        Số dòng: &nbsp; {this.state.dataTable.filter(p => p.rowId !== 'header').length || 0}
-                        <Divider type="vertical" style={this.dividerStyle} />
-                        Thành công: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'SUCCESS').length || 0}
-                        <Divider type="vertical" style={this.dividerStyle} />
+    handleGetDataTable(dataTableSearch)
+  }
 
-                        Thất bại: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'FAIL').length || 0}
-                        <Divider type="vertical" style={this.dividerStyle} />
-                        Chưa gửi: &nbsp; {this.state.dataTable.filter(p => p.STATUS === 'READY').length || 0}
+  return (
+    <Row>
+      <Col span={24} >
+        <Space style={{ justifyContent: 'space-between', width: '100%' }}>
+          <Space >
+            <p>Tìm:</p>
+            <Input
+              onChange={(e) => { handelSearch(e.target.value) }} />
+            <Divider type="vertical" style={dividerStyle} />
+            <SearchOutlined />
+          </Space>
+          {
+            footer === true ?
+              <Col span={24}>
+                <Space style={{ justifyContent: 'space-between', width: '100%' }}>
+                  <Space>
+                    {
+                      dataTable.filter(p => p.selected === true).length > 0
+                        ?
+                        'Đã chọn:' `${dataTable.filter(p => p.selected === true).length || 0}`
+                        : ''
+                    }
+                    <Space size={5} style={{ fontWeight: 'bold', fontSize: '13px' }}>
+                      Số dòng: &nbsp; {dataTable.filter(p => p.rowId !== 'header').length || 0}
+                      <Divider type="vertical" style={dividerStyle} />
+                      Thành công: &nbsp; {dataTable.filter(p => p.STATUS === 'SUCCESS').length || 0}
+                      <Divider type="vertical" style={dividerStyle} />
 
-                        <Divider type="vertical" style={this.dividerStyle} />
-                        <Button icon={<FileExcelTwoTone />} size='small' />
-                      </Space>
+                      Thất bại: &nbsp; {dataTable.filter(p => p.STATUS === 'FAIL').length || 0}
+                      <Divider type="vertical" style={dividerStyle} />
+                      Chưa gửi: &nbsp; {dataTable.filter(p => p.STATUS === 'READY').length || 0}
+
+                      <Divider type="vertical" style={dividerStyle} />
+                      <Button icon={<FileExcelTwoTone />} size='small' />
                     </Space>
                   </Space>
-                </Col>
-                : ''
-            }
-          </Space>
-        </Col>
-        <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede' }} />
-        <Col span={24}>
-          <div className="b-table">
-            <ReactGrid
-              ref={this.props.tableRef}
-              enableRangeSelection
-              rows={this.state.dataTable}
-              columns={this.columns}
-              onCellsChanged={(changedCell) => {
-                let tempTable = [...this.state.dataTable];
-                tempTable.map((item) => {
-                  if (item.rowId === changedCell[0]?.rowId) {
-                    item.cells[changedCell[0]?.newCell.index].text = changedCell[0]?.newCell.text;
-                  }
-                  return item;
-                });
-                this.setState({
-                  dataTable: tempTable
-                });
-              }}
-            />
-          </div>
-          <Divider style={this.dividerStyle} />
+                </Space>
+              </Col>
+              : ''
+          }
+        </Space>
+      </Col>
+      <Divider style={{ margin: '5px 0 5px', borderColor: '#dededede' }} />
+      <Col span={24}>
+        <div className="b-table">
+          <ReactGrid
+            ref={tableRef}
+            enableRangeSelection
+            rows={dataTable}
+            columns={columns}
+            onCellsChanged={(changedCell) => {
+              let tempTable = [...dataTable];
+              tempTable.map((item) => {
+                if (item.rowId === changedCell[0]?.rowId) {
+                  item.cells[changedCell[0]?.newCell.index].text = changedCell[0]?.newCell.text;
+                }
+                return item;
+              });
+              setDataTable(tempTable)
+            }}
+          />
+        </div>
+        <Divider style={dividerStyle} />
 
-        </Col>
-      </Row>
-    )
-  }
+      </Col>
+    </Row>
+  );
 }
 export default Table;
