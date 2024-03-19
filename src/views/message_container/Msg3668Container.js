@@ -9,7 +9,17 @@ import {
 } from "../../global_component/EventButtons/index.jsx";
 import { load } from "../../apis/message_container/3668.js";
 
-const { Text } = Typography;
+  for (const item of target) {
+    inputNames.push(item.name);
+  }
+
+  return inputNames.reduce((prevValue, currentValue) => {
+    return {
+      ...prevValue,
+      [currentValue]: formData.get(currentValue),
+    };
+  }, {});
+};
 
 export default function Msg3668Container() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -155,103 +165,150 @@ export default function Msg3668Container() {
       <ProviderMessage3668Context>
         <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
           <Col span={7}>
+            {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
+            {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
             <Card
               title="366.8 - GỬI GETIN CONTAINER"
               style={{ borderRadius: "0px" }}
               className="b-card"
             >
-              <Row>
+              <Row style={{ padding: "0 24px" }}>
                 <Col span={24}>
                   <VesselSelect />
                 </Col>
-                <Divider style={style}> Lọc dữ liệu </Divider>
-                <Col span={24}>
-                  <Row gutter={[8, 8]}>
-                    <Col span={24}>
-                      <Text strong={true}>Hướng</Text>
-                    </Col>
-                    <Col span={24}>
-                      <Radio.Group>
-                        <Radio value={1}>Tất cả</Radio>
-                        <Radio value={2}>Nhập</Radio>
-                        <Radio value={3}>Xuất</Radio>
-                        <Radio value={4}>Nội địa</Radio>
-                      </Radio.Group>
-                    </Col>
-                    <Divider
-                      style={{
-                        marginTop: "1px",
-                        marginBottom: "1px",
-                        borderColor: "#d1cccc",
-                      }}
-                    />
-                    <Col span={24}>
-                      <Text strong={true}>Hàng Nội / Ngoại</Text>
-                    </Col>
-                    <Col span={24}>
-                      <Radio.Group>
-                        <Radio value={1}>Tất cả</Radio>
-                        <Radio value={2}>Hàng ngoại</Radio>
-                        <Radio value={3}>Hàng nội</Radio>
-                      </Radio.Group>
-                    </Col>
-                    <Divider
-                      style={{
-                        marginTop: "1px",
-                        marginBottom: "1px",
-                        borderColor: "#d1cccc",
-                      }}
-                    />
-                    <Col span={24}>
-                      <Text strong={true}>Hàng / Rỗng</Text>
-                    </Col>
-                    <Col span={24}>
-                      <Radio.Group>
-                        <Radio value={"A"}>Tất cả</Radio>
-                        <Radio value={"F"}>Hàng</Radio>
-                        <Radio value={"E"}>Rỗng</Radio>
-                      </Radio.Group>
-                    </Col>
-                    <Divider
-                      style={{
-                        marginTop: "1px",
-                        marginBottom: "1px",
-                        borderColor: "#d1cccc",
-                      }}
-                    />
-                    <Col span={24}>
-                      <Text strong={true}>Trạng thái thông điệp</Text>
-                    </Col>
-                    <Col span={24}>
-                      <Radio.Group>
-                        <Radio value={"all"}>Tất cả</Radio>
-                        <Radio value={"s"}>Thành công</Radio>
-                        <Radio value={"c"}>Thất bại</Radio>
-                        <Radio value={"n"}>Chưa gửi</Radio>
-                      </Radio.Group>
-                    </Col>
-                    <Divider
-                      style={{
-                        marginTop: "1px",
-                        marginBottom: "1px",
-                        borderColor: "#d1cccc",
-                      }}
-                    />
-                    <Col span={24}>
-                      <Text strong={true}>
-                        Trạng thái container ra khỏi cảng
-                      </Text>
-                    </Col>
-                    <Col span={24}>
-                      <Radio.Group>
-                        <Radio value={"all"}>Tất cả</Radio>
-                        <Radio value={"s"}>Chưa ra </Radio>
-                        <Radio value={"c"}>Đã ra </Radio>
-                      </Radio.Group>
-                    </Col>
-                    <Col style={{ margin: "auto" }}></Col>
-                  </Row>
-                </Col>
+
+                <Filter
+                  filterRef={filterRef}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Nhập",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất",
+                            value: "2",
+                          },
+                          {
+                            label: "Nội địa",
+                            value: "3",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng",
+                      config: {
+                        name: "isLF",
+                        options: [
+                          {
+                            label: "Hàng ngoại",
+                            value: "1",
+                          },
+                          {
+                            label: "Hàng nội",
+                            value: "2",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái thông điệp",
+                      config: {
+                        name: "marker",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Thành công",
+                            value: "SuccessMarker",
+                          },
+                          {
+                            label: "Thất bại",
+                            value: "ErrorMarker",
+                          },
+                          {
+                            label: "Chưa gửi",
+                            value: "UnMarker",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái container ra khỏi cảng",
+                      config: {
+                        name: "getout",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Chưa ra",
+                            value: "1",
+                          },
+                          {
+                            label: "Đã ra",
+                            value: "2",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng",
+                      config: {
+                        name: "fe",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Full",
+                            value: "1",
+                          },
+                          {
+                            label: "Empty",
+                            value: "0",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.rangePicker,
+                      label: "Khoản",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: "Số Cont",
+                      config: {
+                        name: "cntrNo",
+                        placeholder: "",
+                        value: "",
+                      },
+                    },
+                  ]}
+                />
               </Row>
             </Card>
           </Col>
