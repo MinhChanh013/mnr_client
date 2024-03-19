@@ -2,7 +2,7 @@ import { Card, Col, Divider, Radio, Row, Typography } from "antd";
 import * as React from "react";
 import { ProviderMessage3668Context } from "../../contexts/Message3668Container.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import Table from "../../global_component/dataTable/customTable.jsx";
+import Table from "../../global_component/dataTable/customTable.js";
 import {
   buttonTypes,
   renderEventButtons,

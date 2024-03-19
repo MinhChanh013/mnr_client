@@ -1,5 +1,5 @@
 import * as React from "react";
-import Table from '../../global_component/dataTable/customTable.jsx'
+import Table from '../../global_component/dataTable/customTable.js'
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Card, Row, Col, Space, Input, Divider, Button } from 'antd';
 import {  SendOutlined } from '@ant-design/icons';
