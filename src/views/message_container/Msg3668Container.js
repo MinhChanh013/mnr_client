@@ -22,22 +22,22 @@ export default function Msg3668Container() {
   const columns = [
     { columnId: "Select", width: 100 },
     { columnId: "JobStatus", width: 180 },
-    { columnId: "StatusOfGood", width: 100 },
+    { columnId: "StatusMarker", width: 100 },
     { columnId: "BillOfLading", width: 100 },
-    { columnId: "cargoCtrlNo", width: 100 },
-    { columnId: "container", width: 150 },
+    { columnId: "CargoCtrlNo", width: 100 },
+    { columnId: "CntrNo", width: 150 },
     { columnId: "GetIn", width: 200 },
     { columnId: "TransportIdentity", width: 150 },
     { columnId: "NumberOfJourney", width: 150 },
     { columnId: "ArrivalDeparture", width: 200 },
     { columnId: "ImExType", width: 150 },
     { columnId: "StatusOfGood", width: 150 },
-    { columnId: "jobModeIn", width: 150 },
-    { columnId: "cargoWeight", width: 150 },
+    { columnId: "JobModeIn", width: 150 },
+    { columnId: "CargoWeight", width: 150 },
     { columnId: "SealNo", width: 150 },
     { columnId: "CommodityDescription", width: 150 },
     { columnId: "ContainerLocation", width: 150 },
-    { columnId: "content", width: 150 },
+    { columnId: "Content", width: 150 },
     { columnId: "AcceptanceNo", width: 150 },
     { columnId: "AcceptanceTime", width: 220 },
     { columnId: "ResponseText", width: 180 },
@@ -73,7 +73,6 @@ export default function Msg3668Container() {
   };
 
   const handleLoadData = async () => {
-    const dataMsg3668 = [];
     try {
       const resultDataMsg3668 = await load({
         fromdate: "2023/03/13 00:00:00",
@@ -81,66 +80,36 @@ export default function Msg3668Container() {
         cntrnos: "",
       });
       if (resultDataMsg3668) {
-        console.log(resultDataMsg3668);
-        resultDataMsg3668.data.forEach((item) => {
-          const {
-            SuccessMarker,
-            ErrorMarker,
-            JobStatus,
-            BillOfLading,
-            CargoCtrlNo,
-            CntrNo,
-            GetIn,
-            TransportIdentity,
-            NumberOfJourney,
-            ArrivalDeparture,
-            ImExType,
-            StatusOfGood,
-            JobModeIn,
-            CargoWeight,
-            SealNo,
-            CommodityDescription,
-            ContainerLocation,
-            Content,
-            AcceptanceNo,
-            AcceptanceTime,
-            ResponseText,
-            MsgRef,
-          } = item;
-          let msgLog, imextype, fe;
-          imextype =
-            ImExType === 1 ? "Nhập" : ImExType === 2 ? "Xuất" : "Nội Địa";
-          if (SuccessMarker) {
-            msgLog = "Thành công";
-          } else if (ErrorMarker) {
-            msgLog = "Thất bại";
-          } else msgLog = "Chưa gửi";
-          fe = StatusOfGood === 1 ? "Full" : "Empty";
-
-          dataMsg3668.push({
-            Select: "select",
-            JobStatus: JobStatus ?? "",
-            msgLog,
-            BillOfLading,
-            CargoCtrlNo,
-            CntrNo,
-            GetIn,
-            TransportIdentity,
-            NumberOfJourney,
-            ArrivalDeparture,
-            ImExType: imextype,
-            StatusOfGood: fe,
-            JobModeIn,
-            CargoWeight: `${CargoWeight}`,
-            SealNo,
-            CommodityDescription,
-            ContainerLocation,
-            Content: Content ?? "",
-            AcceptanceNo: AcceptanceNo ?? "",
-            AcceptanceTime: AcceptanceTime ?? "",
-            ResponseText: ResponseText ?? "",
-            MsgRef: MsgRef ?? "",
-          });
+        const dataMsg3668 = resultDataMsg3668.data.map((row) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.columnId;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "StatusMarker":
+                if (row["SuccessMarker"]) {
+                  acc[keyValue] = "Thành công";
+                } else if (row["ErrorMarker"]) {
+                  acc[keyValue] = "Thất bại";
+                } else acc[keyValue] = "Chưa gửi";
+                break;
+              case "StatusOfGood":
+                rowValue === 1
+                  ? (acc[keyValue] = "Full")
+                  : (acc[keyValue] = "Empty");
+                break;
+              default:
+                keyValue === "Select"
+                  ? (acc[keyValue] = "select")
+                  : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
+                break;
+            }
+            return acc;
+          }, {});
         });
         setDataTable(dataMsg3668);
       }
