@@ -5,6 +5,8 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.0",
     "@reduxjs/toolkit": "^2.2.1",
+    "@revolist/revogrid-column-select": "^2.0.2",
+    "@revolist/revogrid-react": "^3.0.52",
     "@silevis/reactgrid": "^4.0.3",
     "antd": "^5.15.2",
     "axios": "^1.6.7",

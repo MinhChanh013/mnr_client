@@ -363,4 +363,8 @@
 .b-table .rg-header-cell {
   justify-content: center;
   background: rgba(134, 229, 255, 0.5) !important;
+}
+
+revo-grid {
+  height: 500px !important;
 }/*# sourceMappingURL=custom-table.css.map */

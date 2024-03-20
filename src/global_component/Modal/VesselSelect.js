@@ -1,12 +1,10 @@
 import { useState } from "react";
-
 import { Button, Card, Col, Flex, Modal, Row, Space, Typography } from "antd";
 import { CloseOutlined, UnorderedListOutlined } from "@ant-design/icons";
 
 import Table from "../dataTable/customTable";
 
 import "./vessel-select.scss";
-import { useMessage3668Context } from "../../contexts/Message3668Container";
 
 const { Text } = Typography;
 
@@ -38,9 +36,10 @@ function VesselValue({ children }) {
   return <Text style={{ minWidth: "100px" }}>{children}</Text>;
 }
 
-function VesselModalSelect({ setOpen, open }) {
-  const { tableRef, handleSelectRow } = useMessage3668Context();
-
+export default function VesselSelect() {
+  const [vessel, setVessel] = useState({});
+  const [display, setDisplay] = useState({});
+  const [open, setOpen] = useState(false);
   const columns = [
     { columnId: "select", width: 150 },
     { columnId: "VesselName", width: 165 },
@@ -48,6 +47,7 @@ function VesselModalSelect({ setOpen, open }) {
     { columnId: "OutboundVoyage", width: 165 },
     { columnId: "ETA", width: 165 },
     { columnId: "ETD", width: 165 },
+    { columnId: "VOYAGEKEY", width: 0 },
   ];
   const header = {
     rowId: "header",
@@ -58,46 +58,20 @@ function VesselModalSelect({ setOpen, open }) {
       { type: "header", text: "Chuyến Xuất" },
       { type: "header", text: "Ngày Cập" },
       { type: "header", text: "Ngày Rời" },
+      { type: "header", text: "VOYAGEKEY" },
     ],
   };
   const dataTable = [
     {
       chon: "select",
-      VesselName: "vessel 1",
       InboundVoyage: "123S",
+      VesselName: "vessel 1",
       OutboundVoyage: "222B",
       ETA: "2022-11-18 11:07:09",
       ETD: "2022-11-20 11:08:20",
+      VOYAGEKEY: 'ASDKASDAS'
     },
   ];
-
-  return (
-    <Modal
-      open={open}
-      maskClosable={false}
-      width={700}
-      className="vessel-modal"
-      onOk={() => {
-        handleSelectRow();
-        // setOpen(false)
-      }}
-      onCancel={() => setOpen(false)}
-      title={
-        <Text style={{ width: "100%", fontSize: "1rem" }}>Chọn Chuyến Tàu</Text>
-      }
-    >
-      <Card className="vessel-select">
-        <Table
-          tableRef={tableRef}
-          config={{ columns, header, dataSource: dataTable }}
-        />
-      </Card>
-    </Modal>
-  );
-}
-
-export default function VesselSelect() {
-  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
@@ -112,14 +86,21 @@ export default function VesselSelect() {
           >
             <Space>
               <VesselLabel>Tên tàu:</VesselLabel>
-              <VesselValue>Tên tàu:</VesselValue>
+              <VesselValue>
+                {
+                  Object.values(vessel).length > 0
+                    ?
+                    vessel.VesselName
+                    : ''
+                }
+              </VesselValue>
             </Space>
             <Flex gap="5px">
               <VesselButton>
                 <CloseOutlined style={{ fontSize: "13px" }} />
               </VesselButton>
 
-              <VesselButton onClick={() => setOpenModal(true)}>
+              <VesselButton onClick={() => setOpen(true)}>
                 <UnorderedListOutlined style={{ fontSize: "13px" }} />
               </VesselButton>
             </Flex>
@@ -129,7 +110,14 @@ export default function VesselSelect() {
         <Col span={24} style={{ borderBottom: "1px dashed" }}>
           <Space>
             <VesselLabel>Chuyến N/X:</VesselLabel>
-            <VesselValue>VesselValue</VesselValue>
+            <VesselValue>
+              {
+                Object.values(vessel).length > 0
+                  ?
+                  vessel?.InboundVoyage + ' / ' + vessel?.OutboundVoyage
+                  : ''
+              }
+            </VesselValue>
           </Space>
         </Col>
 
@@ -138,20 +126,60 @@ export default function VesselSelect() {
             <Col span={11} style={{ borderBottom: "1px dashed" }}>
               <Space>
                 <VesselLabel>ETA:</VesselLabel>
-                <VesselValue>VesselValue</VesselValue>
+                <VesselValue>
+                {
+                  Object.values(vessel).length > 0
+                    ?
+                    vessel.ETA
+                    : ''
+                }
+
+                </VesselValue>
               </Space>
             </Col>
             <Col span={2}></Col>
             <Col span={11} style={{ borderBottom: "1px dashed" }}>
               <Space>
                 <VesselLabel>ETD:</VesselLabel>
-                <VesselValue>VesselValue</VesselValue>
+                <VesselValue>
+                {
+                  Object.values(vessel).length > 0
+                    ?
+                    vessel.ETD
+                    : ''
+                }
+
+                </VesselValue>
               </Space>
             </Col>
           </Row>
         </Col>
       </Row>
-      <VesselModalSelect open={openModal} setOpen={setOpenModal} />
+      < Modal
+        open={open}
+        maskClosable={false}
+        width={700}
+        className="vessel-modal"
+        onOk={() => {
+          setOpen(false)
+        }}
+        onCancel={() => setOpen(false)}
+        title={
+          <Text style={{ width: "100%", fontSize: "1rem" }}>Chọn Chuyến Tàu</Text>
+        }
+      >
+        <Card className="vessel-select">
+          <Table
+            config={{ columns, header, dataSource: dataTable }}
+            handleSelect={(vesselData) => {
+              let obj = {}
+              vesselData[0].cells.filter(p => p.column).map(p => obj[p.column] = p.text);
+              setVessel(obj);
+              setDisplay(obj);
+            }}
+          />
+        </Card>
+      </Modal>
     </>
   );
 }
