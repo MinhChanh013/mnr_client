@@ -14,6 +14,7 @@ import Msg367point8 from "./views/message_common/Msg367point8.js";
 import Msg213 from "./views/message_container/Msg213Container.js";
 import Msg214 from "./views/message_container/Msg214Container.js";
 import Msg237 from "./views/message_container/Msg237Container.js";
+import Msg3665Container from "./views/message_container/Msg3665Container.js";
 import Msg247Container from "./views/message_container/Msg247Container.js";
 import Dashboard from "./views/Dashboard/Dashboard.js";
 import Layout from "./global_component/Layout/Layout.js";
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "/msg214_container", element: <Msg214 /> },
       { path: "/msg237_container", element: <Msg237 /> },
       { path: "/msg247_container", element: <Msg247Container /> },
+      { path: "/msg3665_container", element: <Msg3665Container /> },
     ],
   },
   { path: "/login", element: <Login /> },
