@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Radio, Row, Typography } from "antd";
+import { Card, Col, Row } from "antd";
 import * as React from "react";
 import { ProviderMessage3668Context } from "../../contexts/Message3668Container.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
@@ -8,19 +8,8 @@ import {
   renderEventButtons,
 } from "../../global_component/EventButtons/index.jsx";
 import { load } from "../../apis/message_container/3668.js";
-
-  for (const item of target) {
-    inputNames.push(item.name);
-  }
-
-  return inputNames.reduce((prevValue, currentValue) => {
-    return {
-      ...prevValue,
-      [currentValue]: formData.get(currentValue),
-    };
-  }, {});
-};
-
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import { getFormData } from "../../utils";
 export default function Msg3668Container() {
   const [dataTable, setDataTable] = React.useState([]);
 
@@ -159,6 +148,15 @@ export default function Msg3668Container() {
       console.log(error);
     }
   };
+
+  //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
+  const filterRef = React.useRef();
+  // const handleSelectFilterData = () => {
+  //* KHI HÀM NÀY CHẠY THÌ CỰA THEO filterRef ĐỂ LẤY DỮ LIỆU,
+  //   console.log({
+  //     data: getFormData(filterRef.current),
+  //   });
+  // };
 
   return (
     <>

@@ -34,22 +34,17 @@ export const RadioGroupFilter = ({
   );
 };
 
-export const InputFilter = ({ name = "", placeholder = "", value = "" }) => {
-  return <Input name={name} placeholder={placeholder} value={value} />;
+export const InputFilter = ({ name = "", placeholder = "" }) => {
+  return <Input name={name} placeholder={placeholder} />;
 };
 
 const { RangePicker } = DatePicker;
-export const RangePickerFilter = ({
-  name = "",
-  placeholder = "",
-  value = "",
-}) => {
+export const RangePickerFilter = ({ name = "", placeholder = "" }) => {
   return (
     <RangePicker
       style={{ width: "100%" }}
       name={name}
       placeholder={placeholder}
-      value={value}
     />
   );
 };
