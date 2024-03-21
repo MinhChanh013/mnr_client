@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Flex, Modal, Row, Space, Typography } from "antd";
 import { CloseOutlined, UnorderedListOutlined } from "@ant-design/icons";
 
@@ -36,10 +36,11 @@ function VesselValue({ children }) {
   return <Text style={{ minWidth: "100px" }}>{children}</Text>;
 }
 
-export default function VesselSelect() {
+export default function VesselSelect({ data }) {
   const [vessel, setVessel] = useState({});
   const [display, setDisplay] = useState({});
   const [open, setOpen] = useState(false);
+  const [viewvessels, setViewvessels] = useState({});
   const columns = [
     { columnId: "select", width: 150 },
     { columnId: "VesselName", width: 165 },
@@ -61,18 +62,23 @@ export default function VesselSelect() {
       { type: "header", text: "VOYAGEKEY" },
     ],
   };
-  const dataTable = [
-    {
-      chon: "select",
-      InboundVoyage: "123S",
-      VesselName: "vessel 1",
-      OutboundVoyage: "222B",
-      ETA: "2022-11-18 11:07:09",
-      ETD: "2022-11-20 11:08:20",
-      VOYAGEKEY: 'ASDKASDAS'
-    },
-  ];
-
+  useEffect(() => {
+    handleLoadData();
+  }, [data]);
+  const handleLoadData = () => {
+    if (data) {
+      const dataViewsels = data.map((row) => {
+        return columns.reduce((acc, column) => {
+          const keyValue = column.columnId;
+          keyValue === "Select"
+            ? (acc[keyValue] = "select")
+            : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
+          return acc;
+        }, {});
+      });
+      setViewvessels(dataViewsels);
+    }
+  };
   return (
     <>
       <Row style={{ gap: "15px" }}>
@@ -87,12 +93,7 @@ export default function VesselSelect() {
             <Space>
               <VesselLabel>Tên tàu:</VesselLabel>
               <VesselValue>
-                {
-                  Object.values(vessel).length > 0
-                    ?
-                    vessel.VesselName
-                    : ''
-                }
+                {Object.values(vessel).length > 0 ? vessel.VesselName : ""}
               </VesselValue>
             </Space>
             <Flex gap="5px">
@@ -111,12 +112,9 @@ export default function VesselSelect() {
           <Space>
             <VesselLabel>Chuyến N/X:</VesselLabel>
             <VesselValue>
-              {
-                Object.values(vessel).length > 0
-                  ?
-                  vessel?.InboundVoyage + ' / ' + vessel?.OutboundVoyage
-                  : ''
-              }
+              {Object.values(vessel).length > 0
+                ? vessel?.InboundVoyage + " / " + vessel?.OutboundVoyage
+                : ""}
             </VesselValue>
           </Space>
         </Col>
@@ -127,13 +125,7 @@ export default function VesselSelect() {
               <Space>
                 <VesselLabel>ETA:</VesselLabel>
                 <VesselValue>
-                {
-                  Object.values(vessel).length > 0
-                    ?
-                    vessel.ETA
-                    : ''
-                }
-
+                  {Object.values(vessel).length > 0 ? vessel.ETA : ""}
                 </VesselValue>
               </Space>
             </Col>
@@ -142,38 +134,36 @@ export default function VesselSelect() {
               <Space>
                 <VesselLabel>ETD:</VesselLabel>
                 <VesselValue>
-                {
-                  Object.values(vessel).length > 0
-                    ?
-                    vessel.ETD
-                    : ''
-                }
-
+                  {Object.values(vessel).length > 0 ? vessel.ETD : ""}
                 </VesselValue>
               </Space>
             </Col>
           </Row>
         </Col>
       </Row>
-      < Modal
+      <Modal
         open={open}
         maskClosable={false}
         width={700}
         className="vessel-modal"
         onOk={() => {
-          setOpen(false)
+          setOpen(false);
         }}
         onCancel={() => setOpen(false)}
         title={
-          <Text style={{ width: "100%", fontSize: "1rem" }}>Chọn Chuyến Tàu</Text>
+          <Text style={{ width: "100%", fontSize: "1rem" }}>
+            Chọn Chuyến Tàu
+          </Text>
         }
       >
         <Card className="vessel-select">
           <Table
-            config={{ columns, header, dataSource: dataTable }}
+            config={{ columns, header, dataSource: viewvessels }}
             handleSelect={(vesselData) => {
-              let obj = {}
-              vesselData[0].cells.filter(p => p.column).map(p => obj[p.column] = p.text);
+              let obj = {};
+              vesselData[0].cells
+                .filter((p) => p.column)
+                .map((p) => (obj[p.column] = p.text));
               setVessel(obj);
               setDisplay(obj);
             }}
