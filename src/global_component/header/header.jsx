@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   GlobalOutlined,
   LogoutOutlined,
@@ -8,6 +9,7 @@ import { Avatar, Card, Dropdown, Space, Typography, Drawer } from "antd";
 import * as React from "react";
 import Nav from "../Nav/Nav";
 import NavMobile from "../Nav/NavMobile";
+import { socket } from "../../socket"
 
 const items = [
   {

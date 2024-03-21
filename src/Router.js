@@ -19,6 +19,8 @@ import Msg247Container from "./views/message_container/Msg247Container.js";
 import Dashboard from "./views/Dashboard/Dashboard.js";
 import Layout from "./global_component/Layout/Layout.js";
 import NotFound from "./views/not_found/NotFound.jsx";
+import React from "react";
+import { reConnect, socket } from "./socket.js";
 
 const router = createBrowserRouter([
   {
@@ -47,5 +49,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function Router() {
+  React.useEffect(() => {
+    socket.connect();
+    reConnect();
+  }, []);
   return <RouterProvider router={router} />;
 }
