@@ -21,3 +21,23 @@ export const socketReceiveReponse = (
     }
   }
 };
+
+export const reConnect = () => {
+  setInterval(() => {
+    let isDisconnect = 0;
+    if (!socket.connected) {
+      //  handle notification disconnected socket
+      isDisconnect = 1;
+    }
+
+    if (isDisconnect === 1 && socket.connected) {
+      //  handle notification connected socket
+      isDisconnect = 0;
+      var userInfo = {
+        // 'userID': $('span#user_name').text().trim(),
+        // 'grpID': $('span#loginGrpID').text().trim()
+      };
+      socket.emit("nguoidung", userInfo);
+    }
+  }, 2000);
+};

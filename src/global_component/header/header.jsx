@@ -31,28 +31,6 @@ const itemsMenu = [
 ];
 
 const Header = () => {
-  const [isDisconnect, setIsDisconnect] = React.useState(0)
-
-  React.useEffect(() => {
-    socket.connect()
-    setInterval(() => {
-      if (!socket.connected) {
-        //  handle notification disconnected socket
-        setIsDisconnect(1);
-      }
-
-      if (isDisconnect === 1 && socket.connected) {
-        //  handle notification connected socket
-        setIsDisconnect(0)
-        var userInfo = {
-          // 'userID': $('span#user_name').text().trim(),
-          // 'grpID': $('span#loginGrpID').text().trim()
-        };
-        socket.emit('nguoidung', userInfo);
-      }
-    }, 2000)
-  }, [])
-
   const [activeMenuMobile, setActiveMenuMobile] = React.useState(false);
   React.useEffect(() => {
     window.addEventListener("resize", () => {
