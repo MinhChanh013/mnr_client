@@ -1280,6 +1280,7 @@ export const itemsMenu = [
   },
 ];
 
+export const FORMAT_DATETIME = 'YYYY-MM-DD HH:mm:ss';
 export const ev_code = [
   "MESSAGE_TRANSMIT_FAILED",
   "ASKING_MESSAGE_CREATION_FAILED",
