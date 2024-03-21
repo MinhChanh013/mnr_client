@@ -10,6 +10,7 @@ import { load, searchVessels } from "../../apis/message_container/3668.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import { getFormData } from "../../utils";
 import RevoTable from "../../global_component/dataTable/revoTable.js";
+import ToolBar, { Type } from "../../global_component/ToolbarButton/ToolBar.js";
 
 export default function Msg3665Container() {
     const [dataTable, setDataTable] = useState([]);
@@ -20,11 +21,11 @@ export default function Msg3665Container() {
         color: "#ffb13d",
         marginBottom: "2px",
     };
-
+    // setDataTable([{ JobStatus: 'READY', Status: 'ACCEPT', BillOfLading: 'KBHCM-009-001-24JP	', CargoCtrlNo: '', CntrNo: 'CSNU7375605', Getin: '2024-02-26 14:22:00	', TransportIdentity: 'MANET', NumberOfJourney: '026S', ArrivalDeparture: '2024-02-24 18:30:00	', ImExType: 'Nhập', StatusOfGood: 'Full', JobModeIn: 'NKN', CargoWeight: '15093', SealNo: 'OOLJCT8469', CommodityDescription: 'GP' }])
     const columns = [
         { prop: "Select", name: 'Chọn', size: 80 },
         { prop: "JobStatus", name: 'Hành Động' },
-        { prop: "StatusOfGood", name: 'Trạng Thái', sortable: true, size: 150 },
+        { prop: "Status", name: 'Trạng Thái', sortable: true, size: 150 },
         { prop: "BillOfLading", name: 'Số Vận Đơn', resize: true, size: 150 },
         { prop: "CargoCtrlNo", name: 'Số Định Danh' },
         { prop: "CntrNo", name: 'Số Container' },
@@ -45,83 +46,6 @@ export default function Msg3665Container() {
         { prop: "ResponseText", name: 'Nội Dung Phản Hồi' },
         { prop: "MsgRef", name: 'Khóa Tham Chiếu' },
     ];
-
-    const handleLoadData = async () => {
-        const dataMsg3668 = [];
-        try {
-            const resultDataMsg3668 = await load({
-                fromdate: "2023/03/13 00:00:00",
-                todate: "2024/03/01 00:00:00",
-                cntrnos: "",
-            });
-            if (resultDataMsg3668) {
-                console.log(resultDataMsg3668);
-                resultDataMsg3668.data.forEach((item) => {
-                    const {
-                        SuccessMarker,
-                        ErrorMarker,
-                        JobStatus,
-                        BillOfLading,
-                        CargoCtrlNo,
-                        CntrNo,
-                        GetIn,
-                        TransportIdentity,
-                        NumberOfJourney,
-                        ArrivalDeparture,
-                        ImExType,
-                        StatusOfGood,
-                        JobModeIn,
-                        CargoWeight,
-                        SealNo,
-                        CommodityDescription,
-                        ContainerLocation,
-                        Content,
-                        AcceptanceNo,
-                        AcceptanceTime,
-                        ResponseText,
-                        MsgRef,
-                    } = item;
-                    let msgLog, imextype, fe;
-                    imextype =
-                        ImExType === 1 ? "Nhập" : ImExType === 2 ? "Xuất" : "Nội Địa";
-                    if (SuccessMarker) {
-                        msgLog = "Thành công";
-                    } else if (ErrorMarker) {
-                        msgLog = "Thất bại";
-                    } else msgLog = "Chưa gửi";
-                    fe = StatusOfGood === 1 ? "Full" : "Empty";
-
-                    dataMsg3668.push({
-                        Select: "select",
-                        JobStatus: JobStatus ?? "",
-                        msgLog,
-                        BillOfLading,
-                        CargoCtrlNo,
-                        CntrNo,
-                        GetIn,
-                        TransportIdentity,
-                        NumberOfJourney,
-                        ArrivalDeparture,
-                        ImExType: imextype,
-                        StatusOfGood: fe,
-                        JobModeIn,
-                        CargoWeight: `${CargoWeight}`,
-                        SealNo,
-                        CommodityDescription,
-                        ContainerLocation,
-                        Content: Content ?? "",
-                        AcceptanceNo: AcceptanceNo ?? "",
-                        AcceptanceTime: AcceptanceTime ?? "",
-                        ResponseText: ResponseText ?? "",
-                        MsgRef: MsgRef ?? "",
-                    });
-                });
-                setDataTable(dataMsg3668);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
     const filterRef = React.useRef();
@@ -284,28 +208,11 @@ export default function Msg3665Container() {
                     </Card>
                 </Col>
                 <Col span={18}>
+                    <ToolBar buttonConfig={[Type.send, Type.load, Type.cancel, Type.cancelgetin, Type.save, Type.delete]}  />
                     <Card
                         style={{ borderRadius: "0px", height: "100%" }}
                         className="b-card"
                     >
-                        {renderEventButtons([
-                            {
-                                type: buttonTypes.Load,
-                                action: handleLoadData,
-                            },
-                            {
-                                type: buttonTypes.Send,
-                                action: handleLoadData,
-                            },
-                            {
-                                type: buttonTypes.Cancel,
-                                action: handleLoadData,
-                            },
-                            {
-                                type: buttonTypes.CancelGetin,
-                                action: handleLoadData,
-                            },
-                        ])}
                         <RevoTable
                             config={{
                                 columns: columns,

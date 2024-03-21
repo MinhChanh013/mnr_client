@@ -16,13 +16,10 @@ const RevoTable = ({ config, tableRef }) => {
 
     return (
         <Row>
-            <Col span={24} >
-
-            </Col>
-            <Divider style={{ margin: '3px 0 5px', borderColor: '#dededede' }} />
             <Col span={24}>
                 <div>
                     <RevoGrid
+                        range={true}
                         autoSize={true}
                         resize={true}
                         autoSizeColumn={true}
