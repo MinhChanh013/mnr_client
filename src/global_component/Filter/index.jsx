@@ -12,18 +12,14 @@ import { Fragment } from "react";
 
 const { Text } = Typography;
 
-export const RadioGroupFilter = ({
-  options = [],
-  name = "",
-  defaultValue = [0],
-}) => {
+export const RadioGroupFilter = ({ options = [], name = "", defaultValue }) => {
   return (
     <Radio.Group
       name={name}
       defaultValue={defaultValue}
       style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
+        display: "flex",
+        flexWrap: "wrap",
         gap: "5px",
       }}
     >

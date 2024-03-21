@@ -10,8 +10,17 @@ import {
 import { load, searchVessels } from "../../apis/message_container/3668.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import { getFormData } from "../../utils";
+import DataGrid, {
+  columnTypes,
+} from "../../global_component/DataGrid/index.jsx";
+import { textEditor } from "react-data-grid";
+import { renderCellEditDatePicker } from "../../global_component/DataGrid/renderCellEditDatePicker.jsx";
 export default function Msg3668Container() {
   const [dataTable, setDataTable] = React.useState([]);
+  const [rows, setRows] = React.useState([]);
+  const [selectedRows, setSelectedRows] = React.useState(() => new Set());
+  const onFocus = () => {};
+
 
   /////////////////////////////////////////////////////////////////////
   const [dataViewsels, setDataViewsels] = React.useState([]);
@@ -34,57 +43,156 @@ export default function Msg3668Container() {
     marginBottom: "2px",
   };
   const columns = [
-    { columnId: "Select", width: 100 },
-    { columnId: "JobStatus", width: 180 },
-    { columnId: "StatusMarker", width: 100 },
-    { columnId: "BillOfLading", width: 100 },
-    { columnId: "CargoCtrlNo", width: 100 },
-    { columnId: "CntrNo", width: 150 },
-    { columnId: "GetIn", width: 200 },
-    { columnId: "TransportIdentity", width: 150 },
-    { columnId: "NumberOfJourney", width: 150 },
-    { columnId: "ArrivalDeparture", width: 200 },
-    { columnId: "ImExType", width: 150 },
-    { columnId: "StatusOfGood", width: 150 },
-    { columnId: "JobModeIn", width: 150 },
-    { columnId: "CargoWeight", width: 150 },
-    { columnId: "SealNo", width: 150 },
-    { columnId: "CommodityDescription", width: 150 },
-    { columnId: "ContainerLocation", width: 150 },
-    { columnId: "Content", width: 150 },
-    { columnId: "AcceptanceNo", width: 150 },
-    { columnId: "AcceptanceTime", width: 220 },
-    { columnId: "ResponseText", width: 180 },
-    { columnId: "MsgRef", width: 300 },
+    {
+      key: "JobStatus",
+      name: "Hành Động",
+      width: 180,
+      // type:
+      // editable:
+
+      // visible:
+
+      // render: () => {}, // hiển thị thông tin.
+
+      // textAlign:
+      renderEditCell: textEditor,
+    },
+    {
+      key: "StatusMarker",
+      name: "Trạng Thái",
+      width: 100,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      width: 100,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "CargoCtrlNo",
+      name: "Số Định Danh",
+      width: 100,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "GetIn",
+      name: "Ngày Getin",
+      width: 200,
+      type: columnTypes.DatePicker,
+      // renderCell: ({ row }) => {
+      //   console.log({
+      //     test: row["GetIn"],
+      //   });
+      //   return <span>{row["GetIn"]}</span>;
+      // },
+      // renderEditCell: ({ row, onRowChange }) =>
+      //   renderCellEditDatePicker({
+      //     key: "GetIn",
+      //     row,
+      //     onRowChange,
+      //   }),
+    },
+    {
+      key: "TransportIdentity",
+      name: "Tên Tàu",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "NumberOfJourney",
+      name: "Chuyến Tàu",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "ArrivalDeparture",
+      name: "Ngày tàu đến",
+      width: 200,
+      renderEditCell: (row, onRowChange) =>
+        renderCellEditDatePicker({ row, key: "ArrivalDeparture", onRowChange }),
+    },
+    {
+      key: "ImExType",
+      name: "Nhập/Xuất",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "StatusOfGood",
+      name: "Full/Empty",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "JobModeIn",
+      name: "Phương Án Vào",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "CargoWeight",
+      name: "Trọng Lượng",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "SealNo",
+      name: "Số Chì",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "CommodityDescription",
+      name: "Mô Tả HH",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "ContainerLocation",
+      name: "Vị Trí Count",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "Content",
+      name: "Ghi Chú",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "AcceptanceNo",
+      name: "Số Tiếp Nhận",
+      width: 150,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "AcceptanceTime",
+      name: "Ngày Tiếp Nhận",
+      width: 220,
+      renderEditCell: (row, onRowChange) =>
+        renderCellEditDatePicker({ row, key: "AcceptanceTime", onRowChange }),
+    },
+    {
+      key: "ResponseText",
+      name: "Nội Dung Phản Hồi",
+      width: 180,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Khóa Tham Chiếu",
+      width: 300,
+      renderEditCell: textEditor,
+    },
   ];
 
-  const header = {
-    rowId: "header",
-    cells: [
-      { type: "header", text: "Chọn" },
-      { type: "header", text: "Hành Động" },
-      { type: "header", text: "Trạng Thái" },
-      { type: "header", text: "Số Vận Đơn" },
-      { type: "header", text: "Số Định Danh" },
-      { type: "header", text: "Số Container" },
-      { type: "header", text: "Ngày Getin" },
-      { type: "header", text: "Tên Tàu" },
-      { type: "header", text: "Chuyến Tàu" },
-      { type: "header", text: "Ngày tàu đến" },
-      { type: "header", text: "Nhập/Xuất" },
-      { type: "header", text: "Full/Empty" },
-      { type: "header", text: "Phương Án Vào" },
-      { type: "header", text: "Trọng Lượng" },
-      { type: "header", text: "Số Chì" },
-      { type: "header", text: "Mô Tả HH" },
-      { type: "header", text: "Vị Trí Count" },
-      { type: "header", text: "Ghi Chú" },
-      { type: "header", text: "Số Tiếp Nhận" },
-      { type: "header", text: "Ngày Tiếp Nhận" },
-      { type: "header", text: "Nội Dung Phản Hồi" },
-      { type: "header", text: "Khóa Tham Chiếu" },
-    ],
-  };
   const handleLoadData = async () => {
     try {
       const resultDataMsg3668 = await load({
@@ -95,7 +203,7 @@ export default function Msg3668Container() {
         const dataMsg3668 = resultDataMsg3668.data.map((row) => {
           return columns.reduce((acc, column) => {
             // handle logic data
-            const keyValue = column.columnId;
+            const keyValue = column.key;
             const rowValue = row[keyValue];
             switch (keyValue) {
               case "ImExType":
@@ -123,7 +231,8 @@ export default function Msg3668Container() {
             return acc;
           }, {});
         });
-        setDataTable(dataMsg3668);
+        console.log({ dataMsg3668 });
+        setRows(dataMsg3668);
       }
     } catch (error) {
       console.log(error);
@@ -146,11 +255,17 @@ export default function Msg3668Container() {
             {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
             {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
             <Card
+              styles={{
+                title: {
+                  textAlign: "center",
+                  color: "#1b618c",
+                },
+              }}
               title="366.8 - GỬI GETIN CONTAINER"
               style={{ borderRadius: "0px" }}
               className="b-card"
             >
-              <Row style={{ padding: "0 24px" }}>
+              <Row style={{ padding: "0 8px" }}>
                 <Col span={24}>
                   <VesselSelect data={dataViewsels} />
                 </Col>
@@ -163,6 +278,7 @@ export default function Msg3668Container() {
                       label: "Hướng",
                       config: {
                         name: "imextype",
+                        defaultValue: "",
                         options: [
                           {
                             label: "Tất cả",
@@ -188,7 +304,12 @@ export default function Msg3668Container() {
                       label: "Loại hàng",
                       config: {
                         name: "isLF",
+                        defaultValue: "",
                         options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
                           {
                             label: "Hàng ngoại",
                             value: "1",
@@ -205,6 +326,7 @@ export default function Msg3668Container() {
                       label: "Trạng thái thông điệp",
                       config: {
                         name: "marker",
+                        defaultValue: "",
                         options: [
                           {
                             label: "Tất cả",
@@ -230,6 +352,7 @@ export default function Msg3668Container() {
                       label: "Trạng thái container ra khỏi cảng",
                       config: {
                         name: "getout",
+                        defaultValue: "",
                         options: [
                           {
                             label: "Tất cả",
@@ -251,6 +374,7 @@ export default function Msg3668Container() {
                       label: "Loại hàng",
                       config: {
                         name: "fe",
+                        defaultValue: "",
                         options: [
                           {
                             label: "Tất cả",
@@ -301,13 +425,16 @@ export default function Msg3668Container() {
                   action: handleLoadData,
                 },
               ])}
-              <Table
-                config={{
-                  columns: columns,
-                  header: header,
-                  dataSource: dataTable,
-                  footer: true,
-                }}
+
+              <DataGrid
+                direction="ltr"
+                columns={columns}
+                columnKeySelected="id"
+                rows={rows}
+                setRows={setRows}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                onFocus={onFocus}
               />
             </Card>
           </Col>
