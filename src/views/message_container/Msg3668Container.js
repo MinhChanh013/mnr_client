@@ -7,18 +7,32 @@ import {
   buttonTypes,
   renderEventButtons,
 } from "../../global_component/EventButtons/index.jsx";
-import { load } from "../../apis/message_container/3668.js";
+import { load, searchVessels } from "../../apis/message_container/3668.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import { getFormData } from "../../utils";
 export default function Msg3668Container() {
   const [dataTable, setDataTable] = React.useState([]);
 
+  /////////////////////////////////////////////////////////////////////
+  const [dataViewsels, setDataViewsels] = React.useState([]);
+  React.useEffect(() => {
+    getvesels();
+  }, []);
+  const getvesels = async () => {
+    try {
+      const res = await searchVessels("");
+      setDataViewsels(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(dataViewsels);
+  };
+ //////////////////////////////////////////////////////////////////////
   const style = {
     borderColor: "#ffb13d",
     color: "#ffb13d",
     marginBottom: "2px",
   };
-
   const columns = [
     { columnId: "Select", width: 100 },
     { columnId: "JobStatus", width: 180 },
@@ -71,7 +85,6 @@ export default function Msg3668Container() {
       { type: "header", text: "Khóa Tham Chiếu" },
     ],
   };
-
   const handleLoadData = async () => {
     try {
       const resultDataMsg3668 = await load({
@@ -125,7 +138,6 @@ export default function Msg3668Container() {
   //     data: getFormData(filterRef.current),
   //   });
   // };
-
   return (
     <>
       <ProviderMessage3668Context>
@@ -140,7 +152,7 @@ export default function Msg3668Container() {
             >
               <Row style={{ padding: "0 24px" }}>
                 <Col span={24}>
-                  <VesselSelect />
+                  <VesselSelect data={dataViewsels} />
                 </Col>
 
                 <Filter
