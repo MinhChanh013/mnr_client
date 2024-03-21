@@ -77,7 +77,6 @@ export default function Msg3668Container() {
       const resultDataMsg3668 = await load({
         fromdate: "2023/03/13 00:00:00",
         todate: "2024/03/01 00:00:00",
-        cntrnos: "",
       });
       if (resultDataMsg3668) {
         const dataMsg3668 = resultDataMsg3668.data.map((row) => {

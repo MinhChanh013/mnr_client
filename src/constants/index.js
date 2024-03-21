@@ -1279,3 +1279,11 @@ export const itemsMenu = [
     ],
   },
 ];
+
+export const ev_code = [
+  "MESSAGE_TRANSMIT_FAILED",
+  "ASKING_MESSAGE_CREATION_FAILED",
+  "REQUEST_ABORTED",
+  "MESSAGE_DESERIALISE_FAILED",
+  "RESPONSE_TIMED_OUT",
+];

@@ -1,4 +1,5 @@
 import { poster } from "../../services/BaseService";
+import { socket, socketReceiveReponse } from "../../socket";
 const msgType = "cont";
 const msgId = "212";
 const cpath = (action) => {
@@ -51,3 +52,15 @@ export const searchVessels = async ({ vesselName }) => {
   const data = await poster(cpath("view-vessel"), formData);
   return data;
 };
+
+socket.on("sock_to_client", (data) => {
+  socketReceiveReponse(
+    data,
+    "212.1",
+    data.response_func === "32" || data.response_func === "27",
+    load({
+      fromdate: "2023/03/13 00:00:00",
+      todate: "2024/03/01 00:00:00",
+    })
+  );
+});

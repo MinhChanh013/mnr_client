@@ -1,3 +1,4 @@
+import { Socket, socketReceiveReponse } from "socket.io-client";
 import { poster } from "../../services/BaseService";
 const msgType = "cont";
 const msgId = "237";
@@ -53,3 +54,15 @@ export const searchVessels = async ({ vesselName }) => {
   const data = await poster(cpath("view-vessel"), formData);
   return data;
 };
+
+Socket.on("sock_to_client", (data) => {
+  socketReceiveReponse(
+    data,
+    msgId,
+    data.response_func === "29" || data.response_func === "27",
+    load({
+      fromdate: "2023/03/13 00:00:00",
+      todate: "2024/03/01 00:00:00",
+    })
+  );
+});

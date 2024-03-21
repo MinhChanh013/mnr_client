@@ -1,4 +1,6 @@
+import { Socket } from "socket.io-client";
 import { poster } from "../../services/BaseService";
+import { ev_code } from "../../constants";
 const msgType = "cont";
 const msgId = "365";
 const cpath = (action) => {
@@ -90,3 +92,29 @@ export const searchVessels = async ({ vesselName }) => {
   const data = await poster(cpath("view-vessel"), formData);
   return data;
 };
+
+Socket.on("sock_to_client", function (data) {
+  if (data.request_type === "365") {
+    if (
+      data.response_func === "29" ||
+      data.response_func === "27" ||
+      data.event_code.includes(ev_code)
+    ) {
+      // append_msglog(data.note_state, "b");
+
+      //get remaining msgcount in storage after each msg completed
+      //check
+      let remaining = parseInt(localStorage.getItem("queueCount") || 0) - 1;
+      if (remaining <= 0) {
+        let filter = localStorage.getItem("filter");
+        if (filter) {
+          load(JSON.parse(filter));
+        }
+
+        localStorage.removeItem("queueCount");
+      } else {
+        localStorage.setItem("queueCount", remaining);
+      }
+    }
+  }
+});

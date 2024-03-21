@@ -1,4 +1,5 @@
 import { poster } from "../../services/BaseService";
+import { socket, socketReceiveReponse } from "../../socket";
 const msgType = "cont";
 const msgId = "3668";
 const cpath = (action) => {
@@ -32,12 +33,14 @@ export const load = async (params) => {
   } = params;
   validateLoad(GroupID);
 
-  let arrCont = cntrnos
-    .split(/[\t\r\n\s,]+/g)
-    .filter((v, i, s) => s.indexOf(v) === i && v);
-
-  if (arrCont.length > 10) {
-    arrCont = arrCont.slice(0, 10);
+  let arrCont;
+  if (cntrnos) {
+    arrCont = cntrnos
+      .split(/[\t\r\n\s,]+/g)
+      .filter((v, i, s) => s.indexOf(v) === i && v);
+    if (arrCont.length > 10) {
+      arrCont = arrCont.slice(0, 10);
+    }
   }
 
   const formData = {
@@ -98,3 +101,15 @@ export const searchVessels = async ({ vesselName }) => {
   const data = await poster(cpath("view-vessel"), formData);
   return data;
 };
+
+socket.on("sock_to_client", (data) => {
+  socketReceiveReponse(
+    data,
+    msgId,
+    data.response_func === "29" || data.response_func === "27",
+    load({
+      fromdate: "2023/03/13 00:00:00",
+      todate: "2024/03/01 00:00:00",
+    })
+  );
+});
