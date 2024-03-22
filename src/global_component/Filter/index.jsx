@@ -1,55 +1,17 @@
-import {
-  Col,
-  DatePicker,
-  Input,
-  Typography,
-  Radio,
-  Row,
-  Divider,
-  Space,
-} from "antd";
+import { Col, Typography, Row, Divider, Space } from "antd";
 import { Fragment } from "react";
+import RadioGroupFilter from "./RadioGroupFilter";
+import InputFilter from "./InputFilter";
+import RangePickerFilter from "./RangePickerFilter";
+
+const style = {
+  borderColor: "#ffb13d",
+  color: "#ffb13d",
+  marginBottom: "5px",
+};
 
 const { Text } = Typography;
 
-export const RadioGroupFilter = ({ options = [], name = "", defaultValue }) => {
-  return (
-    <Radio.Group
-      name={name}
-      defaultValue={defaultValue}
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "5px",
-      }}
-    >
-      {options.map(({ value, label }) => (
-        <Radio value={value}>{label}</Radio>
-      ))}
-    </Radio.Group>
-  );
-};
-
-export const InputFilter = ({ name = "", placeholder = "" }) => {
-  return <Input name={name} placeholder={placeholder} />;
-};
-
-const { RangePicker } = DatePicker;
-export const RangePickerFilter = ({ name = "", placeholder = "" }) => {
-  return (
-    <RangePicker
-      style={{ width: "100%" }}
-      name={name}
-      placeholder={placeholder}
-    />
-  );
-};
-
-export const filterType = {
-  radio: "radio",
-  input: "input",
-  rangePicker: "rangePicker",
-};
 const pickComponent = (type) =>
   ({
     [filterType.radio]: RadioGroupFilter,
@@ -57,11 +19,12 @@ const pickComponent = (type) =>
     [filterType.rangePicker]: RangePickerFilter,
   }[type]);
 
-const style = {
-  borderColor: "#ffb13d",
-  color: "#ffb13d",
-  marginBottom: "5px",
+export const filterType = {
+  radio: "radio",
+  input: "input",
+  rangePicker: "rangePicker",
 };
+
 export const Filter = (
   /** @type {{items: Array<{type: String, label: String, config: any}>, filterRef: any}} */ {
     items = [],
@@ -77,7 +40,7 @@ export const Filter = (
           const Component = pickComponent(type);
 
           return (
-            <Fragment>
+            <Fragment key={`${label}-${index}`}>
               <Col span={24}>
                 <Text strong={true}>{label}</Text>
                 <Space style={{ display: "block", marginTop: "5px" }}>

@@ -160,8 +160,8 @@ export function renderEventButtons(
 ) {
   return (
     <Flex style={{ gap: "10px", flexWrap: "wrap" }}>
-      {buttons.map(({ type, action }) => (
-        <EventButton {...type} action={action} />
+      {buttons.map(({ type, action }, index) => (
+        <EventButton key={`${action}-${index}`} {...type} action={action} />
       ))}
     </Flex>
   );
