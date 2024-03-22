@@ -1,39 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Row } from "antd";
 import * as React from "react";
-
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-
 import { load, searchVessels } from "../../apis/message_container/3668.js";
-import {
-  buttonTypes,
-  renderEventButtons,
-} from "../../global_component/EventButtons/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-
 import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
+import { getFormData } from "../../utils/form.utils.js";
 export default function Msg3668Container() {
-  const [rows, setRows] = React.useState([]);
-  const gridRef = React.createRef();
   const onFocus = () => {};
-
-  /////////////////////////////////////////////////////////////////////
+  const gridRef = React.createRef();
+  const vesselSelectRef = React.useRef();
+  const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
-  React.useEffect(() => {
-    getvesels();
-  }, []);
-  const getvesels = async () => {
+
+  React.useEffect(async () => {
     try {
       const res = await searchVessels("");
-      setDataViewsels(res.data);
+      if (res) {
+        setDataViewsels(res.data);
+      }
     } catch (error) {
       console.log(error);
     }
-    console.log(dataViewsels);
-  };
-  //////////////////////////////////////////////////////////////////////
+  }, []);
 
   const columns = [
     {
@@ -172,6 +167,24 @@ export default function Msg3668Container() {
     },
   ];
 
+  const buttonConfirm = (props) => {
+    switch (props.type) {
+      case "load":
+        handleSelectFilterData();
+        handleLoadData();
+        // console.log(vesselSelectRef.current?.getSelectedVessel());
+        break;
+      case "send":
+        break;
+      case "cancelgetin":
+        break;
+      case "cancel":
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleLoadData = async () => {
     try {
       const resultDataMsg3668 = await load({
@@ -210,7 +223,6 @@ export default function Msg3668Container() {
             return acc;
           }, {});
         });
-        console.log({ dataMsg3668 });
         setRows(dataMsg3668);
       }
     } catch (error) {
@@ -220,18 +232,15 @@ export default function Msg3668Container() {
 
   //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
   const filterRef = React.useRef();
-  // const handleSelectFilterData = () => {
-  //* KHI HÀM NÀY CHẠY THÌ CỰA THEO filterRef ĐỂ LẤY DỮ LIỆU,
-  //   console.log({
-  //     data: getFormData(filterRef.current),
-  //   });
-  // };
+  const handleSelectFilterData = () => {
+    console.log({
+      data: getFormData(filterRef.current),
+    });
+  };
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
         <Col span={7}>
-          {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
-          {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
           <Card
             styles={{
               title: {
@@ -245,7 +254,7 @@ export default function Msg3668Container() {
           >
             <Row style={{ padding: "0 8px" }}>
               <Col span={24}>
-                <VesselSelect data={dataViewsels} />
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
 
               <Filter
@@ -397,13 +406,15 @@ export default function Msg3668Container() {
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            {renderEventButtons([
-              {
-                type: buttonTypes.Load,
-                action: handleLoadData,
-              },
-            ])}
-
+            <ToolBar
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.cancelgetin,
+                toolBarButtonTypes.cancel,
+              ]}
+              handleConfirm={buttonConfirm}
+            />
             <DataGrid
               ref={gridRef}
               direction="ltr"
