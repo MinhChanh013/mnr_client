@@ -1,8 +1,19 @@
-import { useCallback, useMemo, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 
 import ReactDataGrid, { SelectColumn, textEditor } from "react-data-grid";
 import { renderCellEditDatePicker } from "./renderCellEditDatePicker";
 
+export const selectionTypes = {
+  multi: "multi",
+  single: "single",
+  none: "none",
+};
 export const columnTypes = {
   DatePicker: "DatePicker",
   TextEditor: "TextEditor",
@@ -25,84 +36,122 @@ const getEditCell = (key, cellType) => {
 const handleRenderColumn = ({
   type = columnTypes.TextEditor,
   editable = true,
-
-  // visible
-  // render: () => {}, // hiển thị thông tin.
-  // textAlign
+  visible = false,
+  render,
   key,
+  selection,
+  index,
   ...props
 }) => {
-  return {
+  const column = {
     ...props,
     key,
     renderEditCell: editable ? getEditCell(key, type) : null,
   };
+
+  // Hide column when visible = true
+  if (visible) return null;
+
+  // custom renderCell
+  if (typeof render === "function") column["renderCell"] = render;
+
+  // Hide header of column SelectColumn
+  if (selection === selectionTypes.single && index === 0)
+    column["renderHeaderCell"] = null;
+
+  // Hide all SelectColumn
+  if (selection === selectionTypes.none && index === 0) {
+    return null;
+  }
+
+  return column;
 };
 
-export default function DataGrid({
-  direction = "ltr",
-  style,
-  columns = [],
-  columnKeySelected = "id",
-  rows = new Set(),
-  setRows,
-  selectedRows,
-  setSelectedRows,
-  onFocus,
-}) {
-  const [sortColumns, setSortColumns] = useState([]);
-  const columnsCombined = useMemo(
-    () =>
-      columns.length
-        ? [SelectColumn, ...columns.map((column) => handleRenderColumn(column))]
-        : [],
-    [columns]
-  );
-
-  const handleFill = useCallback(({ columnKey, sourceRow, targetRow }) => {
-    return { ...targetRow, [columnKey]: sourceRow[columnKey] };
-  }, []);
-
-  const handlePaste = useCallback(
-    ({ sourceColumnKey, sourceRow, targetColumnKey, targetRow }) => {
-      return { ...targetRow, [targetColumnKey]: sourceRow[sourceColumnKey] };
+const DataGrid = forwardRef(
+  (
+    {
+      direction = "ltr",
+      style,
+      columns = [],
+      className,
+      columnKeySelected = "id",
+      selection = selectionTypes.multi,
+      rows = new Set(),
+      setRows,
+      onFocus,
     },
-    []
-  );
+    ref
+  ) => {
+    const [sortColumns, setSortColumns] = useState([]);
+    const [selectedRows, setSelectedRows] = useState(() => new Set());
 
-  const handleCopy = useCallback(({ sourceRow, sourceColumnKey }) => {
-    if (window.isSecureContext) {
-      navigator.clipboard.writeText(sourceRow[sourceColumnKey]);
-    }
-  }, []);
+    const columnsCombined = useMemo(() => {
+      return [SelectColumn, ...columns]
+        .map((column, index) =>
+          handleRenderColumn({ ...column, selection, index })
+        )
+        .filter((column) => column);
+    }, [columns, selection]);
 
-  return (
-    <ReactDataGrid
-      style={{
-        marginTop: "20px",
-        ...style,
-      }}
-      defaultColumnOptions={{ sortable: true, resizable: true }}
-      sortColumns={sortColumns}
-      onSortColumnsChange={setSortColumns}
-      rows={rows}
-      columns={columnsCombined}
-      selectedRows={selectedRows}
-      rowHeight={30}
-      direction={direction}
-      rowKeyGetter={(row) => row[columnKeySelected]}
-      onRowsChange={setRows}
-      onSelectedCellChange={onFocus}
-      onFill={handleFill}
-      onCopy={handleCopy}
-      onPaste={handlePaste}
-      onSelectedRowsChange={setSelectedRows}
-      onCellClick={(args, event) => {
-        if (args.column.key === "title") {
-          event.preventGridDefault();
-          args.selectCell(true);
+    const handleFill = useCallback(({ columnKey, sourceRow, targetRow }) => {
+      return { ...targetRow, [columnKey]: sourceRow[columnKey] };
+    }, []);
+
+    const handlePaste = useCallback(
+      ({ sourceColumnKey, sourceRow, targetColumnKey, targetRow }) => {
+        return { ...targetRow, [targetColumnKey]: sourceRow[sourceColumnKey] };
+      },
+      []
+    );
+
+    const handleCopy = useCallback(({ sourceRow, sourceColumnKey }) => {
+      if (window.isSecureContext) {
+        navigator.clipboard.writeText(sourceRow[sourceColumnKey]);
+      }
+    }, []);
+
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          getSelectedRows: () => {
+            return selectedRows;
+          },
+        };
+      },
+      [selectedRows]
+    );
+
+    return (
+      <ReactDataGrid
+        className={`rdg-light ${className}`}
+        style={{ ...style }}
+        defaultColumnOptions={{ sortable: true, resizable: true }}
+        sortColumns={sortColumns}
+        onSortColumnsChange={setSortColumns}
+        rows={rows}
+        columns={columnsCombined}
+        selectedRows={selectedRows}
+        rowHeight={30}
+        direction={direction}
+        rowKeyGetter={(row) => row[columnKeySelected]}
+        onRowsChange={setRows}
+        onSelectedCellChange={
+          typeof onFocus === "function" ? onFocus : () => {}
         }
-      }}
-    />
-  );
-}
+        onFill={handleFill}
+        onCopy={handleCopy}
+        onPaste={handlePaste}
+        onSelectedRowsChange={setSelectedRows}
+        onCellClick={(args, event) => {
+          if (args.column.key === "title") {
+            event.preventGridDefault();
+            args.selectCell(true);
+          }
+        }}
+      />
+    );
+  }
+);
+
+export default DataGrid;

@@ -1,23 +1,23 @@
 import { Card, Col, Row } from "antd";
 import * as React from "react";
+
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import Table from "../../global_component/dataTable/customTable.js";
+
 import { load, searchVessels } from "../../apis/message_container/3668.js";
+import {
+  buttonTypes,
+  renderEventButtons,
+} from "../../global_component/EventButtons/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import { getFormData } from "../../utils";
+
 import DataGrid, {
   columnTypes,
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { textEditor } from "react-data-grid";
-import { renderCellEditDatePicker } from "../../global_component/DataGrid/renderCellEditDatePicker.jsx";
-import ToolBar from // toolBarButtonTypes,
-"../../global_component/ToolbarButton/ToolBar.js";
 export default function Msg3668Container() {
-  const [dataTable, setDataTable] = React.useState([]);
   const [rows, setRows] = React.useState([]);
-  const [selectedRows, setSelectedRows] = React.useState(() => new Set());
+  const gridRef = React.createRef();
   const onFocus = () => {};
-  
 
   /////////////////////////////////////////////////////////////////////
   const [dataViewsels, setDataViewsels] = React.useState([]);
@@ -34,159 +34,141 @@ export default function Msg3668Container() {
     console.log(dataViewsels);
   };
   //////////////////////////////////////////////////////////////////////
-  const style = {
-    borderColor: "#ffb13d",
-    color: "#ffb13d",
-    marginBottom: "2px",
-  };
+
   const columns = [
+    {
+      key: "ID",
+      name: "ID",
+      width: 180,
+      editable: false,
+      visible: true,
+    },
     {
       key: "JobStatus",
       name: "Hành Động",
       width: 180,
-      // type:
-      // editable:
-
-      // visible:
-
-      // render: () => {}, // hiển thị thông tin.
-
-      // textAlign:
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "StatusMarker",
       name: "Trạng Thái",
       width: 100,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 100,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "CargoCtrlNo",
       name: "Số Định Danh",
       width: 100,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "CntrNo",
       name: "Số Container",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "GetIn",
       name: "Ngày Getin",
       width: 200,
       type: columnTypes.DatePicker,
-      // renderCell: ({ row }) => {
-      //   console.log({
-      //     test: row["GetIn"],
-      //   });
-      //   return <span>{row["GetIn"]}</span>;
-      // },
-      // renderEditCell: ({ row, onRowChange }) =>
-      //   renderCellEditDatePicker({
-      //     key: "GetIn",
-      //     row,
-      //     onRowChange,
-      //   }),
     },
     {
       key: "TransportIdentity",
       name: "Tên Tàu",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "NumberOfJourney",
       name: "Chuyến Tàu",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "ArrivalDeparture",
       name: "Ngày tàu đến",
       width: 200,
-      renderEditCell: (row, onRowChange) =>
-        renderCellEditDatePicker({ row, key: "ArrivalDeparture", onRowChange }),
+      type: columnTypes.DatePicker,
     },
     {
       key: "ImExType",
       name: "Nhập/Xuất",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "StatusOfGood",
       name: "Full/Empty",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "JobModeIn",
       name: "Phương Án Vào",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "CargoWeight",
       name: "Trọng Lượng",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "SealNo",
       name: "Số Chì",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "CommodityDescription",
       name: "Mô Tả HH",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "ContainerLocation",
       name: "Vị Trí Count",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "Content",
       name: "Ghi Chú",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 150,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 220,
-      renderEditCell: (row, onRowChange) =>
-        renderCellEditDatePicker({ row, key: "AcceptanceTime", onRowChange }),
+      type: columnTypes.DatePicker,
     },
     {
       key: "ResponseText",
       name: "Nội Dung Phản Hồi",
       width: 180,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
       width: 300,
-      renderEditCell: textEditor,
+      type: columnTypes.TextEditor,
     },
   ];
 
@@ -411,34 +393,25 @@ export default function Msg3668Container() {
           </Card>
         </Col>
         <Col span={17}>
-          {/* <ToolBar
-          buttonConfig={[
-            {
-              ...toolBarButtonTypes.load,
-              action: handleLoadData,
-            },
-            {
-              ...toolBarButtonTypes.send,
-              action: handleLoadData,
-            },
-            {
-              ...toolBarButtonTypes.cancelgetin,
-              action: handleLoadData,
-            },
-          ]}
-          /> */}
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
+            {renderEventButtons([
+              {
+                type: buttonTypes.Load,
+                action: handleLoadData,
+              },
+            ])}
+
             <DataGrid
+              ref={gridRef}
               direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.single}
               columns={columns}
-              columnKeySelected="id"
               rows={rows}
               setRows={setRows}
-              selectedRows={selectedRows}
-              setSelectedRows={setSelectedRows}
               onFocus={onFocus}
             />
           </Card>
