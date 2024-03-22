@@ -37,9 +37,6 @@ export const Filter = (
       return init;
     }, {});
 
-    console.log({
-      result,
-    });
     return result;
   }, [items]);
 
