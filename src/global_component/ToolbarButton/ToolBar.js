@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import * as React from "react";
 
-export const Type = {
+export const toolBarButtonTypes = {
     load: {
         id: 'load',
         label: "Nạp dữ liệu",
@@ -46,6 +46,8 @@ export const Type = {
         label: "Lưu dữ liệu",
         fontColor: "#50a81d",
         icon: <CloudDownloadOutlined style={{ stroke: "#50a81d", strokeWidth: 30 }} />,
+        alert: true,
+        message: 'Bạn có muốn lưu dữ liệu?'
     },
     delete: {
         id: 'delete',
@@ -57,7 +59,7 @@ export const Type = {
     },
 }
 
-const ToolBar = ({ buttonConfig, cardConfig }) => {
+const ToolBar = ({ buttonConfig, cardConfig, handleConfirm}) => {
     const [openModal, setOpen] = useState(false);
     return (
         <>
@@ -89,20 +91,29 @@ const ToolBar = ({ buttonConfig, cardConfig }) => {
                                         type='text'
                                         icon={item.icon}
                                         onClick={() => {
-                                            console.log('a');
                                             if (item.alert) {
                                                 Modal.confirm({
                                                     title: 'Cảnh báo!',
                                                     content: item.message,
+                                                    open: { openModal },
                                                     icon: < WarningOutlined />,
-                                                    footer: () => (
+                                                    okText: 'Xác nhận',
+                                                    cancelText: 'Hủy',
+                                                    onCancel: () => {
+                                                        return;
+                                                    },
+                                                    onOk: () => {
+                                                        handleConfirm({type: item.id})
+                                                    },
+                                                    footer: (_, { OkBtn, CancelBtn }) => (
                                                         <>
-                                                          <Button onClick={() => {setOpen(false)}}> Hủy </Button>
-                                                          <Button onClick={() => {setOpen(false)}}> Xác Nhận </Button>
+                                                            <CancelBtn />
+                                                            <OkBtn />
                                                         </>
-                                                      ),
+                                                    ),
                                                 });
-                                                return;
+                                            } else {
+                                                handleConfirm({type: item.id});
                                             }
                                         }}
                                         style={{
