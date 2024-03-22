@@ -1,5 +1,5 @@
-import { Socket, socketReceiveReponse } from "socket.io-client";
 import { poster } from "../../services/BaseService";
+import { socket, socketReceiveReponse } from "../../socket";
 const msgType = "cont";
 const msgId = "3665";
 const cpath = (action) => {
@@ -56,7 +56,7 @@ export const searchVessels = async ({ vesselName }) => {
   return data;
 };
 
-Socket.on("sock_to_client", (data) => {
+socket.on("sock_to_client", (data) => {
   socketReceiveReponse(
     data,
     msgId,

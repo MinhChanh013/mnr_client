@@ -1,8 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row } from "antd";
+import { Card, Col, Form, Row } from "antd";
 import * as React from "react";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { load, searchVessels } from "../../apis/message_container/3668.js";
+import {
+  cancelSending,
+  load,
+  searchVessels,
+} from "../../apis/message_container/3668.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import DataGrid, {
   columnTypes,
@@ -11,13 +15,18 @@ import DataGrid, {
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
-import { getFormData } from "../../utils/form.utils.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../constants/index.js";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
 export default function Msg3668Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
+  const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
   React.useEffect(async () => {
     try {
@@ -167,30 +176,44 @@ export default function Msg3668Container() {
     },
   ];
 
-  const buttonConfirm = (props) => {
+  const buttonConfirm = async (props) => {
     switch (props.type) {
       case "load":
-        handleSelectFilterData();
-        handleLoadData();
-        // console.log(vesselSelectRef.current?.getSelectedVessel());
+        const dataFormFilter = form.getFieldsValue();
+        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+        let fromdate, todate;
+        if (dataFormFilter.dateFromTo) {
+          fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
+            FORMAT_DATETIME
+          );
+          todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+        }
+
+        delete dataFormFilter.dateFromTo;
+        const formData = {
+          ...dataFormFilter,
+          fromdate,
+          todate,
+          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+        };
+        handleLoadData(formData);
         break;
       case "send":
         break;
       case "cancelgetin":
         break;
       case "cancel":
+        // await cancelSending();
         break;
       default:
         break;
     }
   };
 
-  const handleLoadData = async () => {
+  const handleLoadData = async (formData) => {
     try {
-      const resultDataMsg3668 = await load({
-        fromdate: "2023/03/13 00:00:00",
-        todate: "2024/03/01 00:00:00",
-      });
+      dispatch(setLoading(true));
+      const resultDataMsg3668 = await load(formData);
       if (resultDataMsg3668) {
         const dataMsg3668 = resultDataMsg3668.data.map((row) => {
           return columns.reduce((acc, column) => {
@@ -225,18 +248,12 @@ export default function Msg3668Container() {
         });
         setRows(dataMsg3668);
       }
+      dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
   };
 
-  //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
-  const filterRef = React.useRef();
-  const handleSelectFilterData = () => {
-    console.log({
-      data: getFormData(filterRef.current),
-    });
-  };
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
@@ -258,7 +275,7 @@ export default function Msg3668Container() {
               </Col>
 
               <Filter
-                filterRef={filterRef}
+                form={form}
                 items={[
                   {
                     type: filterType.radio,
@@ -391,6 +408,7 @@ export default function Msg3668Container() {
                     type: filterType.input,
                     label: "Số Cont",
                     config: {
+                      defaultValue: "",
                       name: "cntrNo",
                       placeholder: "",
                       value: "",

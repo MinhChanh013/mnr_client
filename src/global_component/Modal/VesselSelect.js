@@ -152,7 +152,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
               </VesselValue>
             </Space>
             <Flex gap="5px">
-              <VesselButton>
+              <VesselButton onClick={() => setVesselSelect({})}>
                 <CloseOutlined style={{ fontSize: "13px" }} />
               </VesselButton>
 

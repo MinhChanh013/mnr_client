@@ -1,59 +1,193 @@
-import { Card, Col, Row } from "antd";
-import { useEffect, useState } from "react";
+import { Card, Col, Form, Row } from "antd";
 import * as React from "react";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { load, searchVessels } from "../../apis/message_container/3668.js";
+import { useState } from "react";
+import { load } from "../../apis/message_container/3665.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import { getFormData } from "../../utils";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import RevoTable from "../../global_component/dataTable/revoTable.js";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import DataGrid, {
+  columnTypes,
+  selectionTypes,
+} from "../../global_component/DataGrid/index.jsx";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
 
 export default function Msg3665Container() {
-  const [dataTable, setDataTable] = useState([]);
-  const [vesselData, setVesselData] = useState([]);
-
-  const style = {
-    borderColor: "#ffb13d",
-    color: "#ffb13d",
-    marginBottom: "2px",
-  };
+  const gridRef = React.createRef();
+  const onFocus = () => {};
+  const vesselSelectRef = React.useRef();
+  const dispatch = useDispatch();
+  const [rows, setRows] = React.useState([]);
+  const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
   const columns = [
-    { prop: "Select", name: "Chọn", size: 80 },
-    { prop: "JobStatus", name: "Hành Động" },
-    { prop: "StatusOfGood", name: "Trạng Thái", sortable: true, size: 150 },
-    { prop: "BillOfLading", name: "Số Vận Đơn", resize: true, size: 150 },
-    { prop: "CargoCtrlNo", name: "Số Định Danh" },
-    { prop: "CntrNo", name: "Số Container" },
-    { prop: "GetIn", name: "Ngày Getin" },
-    { prop: "TransportIdentity", name: "Tên Tàu" },
-    { prop: "NumberOfJourney", name: "Số Chuyến" },
-    { prop: "ArrivalDeparture", name: "Ngày Tàu Đến" },
-    { prop: "ImExType", name: "Nhập/Xuất" },
-    { prop: "StatusOfGood", name: "Full/Empty" },
-    { prop: "JobModeIn", name: "Phương Án Vào" },
-    { prop: "CargoWeight", name: "Trọng Lượng" },
-    { prop: "SealNo", name: "Số Chì" },
-    { prop: "CommodityDescription", name: "Mô Tả HH" },
-    { prop: "ContainerLocation", name: "Vị Trí Cont" },
-    { prop: "Content", name: "Ghi Chú" },
-    { prop: "AcceptanceNo", name: "Số Tiếp Nhận" },
-    { prop: "AcceptanceTime", name: "Ngày Tiếp Nhận" },
-    { prop: "ResponseText", name: "Nội Dung Phản Hồi" },
-    { prop: "MsgRef", name: "Khóa Tham Chiếu" },
+    {
+      key: "ID",
+      name: "ID",
+      width: 180,
+      editable: false,
+      visible: true,
+    },
+    {
+      key: "JobStatus",
+      name: "Hành Động",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "StatusOfGood",
+      name: "Trạng Thái",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "CargoCtrlNo",
+      name: "Số Định Danh",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "GetIn",
+      name: "Ngày Getin",
+      width: 180,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "TransportIdentity",
+      name: "Tên Tàu",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "NumberOfJourney",
+      name: "Số Chuyến",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "ArrivalDeparture",
+      name: "Ngày Tàu Đến",
+      width: 180,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "ImExType",
+      name: "Nhập/Xuất",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "StatusOfGood",
+      name: "Full/Empty",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "JobModeIn",
+      name: "Phương Án Vào",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "CargoWeight",
+      name: "Trọng Lượng",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "SealNo",
+      name: "Số Chì",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "CommodityDescription",
+      name: "Mô Tả HH",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "ContainerLocation",
+      name: "Vị Trí Cont",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "Content",
+      name: "Ghi Chú",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "AcceptanceNo",
+      name: "Số Tiếp Nhận",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "AcceptanceTime",
+      name: "Ngày Tiếp Nhận",
+      width: 180,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "ResponseText",
+      name: "Nội Dung Phản Hồi",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "MsgRef",
+      name: "Khóa Tham Chiếu",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
   ];
 
   const handleLoadData = async () => {
-    const dataMsg3668 = [];
+    const dataMsg3665 = [];
+    dispatch(setLoading(true));
     try {
-      const resultDataMsg3668 = await load({
-        fromdate: "2023/03/13 00:00:00",
-        todate: "2024/03/01 00:00:00",
-        cntrnos: "",
-      });
-      if (resultDataMsg3668) {
-        console.log(resultDataMsg3668);
-        resultDataMsg3668.data.forEach((item) => {
+      const resultDataMsg3665 = await load({});
+      if (resultDataMsg3665) {
+        resultDataMsg3665.data.forEach((item) => {
           const {
             SuccessMarker,
             ErrorMarker,
@@ -88,7 +222,7 @@ export default function Msg3665Container() {
           } else msgLog = "Chưa gửi";
           fe = StatusOfGood === 1 ? "Full" : "Empty";
 
-          dataMsg3668.push({
+          dataMsg3665.push({
             Select: "select",
             JobStatus: JobStatus ?? "",
             msgLog,
@@ -113,39 +247,30 @@ export default function Msg3665Container() {
             MsgRef: MsgRef ?? "",
           });
         });
-        setDataTable(dataMsg3668);
+        setRows(dataMsg3665);
       }
     } catch (error) {
       console.log(error);
     }
+    dispatch(setLoading(false));
   };
 
-  //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
   const filterRef = React.useRef();
-  // const handleSelectFilterData = () => {
-  //* KHI HÀM NÀY CHẠY THÌ CỰA THEO filterRef ĐỂ LẤY DỮ LIỆU,
-  //   console.log({
-  //     data: getFormData(filterRef.current),
-  //   });
-  // };
 
   const buttonConfirm = (props) => {
-    if (props.type === 'load') {
-
+    if (props.type === "load") {
+      handleLoadData();
     }
 
-    if (props.type === 'send') {
-
+    if (props.type === "send") {
     }
 
-    if (props.type === 'delete') {
-
+    if (props.type === "delete") {
     }
 
-    if (props.type === 'save') {
-
+    if (props.type === "save") {
     }
-  }
+  };
 
   return (
     <>
@@ -154,8 +279,6 @@ export default function Msg3665Container() {
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
         <Col span={6}>
-          {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
-          {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
           <Card
             title="366.5 - HIỆU CHỈNH CONTAINER GETIN"
             style={{ borderRadius: "0px" }}
@@ -310,21 +433,29 @@ export default function Msg3665Container() {
             </Row>
           </Card>
         </Col>
-        <Col span={18}>
-          <ToolBar
-            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.cancel, toolBarButtonTypes.cancelgetin, toolBarButtonTypes.save, toolBarButtonTypes.delete]}
-            handleConfirm={buttonConfirm}
-          />
+        <Col span={17}>
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <RevoTable
-              config={{
-                columns: columns,
-                dataSource: dataTable,
-                footer: true,
-              }}
+            <ToolBar
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.cancelgetin,
+                toolBarButtonTypes.cancel,
+              ]}
+              handleConfirm={buttonConfirm}
+            />
+            <DataGrid
+              ref={gridRef}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.single}
+              columns={columns}
+              rows={rows}
+              setRows={setRows}
+              onFocus={onFocus}
             />
           </Card>
         </Col>
