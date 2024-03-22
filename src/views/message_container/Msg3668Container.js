@@ -238,9 +238,7 @@ export default function Msg3668Container() {
                   : (acc[keyValue] = "Empty");
                 break;
               default:
-                keyValue === "Select"
-                  ? (acc[keyValue] = "select")
-                  : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
                 break;
             }
             return acc;

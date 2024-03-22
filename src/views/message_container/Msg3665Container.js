@@ -1,18 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Form, Row } from "antd";
+import dayjs from "dayjs";
 import * as React from "react";
-import { useState } from "react";
-import { load } from "../../apis/message_container/3665.js";
+import { useDispatch } from "react-redux";
+import { load, searchVessels } from "../../apis/message_container/3665.js";
+import { FORMAT_DATETIME } from "../../constants/index.js";
+import DataGrid, {
+  columnTypes,
+  selectionTypes,
+} from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
-import RevoTable from "../../global_component/dataTable/revoTable.js";
-import DataGrid, {
-  columnTypes,
-  selectionTypes,
-} from "../../global_component/DataGrid/index.jsx";
-import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 
 export default function Msg3665Container() {
@@ -23,6 +24,17 @@ export default function Msg3665Container() {
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
+
+  React.useEffect(async () => {
+    try {
+      const res = await searchVessels("");
+      if (res) {
+        setDataViewsels(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const columns = [
     {
@@ -47,15 +59,15 @@ export default function Msg3665Container() {
       editable: true,
     },
     {
-      key: "BillOfLading",
-      name: "Số Vận Đơn",
+      key: "ImExType",
+      name: "Nhập/Xuất",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
-      key: "CargoCtrlNo",
-      name: "Số Định Danh",
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
@@ -68,41 +80,6 @@ export default function Msg3665Container() {
       editable: true,
     },
     {
-      key: "GetIn",
-      name: "Ngày Getin",
-      width: 180,
-      type: columnTypes.DatePicker,
-      editable: true,
-    },
-    {
-      key: "TransportIdentity",
-      name: "Tên Tàu",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "NumberOfJourney",
-      name: "Số Chuyến",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "ArrivalDeparture",
-      name: "Ngày Tàu Đến",
-      width: 180,
-      type: columnTypes.DatePicker,
-      editable: true,
-    },
-    {
-      key: "ImExType",
-      name: "Nhập/Xuất",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
       key: "StatusOfGood",
       name: "Full/Empty",
       width: 180,
@@ -110,38 +87,61 @@ export default function Msg3665Container() {
       editable: true,
     },
     {
-      key: "JobModeIn",
-      name: "Phương Án Vào",
+      key: "OldGetIn",
+      name: "Ngày Getin Cũ",
+      width: 180,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "NewGetIn",
+      name: "Ngày Getin Mới",
+      width: 180,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "OldTransportIdentity",
+      name: "Tên Tàu Cũ",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
-      key: "CargoWeight",
-      name: "Trọng Lượng",
+      key: "NewTransportIdentity",
+      name: "Tên Tàu Mới",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
-      key: "SealNo",
-      name: "Số Chì",
+      key: "OldNumberOfJourney",
+      name: "Chuyến Tàu Cũ",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
+
     {
-      key: "CommodityDescription",
-      name: "Mô Tả HH",
+      key: "NewNumberOfJourney",
+      name: "Chuyến Tàu Mới",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
+
     {
-      key: "ContainerLocation",
-      name: "Vị Trí Cont",
+      key: "OldArrivalDeparture",
+      name: "Ngày Tàu Đến/Đi Cũ",
       width: 180,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "NewArrivalDeparture",
+      name: "Ngày Tàu Đến/Đi Mới",
+      width: 180,
+      type: columnTypes.DatePicker,
       editable: true,
     },
     {
@@ -181,73 +181,44 @@ export default function Msg3665Container() {
     },
   ];
 
-  const handleLoadData = async () => {
-    const dataMsg3665 = [];
+  const handleLoadData = async (formData) => {
     dispatch(setLoading(true));
     try {
-      const resultDataMsg3665 = await load({});
+      const resultDataMsg3665 = await load(formData);
       if (resultDataMsg3665) {
-        resultDataMsg3665.data.forEach((item) => {
-          const {
-            SuccessMarker,
-            ErrorMarker,
-            JobStatus,
-            BillOfLading,
-            CargoCtrlNo,
-            CntrNo,
-            GetIn,
-            TransportIdentity,
-            NumberOfJourney,
-            ArrivalDeparture,
-            ImExType,
-            StatusOfGood,
-            JobModeIn,
-            CargoWeight,
-            SealNo,
-            CommodityDescription,
-            ContainerLocation,
-            Content,
-            AcceptanceNo,
-            AcceptanceTime,
-            ResponseText,
-            MsgRef,
-          } = item;
-          let msgLog, imextype, fe;
-          imextype =
-            ImExType === 1 ? "Nhập" : ImExType === 2 ? "Xuất" : "Nội Địa";
-          if (SuccessMarker) {
-            msgLog = "Thành công";
-          } else if (ErrorMarker) {
-            msgLog = "Thất bại";
-          } else msgLog = "Chưa gửi";
-          fe = StatusOfGood === 1 ? "Full" : "Empty";
-
-          dataMsg3665.push({
-            Select: "select",
-            JobStatus: JobStatus ?? "",
-            msgLog,
-            BillOfLading,
-            CargoCtrlNo,
-            CntrNo,
-            GetIn,
-            TransportIdentity,
-            NumberOfJourney,
-            ArrivalDeparture,
-            ImExType: imextype,
-            StatusOfGood: fe,
-            JobModeIn,
-            CargoWeight: `${CargoWeight}`,
-            SealNo,
-            CommodityDescription,
-            ContainerLocation,
-            Content: Content ?? "",
-            AcceptanceNo: AcceptanceNo ?? "",
-            AcceptanceTime: AcceptanceTime ?? "",
-            ResponseText: ResponseText ?? "",
-            MsgRef: MsgRef ?? "",
-          });
+        const dataMsg3668 = resultDataMsg3665.data.map((row) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.key;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "JobStatus":
+                acc[keyValue] = row[keyValue] ?? "READY";
+                break;
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "StatusMarker":
+                if (row["SuccessMarker"]) {
+                  acc[keyValue] = "Thành công";
+                } else if (row["ErrorMarker"]) {
+                  acc[keyValue] = "Thất bại";
+                } else acc[keyValue] = "Chưa gửi";
+                break;
+              case "StatusOfGood":
+                rowValue === 1
+                  ? (acc[keyValue] = "Full")
+                  : (acc[keyValue] = "Empty");
+                break;
+              default:
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
+                break;
+            }
+            return acc;
+          }, {});
         });
-        setRows(dataMsg3665);
+        setRows(dataMsg3668);
       }
     } catch (error) {
       console.log(error);
@@ -255,20 +226,35 @@ export default function Msg3665Container() {
     dispatch(setLoading(false));
   };
 
-  const filterRef = React.useRef();
-
   const buttonConfirm = (props) => {
-    if (props.type === "load") {
-      handleLoadData();
-    }
+    switch (props.type) {
+      case "load":
+        const dataFormFilter = form.getFieldsValue();
+        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+        let fromdate, todate;
+        if (dataFormFilter.dateFromTo) {
+          fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
+            FORMAT_DATETIME
+          );
+          todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+        }
 
-    if (props.type === "send") {
-    }
-
-    if (props.type === "delete") {
-    }
-
-    if (props.type === "save") {
+        delete dataFormFilter.dateFromTo;
+        const formData = {
+          ...dataFormFilter,
+          fromdate,
+          todate,
+          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+        };
+        handleLoadData(formData);
+        break;
+      case "send":
+        break;
+      case "cancel":
+        // await cancelSending();
+        break;
+      default:
+        break;
     }
   };
 
@@ -286,11 +272,11 @@ export default function Msg3665Container() {
           >
             <Row style={{ padding: "0 24px" }}>
               <Col span={24}>
-                <VesselSelect />
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
 
               <Filter
-                filterRef={filterRef}
+                form={form}
                 items={[
                   {
                     type: filterType.radio,
@@ -442,7 +428,6 @@ export default function Msg3665Container() {
               buttonConfig={[
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
-                toolBarButtonTypes.cancelgetin,
                 toolBarButtonTypes.cancel,
               ]}
               handleConfirm={buttonConfirm}
