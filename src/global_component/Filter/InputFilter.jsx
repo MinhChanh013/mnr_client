@@ -1,5 +1,12 @@
-import { Input } from "antd";
+import { Form, Input } from "antd";
 
 export default function InputFilter({ name = "", placeholder = "" }) {
-  return <Input name={name} placeholder={placeholder} />;
+  const formInstance = Form.useFormInstance();
+  return (
+    <Input
+      name={name}
+      placeholder={placeholder}
+      onChange={(event) => formInstance.setFieldValue(name, event.target.value)}
+    />
+  );
 }

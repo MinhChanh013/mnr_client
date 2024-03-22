@@ -1,10 +1,11 @@
-import { Radio } from "antd";
+import { Form, Radio } from "antd";
 
 export default function RadioGroupFilter({
   options = [],
   name = "",
   defaultValue,
 }) {
+  const formInstance = Form.useFormInstance();
   return (
     <Radio.Group
       name={name}
@@ -14,6 +15,7 @@ export default function RadioGroupFilter({
         flexWrap: "wrap",
         gap: "5px",
       }}
+      onChange={(event) => formInstance.setFieldValue(name, event.target.value)}
     >
       {options.map(({ value, label }) => (
         <Radio key={value} value={value}>
