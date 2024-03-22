@@ -1,5 +1,5 @@
-import { Col, Typography, Row, Divider, Space } from "antd";
-import { Fragment } from "react";
+import { Col, Typography, Row, Divider, Space, Form } from "antd";
+import { Fragment, useMemo } from "react";
 import RadioGroupFilter from "./RadioGroupFilter";
 import InputFilter from "./InputFilter";
 import RangePickerFilter from "./RangePickerFilter";
@@ -26,13 +26,25 @@ export const filterType = {
 };
 
 export const Filter = (
-  /** @type {{items: Array<{type: String, label: String, config: any}>, filterRef: any}} */ {
+  /** @type {{items: Array<{type: String, label: String, config: any}>, form: FormInstance<any>}} */ {
     items = [],
-    filterRef = null,
+    form = null,
   }
 ) => {
+  const initValues = useMemo(() => {
+    const result = items.reduce((init, { config }) => {
+      init[config["name"]] = config["defaultValue"];
+      return init;
+    }, {});
+
+    console.log({
+      result,
+    });
+    return result;
+  }, [items]);
+
   return (
-    <form ref={filterRef}>
+    <Form form={form} initialValues={initValues}>
       <Divider style={style}> Lọc dữ liệu </Divider>
 
       <Row gutter={[0, 5]}>
@@ -44,7 +56,9 @@ export const Filter = (
               <Col span={24}>
                 <Text strong={true}>{label}</Text>
                 <Space style={{ display: "block", marginTop: "5px" }}>
-                  <Component {...config} />
+                  <Form.Item name={config.name}>
+                    <Component {...config} />
+                  </Form.Item>
                 </Space>
 
                 {items.length - 1 !== index && (
@@ -60,6 +74,6 @@ export const Filter = (
           );
         })}
       </Row>
-    </form>
+    </Form>
   );
 };
