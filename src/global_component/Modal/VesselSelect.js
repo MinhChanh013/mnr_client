@@ -1,6 +1,12 @@
 import { CloseOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Flex, Modal, Row, Space, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 import { textEditor } from "react-data-grid";
 import DataGrid, { columnTypes } from "../DataGrid";
@@ -38,7 +44,8 @@ function VesselValue({ children }) {
   return <Text style={{ minWidth: "100px" }}>{children}</Text>;
 }
 
-export default function VesselSelect({ data }) {
+const VesselSelect = forwardRef(({ data }, ref) => {
+  const vesselTable = useRef();
   const [vesselRowSelect, setVesselRowSelect] = useState(() => new Set());
   const [open, setOpen] = useState(false);
   const [viewvessels, setViewvessels] = useState({});
@@ -103,9 +110,9 @@ export default function VesselSelect({ data }) {
   }, [data]);
 
   const handleConfirmsSelect = () => {
-    const vesselRowData = vesselRowSelect.values();
+    const vesselRowData = vesselTable.current?.getSelectedRows();
     if (vesselRowData) {
-      const idVesselSelected = vesselRowData.next().value;
+      const idVesselSelected = vesselRowData.values().next().value;
       if (idVesselSelected && data) {
         setVesselSelect(
           data[data.findIndex((item) => item.ID === idVesselSelected)]
@@ -114,6 +121,17 @@ export default function VesselSelect({ data }) {
     }
     setOpen(false);
   };
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        getSelectedVessel: () => vesselSelect,
+      };
+    },
+    [vesselSelect]
+  );
+
   return (
     <>
       <Row style={{ gap: "15px" }}>
@@ -199,6 +217,7 @@ export default function VesselSelect({ data }) {
       >
         <Card className="vessel-select">
           <DataGrid
+            ref={vesselTable}
             direction="ltr"
             columns={columns}
             columnKeySelected="ID"
@@ -211,4 +230,6 @@ export default function VesselSelect({ data }) {
       </Modal>
     </>
   );
-}
+});
+
+export default VesselSelect;
