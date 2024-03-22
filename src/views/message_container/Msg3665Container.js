@@ -6,7 +6,7 @@ import { load, searchVessels } from "../../apis/message_container/3668.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import { getFormData } from "../../utils";
 import RevoTable from "../../global_component/dataTable/revoTable.js";
-import ToolBar, { Type } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
 
 export default function Msg3665Container() {
   const [dataTable, setDataTable] = useState([]);
@@ -128,6 +128,24 @@ export default function Msg3665Container() {
   //     data: getFormData(filterRef.current),
   //   });
   // };
+
+  const buttonConfirm = (props) => {
+    if (props.type === 'load') {
+
+    }
+
+    if (props.type === 'send') {
+
+    }
+
+    if (props.type === 'delete') {
+
+    }
+
+    if (props.type === 'save') {
+
+    }
+  }
 
   return (
     <>
@@ -293,28 +311,14 @@ export default function Msg3665Container() {
           </Card>
         </Col>
         <Col span={18}>
+          <ToolBar
+            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.cancel, toolBarButtonTypes.cancelgetin, toolBarButtonTypes.save, toolBarButtonTypes.delete]}
+            handleConfirm={buttonConfirm}
+          />
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            {/* {renderEventButtons([
-              {
-                type: buttonTypes.Load,
-                action: handleLoadData,
-              },
-              {
-                type: buttonTypes.Send,
-                action: handleLoadData,
-              },
-              {
-                type: buttonTypes.Cancel,
-                action: handleLoadData,
-              },
-              {
-                type: buttonTypes.CancelGetin,
-                action: handleLoadData,
-              },
-            ])} */}
             <RevoTable
               config={{
                 columns: columns,
