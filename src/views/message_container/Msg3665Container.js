@@ -2,10 +2,6 @@ import { Card, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import * as React from "react";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import {
-  buttonTypes,
-  renderEventButtons,
-} from "../../global_component/EventButtons/index.jsx";
 import { load, searchVessels } from "../../apis/message_container/3668.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import { getFormData } from "../../utils";
@@ -301,7 +297,7 @@ export default function Msg3665Container() {
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            {renderEventButtons([
+            {/* {renderEventButtons([
               {
                 type: buttonTypes.Load,
                 action: handleLoadData,
@@ -318,7 +314,7 @@ export default function Msg3665Container() {
                 type: buttonTypes.CancelGetin,
                 action: handleLoadData,
               },
-            ])}
+            ])} */}
             <RevoTable
               config={{
                 columns: columns,
