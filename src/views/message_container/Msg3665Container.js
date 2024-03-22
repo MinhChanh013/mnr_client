@@ -2,10 +2,6 @@ import { Card, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import * as React from "react";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import {
-  buttonTypes,
-  renderEventButtons,
-} from "../../global_component/EventButtons/index.jsx";
 import { load, searchVessels } from "../../apis/message_container/3668.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import { getFormData } from "../../utils";

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Flex, Modal, Row, Space, Typography } from "antd";
 import { CloseOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Flex, Modal, Row, Space, Typography } from "antd";
+import React, { useEffect, useState } from "react";
 
-import Table from "../dataTable/customTable";
-
+import { textEditor } from "react-data-grid";
+import DataGrid, { columnTypes } from "../DataGrid";
 import "./vessel-select.scss";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../constants";
 
 const { Text } = Typography;
 
@@ -37,47 +39,80 @@ function VesselValue({ children }) {
 }
 
 export default function VesselSelect({ data }) {
-  const [vessel, setVessel] = useState({});
-  const [display, setDisplay] = useState({});
+  const [vesselRowSelect, setVesselRowSelect] = useState(() => new Set());
   const [open, setOpen] = useState(false);
   const [viewvessels, setViewvessels] = useState({});
+  const [vesselSelect, setVesselSelect] = useState({});
+
   const columns = [
-    { columnId: "select", width: 150 },
-    { columnId: "VesselName", width: 165 },
-    { columnId: "InboundVoyage", width: 165 },
-    { columnId: "OutboundVoyage", width: 165 },
-    { columnId: "ETA", width: 165 },
-    { columnId: "ETD", width: 165 },
-    { columnId: "VOYAGEKEY", width: 0 },
+    {
+      key: "ID",
+      name: "ID",
+      editable: false,
+      visible: true,
+    },
+    {
+      key: "VesselName",
+      name: "Tên tàu",
+      width: 180,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "VoyageStatus",
+      name: "C.Nhập/Xuất",
+      width: 120,
+      renderEditCell: textEditor,
+    },
+    {
+      key: "ETA",
+      name: "Ngày Cập",
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "ETD",
+      name: "Ngày Rời",
+      type: columnTypes.DatePicker,
+    },
   ];
-  const header = {
-    rowId: "header",
-    cells: [
-      { type: "header", text: "Chọn" },
-      { type: "header", text: "Tên Tàu" },
-      { type: "header", text: "Chuyến Nhập" },
-      { type: "header", text: "Chuyến Xuất" },
-      { type: "header", text: "Ngày Cập" },
-      { type: "header", text: "Ngày Rời" },
-      { type: "header", text: "VOYAGEKEY" },
-    ],
-  };
+
   useEffect(() => {
-    handleLoadData();
-  }, [data]);
-  const handleLoadData = () => {
     if (data) {
       const dataViewsels = data.map((row) => {
         return columns.reduce((acc, column) => {
-          const keyValue = column.columnId;
-          keyValue === "Select"
-            ? (acc[keyValue] = "select")
-            : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
+          const keyValue = column.key;
+
+          switch (keyValue) {
+            case "VoyageStatus":
+              acc[keyValue] = `${row.InboundVoyage} / ${row.OutboundVoyage}`;
+              break;
+            case "ETA":
+            case "ETD":
+              acc[keyValue] = dayjs(row[keyValue]).format(FORMAT_DATETIME);
+              break;
+            default:
+              keyValue === "Select"
+                ? (acc[keyValue] = "select")
+                : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
+              break;
+          }
           return acc;
         }, {});
       });
       setViewvessels(dataViewsels);
     }
+  }, [data]);
+
+  const handleConfirmsSelect = () => {
+    const vesselRowData = vesselRowSelect.values();
+    if (vesselRowData) {
+      const idVesselSelected = vesselRowData.next().value;
+      if (idVesselSelected && data) {
+        setVesselSelect(
+          data[data.findIndex((item) => item.ID === idVesselSelected)]
+        );
+      }
+    }
+    setOpen(false);
   };
   return (
     <>
@@ -93,7 +128,9 @@ export default function VesselSelect({ data }) {
             <Space>
               <VesselLabel>Tên tàu:</VesselLabel>
               <VesselValue>
-                {Object.values(vessel).length > 0 ? vessel.VesselName : ""}
+                {Object.values(vesselSelect).length > 0
+                  ? vesselSelect.VesselName
+                  : ""}
               </VesselValue>
             </Space>
             <Flex gap="5px">
@@ -112,8 +149,10 @@ export default function VesselSelect({ data }) {
           <Space>
             <VesselLabel>Chuyến N/X:</VesselLabel>
             <VesselValue>
-              {Object.values(vessel).length > 0
-                ? vessel?.InboundVoyage + " / " + vessel?.OutboundVoyage
+              {Object.values(vesselSelect).length > 0
+                ? vesselSelect?.InboundVoyage +
+                  " / " +
+                  vesselSelect?.OutboundVoyage
                 : ""}
             </VesselValue>
           </Space>
@@ -125,7 +164,9 @@ export default function VesselSelect({ data }) {
               <Space>
                 <VesselLabel>ETA:</VesselLabel>
                 <VesselValue>
-                  {Object.values(vessel).length > 0 ? vessel.ETA : ""}
+                  {Object.values(vesselSelect).length > 0
+                    ? dayjs(vesselSelect.ETA).format(FORMAT_DATETIME)
+                    : ""}
                 </VesselValue>
               </Space>
             </Col>
@@ -134,7 +175,9 @@ export default function VesselSelect({ data }) {
               <Space>
                 <VesselLabel>ETD:</VesselLabel>
                 <VesselValue>
-                  {Object.values(vessel).length > 0 ? vessel.ETD : ""}
+                  {Object.values(vesselSelect).length > 0
+                    ? dayjs(vesselSelect.ETD).format(FORMAT_DATETIME)
+                    : ""}
                 </VesselValue>
               </Space>
             </Col>
@@ -146,9 +189,7 @@ export default function VesselSelect({ data }) {
         maskClosable={false}
         width={700}
         className="vessel-modal"
-        onOk={() => {
-          setOpen(false);
-        }}
+        onOk={handleConfirmsSelect}
         onCancel={() => setOpen(false)}
         title={
           <Text style={{ width: "100%", fontSize: "1rem" }}>
@@ -157,16 +198,14 @@ export default function VesselSelect({ data }) {
         }
       >
         <Card className="vessel-select">
-          <Table
-            config={{ columns, header, dataSource: viewvessels }}
-            handleSelect={(vesselData) => {
-              let obj = {};
-              vesselData[0].cells
-                .filter((p) => p.column)
-                .map((p) => (obj[p.column] = p.text));
-              setVessel(obj);
-              setDisplay(obj);
-            }}
+          <DataGrid
+            direction="ltr"
+            columns={columns}
+            columnKeySelected="ID"
+            rows={viewvessels}
+            selectedRows={vesselRowSelect}
+            setSelectedRows={setVesselRowSelect}
+            selection="single"
           />
         </Card>
       </Modal>
