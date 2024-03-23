@@ -1,0 +1,12 @@
+.modal-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+
+  .ant-modal-content {
+    background-color: transparent !important;
+    box-shadow: unset !important;
+  }
+}

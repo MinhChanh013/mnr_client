@@ -1,89 +1,237 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Card, Col, Row } from "antd";
 import * as React from "react";
-import Table from '../../global_component/dataTable/customTable.js'
+import { useDispatch } from "react-redux";
+import { load, searchVessels } from "../../apis/message_container/212.js";
+import DataGrid, {
+    columnTypes,
+    selectionTypes,
+} from "../../global_component/DataGrid/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { Card, Row, Col, Space, Input, Divider, Button } from 'antd';
-import {  SendOutlined } from '@ant-design/icons';
+import ToolBar, {
+    toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
 
-class Msg212Container extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            dataTable: [{ tentau: '', hohieu: '', imo: '', ngaytau: '', sochuyen: '', sovandon: '', sodinhdanh: '', cntrno: '', sealno: '', fe: '', descript: '', khoathamchieu: '' }]
+const Msg212Container = () => {
+  const gridRef = React.createRef();
+  const onFocus = () => {};
+  const vesselSelectRef = React.useRef();
+  const dispatch = useDispatch();
+  const [rows, setRows] = React.useState([]);
+  const [dataViewsels, setDataViewsels] = React.useState([]);
+
+  React.useEffect(async () => {
+    try {
+      const res = await searchVessels("");
+      if (res) {
+        setDataViewsels(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const columns = [
+    {
+      key: "ID",
+      name: "ID",
+      width: 180,
+      editable: false,
+      visible: true,
+    },
+    {
+      key: "TransportIdentity",
+      name: "Tên tàu",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "TransportCallSign",
+      name: "Hô Hiệu Tàu",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "TransportIMONumber",
+      name: "Số IMO",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "ArrivalDeparture",
+      name: "Ngày tàu đến/đi",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "NumberOfJourney",
+      name: "Số Chuyến",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "CargoCtrlNo",
+      name: "Số Định Danh",
+      width: 180,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
+      width: 180,
+      type: columnTypes.DatePicker,
+      editable: true,
+    },
+    {
+      key: "SealNo",
+      name: "Số Chì",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "StatusOfGood",
+      name: "Full/Empty",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "CommodityDescription",
+      name: "Mô Tả Hàng Hóa",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+
+    {
+      key: "MsgRef",
+      name: "Khóa Tham Chiếu",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+  ];
+
+  const handleLoadData = async (formData) => {
+    dispatch(setLoading(true));
+    try {
+      const resultDataMsg3665 = await load(formData);
+      if (resultDataMsg3665) {
+        const dataMsg3668 = resultDataMsg3665.data.map((row) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.key;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "JobStatus":
+                acc[keyValue] = row[keyValue] ?? "READY";
+                break;
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "StatusMarker":
+                if (row["SuccessMarker"]) {
+                  acc[keyValue] = "Thành công";
+                } else if (row["ErrorMarker"]) {
+                  acc[keyValue] = "Thất bại";
+                } else acc[keyValue] = "Chưa gửi";
+                break;
+              case "StatusOfGood":
+                rowValue === 1
+                  ? (acc[keyValue] = "Full")
+                  : (acc[keyValue] = "Empty");
+                break;
+              default:
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
+                break;
+            }
+            return acc;
+          }, {});
+        });
+        setRows(dataMsg3668);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+  };
+
+  const buttonConfirm = (props) => {
+    switch (props.type) {
+      case "load":
+        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+        const formData = {
+          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
         };
-        this.columns = [
-            { columnId: 'tentau', width: 150 },
-            { columnId: 'hohieu', width: 150 },
-            { columnId: 'imo', width: 150 },
-            { columnId: 'ngaytau', width: 150 },
-            { columnId: 'sochuyen', width: 150 },
-            { columnId: 'sovandon', width: 150 },
-            { columnId: 'sodinhdanh', width: 150 },
-            { columnId: 'cntrno', width: 150 },
-            { columnId: 'sealno', width: 150 },
-            { columnId: 'fe', width: 150 },
-            { columnId: 'descript', width: 150 },
-            { columnId: 'khoathamchieu', width: 150 },
-        ];
-        this.header = {
-            rowId: 'header',
-            cells:
-                [
-                    { type: 'header', text: 'Tên Tàu' },
-                    { type: 'header', text: 'Hô Hiệu Tàu' },
-                    { type: 'header', text: 'Số IMO' },
-                    { type: 'header', text: 'Ngày Tàu Đến/Đi' },
-                    { type: 'header', text: 'Số vận đơn' },
-                    { type: 'header', text: 'Số Chuyến' },
-                    { type: 'header', text: 'Số Định Danh' },
-                    { type: 'header', text: 'Số Container' },
-                    { type: 'header', text: 'Số Chì' },
-                    { type: 'header', text: 'Full/Empty' },
-                    { type: 'header', text: 'Mô Tả HH' },
-                    { type: 'header', text: 'Khóa Tham Chiếu' },
-                ]
-        };
+        handleLoadData(formData);
+        break;
+      case "send":
+        break;
+      case "cancel":
+        // await cancelSending();
+        break;
+      default:
+        break;
     }
+  };
 
-    // rowid: text & cells [{}]
-    componentDidMount() {
-    }
-
-    render() {
-        return (
-            <>
-                <Card style={{ marginTop: '10px' }} title='212. CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI'>
-                    <Row gutter={[24, 24]}>
-                        <Col span={24}>
-                            <VesselSelect />
-                        </Col>
-                        <Col span={3} style={{ marginTop: '8px' }}>
-                            <Button style={{ backgroundColor: '#50a81d' }} type='primary'>Nạp dữ liệu</Button>
-                        </Col>
-                    </Row>
-                </Card >
-                <Card style={{ marginTop: '10px' }}>
-                    <Row gutter={[8, 8]}>
-                        <Col span={24} style={{ justifyContent: 'space-between' }}>
-                            <Row style={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Col>
-                                    <Space>
-                                        <p>Tìm:</p>
-                                        <Input />
-                                    </Space>
-                                </Col>
-                                <Col>
-                                    <Button type="primary" icon={<SendOutlined />} style={{ backgroundColor: '#f5a442' }}>Gửi thông điệp</Button>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Divider className="b-horizontal-divider" />
-                        <Col span={24}>
-                            <Table config={{ columns: this.columns, header: this.header, dataSource: this.state.dataTable }} />
-                        </Col>
-                    </Row>
-                </Card>
-            </>
-        );
-    }
-}
+  return (
+    <>
+      <Card
+        style={{ marginTop: "10px" }}
+        title="212. CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI"
+      >
+        <Row gutter={[24, 24]}>
+          <Col span={24}>
+            <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+          </Col>
+        </Row>
+      </Card>
+      <Card style={{ marginTop: "10px" }}>
+        <Row gutter={[8, 8]}>
+          <Col span={24}>
+            <Card
+              style={{ borderRadius: "0px", height: "100%" }}
+              className="b-card"
+            >
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <DataGrid
+                ref={gridRef}
+                direction="ltr"
+                columnKeySelected="ID"
+                selection={selectionTypes.single}
+                columns={columns}
+                rows={rows}
+                setRows={setRows}
+                onFocus={onFocus}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Card>
+    </>
+  );
+};
 export default Msg212Container;

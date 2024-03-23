@@ -1,194 +1,449 @@
-import React from "react";
-import { SendOutlined, CloudDownloadOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Divider, Flex, Input, Row, Typography } from "antd";
-import Table from "../../global_component/dataTable/customTable";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Card, Col, Form, Row } from "antd";
+import * as React from "react";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import {
+  cancelSending,
+  load,
+  searchVessels,
+} from "../../apis/message_container/214.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import DataGrid, {
+  columnTypes,
+  selectionTypes,
+} from "../../global_component/DataGrid/index.jsx";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../constants/index.js";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
+export default function Msg214Container() {
+  const onFocus = () => {};
+  const gridRef = React.createRef();
+  const vesselSelectRef = React.useRef();
+  const dispatch = useDispatch();
+  const [rows, setRows] = React.useState([]);
+  const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
-const Msg214 = () => {
-  const dataTable = [
+  React.useEffect(async () => {
+    try {
+      const res = await searchVessels("");
+      if (res) {
+        setDataViewsels(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const columns = [
     {
-      chon: "",
-      ma_tau: "",
-      hanh_dong: "",
-      trang_thai: "",
-      ten_tau: "",
-      ho_hieu_tau: "",
-      so_imo: "",
-      so_chuyen: "",
-      ngay_tau_den_di: "",
-      so_van_don: "",
-      so_dinh_danh: "",
-      so_container: "",
-      so_niem_chi: "",
-      loai_sai_khac: "",
-      chi_tiet_sai_khac: "",
-      so_tiep_nhan: "",
-      ngay_tiep_nhan: "",
-      noi_dung_phan_hoi: "",
-      khoa_tham_chieu: "",
+      key: "ID",
+      name: "ID",
+      width: 180,
+      editable: false,
+      visible: true,
+    },
+    {
+      key: "JobStatus",
+      name: "Hành Động",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "StatusMarker",
+      name: "Trạng Thái",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CargoCtrlNo",
+      name: "Số Định Danh",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "GetIn",
+      name: "Ngày Getin",
+      width: 200,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "TransportIdentity",
+      name: "Tên Tàu",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "NumberOfJourney",
+      name: "Chuyến Tàu",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ArrivalDeparture",
+      name: "Ngày tàu đến",
+      width: 200,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "ImExType",
+      name: "Nhập/Xuất",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "StatusOfGood",
+      name: "Full/Empty",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "JobModeIn",
+      name: "Phương Án Vào",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CargoWeight",
+      name: "Trọng Lượng",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "SealNo",
+      name: "Số Chì",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CommodityDescription",
+      name: "Mô Tả HH",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ContainerLocation",
+      name: "Vị Trí Count",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "Content",
+      name: "Ghi Chú",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "AcceptanceNo",
+      name: "Số Tiếp Nhận",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "AcceptanceTime",
+      name: "Ngày Tiếp Nhận",
+      width: 220,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "ResponseText",
+      name: "Nội Dung Phản Hồi",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Khóa Tham Chiếu",
+      width: 300,
+      type: columnTypes.TextEditor,
     },
   ];
-  const columns = [
-    { columnId: "chon" },
-    { columnId: "ma_tau" },
-    { columnId: "hanh_dong" },
-    { columnId: "trang_thai" },
-    { columnId: "ten_tau" },
-    { columnId: "ho_hieu_tau" },
-    { columnId: "so_imo" },
-    { columnId: "so_chuyen" },
-    { columnId: "ngay_tau_den_di" },
-    { columnId: "so_van_don" },
-    { columnId: "so_dinh_danh" },
-    { columnId: "so_container" },
-    { columnId: "so_niem_chi" },
-    { columnId: "loai_sai_khac" },
-    { columnId: "chi_tiet_sai_khac" },
-    { columnId: "so_tiep_nhan" },
-    { columnId: "ngay_tiep_nhan" },
-    { columnId: "noi_dung_phan_hoi" },
-    { columnId: "khoa_tham_chieu" },
-  ];
-  const header = {
-    rowId: "header",
-    cells: [
-      { type: "header", text: "Chọn" },
-      { type: "header", text: "Mã Tàu" },
-      { type: "header", text: "Hành Động" },
-      { type: "header", text: "Trạng Thái" },
-      { type: "header", text: "Tên tàu" },
-      { type: "header", text: "Hô Hiệu Tàu" },
-      { type: "header", text: "Số IMO" },
-      { type: "header", text: "Số Chuyến" },
-      { type: "header", text: "Ngày tàu đến/đi" },
-      { type: "header", text: "Số Vận Đơn" },
-      { type: "header", text: "Số Định Danh" },
-      { type: "header", text: "Số Container" },
-      { type: "header", text: "Số Niêm Chì" },
-      { type: "header", text: "Loại Sai Khác" },
-      { type: "header", text: "Chi Tiết Sai Khác" },
-      { type: "header", text: "Số Tiếp Nhận" },
-      { type: "header", text: "Ngày Tiếp Nhận" },
-      { type: "header", text: "Nội dung Phản Hồi" },
-      { type: "header", text: "Khóa tham chiếu" },
-    ],
+
+  const buttonConfirm = async (props) => {
+    switch (props.type) {
+      case "load":
+        const dataFormFilter = form.getFieldsValue();
+        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+        let fromdate, todate;
+        if (dataFormFilter.dateFromTo) {
+          fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
+            FORMAT_DATETIME
+          );
+          todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+        }
+
+        delete dataFormFilter.dateFromTo;
+        const formData = {
+          ...dataFormFilter,
+          fromdate,
+          todate,
+          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+        };
+        handleLoadData(formData);
+        break;
+      case "send":
+        break;
+      case "cancelgetin":
+        break;
+      case "cancel":
+        // await cancelSending();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleLoadData = async (formData) => {
+    try {
+      dispatch(setLoading(true));
+      const resultDataMsg214 = await load(formData);
+      if (resultDataMsg214) {
+        const dataMsg214 = resultDataMsg214.data.map((row) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.key;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "StatusMarker":
+                if (row["SuccessMarker"]) {
+                  acc[keyValue] = "Thành công";
+                } else if (row["ErrorMarker"]) {
+                  acc[keyValue] = "Thất bại";
+                } else acc[keyValue] = "Chưa gửi";
+                break;
+              case "StatusOfGood":
+                rowValue === 1
+                  ? (acc[keyValue] = "Full")
+                  : (acc[keyValue] = "Empty");
+                break;
+              default:
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
+                break;
+            }
+            return acc;
+          }, {});
+        });
+        setRows(dataMsg214);
+      }
+      dispatch(setLoading(false));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <Row gutter={[16, 16]} style={{ marginTop: "15px" }}>
-      <Col span={6}>
-        <Card title="214 - DANH SÁCH CONTAINER SAI KHÁC">
-          <Flex
-            style={{
-              flexDirection: "column",
-              gap: "20px",
+    <>
+      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+        <Col span={7}>
+          <Card
+            styles={{
+              title: {
+                textAlign: "center",
+                color: "#1b618c",
+              },
             }}
+            title="214 - GỬI GETIN CONTAINER"
+            style={{ borderRadius: "0px" }}
+            className="b-card"
           >
-            <Col>
-              <Button
-                type="primary"
-                icon={<CloudDownloadOutlined />}
-                style={{ backgroundColor: "#50a81d" }}
-              >
-                Nạp dữ liệu
-              </Button>
+            <Row style={{ padding: "0 8px" }}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
 
-              <Divider />
-
-              <Flex
-                style={{
-                  flexDirection: "column",
-                }}
-              >
-                <Flex
-                  style={{
-                    flexDirection: "column",
-                  }}
-                >
-                  <Button>Chọn Chuyến Tàu</Button>
-                  <Button>Bỏ Chọn</Button>
-
-                  <Divider />
-
-                  <Flex
-                    style={{
-                      gap: "10px",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <label>
-                      <Typography>Tên Tàu</Typography>
-                      <Input />
-                    </label>
-
-                    <label>
-                      <Typography>Chuyến N/X</Typography>
-                      <Input />
-                    </label>
-
-                    <label>
-                      <Typography>ETA/ETD</Typography>
-                      <Input />
-                    </label>
-                  </Flex>
-                </Flex>
-              </Flex>
-            </Col>
-          </Flex>
-        </Card>
-      </Col>
-      <Col span={18}>
-        <Card
-          style={{ borderRadius: "0px", height: "100%" }}
-          className="b-card"
-        >
-          <Row gutter={[8, 8]}>
-            <Col span={24} style={{ justifyContent: "space-between" }}>
-              <Row
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Col>
-                  <div>
-                    <Typography>Tìm:</Typography>
-                    <Input />
-                  </div>
-                </Col>
-                <Col>
-                  <Button
-                    type="primary"
-                    icon={<SendOutlined />}
-                    style={{ backgroundColor: "#f5a442" }}
-                  >
-                    Gửi thông điệp
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
-            <Divider
-              style={{ margin: "5px 0 5px", borderColor: "#dededede " }}
+              <Filter
+                form={form}
+                items={[
+                  {
+                    type: filterType.radio,
+                    label: "Hướng",
+                    config: {
+                      name: "imextype",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Nhập",
+                          value: "1",
+                        },
+                        {
+                          label: "Xuất",
+                          value: "2",
+                        },
+                        {
+                          label: "Nội địa",
+                          value: "3",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Loại hàng",
+                    config: {
+                      name: "isLF",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Hàng ngoại",
+                          value: "1",
+                        },
+                        {
+                          label: "Hàng nội",
+                          value: "2",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Trạng thái thông điệp",
+                    config: {
+                      name: "marker",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Thành công",
+                          value: "SuccessMarker",
+                        },
+                        {
+                          label: "Thất bại",
+                          value: "ErrorMarker",
+                        },
+                        {
+                          label: "Chưa gửi",
+                          value: "UnMarker",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Trạng thái container ra khỏi cảng",
+                    config: {
+                      name: "getout",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Chưa ra",
+                          value: "1",
+                        },
+                        {
+                          label: "Đã ra",
+                          value: "2",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Loại hàng",
+                    config: {
+                      name: "fe",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Full",
+                          value: "1",
+                        },
+                        {
+                          label: "Empty",
+                          value: "0",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.rangePicker,
+                    label: "Khoản",
+                    config: {
+                      name: "dateFromTo",
+                      placeholder: ["Từ", "Đến"],
+                      value: "",
+                    },
+                  },
+                  {
+                    type: filterType.input,
+                    label: "Số Cont",
+                    config: {
+                      defaultValue: "",
+                      name: "cntrNo",
+                      placeholder: "",
+                      value: "",
+                    },
+                  },
+                ]}
+              />
+            </Row>
+          </Card>
+        </Col>
+        <Col span={17}>
+          <Card
+            style={{ borderRadius: "0px", height: "100%" }}
+            className="b-card"
+          >
+            <ToolBar
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.cancelgetin,
+                toolBarButtonTypes.cancel,
+              ]}
+              handleConfirm={buttonConfirm}
             />
-            <Col span={24}>
-              <div className="b-table">
-                <Table
-                  config={{
-                    columns,
-                    header,
-                    dataSource: dataTable,
-                  }}
-                />
-              </div>
-            </Col>
-            <Divider
-              style={{ margin: "5px 0 5px", borderColor: "#dededede" }}
+            <DataGrid
+              ref={gridRef}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.single}
+              columns={columns}
+              rows={rows}
+              setRows={setRows}
+              onFocus={onFocus}
             />
-            <Col span={24} style={{ textAlign: "right" }}></Col>
-          </Row>
-        </Card>
-      </Col>
-    </Row>
+          </Card>
+        </Col>
+      </Row>
+    </>
   );
-};
-
-export default Msg214;
+}

@@ -31,7 +31,7 @@ export const load = async (params) => {
     getout,
     fe,
   } = params;
-  validateLoad(GroupID);
+  // validateLoad(GroupID);
 
   let arrCont;
   if (cntrnos) {
@@ -86,7 +86,7 @@ export const clearGetin = async (rows = []) => {
   return data;
 };
 
-export const cancelSending = async (rows = []) => {
+export const cancelSending = async () => {
   const formData = { msgId: msgId };
 
   const data = await poster(cpath("send-cancel"), formData);
