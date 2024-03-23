@@ -1,161 +1,213 @@
-import React from "react";
-import { SendOutlined, CloudDownloadOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Flex,
-  Input,
-  Row,
-  Typography,
-  DatePicker,
-  Radio,
-} from "antd";
-import Table from "../../global_component/dataTable/customTable";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Card, Col, Form, Row } from "antd";
+import dayjs from "dayjs";
+import * as React from "react";
+import { useDispatch } from "react-redux";
+import { load } from "../../apis/message_container/213.js";
+import { FORMAT_DATETIME } from "../../constants/index.js";
+import DataGrid, {
+  columnTypes,
+  selectionTypes,
+} from "../../global_component/DataGrid/index.jsx";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
+export default function Msg213Container() {
+  const onFocus = () => {};
+  const gridRef = React.createRef();
+  const vesselSelectRef = React.useRef();
+  const dispatch = useDispatch();
+  const [rows, setRows] = React.useState([]);
+  const [form] = Form.useForm();
 
-const { RangePicker } = DatePicker;
-
-const Msg213 = () => {
-  const dataTable = [
+  const columns = [
     {
-      id: "",
-      stt: "",
-      huong: "",
-      so_to_khai: "",
-      so_van_don: "",
-      so_container: "",
-      so_niem_chi: "",
-      ten_tau: "",
-      khoa_tham_chieu: "",
+      key: "ID",
+      name: "ID",
+      width: 180,
+      editable: false,
+      visible: true,
+    },
+    {
+      key: "STT",
+      name: "STT",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "ImExType",
+      name: "Hướng",
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "DeclareNo",
+      name: "Số Tờ Khai",
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "SealNo",
+      name: "Số Niêm Chì",
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "MsgRef",
+      name: "Khóa Tham Chiếu",
+      type: columnTypes.TextEditor,
     },
   ];
-  const columns = [
-    { columnId: "id" },
-    { columnId: "stt" },
-    { columnId: "huong" },
-    { columnId: "so_to_khai" },
-    { columnId: "so_van_don" },
-    { columnId: "so_container" },
-    { columnId: "so_niem_chi" },
-    { columnId: "ten_tau" },
-    { columnId: "khoa_tham_chieu" },
-  ];
-  const header = {
-    rowId: "header",
-    cells: [
-      { type: "header", text: "ID" },
-      { type: "header", text: "STT" },
-      { type: "header", text: "Hướng" },
-      { type: "header", text: "Số Tờ Khai" },
-      { type: "header", text: "Số Vận Đơn" },
-      { type: "header", text: "Số Container" },
-      { type: "header", text: "Số Niêm Chì" },
-      { type: "header", text: "Tên Tàu" },
-      { type: "header", text: "Khóa tham chiếu" },
-    ],
+
+  const buttonConfirm = async (props) => {
+    switch (props.type) {
+      case "load":
+        const dataFormFilter = form.getFieldsValue();
+        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+        let startDate, finishDate;
+        if (dataFormFilter.dateFromTo) {
+          startDate = dayjs(dataFormFilter.dateFromTo[0]).format(
+            FORMAT_DATETIME
+          );
+          finishDate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+        }
+
+        delete dataFormFilter.dateFromTo;
+        const formData = {
+          ...dataFormFilter,
+          startDate,
+          finishDate,
+          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+        };
+        handleLoadData(formData);
+        break;
+      case "send":
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleLoadData = async (formData) => {
+    try {
+      dispatch(setLoading(true));
+      const resultDataMsg213 = await load(formData);
+      if (resultDataMsg213) {
+        const dataMsg213 = resultDataMsg213.data.map((row, index) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.key;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "STT":
+                acc[keyValue] = index + 1;
+                break;
+              default:
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
+                break;
+            }
+            return acc;
+          }, {});
+        });
+        setRows(dataMsg213);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
   };
 
   return (
-    <Row gutter={[16, 16]} style={{ marginTop: "15px" }}>
-      <Col span={6}>
-        <Card title="213 - DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC">
-          <Flex
-            style={{
-              flexDirection: "column",
-              gap: "20px",
+    <>
+      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+        <Col span={7}>
+          <Card
+            styles={{
+              title: {
+                textAlign: "center",
+                color: "#1b618c",
+              },
             }}
+            title="213 - DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC"
+            style={{ borderRadius: "0px" }}
+            className="b-card"
           >
-            <Col>
-              <Button
-                type="primary"
-                icon={<CloudDownloadOutlined />}
-                style={{ backgroundColor: "#50a81d" }}
-              >
-                Nạp dữ liệu
-              </Button>
-
-              <Divider />
-
-              <Flex
-                style={{
-                  flexDirection: "column",
-                }}
-              >
-                <Flex
-                  style={{
-                    gap: "10px",
-                    flexDirection: "column",
-                  }}
-                >
-                  <label>
-                    <Typography>Ngày</Typography>
-                    <RangePicker placeholder={["Từ ngày", "Đến ngày"]} />
-                  </label>
-
-                  <Radio.Group>
-                    <Radio value={0}>Nhập Khẩu</Radio>
-                    <Radio value={1}>Xuất Khẩu</Radio>
-                  </Radio.Group>
-                </Flex>
-              </Flex>
-            </Col>
-          </Flex>
-        </Card>
-      </Col>
-      <Col span={18}>
-        <Card
-          style={{ borderRadius: "0px", height: "100%" }}
-          className="b-card"
-        >
-          <Row gutter={[8, 8]}>
-            <Col span={24} style={{ justifyContent: "space-between" }}>
-              <Row
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Col>
-                  <div>
-                    <Typography>Tìm:</Typography>
-                    <Input />
-                  </div>
-                </Col>
-                <Col>
-                  <Button
-                    type="primary"
-                    icon={<SendOutlined />}
-                    style={{ backgroundColor: "#f5a442" }}
-                  >
-                    Gửi thông điệp
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
-            <Divider
-              style={{ margin: "5px 0 5px", borderColor: "#dededede " }}
+            <Row style={{ padding: "0 8px" }}>
+              <Filter
+                form={form}
+                items={[
+                  {
+                    type: filterType.radio,
+                    label: "Hướng",
+                    config: {
+                      name: "imextype",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Nhập",
+                          value: "1",
+                        },
+                        {
+                          label: "Xuất",
+                          value: "2",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.rangePicker,
+                    label: "Khoản",
+                    config: {
+                      name: "dateFromTo",
+                      placeholder: ["Từ", "Đến"],
+                      value: "",
+                    },
+                  },
+                ]}
+              />
+            </Row>
+          </Card>
+        </Col>
+        <Col span={17}>
+          <Card
+            style={{ borderRadius: "0px", height: "100%" }}
+            className="b-card"
+          >
+            <ToolBar
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              handleConfirm={buttonConfirm}
             />
-            <Col span={24}>
-              <div className="b-table">
-                <Table
-                  config={{
-                    columns,
-                    header,
-                    dataSource: dataTable,
-                  }}
-                />
-              </div>
-            </Col>
-            <Divider
-              style={{ margin: "5px 0 5px", borderColor: "#dededede" }}
+            <DataGrid
+              ref={gridRef}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.single}
+              columns={columns}
+              rows={rows}
+              setRows={setRows}
+              onFocus={onFocus}
             />
-            <Col span={24} style={{ textAlign: "right" }}></Col>
-          </Row>
-        </Card>
-      </Col>
-    </Row>
+          </Card>
+        </Col>
+      </Row>
+    </>
   );
-};
-
-export default Msg213;
+}

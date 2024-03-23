@@ -1,7 +1,7 @@
-import { Socket, socketReceiveReponse } from "socket.io-client";
 import { poster } from "../../services/BaseService";
+import { socket, socketReceiveReponse } from "../../socket";
 const msgType = "cont";
-const msgId = "3668";
+const msgId = "566";
 const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
 };
@@ -13,13 +13,13 @@ const validateSend = () => {
 
 ///--process
 export const load = async (params) => {
-  const { voyagekey, isLF, marker, fe } = params;
-
+  const { voyagekey, isLF, marker, fe, billOfLading } = params;
   const formData = {
-    voyagekey,
+    voyagekey: voyagekey ?? "",
     isLF,
     fe,
     marker,
+    billOfLading,
   };
 
   const data = await poster(cpath("view"), formData);
@@ -55,7 +55,7 @@ export const searchVessels = async ({ vesselName }) => {
   return data;
 };
 
-Socket.on("sock_to_client", (data) => {
+socket.on("sock_to_client", (data) => {
   socketReceiveReponse(
     data,
     msgId,

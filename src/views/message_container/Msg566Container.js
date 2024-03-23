@@ -1,24 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row } from "antd";
+import { Card, Col, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels } from "../../apis/message_container/214.js";
+import { load, searchVessels } from "../../apis/message_container/566.js";
 import DataGrid, {
-  columnTypes,
-  selectionTypes,
+    columnTypes,
+    selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
-  toolBarButtonTypes,
+    toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-export default function Msg214Container() {
+export default function Msg566Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
   React.useEffect(async () => {
     try {
@@ -53,33 +55,27 @@ export default function Msg214Container() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "TransportIdentity",
+      key: "ImExType",
+      name: "Nhập/Xuất",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "transportIdentity",
       name: "Tên Tàu",
       width: 100,
       type: columnTypes.TextEditor,
     },
     {
-      key: "TransportCallSign",
-      name: "Hô Hiệu Tàu",
-      width: 100,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "TransportIMONumber",
-      name: "Số IMO",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "NumberOfJourney",
+      key: "numberOfJourney",
       name: "Số Chuyến",
-      width: 200,
+      width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
-      name: "Ngày Tàu đến/đi",
-      width: 150,
+      key: "arrivalDeparture",
+      name: "Ngày Cập/Rời",
+      width: 200,
       type: columnTypes.DatePicker,
     },
     {
@@ -89,77 +85,68 @@ export default function Msg214Container() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
-      name: "Số Định Danh",
+      key: "IssueDate",
+      name: "Ngày Vận Đơn",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CommodityDescription",
+      name: "Mô Tả Hàng Hóa",
       width: 200,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
     {
-      key: "CntrNo",
-      name: "Số Container",
+      key: "content",
+      name: "Ghi Chú",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "SealNo,",
-      name: "Số Niêm Chì",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "DiffType",
-      name: "Loại Sai Khác",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    // (data.lists[i].DiffType == 1 ? 'Khong co trong danh sach HQ thong bao' : 'Co trong danh sach HQ thong bao nhung khong ha bai'),
-    {
-      key: "DiffTypeContent",
-      name: "Chi Tiết Sai Khác",
+      key: "isUpdate",
+      name: "Cấp Lại",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
-      width: 150,
+      width: 180,
       type: columnTypes.TextEditor,
     },
     {
       key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
-      width: 150,
+      width: 220,
       type: columnTypes.DatePicker,
     },
     {
       key: "ResponseText",
-      name: "Nội Dung Phản Hồi",
-      width: 150,
-      type: columnTypes.TextEditor,
+      name: "Nội dung Phản Hồi",
+      width: 220,
+      type: columnTypes.DatePicker,
     },
     {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
-      width: 150,
-      type: columnTypes.TextEditor,
+      width: 220,
+      type: columnTypes.DatePicker,
     },
   ];
 
   const buttonConfirm = async (props) => {
     switch (props.type) {
       case "load":
+        const dataFormFilter = form.getFieldsValue();
         const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+
         const formData = {
+          ...dataFormFilter,
           voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
         };
         handleLoadData(formData);
         break;
       case "send":
-        break;
-      case "cancelgetin":
-        break;
-      case "cancel":
-        // await cancelSending();
         break;
       default:
         break;
@@ -169,26 +156,20 @@ export default function Msg214Container() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg214 = await load(formData);
-      if (resultDataMsg214) {
-        const dataMsg214 = resultDataMsg214.data.map((row) => {
+      const resultDataMsg566 = await load(formData);
+      if (resultDataMsg566) {
+        const dataMsg566 = resultDataMsg566.data.map((row) => {
           return columns.reduce((acc, column) => {
             // handle logic data
             const keyValue = column.key;
             const rowValue = row[keyValue];
-
-            // (data.lists[i].DiffType),
-
             switch (keyValue) {
+              case "JobStatus":
+                acc[keyValue] = rowValue ?? "READY";
+                break;
               case "ImExType":
                 acc[keyValue] =
                   rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                break;
-              case "DiffTypeContent":
-                acc[keyValue] =
-                  row["DiffType"] === 1
-                    ? "Khong co trong danh sach HQ thong bao"
-                    : "Co trong danh sach HQ thong bao nhung khong ha bai";
                 break;
               case "StatusMarker":
                 if (row["SuccessMarker"]) {
@@ -209,7 +190,7 @@ export default function Msg214Container() {
             return acc;
           }, {});
         });
-        setRows(dataMsg214);
+        setRows(dataMsg566);
       }
     } catch (error) {
       console.log(error);
@@ -228,7 +209,7 @@ export default function Msg214Container() {
                 color: "#1b618c",
               },
             }}
-            title="214 - DANH SÁCH CONTAINER SAI KHÁC"
+            title="366.8 - GỬI GETIN CONTAINER"
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -236,6 +217,44 @@ export default function Msg214Container() {
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
+
+              <Filter
+                form={form}
+                items={[
+                  {
+                    type: filterType.radio,
+                    label: "Loại hàng",
+                    config: {
+                      name: "isLF",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Hàng ngoại",
+                          value: "1",
+                        },
+                        {
+                          label: "Hàng nội",
+                          value: "2",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.input,
+                    label: "Số vận đơn",
+                    config: {
+                      defaultValue: "",
+                      name: "billOfLading",
+                      placeholder: "",
+                      value: "",
+                    },
+                  },
+                ]}
+              />
             </Row>
           </Card>
         </Col>
@@ -245,12 +264,7 @@ export default function Msg214Container() {
             className="b-card"
           >
             <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancelgetin,
-                toolBarButtonTypes.cancel,
-              ]}
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

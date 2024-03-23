@@ -12,11 +12,7 @@ const validateSend = () => {
 };
 
 ///--process
-export const load = async (voyagekey) => {
-  const formData = {
-    voyagekey: voyagekey,
-  };
-
+export const load = async (formData) => {
   const data = await poster(cpath("view"), formData);
   return data;
 };
