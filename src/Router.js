@@ -21,6 +21,8 @@ import Layout from "./global_component/Layout/Layout.js";
 import NotFound from "./views/not_found/NotFound.jsx";
 import React from "react";
 import { reConnect, socket } from "./socket.js";
+import Msg566Container from "./views/message_container/Msg566Container.js";
+import Msg3661Container from "./views/message_container/Msg3661Container.js";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,8 @@ const router = createBrowserRouter([
       { path: "/msg237_container", element: <Msg237 /> },
       { path: "/msg247_container", element: <Msg247Container /> },
       { path: "/msg3665_container", element: <Msg3665Container /> },
+      { path: "/msg3661_container", element: <Msg3661Container /> },
+      { path: "/msg566_container", element: <Msg566Container /> },
     ],
   },
   { path: "/login", element: <Login /> },

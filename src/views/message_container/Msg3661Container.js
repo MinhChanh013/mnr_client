@@ -3,22 +3,21 @@ import { Card, Col, Form, Row } from "antd";
 import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels } from "../../apis/message_container/3665.js";
+import { load, searchVessels } from "../../apis/message_container/3661.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
-  columnTypes,
-  selectionTypes,
+    columnTypes,
+    selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
-  toolBarButtonTypes,
+    toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-
-export default function Msg3665Container() {
-  const gridRef = React.createRef();
+export default function Msg3661Container() {
   const onFocus = () => {};
+  const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
@@ -52,181 +51,92 @@ export default function Msg3665Container() {
       editable: true,
     },
     {
-      key: "StatusOfGood",
+      key: "StatusMarker",
       name: "Trạng Thái",
-      width: 180,
+      width: 100,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "ImExType",
       name: "Nhập/Xuất",
-      width: 180,
+      width: 100,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
-      key: "BillOfLading",
-      name: "Số Vận Đơn",
-      width: 180,
+      key: "TransportIdentity",
+      name: "Tên Tàu",
+      width: 100,
       type: columnTypes.TextEditor,
-      editable: true,
+    },
+    {
+      key: "NumberOfJourney",
+      name: "Số Chuyến",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ArrivalDeparture",
+      name: "Ngày Tàu Đến/Đi",
+      width: 200,
+      type: columnTypes.DatePicker,
     },
     {
       key: "CntrNo",
       name: "Số Container",
-      width: 180,
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "GetIn",
+      name: "Ngày Getin",
+      width: 200,
+      type: columnTypes.DatePicker,
     },
     {
       key: "StatusOfGood",
       name: "Full/Empty",
-      width: 180,
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "OldGetIn",
-      name: "Ngày Getin Cũ",
-      width: 180,
-      type: columnTypes.DatePicker,
-      editable: true,
-    },
-    {
-      key: "NewGetIn",
-      name: "Ngày Getin Mới",
-      width: 180,
-      type: columnTypes.DatePicker,
-      editable: true,
-    },
-    {
-      key: "OldTransportIdentity",
-      name: "Tên Tàu Cũ",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "NewTransportIdentity",
-      name: "Tên Tàu Mới",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "OldNumberOfJourney",
-      name: "Chuyến Tàu Cũ",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-
-    {
-      key: "NewNumberOfJourney",
-      name: "Chuyến Tàu Mới",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-
-    {
-      key: "OldArrivalDeparture",
-      name: "Ngày Tàu Đến/Đi Cũ",
-      width: 180,
-      type: columnTypes.DatePicker,
-      editable: true,
-    },
-    {
-      key: "NewArrivalDeparture",
-      name: "Ngày Tàu Đến/Đi Mới",
-      width: 180,
-      type: columnTypes.DatePicker,
-      editable: true,
     },
     {
       key: "Content",
       name: "Ghi Chú",
-      width: 180,
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
-      width: 180,
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
-      width: 180,
+      width: 220,
       type: columnTypes.DatePicker,
-      editable: true,
     },
     {
       key: "ResponseText",
       name: "Nội Dung Phản Hồi",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
-      width: 180,
+      width: 300,
       type: columnTypes.TextEditor,
-      editable: true,
     },
   ];
 
-  const handleLoadData = async (formData) => {
-    dispatch(setLoading(true));
-    try {
-      const resultDataMsg3665 = await load(formData);
-      if (resultDataMsg3665) {
-        const dataMsg3668 = resultDataMsg3665.data.map((row) => {
-          return columns.reduce((acc, column) => {
-            // handle logic data
-            const keyValue = column.key;
-            const rowValue = row[keyValue];
-            switch (keyValue) {
-              case "JobStatus":
-                acc[keyValue] = row[keyValue] ?? "READY";
-                break;
-              case "ImExType":
-                acc[keyValue] =
-                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                break;
-              case "StatusMarker":
-                if (row["SuccessMarker"]) {
-                  acc[keyValue] = "Thành công";
-                } else if (row["ErrorMarker"]) {
-                  acc[keyValue] = "Thất bại";
-                } else acc[keyValue] = "Chưa gửi";
-                break;
-              case "StatusOfGood":
-                rowValue === 1
-                  ? (acc[keyValue] = "Full")
-                  : (acc[keyValue] = "Empty");
-                break;
-              default:
-                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
-                break;
-            }
-            return acc;
-          }, {});
-        });
-        setRows(dataMsg3668);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    dispatch(setLoading(false));
-  };
-
-  const buttonConfirm = (props) => {
+  const buttonConfirm = async (props) => {
     switch (props.type) {
       case "load":
         const dataFormFilter = form.getFieldsValue();
@@ -258,19 +168,67 @@ export default function Msg3665Container() {
     }
   };
 
+  const handleLoadData = async (formData) => {
+    try {
+      dispatch(setLoading(true));
+      const resultDataMsg3661 = await load(formData);
+      if (resultDataMsg3661) {
+        const dataMsg3661 = resultDataMsg3661.data.map((row) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.key;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "JobStatus":
+                acc[keyValue] = rowValue ?? "READY";
+                break;
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "StatusMarker":
+                if (row["SuccessMarker"]) {
+                  acc[keyValue] = "Thành công";
+                } else if (row["ErrorMarker"]) {
+                  acc[keyValue] = "Thất bại";
+                } else acc[keyValue] = "Chưa gửi";
+                break;
+              case "StatusOfGood":
+                rowValue === 1
+                  ? (acc[keyValue] = "Full")
+                  : (acc[keyValue] = "Empty");
+                break;
+              default:
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
+                break;
+            }
+            return acc;
+          }, {});
+        });
+        setRows(dataMsg3661);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+  };
+
   return (
     <>
-      <Row
-        gutter={[8, 8]}
-        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
-      >
-        <Col span={6}>
+      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+        <Col span={7}>
           <Card
-            title="366.5 - HIỆU CHỈNH THÔNG TIN GETIN CHO CONTAINER HẠ BÃI/VÀO CẢNG"
+            styles={{
+              title: {
+                textAlign: "center",
+                color: "#1b618c",
+              },
+            }}
+            title="366.1 - GỬI YÊU CẦU HỦY DANH SÁCH CONTAINER HẠ BÃI/VÀO CẢNG"
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 24px" }}>
+            <Row style={{ padding: "0 8px" }}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
@@ -353,64 +311,11 @@ export default function Msg3665Container() {
                     },
                   },
                   {
-                    type: filterType.radio,
-                    label: "Trạng thái container ra khỏi cảng",
-                    config: {
-                      name: "getout",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Chưa ra",
-                          value: "1",
-                        },
-                        {
-                          label: "Đã ra",
-                          value: "2",
-                        },
-                      ],
-                    },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "fe",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Full",
-                          value: "1",
-                        },
-                        {
-                          label: "Empty",
-                          value: "0",
-                        },
-                      ],
-                    },
-                  },
-                  {
                     type: filterType.rangePicker,
                     label: "Khoản",
                     config: {
                       name: "dateFromTo",
                       placeholder: ["Từ", "Đến"],
-                      value: "",
-                    },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Số Cont",
-                    config: {
-                      name: "cntrNo",
-                      placeholder: "",
                       value: "",
                     },
                   },

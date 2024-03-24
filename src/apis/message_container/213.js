@@ -1,6 +1,5 @@
-import { Socket } from "socket.io-client";
 import { poster } from "../../services/BaseService";
-import { socketReceiveReponse } from "../../socket";
+import { socket, socketReceiveReponse } from "../../socket";
 const msgType = "cont";
 const msgId = "213";
 const cpath = (action) => {
@@ -47,13 +46,11 @@ export const cancelSending = async (rows = []) => {
   return data;
 };
 
-
-
-Socket.on("sock_to_client", (data) => {
+socket.on("sock_to_client", (data) => {
   socketReceiveReponse(
     data,
     msgId,
-    data.response_func === '32' || data.response_func === '27',
+    data.response_func === "32" || data.response_func === "27",
     load({
       fromdate: "2023/03/13 00:00:00",
       todate: "2024/03/01 00:00:00",

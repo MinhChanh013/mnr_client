@@ -4,12 +4,12 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { load, searchVessels } from "../../apis/message_container/212.js";
 import DataGrid, {
-    columnTypes,
-    selectionTypes,
+  columnTypes,
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
-    toolBarButtonTypes,
+  toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 
@@ -177,9 +177,14 @@ const Msg212Container = () => {
       case "load":
         const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
         const formData = {
-          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+          voyagekey:
+            Object.keys(dataVesselSelect).length > 0
+              ? dataVesselSelect.VoyageKey
+              : "",
         };
-        handleLoadData(formData);
+        handleLoadData(
+          Object.keys(dataVesselSelect).length > 0 ? formData : {}
+        );
         break;
       case "send":
         break;

@@ -1,23 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Form, Row } from "antd";
+import dayjs from "dayjs";
 import * as React from "react";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import { useDispatch } from "react-redux";
 import {
-  cancelSending,
   load,
-  searchVessels,
+  searchVessels
 } from "../../apis/message_container/3668.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
-import dayjs from "dayjs";
-import { FORMAT_DATETIME } from "../../constants/index.js";
-import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 export default function Msg3668Container() {
   const onFocus = () => {};
@@ -246,10 +245,10 @@ export default function Msg3668Container() {
         });
         setRows(dataMsg3668);
       }
-      dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
+    dispatch(setLoading(false));
   };
 
   return (

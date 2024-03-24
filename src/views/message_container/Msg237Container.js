@@ -1,240 +1,360 @@
-import React from "react";
-import { SendOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Flex,
-  Input,
-  Radio,
-  Row,
-  DatePicker,
-  Typography,
-} from "antd";
-import Table from "../../global_component/dataTable/customTable";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Card, Col, Form, Row } from "antd";
+import dayjs from "dayjs";
+import * as React from "react";
+import { useDispatch } from "react-redux";
+import { load, searchVessels } from "../../apis/message_container/237.js";
+import { FORMAT_DATETIME } from "../../constants/index.js";
+import DataGrid, {
+  columnTypes,
+  selectionTypes,
+} from "../../global_component/DataGrid/index.jsx";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
+export default function Msg237Container() {
+  const onFocus = () => {};
+  const gridRef = React.createRef();
+  const vesselSelectRef = React.useRef();
+  const dispatch = useDispatch();
+  const [rows, setRows] = React.useState([]);
+  const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
-const { RangePicker } = DatePicker;
+  React.useEffect(async () => {
+    try {
+      const res = await searchVessels("");
+      if (res) {
+        setDataViewsels(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
-const Msg237 = () => {
-  const dataTable = [
+  const columns = [
     {
-      chon: "",
-      hanh_dong: "",
-      trang_thai: "",
-      niem_chi_cu: "",
-      niem_chi_moi: "",
-      nhap_xuat: "",
-      so_van_don: "",
-      so_container: "",
-      full_empty: "",
-      ngay_getin: "",
-      ten_tau: "",
-      chuyen_tau: "",
-      ngay_tau_den_roi: "",
-      ghi_chu: "",
-      so_tiep_nhan: "",
-      ngay_tiep_nhan: "",
-      noi_dung_phan_hoi: "",
-      khoa_tham_chieu: "",
+      key: "ID",
+      name: "ID",
+      width: 180,
+      editable: false,
+      visible: true,
+    },
+    {
+      key: "JobStatus",
+      name: "Hành Động",
+      width: 180,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "StatusMarker",
+      name: "Trạng Thái",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "OldSealNo",
+      name: "Niêm Chì Cũ",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "NewSealNo",
+      name: "Niêm Chì Mới",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ImExType",
+      name: "Nhập/Xuất",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      width: 100,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CHK_FE",
+      name: "Full/Empty",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "GetIn",
+      name: "Ngày Getin",
+      width: 200,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "TransportIdentity",
+      name: "Tên Tàu",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "NumberOfJourney",
+      name: "Chuyến Tàu",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ArrivalDeparture",
+      name: "Ngày tàu đến/Rời",
+      width: 200,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "Content",
+      name: "Ghi Chú",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "AcceptanceNo",
+      name: "Số Tiếp Nhận",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "AcceptanceTime",
+      name: "Ngày Tiếp Nhận",
+      width: 220,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "ResponseText",
+      name: "Nội Dung Phản Hồi",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Khóa Tham Chiếu",
+      width: 300,
+      type: columnTypes.TextEditor,
     },
   ];
-  const columns = [
-    { columnId: "chon" },
-    { columnId: "hanh_dong" },
-    { columnId: "trang_thai" },
-    { columnId: "niem_chi_cu" },
-    { columnId: "niem_chi_moi" },
-    { columnId: "nhap_xuat" },
-    { columnId: "so_van_don" },
-    { columnId: "so_container" },
-    { columnId: "full_empty" },
-    { columnId: "ngay_getin" },
-    { columnId: "ten_tau" },
-    { columnId: "chuyen_tau" },
-    { columnId: "ngay_tau_den_roi" },
-    { columnId: "ghi_chu" },
-    { columnId: "so_tiep_nhan" },
-    { columnId: "ngay_tiep_nhan" },
-    { columnId: "noi_dung_phan_hoi" },
-    { columnId: "khoa_tham_chieu" },
-  ];
-  const header = {
-    rowId: "header",
-    cells: [
-      { type: "header", text: "Chọn" },
-      { type: "header", text: "Hành Động" },
-      { type: "header", text: "Trạng Thái" },
-      { type: "header", text: "Niêm Chì Cũ" },
-      { type: "header", text: "Niêm Chì Mới" },
-      { type: "header", text: "Nhập/Xuất" },
-      { type: "header", text: "Số Vận Đơn" },
-      { type: "header", text: "Số Container" },
-      { type: "header", text: "Full/Empty" },
-      { type: "header", text: "Ngày Getin" },
-      { type: "header", text: "Tên Tàu" },
-      { type: "header", text: "Chuyến Tàu" },
-      { type: "header", text: "Ngày Tàu Đến/Rời" },
-      { type: "header", text: "Ghi Chú" },
-      { type: "header", text: "Số Tiếp Nhận" },
-      { type: "header", text: "Ngày Tiếp Nhận" },
-      { type: "header", text: "Nội dung Phản Hồi" },
-      { type: "header", text: "Khóa tham chiếu" },
-    ],
+
+  const buttonConfirm = async (props) => {
+    switch (props.type) {
+      case "load":
+        const dataFormFilter = form.getFieldsValue();
+        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+        let fromdate, todate;
+        if (dataFormFilter.dateFromTo) {
+          fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
+            FORMAT_DATETIME
+          );
+          todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+        }
+
+        delete dataFormFilter.dateFromTo;
+        const formData = {
+          ...dataFormFilter,
+          fromdate,
+          todate,
+          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+        };
+        handleLoadData(formData);
+        break;
+      case "send":
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleLoadData = async (formData) => {
+    try {
+      dispatch(setLoading(true));
+      const resultDataMsg237 = await load(formData);
+      if (resultDataMsg237) {
+        const dataMsg237 = resultDataMsg237.data.map((row) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.key;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "StatusMarker":
+                if (row["SuccessMarker"]) {
+                  acc[keyValue] = "Thành công";
+                } else if (row["ErrorMarker"]) {
+                  acc[keyValue] = "Thất bại";
+                } else acc[keyValue] = "Chưa gửi";
+                break;
+              case "StatusOfGood":
+                row["CHK_FE"] === 1 ? (acc = "Full") : (acc = "Empty");
+                break;
+              case "CHK_FE":
+                acc[keyValue] = `${row["CHK_FE"] === 1 ? "Full" : "Empty"} ${
+                  row["CHK_FE"]
+                }`;
+                break;
+              default:
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
+                break;
+            }
+            return acc;
+          }, {});
+        });
+        setRows(dataMsg237);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
   };
 
   return (
-    <Row gutter={[16, 16]} style={{ marginTop: "15px" }}>
-      <Col span={6}>
-        <Card title="237 - GỬI THÔNG TIN THAY ĐỔI CHÌ NIÊM PHONG CONTAINER">
-          <Flex
-            style={{
-              flexDirection: "column",
+    <>
+      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+        <Col span={7}>
+          <Card
+            styles={{
+              title: {
+                textAlign: "center",
+                color: "#1b618c",
+              },
             }}
+            title="237 - GỬI THÔNG TIN THAY ĐỔI CHÌ NIÊM PHONG CONTAINER"
+            style={{ borderRadius: "0px" }}
+            className="b-card"
           >
-            <Flex
-              style={{
-                flexDirection: "column",
-              }}
-            >
-              <Button>Chọn Chuyến Tàu</Button>
-              <Button>Bỏ Chọn</Button>
+            <Row style={{ padding: "0 8px" }}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
 
-              <Divider />
-
-              <Flex
-                style={{
-                  gap: "10px",
-                  flexDirection: "column",
-                }}
-              >
-                <label>
-                  <Typography>Tên Tàu</Typography>
-                  <Input />
-                </label>
-
-                <label>
-                  <Typography>Chuyến N/X</Typography>
-                  <Input />
-                </label>
-
-                <label>
-                  <Typography>ETA/ETD</Typography>
-                  <Input />
-                </label>
-              </Flex>
-            </Flex>
-          </Flex>
-          <Divider
-            style={{
-              borderColor: "#ffb13d",
-              color: "#ffb13d",
-              marginBottom: "2px",
-            }}
+              <Filter
+                form={form}
+                items={[
+                  {
+                    type: filterType.radio,
+                    label: "Hướng",
+                    config: {
+                      name: "imextype",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Nhập",
+                          value: "1",
+                        },
+                        {
+                          label: "Xuất",
+                          value: "2",
+                        },
+                        {
+                          label: "Nội địa",
+                          value: "3",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Trạng thái thông điệp",
+                    config: {
+                      name: "marker",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Thành công",
+                          value: "SuccessMarker",
+                        },
+                        {
+                          label: "Thất bại",
+                          value: "ErrorMarker",
+                        },
+                        {
+                          label: "Chưa gửi",
+                          value: "UnMarker",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Trạng thái container ra khỏi cảng",
+                    config: {
+                      name: "getout",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Chưa ra",
+                          value: "1",
+                        },
+                        {
+                          label: "Đã ra",
+                          value: "2",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.rangePicker,
+                    label: "Khoản",
+                    config: {
+                      name: "dateFromTo",
+                      placeholder: ["Từ", "Đến"],
+                      value: "",
+                    },
+                  },
+                ]}
+              />
+            </Row>
+          </Card>
+        </Col>
+        <Col span={17}>
+          <Card
+            style={{ borderRadius: "0px", height: "100%" }}
+            className="b-card"
           >
-            Hướng
-          </Divider>
-          <Radio.Group>
-            <Radio value={1}>Tất cả</Radio>
-            <Radio value={2}>Nhập Khấu</Radio>
-            <Radio value={3}>Xuất Khấu</Radio>
-          </Radio.Group>
-          <Divider
-            style={{
-              borderColor: "#ffb13d",
-              color: "#ffb13d",
-              marginBottom: "2px",
-            }}
-          >
-            Gửi thông điệp
-          </Divider>
-          <Radio.Group>
-            <Radio value={1}>Tất cả</Radio>
-            <Radio value={2}>Thành công</Radio>
-            <Radio value={3}>Thất bại</Radio>
-            <Radio value={4}>Chưa gửi</Radio>
-          </Radio.Group>
-          <Divider
-            style={{
-              borderColor: "#ffb13d",
-              color: "#ffb13d",
-              marginBottom: "2px",
-            }}
-          >
-            Trạng thái container
-          </Divider>
-
-          <Radio.Group>
-            <Radio value={1}>Tất cả</Radio>
-            <Radio value={2}>Chưa ra khỏi cảng</Radio>
-            <Radio value={3}>Đã ra khỏi cảng</Radio>
-          </Radio.Group>
-          <Divider
-            style={{
-              borderColor: "#ffb13d",
-              color: "#ffb13d",
-              marginBottom: "2px",
-            }}
-          >
-            Lọc Theo Ngày GetIn
-          </Divider>
-
-          <RangePicker placeholder={["Từ ngày", "Đến ngày"]} />
-        </Card>
-      </Col>
-      <Col span={18}>
-        <Card
-          style={{ borderRadius: "0px", height: "100%" }}
-          className="b-card"
-        >
-          <Row gutter={[8, 8]}>
-            <Col span={24} style={{ justifyContent: "space-between" }}>
-              <Row
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Col>
-                  <div>
-                    <Typography>Tìm:</Typography>
-                    <Input />
-                  </div>
-                </Col>
-                <Col>
-                  <Button
-                    type="primary"
-                    icon={<SendOutlined />}
-                    style={{ backgroundColor: "#f5a442" }}
-                  >
-                    Gửi thông điệp
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
-            <Divider
-              style={{ margin: "5px 0 5px", borderColor: "#dededede " }}
+            <ToolBar
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              handleConfirm={buttonConfirm}
             />
-            <Col span={24}>
-              <div className="b-table">
-                <Table
-                  config={{
-                    columns,
-                    header,
-                    dataSource: dataTable,
-                  }}
-                />
-              </div>
-            </Col>
-            <Divider
-              style={{ margin: "5px 0 5px", borderColor: "#dededede" }}
+            <DataGrid
+              ref={gridRef}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.single}
+              columns={columns}
+              rows={rows}
+              setRows={setRows}
+              onFocus={onFocus}
             />
-            <Col span={24} style={{ textAlign: "right" }}></Col>
-          </Row>
-        </Card>
-      </Col>
-    </Row>
+          </Card>
+        </Col>
+      </Row>
+    </>
   );
-};
-
-export default Msg237;
+}
