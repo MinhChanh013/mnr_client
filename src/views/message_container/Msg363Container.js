@@ -8,14 +8,15 @@ import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { searchVessels, load, send } from "../../apis/message_container/247.js";
 import { socket } from "../../socket.js";
+import { searchVessels, load, send } from "../../apis/message_container/363.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import dayjs from "dayjs";
 
-const Msg247Container = () => {
+
+const Msg363Container = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const vesselSelectRef = React.useRef();
@@ -25,8 +26,8 @@ const Msg247Container = () => {
   const onFocus = () => { };
   const columns = [
     {
-      key: "ID",
-      name: "ID",
+      key: 'ID',
+      name: 'ID',
       visible: true,
     },
     {
@@ -43,46 +44,16 @@ const Msg247Container = () => {
       type: columnTypes.TextEditor,
     },
     {
-      key: "OldImExType",
-      name: "Hướng N/X Cũ",
+      key: "ImExType",
+      name: "Trạng Thái",
       width: 100,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "NewImExType",
-      name: "Hướng N/X Mới",
-      width: 100,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "BillOfLading",
-      name: "Số Vận Đơn",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "CntrNo",
-      name: "Số Container",
-      width: 200,
-      type: columnTypes.DatePicker,
-    },
-    {
-      key: "CHK_FE",
-      name: "Full/Empty",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "GetIn",
-      name: "Ngày Getin",
-      width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "TransportIdentity",
       name: "Tên Tàu",
-      width: 200,
-      type: columnTypes.DatePicker,
+      width: 100,
+      type: columnTypes.TextEditor,
     },
     {
       key: "NumberOfJourney",
@@ -93,12 +64,72 @@ const Msg247Container = () => {
     {
       key: "ArrivalDeparture",
       name: "Ngày Tàu Đến/Rời",
+      width: 200,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "DeclareNo",
+      name: "Số Tờ Khai",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "Content",
-      name: "Ghi Chú",
+      key: "DeclareIssueDate",
+      name: "Ngày Tờ Khai",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "DeclarationOffice",
+      name: "Mã CCHQ Mở TK",
+      width: 200,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "DeclarationOfficeControl",
+      name: "Mã CCHQ GS",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CustomsStatus",
+      name: "Trạng Thái TK",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "EnterpriseIdentity",
+      name: "MST DN",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "EnterpriseName",
+      name: "Tên Doanh Nghiệp",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "GetIn",
+      name: "Ngày Getin",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CHK_FE",
+      name: "Full/Empty",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
     },
@@ -142,8 +173,6 @@ const Msg247Container = () => {
       delete dataFormFilter.dateFromTo;
       const formData = {
         ...dataFormFilter,
-        fromdate,
-        todate,
         voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
       };
       handleLoadData(formData);
@@ -202,14 +231,14 @@ const Msg247Container = () => {
     if (props.type === 'save') {
 
     }
-  };
+  }
 
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg247 = await load(formData);
-      if (resultDataMsg247.data.length > 0) {
-        const dataMsg247 = resultDataMsg247.data.map((row) => {
+      const resultDataMsg363 = await load(formData);
+      if (resultDataMsg363.data.length > 0) {
+        const dataMsg3663 = resultDataMsg363.data.map((row) => {
           return columns.reduce((acc, column) => {
             // handle logic data
             const keyValue = column.key;
@@ -238,17 +267,17 @@ const Msg247Container = () => {
             return acc;
           }, {});
         });
-        setRows(dataMsg247);
+        setRows(dataMsg3663);
       } else {
+        console.log('-----------------')
         setRows([]);
-        message.error('Không tìm thấy dữ liệu dữ liệu!');
+        message.error('Không tìm thấy dữ liệu!');
       }
       dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
   };
-
 
   useEffect(async () => {
     const loadVessel = await searchVessels({});
@@ -271,7 +300,7 @@ const Msg247Container = () => {
           {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
           {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
           <Card
-            title="247 - GỬI THÔNG TIN THAY ĐỔI LOẠI HÀNG HÓA (CONTAINER)"
+            title="363 - HỎI THÔNG TIN (NHẬP/XUẤT) ĐỦ ĐIỀU KIỆN QUA KVSG"
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -279,15 +308,16 @@ const Msg247Container = () => {
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>
+
               <Filter
                 filterRef={filterRef}
                 items={[
                   {
                     type: filterType.radio,
-                    label: "Hướng (mới)",
+                    label: "Hướng",
                     config: {
                       name: "imextype",
-                      defaultValue: "",
+                      defaultValue: "1",
                       options: [
                         {
                           label: "Nhập",
@@ -302,17 +332,17 @@ const Msg247Container = () => {
                   },
                   {
                     type: filterType.radio,
-                    label: "Loại hàng (mới)",
+                    label: "Tình Trạng Container",
                     config: {
                       name: "isLF",
-                      defaultValue: "",
+                      defaultValue: "1",
                       options: [
                         {
-                          label: "Hàng ngoại",
+                          label: "Đã Getin",
                           value: "1",
                         },
                         {
-                          label: "Hàng nội",
+                          label: "Chưa Getin",
                           value: "2",
                         },
                       ],
@@ -344,28 +374,6 @@ const Msg247Container = () => {
                       ],
                     },
                   },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái container ra khỏi cảng",
-                    config: {
-                      name: "getout",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Chưa ra",
-                          value: "1",
-                        },
-                        {
-                          label: "Đã ra",
-                          value: "2",
-                        },
-                      ],
-                    },
-                  },
                 ]}
               />
             </Row>
@@ -373,7 +381,7 @@ const Msg247Container = () => {
         </Col>
         <Col span={18}>
           <ToolBar
-            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel]}
             handleConfirm={buttonConfirm}
           />
           <Card
@@ -397,4 +405,4 @@ const Msg247Container = () => {
   );
 };
 
-export default Msg247Container;
+export default Msg363Container;

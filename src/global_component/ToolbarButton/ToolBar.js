@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Divider, Modal, Space } from "antd";
 import {
     CloseOutlined,
@@ -31,7 +31,7 @@ export const toolBarButtonTypes = {
         fontColor: "#f54f40",
         icon: <CloseOutlined style={{ stroke: "#f54f40", strokeWidth: 30 }} />,
         alert: true,
-        message: 'Bạn có muốn hủy gửi?'
+        message: 'Bạn có muốn hủy gửi thông điệp?'
     },
     cancelgetin: {
         id: 'cancelgetin',
@@ -57,10 +57,24 @@ export const toolBarButtonTypes = {
         alert: true,
         message: 'Bạn có muốn xóa dữ liệu?'
     },
+    deletegetout: {
+        id: 'delete getout',
+        label: "Xóa Getout",
+        fontColor: "#f54f40",
+        icon: <DeleteOutlined style={{ stroke: "#f54f40", strokeWidth: 30 }} />,
+        alert: true,
+        message: 'Bạn có muốn xóa getout?'
+    },
+    newdeclare: {
+        id: 'new declare',
+        label: "Quét tờ khai mới",
+        fontColor: "#2399fa",
+        icon: <SendOutlined style={{ stroke: "#2399fa", strokeWidth: 30 }} />,
+    }
 }
 
 const ToolBar = ({ buttonConfig, cardConfig, handleConfirm}) => {
-    const [openModal, setOpen] = useState(false);
+    const [openModal] = useState(false);
     return (
         <>
             <div style={{ backgroundColor: 'white', marginBottom: '5px', padding: '3px 4px 3px 4px' }}>

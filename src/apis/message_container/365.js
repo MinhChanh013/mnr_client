@@ -1,4 +1,4 @@
-import { Socket } from "socket.io-client";
+import { socket, socketReceiveReponse } from "../../socket";
 import { poster } from "../../services/BaseService";
 import { ev_code } from "../../constants";
 const msgType = "cont";
@@ -28,15 +28,6 @@ export const load = async (params) => {
     getout,
     fe,
   } = params;
-  validateLoad(GroupID);
-
-  let arrCont = cntrnos
-    .split(/[\t\r\n\s,]+/g)
-    .filter((v, i, s) => s.indexOf(v) === i && v);
-
-  if (arrCont.length > 10) {
-    arrCont = arrCont.slice(0, 10);
-  }
 
   const formData = {
     voyagekey,
@@ -93,7 +84,7 @@ export const searchVessels = async ({ vesselName }) => {
   return data;
 };
 
-Socket.on("sock_to_client", function (data) {
+socket.on("sock_to_client", function (data) {
   if (data.request_type === "365") {
     if (
       data.response_func === "29" ||

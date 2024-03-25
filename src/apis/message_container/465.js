@@ -1,4 +1,4 @@
-import { Socket, socketReceiveReponse } from "socket.io-client";
+import { socket, socketReceiveReponse } from "../../socket";
 import { poster } from "../../services/BaseService";
 const msgType = "cont";
 const msgId = "465";
@@ -30,11 +30,8 @@ export const load = async (params) => {
 };
 
 export const send = async (rows = []) => {
-  validateSend();
 
-  const formData = {
-    datas: rows,
-  };
+  const formData = rows;
 
   const data = await poster(cpath("send"), formData);
   return data;
@@ -56,7 +53,7 @@ export const searchVessels = async ({ vesselName }) => {
   return data;
 };
 
-Socket.on("sock_to_client", (data) => {
+socket.on("sock_to_client", (data) => {
   socketReceiveReponse(
     data,
     msgId,

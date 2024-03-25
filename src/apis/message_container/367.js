@@ -25,13 +25,13 @@ export const load = async (params) => {
   return data;
 };
 
-export const send = async (rows = []) => {
-  validateSend();
+export const send =  async (params) => {
+  const { declareNo, declareOffice } = params;
 
   const formData = {
-    datas: rows,
+    declareNo: declareNo,
+    declareOffice: declareOffice,
   };
-
   const data = await poster(cpath("send"), formData);
   return data;
 };
