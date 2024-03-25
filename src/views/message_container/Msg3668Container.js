@@ -5,7 +5,8 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import {
   load,
-  searchVessels
+  searchVessels,
+  send,
 } from "../../apis/message_container/3668.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
@@ -18,6 +19,8 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { showMessage } from "../../store/slices/MessageSlices.js";
+import { socket } from "../../socket.js";
 export default function Msg3668Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -198,6 +201,69 @@ export default function Msg3668Container() {
         handleLoadData(formData);
         break;
       case "send":
+        const idMsgRowData = gridRef.current?.getSelectedRows();
+        const listMsgRowSelect = [];
+        idMsgRowData.forEach((idMsgSelected) => {
+          listMsgRowSelect.push(
+            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+          );
+        });
+        try {
+          const data = await send(listMsgRowSelect);
+          if (data) {
+            if (data.deny) {
+              dispatch(
+                showMessage({
+                  type: "error",
+                  content: data.deny,
+                })
+              );
+              return;
+            }
+            if (data.data && data.data.dont_send_again) {
+              dispatch(
+                showMessage({
+                  type: "success",
+                  content: data.data.dont_send_again,
+                })
+              );
+            }
+
+            if (data.data && data.data.xmlComplete.length > 0) {
+              console.log(data.xmlComplete);
+              dispatch(
+                showMessage({
+                  type: "success",
+                  content: "Thông điệp đã được đưa vào hàng đợi!",
+                })
+              );
+              socket.emit("mess_to_sock", "click");
+            }
+
+            if (data.msgGroupId) {
+              dispatch(
+                showMessage({
+                  type: "success",
+                  content: "Thông điệp đã được đưa vào hàng đợi!",
+                })
+              );
+              socket.emit("mess_to_sock", data.msgGroupId);
+            }
+
+            if (data.result) {
+              alert(data.result);
+            }
+            if (data.msgRef_array) {
+              for (let i = 0; i < data.msgRef_array.length; i++) {
+                // var cntrNo = data.msgRef_array[i].split(":")[0];
+                // var msgRef = data.msgRef_array[i].split(":")[1].toUpperCase();
+                // var trarr = $("#contenttable tr");
+              }
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
         break;
       case "cancelgetin":
         break;

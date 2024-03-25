@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
 const msgType = "cont";
@@ -7,12 +8,6 @@ const cpath = (action) => {
 };
 
 ///---validate
-const validateLoad = (GroupID) => {
-  // throw new Error();
-};
-const validateSend = () => {
-  throw new Error();
-};
 const validateClearGetin = () => {
   throw new Error();
 };
@@ -20,7 +15,6 @@ const validateClearGetin = () => {
 ///--process
 export const load = async (params) => {
   const {
-    GroupID,
     voyagekey,
     cntrnos,
     imextype,
@@ -31,7 +25,6 @@ export const load = async (params) => {
     getout,
     fe,
   } = params;
-  // validateLoad(GroupID);
 
   let arrCont;
   if (cntrnos) {
@@ -60,10 +53,11 @@ export const load = async (params) => {
 };
 
 export const send = async (rows = []) => {
-  validateSend();
-
+  if (rows.length === 0) {
+    return;
+  }
   const formData = {
-    datas: rows,
+    args: rows,
   };
 
   const data = await poster(cpath("send"), formData);
