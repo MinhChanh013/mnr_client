@@ -2,17 +2,18 @@
 import { Card, Col, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels } from "../../apis/message_container/566.js";
+import { load, searchVessels, send } from "../../apis/message_container/566.js";
 import DataGrid, {
-    columnTypes,
-    selectionTypes,
+  columnTypes,
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
-    toolBarButtonTypes,
+  toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { dataConverTable } from "../../utils/dataTable.utils.js";
 export default function Msg566Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -55,63 +56,75 @@ export default function Msg566Container() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "ImExType",
-      name: "Nhập/Xuất",
-      width: 100,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "transportIdentity",
-      name: "Tên Tàu",
-      width: 100,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "numberOfJourney",
-      name: "Số Chuyến",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "arrivalDeparture",
-      name: "Ngày Cập/Rời",
-      width: 200,
-      type: columnTypes.DatePicker,
-    },
-    {
       key: "BillOfLading",
       name: "Số Vận Đơn",
-      width: 150,
+      width: 100,
       type: columnTypes.TextEditor,
     },
     {
       key: "IssueDate",
       name: "Ngày Vận Đơn",
+      width: 100,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "CntrNo",
+      name: "Số Container",
       width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "SealNo",
+      name: "Niêm Chì",
+      width: 200,
       type: columnTypes.TextEditor,
     },
     {
       key: "CommodityDescription",
       name: "Mô Tả Hàng Hóa",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "StatusOfGood",
+      name: "Full/Empty",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "TransportIdentity",
+      name: "Tên Tàu",
       width: 200,
       type: columnTypes.TextEditor,
     },
     {
-      key: "content",
-      name: "Ghi Chú",
+      key: "NumberOfJourney",
+      name: "Số Chuyến",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "isUpdate",
-      name: "Cấp Lại",
+      key: "ArrivalDeparture",
+      name: "Ngày Cập/Rời",
       width: 150,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "Content",
+      name: "Ghi Chú",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "IsUpdate",
+      name: "Cấp Lại",
+      width: 220,
       type: columnTypes.TextEditor,
     },
     {
       key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
-      width: 180,
+      width: 220,
       type: columnTypes.TextEditor,
     },
     {
@@ -122,15 +135,15 @@ export default function Msg566Container() {
     },
     {
       key: "ResponseText",
-      name: "Nội dung Phản Hồi",
+      name: "Nội Dung Phản Hồi",
       width: 220,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
       width: 220,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
   ];
 
@@ -147,6 +160,23 @@ export default function Msg566Container() {
         handleLoadData(formData);
         break;
       case "send":
+        const dataVesselSelectSelect =
+          vesselSelectRef.current?.getSelectedVessel();
+        const formDataFilter = form.getFieldsValue();
+        const isLF = formDataFilter.isLF;
+        const voyagekey = dataVesselSelectSelect.VoyageKey;
+        const idMsgRowData = gridRef.current?.getSelectedRows();
+        const listMsgRowSelect = [];
+        idMsgRowData.forEach((idMsgSelected) => {
+          listMsgRowSelect.push(
+            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+          );
+        });
+        try {
+          await send(listMsgRowSelect, isLF, voyagekey, dispatch);
+        } catch (error) {
+          console.log(error);
+        }
         break;
       default:
         break;
@@ -158,39 +188,7 @@ export default function Msg566Container() {
       dispatch(setLoading(true));
       const resultDataMsg566 = await load(formData);
       if (resultDataMsg566) {
-        const dataMsg566 = resultDataMsg566.data.map((row) => {
-          return columns.reduce((acc, column) => {
-            // handle logic data
-            const keyValue = column.key;
-            const rowValue = row[keyValue];
-            switch (keyValue) {
-              case "JobStatus":
-                acc[keyValue] = rowValue ?? "READY";
-                break;
-              case "ImExType":
-                acc[keyValue] =
-                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                break;
-              case "StatusMarker":
-                if (row["SuccessMarker"]) {
-                  acc[keyValue] = "Thành công";
-                } else if (row["ErrorMarker"]) {
-                  acc[keyValue] = "Thất bại";
-                } else acc[keyValue] = "Chưa gửi";
-                break;
-              case "StatusOfGood":
-                rowValue === 1
-                  ? (acc[keyValue] = "Full")
-                  : (acc[keyValue] = "Empty");
-                break;
-              default:
-                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
-                break;
-            }
-            return acc;
-          }, {});
-        });
-        setRows(dataMsg566);
+        setRows(dataConverTable(resultDataMsg566, columns));
       }
     } catch (error) {
       console.log(error);
@@ -244,8 +242,56 @@ export default function Msg566Container() {
                     },
                   },
                   {
+                    type: filterType.radio,
+                    label: "Loại hàng",
+                    config: {
+                      name: "fe",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Full",
+                          value: "1",
+                        },
+                        {
+                          label: "Empty",
+                          value: "0",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Trạng thái thông điệp",
+                    config: {
+                      name: "marker",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Thành công",
+                          value: "SuccessMarker",
+                        },
+                        {
+                          label: "Thất bại",
+                          value: "ErrorMarker",
+                        },
+                        {
+                          label: "Chưa gửi",
+                          value: "UnMarker",
+                        },
+                      ],
+                    },
+                  },
+                  {
                     type: filterType.input,
-                    label: "Số vận đơn",
+                    label: "Số Cont",
                     config: {
                       defaultValue: "",
                       name: "billOfLading",
@@ -264,7 +310,7 @@ export default function Msg566Container() {
             className="b-card"
           >
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

@@ -36,6 +36,36 @@ export const send = async (params, dispatch) => {
   };
 
   const data = await poster(cpath("send"), formData);
+  if (data) {
+    if (data.deny) {
+      dispatch(
+        showMessage({
+          type: "error",
+          content: data.deny,
+        })
+      );
+      return;
+    }
+    if (data.data && data.data.xmlComplete.length > 0) {
+      dispatch(
+        showMessage({
+          type: "success",
+          content: "Thông điệp đã được đưa vào hàng đợi!",
+        })
+      );
+      socket.emit("mess_to_sock", "click");
+    }
+
+    if (data.msgGroupId) {
+      dispatch(
+        showMessage({
+          type: "success",
+          content: "Thông điệp đã được đưa vào hàng đợi!",
+        })
+      );
+      socket.emit("mess_to_sock", data.msgGroupId);
+    }
+  }
   return data;
 };
 

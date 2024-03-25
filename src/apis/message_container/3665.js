@@ -1,5 +1,6 @@
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
+import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "cont";
 const msgId = "3665";
 const cpath = (action) => {
@@ -25,15 +26,62 @@ export const load = async (params) => {
   return data;
 };
 
-export const send = async (rows = []) => {
+export const send = async (rows = [], dispatch) => {
   if (rows.length === 0) {
     return;
   }
-  const formData = {
-    args: rows,
-  };
 
-  const data = await poster(cpath("send"), formData);
+  const data = await poster(cpath("send"), rows);
+  if (data) {
+    if (data.deny) {
+      dispatch(
+        showMessage({
+          type: "error",
+          content: data.deny,
+        })
+      );
+      return;
+    }
+    if (data.data && data.data.dont_send_again) {
+      dispatch(
+        showMessage({
+          type: "success",
+          content: data.data.dont_send_again,
+        })
+      );
+    }
+
+    if (data.data && data.data.xmlComplete.length > 0) {
+      dispatch(
+        showMessage({
+          type: "success",
+          content: "Thông điệp đã được đưa vào hàng đợi!",
+        })
+      );
+      socket.emit("mess_to_sock", "click");
+    }
+
+    if (data.msgGroupId) {
+      dispatch(
+        showMessage({
+          type: "success",
+          content: "Thông điệp đã được đưa vào hàng đợi!",
+        })
+      );
+      socket.emit("mess_to_sock", data.msgGroupId);
+    }
+
+    if (data.result) {
+      alert(data.result);
+    }
+    if (data.msgRef_array) {
+      for (let i = 0; i < data.msgRef_array.length; i++) {
+        // var cntrNo = data.msgRef_array[i].split(":")[0];
+        // var msgRef = data.msgRef_array[i].split(":")[1].toUpperCase();
+        // var trarr = $("#contenttable tr");
+      }
+    }
+  }
   return data;
 };
 

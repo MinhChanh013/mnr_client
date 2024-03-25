@@ -3,7 +3,7 @@ import { Card, Col, Form, Row } from "antd";
 import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load } from "../../apis/message_container/213.js";
+import { load, send } from "../../apis/message_container/213.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -14,6 +14,7 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { dataConverTable } from "../../utils/dataTable.utils.js";
 export default function Msg213Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -79,7 +80,9 @@ export default function Msg213Container() {
           startDate = dayjs(dataFormFilter.dateFromTo[0]).format(
             FORMAT_DATETIME
           );
-          finishDate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+          finishDate = dayjs(dataFormFilter.dateFromTo[1]).format(
+            FORMAT_DATETIME
+          );
         }
 
         delete dataFormFilter.dateFromTo;
@@ -92,6 +95,30 @@ export default function Msg213Container() {
         handleLoadData(formData);
         break;
       case "send":
+        const FormFilter = form.getFieldsValue();
+        console.log(FormFilter);
+        let startDateFilter, finishDateFilter;
+        if (FormFilter.dateFromTo) {
+          startDateFilter = dayjs(FormFilter.dateFromTo[0]).format(
+            FORMAT_DATETIME
+          );
+          finishDateFilter = dayjs(FormFilter.dateFromTo[1]).format(
+            FORMAT_DATETIME
+          );
+        }
+
+        try {
+          await send(
+            {
+              startDate: startDateFilter,
+              finishDate: finishDateFilter,
+              imextype: FormFilter.imextype,
+            },
+            dispatch
+          );
+        } catch (error) {
+          console.log(error);
+        }
         break;
       default:
         break;
@@ -103,27 +130,7 @@ export default function Msg213Container() {
       dispatch(setLoading(true));
       const resultDataMsg213 = await load(formData);
       if (resultDataMsg213) {
-        const dataMsg213 = resultDataMsg213.data.map((row, index) => {
-          return columns.reduce((acc, column) => {
-            // handle logic data
-            const keyValue = column.key;
-            const rowValue = row[keyValue];
-            switch (keyValue) {
-              case "ImExType":
-                acc[keyValue] =
-                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                break;
-              case "STT":
-                acc[keyValue] = index + 1;
-                break;
-              default:
-                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
-                break;
-            }
-            return acc;
-          }, {});
-        });
-        setRows(dataMsg213);
+        setRows(dataConverTable(resultDataMsg213, columns));
       }
     } catch (error) {
       console.log(error);
@@ -162,11 +169,11 @@ export default function Msg213Container() {
                           value: "",
                         },
                         {
-                          label: "Nhập",
+                          label: "Nhập Khẩu",
                           value: "1",
                         },
                         {
-                          label: "Xuất",
+                          label: "Xuất Khẩu",
                           value: "2",
                         },
                       ],

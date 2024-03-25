@@ -2,7 +2,7 @@
 import { Card, Col, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels } from "../../apis/message_container/214.js";
+import { load, searchVessels, send } from "../../apis/message_container/214.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -12,6 +12,7 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { dataConverTable } from "../../utils/dataTable.utils.js";
 export default function Msg214Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -101,7 +102,7 @@ export default function Msg214Container() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "SealNo,",
+      key: "SealNo",
       name: "Số Niêm Chì",
       width: 150,
       type: columnTypes.TextEditor,
@@ -112,7 +113,6 @@ export default function Msg214Container() {
       width: 150,
       type: columnTypes.TextEditor,
     },
-    // (data.lists[i].DiffType == 1 ? 'Khong co trong danh sach HQ thong bao' : 'Co trong danh sach HQ thong bao nhung khong ha bai'),
     {
       key: "DiffTypeContent",
       name: "Chi Tiết Sai Khác",
@@ -155,6 +155,18 @@ export default function Msg214Container() {
         handleLoadData(formData);
         break;
       case "send":
+        const idMsgRowData = gridRef.current?.getSelectedRows();
+        const listMsgRowSelect = [];
+        idMsgRowData.forEach((idMsgSelected) => {
+          listMsgRowSelect.push(
+            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+          );
+        });
+        try {
+          await send(listMsgRowSelect, dispatch);
+        } catch (error) {
+          console.log(error);
+        }
         break;
       case "cancelgetin":
         break;
@@ -171,45 +183,7 @@ export default function Msg214Container() {
       dispatch(setLoading(true));
       const resultDataMsg214 = await load(formData);
       if (resultDataMsg214) {
-        const dataMsg214 = resultDataMsg214.data.map((row) => {
-          return columns.reduce((acc, column) => {
-            // handle logic data
-            const keyValue = column.key;
-            const rowValue = row[keyValue];
-
-            // (data.lists[i].DiffType),
-
-            switch (keyValue) {
-              case "ImExType":
-                acc[keyValue] =
-                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                break;
-              case "DiffTypeContent":
-                acc[keyValue] =
-                  row["DiffType"] === 1
-                    ? "Khong co trong danh sach HQ thong bao"
-                    : "Co trong danh sach HQ thong bao nhung khong ha bai";
-                break;
-              case "StatusMarker":
-                if (row["SuccessMarker"]) {
-                  acc[keyValue] = "Thành công";
-                } else if (row["ErrorMarker"]) {
-                  acc[keyValue] = "Thất bại";
-                } else acc[keyValue] = "Chưa gửi";
-                break;
-              case "StatusOfGood":
-                rowValue === 1
-                  ? (acc[keyValue] = "Full")
-                  : (acc[keyValue] = "Empty");
-                break;
-              default:
-                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
-                break;
-            }
-            return acc;
-          }, {});
-        });
-        setRows(dataMsg214);
+        setRows(dataConverTable(resultDataMsg214, columns));
       }
     } catch (error) {
       console.log(error);
@@ -245,12 +219,7 @@ export default function Msg214Container() {
             className="b-card"
           >
             <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancelgetin,
-                toolBarButtonTypes.cancel,
-              ]}
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

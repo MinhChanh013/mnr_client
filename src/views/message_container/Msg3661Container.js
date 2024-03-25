@@ -3,20 +3,23 @@ import { Card, Col, Form, Row } from "antd";
 import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels, send } from "../../apis/message_container/3661.js";
+import {
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_container/3661.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
-    columnTypes,
-    selectionTypes,
+  columnTypes,
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
-    toolBarButtonTypes,
+  toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-import { socket } from "../../socket.js";
-import { showMessage } from "../../store/slices/MessageSlices.js";
+import { dataConverTable } from "../../utils/dataTable.utils.js";
 export default function Msg3661Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -169,58 +172,7 @@ export default function Msg3661Container() {
           );
         });
         try {
-          const data = await send(listMsgRowSelect);
-          if (data) {
-            if (data.deny) {
-              dispatch(
-                showMessage({
-                  type: "error",
-                  content: data.deny,
-                })
-              );
-              return;
-            }
-            if (data.data && data.data.dont_send_again) {
-              dispatch(
-                showMessage({
-                  type: "success",
-                  content: data.data.dont_send_again,
-                })
-              );
-            }
-
-            if (data.data && data.data.xmlComplete.length > 0) {
-              console.log(data.xmlComplete);
-              dispatch(
-                showMessage({
-                  type: "success",
-                  content: "Thông điệp đã được đưa vào hàng đợi!",
-                })
-              );
-              socket.emit("mess_to_sock", "click");
-            }
-
-            if (data.msgGroupId) {
-              dispatch(
-                showMessage({
-                  type: "success",
-                  content: "Thông điệp đã được đưa vào hàng đợi!",
-                })
-              );
-              socket.emit("mess_to_sock", data.msgGroupId);
-            }
-
-            if (data.result) {
-              alert(data.result);
-            }
-            if (data.msgRef_array) {
-              for (let i = 0; i < data.msgRef_array.length; i++) {
-                // var cntrNo = data.msgRef_array[i].split(":")[0];
-                // var msgRef = data.msgRef_array[i].split(":")[1].toUpperCase();
-                // var trarr = $("#contenttable tr");
-              }
-            }
-          }
+          await send(listMsgRowSelect, dispatch);
         } catch (error) {
           console.log(error);
         }
@@ -238,39 +190,7 @@ export default function Msg3661Container() {
       dispatch(setLoading(true));
       const resultDataMsg3661 = await load(formData);
       if (resultDataMsg3661) {
-        const dataMsg3661 = resultDataMsg3661.data.map((row) => {
-          return columns.reduce((acc, column) => {
-            // handle logic data
-            const keyValue = column.key;
-            const rowValue = row[keyValue];
-            switch (keyValue) {
-              case "JobStatus":
-                acc[keyValue] = rowValue ?? "READY";
-                break;
-              case "ImExType":
-                acc[keyValue] =
-                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                break;
-              case "StatusMarker":
-                if (row["SuccessMarker"]) {
-                  acc[keyValue] = "Thành công";
-                } else if (row["ErrorMarker"]) {
-                  acc[keyValue] = "Thất bại";
-                } else acc[keyValue] = "Chưa gửi";
-                break;
-              case "StatusOfGood":
-                rowValue === 1
-                  ? (acc[keyValue] = "Full")
-                  : (acc[keyValue] = "Empty");
-                break;
-              default:
-                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
-                break;
-            }
-            return acc;
-          }, {});
-        });
-        setRows(dataMsg3661);
+        setRows(dataConverTable(resultDataMsg3661, columns));
       }
     } catch (error) {
       console.log(error);
@@ -313,16 +233,12 @@ export default function Msg3661Container() {
                           value: "",
                         },
                         {
-                          label: "Nhập",
+                          label: "Nhập Khẩu",
                           value: "1",
                         },
                         {
-                          label: "Xuất",
+                          label: "Xuất Khẩu",
                           value: "2",
-                        },
-                        {
-                          label: "Nội địa",
-                          value: "3",
                         },
                       ],
                     },
