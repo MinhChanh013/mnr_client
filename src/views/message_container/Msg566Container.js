@@ -209,7 +209,7 @@ export default function Msg566Container() {
                 color: "#1b618c",
               },
             }}
-            title="366.8 - GỬI GETIN CONTAINER"
+            title="566 - XIN SỐ ĐỊNH DANH"
             style={{ borderRadius: "0px" }}
             className="b-card"
           >

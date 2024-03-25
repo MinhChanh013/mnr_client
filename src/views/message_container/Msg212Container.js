@@ -2,7 +2,7 @@
 import { Card, Col, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels } from "../../apis/message_container/212.js";
+import { load, searchVessels, send } from "../../apis/message_container/212.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -12,6 +12,8 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { showMessage } from "../../store/slices/MessageSlices.js";
+import { socket } from "../../socket.js";
 
 const Msg212Container = () => {
   const gridRef = React.createRef();
@@ -172,7 +174,7 @@ const Msg212Container = () => {
     dispatch(setLoading(false));
   };
 
-  const buttonConfirm = (props) => {
+  const buttonConfirm = async (props) => {
     switch (props.type) {
       case "load":
         const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -187,9 +189,44 @@ const Msg212Container = () => {
         );
         break;
       case "send":
-        break;
-      case "cancel":
-        // await cancelSending();
+        try {
+          const data = await send(
+            vesselSelectRef.current?.getSelectedVessel(),
+            dispatch
+          );
+          if (data) {
+            if (data.deny) {
+              dispatch(
+                showMessage({
+                  type: "error",
+                  content: data.deny,
+                })
+              );
+              return;
+            }
+            if (data.data && data.data.xmlComplete.length > 0) {
+              dispatch(
+                showMessage({
+                  type: "success",
+                  content: "Thông điệp đã được đưa vào hàng đợi!",
+                })
+              );
+              socket.emit("mess_to_sock", "click");
+            }
+
+            if (data.msgGroupId) {
+              dispatch(
+                showMessage({
+                  type: "success",
+                  content: "Thông điệp đã được đưa vào hàng đợi!",
+                })
+              );
+              socket.emit("mess_to_sock", data.msgGroupId);
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
         break;
       default:
         break;

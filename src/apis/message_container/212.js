@@ -1,14 +1,11 @@
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
+import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "cont";
 const msgId = "212";
+
 const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
-};
-
-///---validate
-const validateSend = () => {
-  throw new Error();
 };
 
 ///--process
@@ -17,16 +14,25 @@ export const load = async (formData) => {
   return data;
 };
 
-export const send = async (params) => {
-  const { voyagekey, vsslname, callsign, imo, eta } = params;
-  validateSend();
+export const send = async (params, dispatch) => {
+  const { VoyageKey, VesselName, CallSign, IMO, ETA } = params;
+
+  if (!VoyageKey) {
+    dispatch(
+      showMessage({
+        type: "error",
+        content: "Vui lòng chọn tàu!",
+      })
+    );
+    return;
+  }
 
   const formData = {
-    voyagekey,
-    vsslname,
-    callsign,
-    imo,
-    eta,
+    voyagekey: VoyageKey,
+    vsslname: VesselName,
+    callsign: CallSign,
+    imo: IMO,
+    eta: ETA,
   };
 
   const data = await poster(cpath("send"), formData);

@@ -6,10 +6,6 @@ const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
 };
 
-///---validate
-const validateSend = () => {
-  throw new Error();
-};
 
 ///--process
 export const load = async (params) => {
@@ -30,10 +26,11 @@ export const load = async (params) => {
 };
 
 export const send = async (rows = []) => {
-  validateSend();
-
+  if (rows.length === 0) {
+    return;
+  }
   const formData = {
-    datas: rows,
+    args: rows,
   };
 
   const data = await poster(cpath("send"), formData);
