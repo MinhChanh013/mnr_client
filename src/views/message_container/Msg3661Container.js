@@ -39,8 +39,8 @@ export default function Msg3661Container() {
 
   const columns = [
     {
-      key: "ID",
-      name: "ID",
+      key: "IDRef",
+      name: "IDRef",
       width: 180,
       editable: false,
       visible: true,
@@ -405,7 +405,7 @@ export default function Msg3661Container() {
             <DataGrid
               ref={gridRef}
               direction="ltr"
-              columnKeySelected="ID"
+              columnKeySelected="IDRef"
               selection={selectionTypes.single}
               columns={columns}
               rows={rows}

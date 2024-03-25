@@ -374,28 +374,6 @@ export default function Msg3665Container() {
                   },
                   {
                     type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "isLF",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Hàng ngoại",
-                          value: "1",
-                        },
-                        {
-                          label: "Hàng nội",
-                          value: "2",
-                        },
-                      ],
-                    },
-                  },
-                  {
-                    type: filterType.radio,
                     label: "Trạng thái thông điệp",
                     config: {
                       name: "marker",
@@ -470,15 +448,6 @@ export default function Msg3665Container() {
                     config: {
                       name: "dateFromTo",
                       placeholder: ["Từ", "Đến"],
-                      value: "",
-                    },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Số Cont",
-                    config: {
-                      name: "cntrNo",
-                      placeholder: "",
                       value: "",
                     },
                   },

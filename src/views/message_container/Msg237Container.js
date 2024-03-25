@@ -322,16 +322,12 @@ export default function Msg237Container() {
                           value: "",
                         },
                         {
-                          label: "Nhập",
+                          label: "Nhập Khẩu",
                           value: "1",
                         },
                         {
-                          label: "Xuất",
+                          label: "Xuất Khẩu",
                           value: "2",
-                        },
-                        {
-                          label: "Nội địa",
-                          value: "3",
                         },
                       ],
                     },
