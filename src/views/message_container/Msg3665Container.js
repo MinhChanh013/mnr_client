@@ -18,9 +18,11 @@ import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Msg3665Container() {
   const gridRef = React.createRef();
@@ -192,7 +194,13 @@ export default function Msg3665Container() {
     try {
       const resultDataMsg3665 = await load(formData);
       if (resultDataMsg3665) {
-        setRows(resultDataMsg3665.data ?? []);
+        const newResultDataMsg3665 = resultDataMsg3665.data.map((item) => {
+          return {
+            ...item,
+            ID: uuidv4(),
+          };
+        });
+        setRows(newResultDataMsg3665);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -206,25 +214,23 @@ export default function Msg3665Container() {
   };
 
   const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
+
+    delete dataFormFilter.dateFromTo;
+    const formData = {
+      ...dataFormFilter,
+      fromdate,
+      todate,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
     switch (props.type) {
       case "load":
-        const dataFormFilter = form.getFieldsValue();
-        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-        let fromdate, todate;
-        if (dataFormFilter.dateFromTo) {
-          fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-            FORMAT_DATETIME
-          );
-          todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-        }
-
-        delete dataFormFilter.dateFromTo;
-        const formData = {
-          ...dataFormFilter,
-          fromdate,
-          todate,
-          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
-        };
         handleLoadData(formData);
         break;
       case "send":
@@ -236,6 +242,7 @@ export default function Msg3665Container() {
           );
         });
         try {
+          dispatch(updateForm(formData));
           await send(listMsgRowSelect, dispatch);
         } catch (error) {
           console.log(error);
