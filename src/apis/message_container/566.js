@@ -24,6 +24,12 @@ export const load = async (params) => {
 
 export const send = async (rows = [], isLF, voyagekey, dispatch) => {
   if (rows.length === 0) {
+    dispatch(
+      showMessage({
+        type: "error",
+        content: "Vui lòng chọn tàu!",
+      })
+    );
     return;
   }
 

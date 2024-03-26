@@ -7,7 +7,6 @@ const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
 };
 
-
 ///--process
 export const load = async (params) => {
   const { voyagekey, imextype, fromdate, todate, marker, getout, fe } = params;
@@ -28,6 +27,12 @@ export const load = async (params) => {
 
 export const send = async (rows = [], dispatch) => {
   if (rows.length === 0) {
+    dispatch(
+      showMessage({
+        type: "error",
+        content: "Vui lòng chọn tàu!",
+      })
+    );
     return;
   }
 
