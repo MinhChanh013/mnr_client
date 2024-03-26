@@ -23,6 +23,13 @@ import React from "react";
 import { reConnect, socket } from "./socket.js";
 import Msg566Container from "./views/message_container/Msg566Container.js";
 import Msg3661Container from "./views/message_container/Msg3661Container.js";
+import Msg363Container from "./views/message_container/Msg363Container.js";
+import Msg214ContainerCSHT from "./views/message_container/Msg214ContainerCSHT.js";
+import Msg365Container from "./views/message_container/Msg365Container.js";
+import Msg365ContainerCSHT from "./views/message_container/Msg365ContainerCSHT.js";
+import Msg465Container from "./views/message_container/Msg465Container.js";
+import Msg367Container from "./views/message_container/Msg367Container.js";
+
 
 const router = createBrowserRouter([
   {
@@ -47,6 +54,12 @@ const router = createBrowserRouter([
       { path: "/msg3665_container", element: <Msg3665Container /> },
       { path: "/msg3661_container", element: <Msg3661Container /> },
       { path: "/msg566_container", element: <Msg566Container /> },
+      { path: "/msg363_container", element: <Msg363Container /> },
+      { path: "/msg365_container", element: <Msg365Container /> },
+      { path: "/msg465_container", element: <Msg465Container /> },
+      { path: "/msg214_container_CSHT", element: <Msg214ContainerCSHT /> },
+      { path: "/msg365_container_CSHT", element: <Msg365ContainerCSHT /> },
+      { path: "/msg367Container", element: <Msg367Container /> },
     ],
   },
   { path: "/login", element: <Login /> },

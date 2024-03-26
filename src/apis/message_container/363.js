@@ -1,4 +1,4 @@
-import { Socket, socketReceiveReponse } from "socket.io-client";
+import { socket, socketReceiveReponse } from "../../socket";
 import { poster } from "../../services/BaseService";
 const msgType = "cont";
 const msgId = "363";
@@ -13,6 +13,7 @@ const validateSend = (rows) => {
 
 ///--process
 export const load = async (params) => {
+  console.log(params);
   const {
     voyagekey,
     cntrnos,
@@ -23,13 +24,13 @@ export const load = async (params) => {
     marker,
     getout,
   } = params;
-  let arrCont = cntrnos
-    .split(/[\t\r\n\s,]+/g)
-    .filter((v, i, s) => s.indexOf(v) === i && v);
+  // let arrCont = cntrnos
+  //   .split(/[\t\r\n\s,]+/g)
+  //   .filter((v, i, s) => s.indexOf(v) === i && v);
 
-  if (arrCont.length > 10) {
-    arrCont = arrCont.slice(0, 10);
-  }
+  // if (arrCont.length > 10) {
+  //   arrCont = arrCont.slice(0, 10);
+  // }
 
   const formData = {
     voyagekey,
@@ -48,9 +49,7 @@ export const load = async (params) => {
 export const send = async (rows = []) => {
   validateSend(rows);
 
-  const formData = {
-    datas: rows,
-  };
+  const formData = rows;
 
   const data = await poster(cpath("send"), formData);
   return data;
@@ -72,7 +71,7 @@ export const searchVessels = async ({ vesselName }) => {
   return data;
 };
 
-Socket.on("sock_to_client", (data) => {
+socket.on("sock_to_client", (data) => {
   socketReceiveReponse(
     data,
     msgId,
