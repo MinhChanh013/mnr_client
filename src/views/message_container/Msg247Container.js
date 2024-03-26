@@ -254,13 +254,13 @@ const Msg247Container = () => {
     try {
       const loadVessel = await searchVessels({});
       if (loadVessel.success) {
-          setVessel(loadVessel.data);
+        setVessel(loadVessel.data);
       } else {
 
       }
-  } catch (error) {
+    } catch (error) {
       console.log(error);
-  }
+    }
   }, []);
 
   const filterRef = React.useRef();
@@ -272,8 +272,6 @@ const Msg247Container = () => {
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
         <Col span={6}>
-          {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
-          {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
           <Card
             title="247 - GỬI THÔNG TIN THAY ĐỔI LOẠI HÀNG HÓA (CONTAINER)"
             style={{ borderRadius: "0px" }}
@@ -376,14 +374,14 @@ const Msg247Container = () => {
           </Card>
         </Col>
         <Col span={18}>
-          <ToolBar
-            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
-            handleConfirm={buttonConfirm}
-          />
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
+            <ToolBar
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              handleConfirm={buttonConfirm}
+            />
             <DataGrid
               ref={gridRef}
               direction="ltr"

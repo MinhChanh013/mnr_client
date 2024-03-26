@@ -332,11 +332,9 @@ const Msg365ContainerCSHT = () => {
                 style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
             >
                 <Col span={6}>
-                    {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
-                    {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
                     <Card
                         title="[CSHT].365 - GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS"
-                        style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '85vh' }}
                         className="b-card"
                     >
                         <Row style={{ padding: "0 24px" }}>
@@ -373,14 +371,14 @@ const Msg365ContainerCSHT = () => {
                     </Card>
                 </Col>
                 <Col span={18}>
-                    <ToolBar
-                        buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
-                        handleConfirm={buttonConfirm}
-                    />
                     <Card
-                        style={{ borderRadius: "0px", height: "100%" }}
+                        style={{ borderRadius: "0px", height: "100%", height: '85vh' }}
                         className="b-card"
                     >
+                        <ToolBar
+                            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+                            handleConfirm={buttonConfirm}
+                        />
                         <DataGrid
                             ref={gridRef}
                             direction="ltr"

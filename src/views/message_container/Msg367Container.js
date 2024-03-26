@@ -162,7 +162,7 @@ const Msg367Container = () => {
 
     const buttonConfirm = async (props) => {
         if (props.type === 'send') {
-            let dataSend = { declareNo: declareNo, declareOffice: HQno};
+            let dataSend = { declareNo: declareNo, declareOffice: HQno };
             const resolve = await send(dataSend);
             if (resolve.success) {
                 message.success('Thành công!');
@@ -181,11 +181,9 @@ const Msg367Container = () => {
                 style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
             >
                 <Col span={6}>
-                    {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
-                    {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
                     <Card
                         title="367 [CONTAINER] -TỜ KHAI ĐỦ ĐIỀU KIỆN QUA KVGS"
-                        style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '85vh' }}
                         className="b-card"
                     >
                         <Row style={{ padding: "0 24px" }}>
@@ -397,14 +395,14 @@ const Msg367Container = () => {
                     </Card>
                 </Col>
                 <Col span={18}>
-                    <ToolBar
-                        buttonConfig={[toolBarButtonTypes.newdeclare, toolBarButtonTypes.send]}
-                        handleConfirm={buttonConfirm}
-                    />
                     <Card
-                        style={{ borderRadius: "0px", height: "100%" }}
+                        style={{ borderRadius: "0px", height: "100%", height: '85vh' }}
                         className="b-card"
                     >
+                        <ToolBar
+                            buttonConfig={[toolBarButtonTypes.newdeclare, toolBarButtonTypes.send]}
+                            handleConfirm={buttonConfirm}
+                        />
                         <DataGrid
                             ref={gridRef}
                             direction="ltr"

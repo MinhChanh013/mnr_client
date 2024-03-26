@@ -296,8 +296,6 @@ const Msg214ContainerCSHT = () => {
                 style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
             >
                 <Col span={6}>
-                    {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
-                    {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
                     <Card
                         title="[CSHT].214 - DS CONTAINER CỦA TK CHƯA NỘP PHÍ"
                         style={{ borderRadius: "0px" }}
@@ -412,14 +410,14 @@ const Msg214ContainerCSHT = () => {
                     </Card>
                 </Col>
                 <Col span={18}>
-                    <ToolBar
-                        buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
-                        handleConfirm={buttonConfirm}
-                    />
                     <Card
                         style={{ borderRadius: "0px", height: "100%" }}
                         className="b-card"
                     >
+                        <ToolBar
+                            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+                            handleConfirm={buttonConfirm}
+                        />
                         <DataGrid
                             ref={gridRef}
                             direction="ltr"

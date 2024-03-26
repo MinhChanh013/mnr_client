@@ -303,8 +303,6 @@ const Msg465Container = () => {
                 style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
             >
                 <Col span={6}>
-                    {/* *MỞ NÚT NÀY LÊN VÀ CHẠY TEST ĐỂ XEM KẾT QUẢ HIỂN THỊ RA GIAO DIỆN. */}
-                    {/* <Button onClick={handleSelectFilterData}>Test</Button> */}
                     <Card
                         title="465 - GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS KHÔNG CẦN CHỨNG TỪ HQ"
                         style={{ borderRadius: "0px" }}
@@ -416,14 +414,14 @@ const Msg465Container = () => {
                     </Card>
                 </Col>
                 <Col span={18}>
-                    <ToolBar
-                        buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel]}
-                        handleConfirm={buttonConfirm}
-                    />
                     <Card
-                        style={{ borderRadius: "0px", height: "100%" }}
+                        style={{ borderRadius: "0px", height: "100%"}}
                         className="b-card"
                     >
+                        <ToolBar
+                            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel]}
+                            handleConfirm={buttonConfirm}
+                        />
                         <DataGrid
                             ref={gridRef}
                             direction="ltr"
