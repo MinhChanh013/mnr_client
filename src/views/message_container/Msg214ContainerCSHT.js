@@ -8,7 +8,8 @@ import DataGrid, {
     columnTypes,
     selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { searchVessels, load } from "../../apis/message_container/CSHT214.js";
+import { searchVessels, load, send } from "../../apis/message_container/CSHT214.js";
+import { socket } from "../../socket.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
@@ -23,6 +24,11 @@ const Msg214ContainerCSHT = () => {
     const gridRef = React.createRef();
     const onFocus = () => { };
     const columns = [
+        {
+            key: "ID",
+            name: "ID",
+            visible: true,
+        },
         {
             key: "JobStatus",
             name: "Hành Động",
@@ -153,7 +159,7 @@ const Msg214ContainerCSHT = () => {
 
     ];
 
-    const buttonConfirm = (props) => {
+    const buttonConfirm = async (props) => {
         if (props.type === 'load') {
             const dataFormFilter = form.getFieldsValue();
             const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -176,24 +182,62 @@ const Msg214ContainerCSHT = () => {
         }
 
         if (props.type === 'send') {
+            const idMsgRowData = gridRef.current?.getSelectedRows();
+            const listMsgRowSelect = [];
+            idMsgRowData.forEach((idMsgSelected) => {
+                listMsgRowSelect.push(
+                    rows[rows.findIndex((item) => item.IDRef === idMsgSelected)]
+                );
+            });
+            try {
+                const data = await send(listMsgRowSelect);
+                if (data) {
+                    if (data.deny) {
+                        message.error(data.deny)
+                        return;
+                    }
+                    if (data.data && data.data.dont_send_again) {
+                        message.success(data.data.dont_send_again)
+                    }
 
-        }
+                    if (data.data && data.data.xmlComplete.length > 0) {
+                        console.log(data.xmlComplete);
+                        message.success('"Thông điệp đã được đưa vào hàng đợi!"');
+                        socket.emit("mess_to_sock", "click");
+                    }
 
-        if (props.type === 'delete') {
+                    if (data.msgGroupId) {
+                        message.success('Thông điệp đã được đưa vào hàng đợi!');
+                        socket.emit("mess_to_sock", data.msgGroupId);
+                    }
 
-        }
-
-        if (props.type === 'save') {
-
+                    if (data.result) {
+                        alert(data.result);
+                    }
+                    if (data.msgRef_array) {
+                        for (let i = 0; i < data.msgRef_array.length; i++) {
+                            // var cntrNo = data.msgRef_array[i].split(":")[0];
+                            // var msgRef = data.msgRef_array[i].split(":")[1].toUpperCase();
+                            // var trarr = $("#contenttable tr");
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
     useEffect(async () => {
-        const loadVessel = await searchVessels({});
-        if (loadVessel.success) {
-            setVessel(loadVessel.data);
-        } else {
+        try {
+            const loadVessel = await searchVessels({});
+            if (loadVessel.success) {
+                setVessel(loadVessel.data);
+            } else {
 
+            }
+        } catch (error) {
+            console.log(error);
         }
     }, [])
 

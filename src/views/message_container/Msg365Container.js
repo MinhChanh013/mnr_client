@@ -305,11 +305,15 @@ const Msg365_container = () => {
 
 
   useEffect(async () => {
-    const loadVessel = await searchVessels({});
-    if (loadVessel.success) {
-      setVessel(loadVessel.data);
-    } else {
+    try {
+      const loadVessel = await searchVessels({});
+      if (loadVessel.success) {
+        setVessel(loadVessel.data);
+      } else {
 
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, []);
 
