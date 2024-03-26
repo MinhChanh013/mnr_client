@@ -125,7 +125,7 @@ const DataGrid = forwardRef(
     return (
       <ReactDataGrid
         className={`rdg-light ${className}`}
-        style={{ ...style, minHeight: '60vh' }}
+        style={{ height: 'calc(100% - 40px)', ...style }}
         defaultColumnOptions={{ sortable: true, resizable: true }}
         sortColumns={sortColumns}
         onSortColumnsChange={setSortColumns}

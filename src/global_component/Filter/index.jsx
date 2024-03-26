@@ -42,17 +42,14 @@ export const Filter = (
 
   return (
     <Form form={form} initialValues={initValues}>
-      <Divider style={style}> Lọc dữ liệu </Divider>
-
-      <Row gutter={[0, 5]}>
+      <Row gutter={[0,0]} style={{marginTop: '10px'}}>
         {items.map(({ type, label, config }, index) => {
           const Component = pickComponent(type);
-
           return (
             <Fragment key={`${label}-${index}`}>
-              <Col span={24}>
+              <Col span={24} >
                 <Text strong={true}>{label}</Text>
-                <Space style={{ display: "block", marginTop: "5px" }}>
+                <Space style={{ display: "block"}}>
                   <Form.Item name={config.name}>
                     <Component {...config} />
                   </Form.Item>
