@@ -7,12 +7,6 @@ const cpath = (action) => {
 };
 
 ///---validate
-const validateLoad = (GroupID) => {
-  throw new Error();
-};
-const validateSend = () => {
-  throw new Error();
-};
 
 ///--process
 export const load = async (params) => {
@@ -33,11 +27,8 @@ export const load = async (params) => {
 };
 
 export const send = async (rows = []) => {
-  validateSend();
 
-  const formData = {
-    datas: rows,
-  };
+  const formData = rows;
 
   const data = await poster(cpath("send"), formData);
   return data;
