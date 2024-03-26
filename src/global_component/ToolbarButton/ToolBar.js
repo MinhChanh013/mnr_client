@@ -7,6 +7,7 @@ import {
     DeleteOutlined,
     SendOutlined,
     WarningOutlined,
+    FileExcelOutlined,
 } from "@ant-design/icons";
 import * as React from "react";
 
@@ -70,6 +71,12 @@ export const toolBarButtonTypes = {
         label: "Quét tờ khai mới",
         fontColor: "#2399fa",
         icon: <SendOutlined style={{ stroke: "#2399fa", strokeWidth: 30 }} />,
+    },
+    exportexcel: {
+        id: 'export excel',
+        label: "Xuất Excel",
+        fontColor: "#2399fa",
+        icon: <FileExcelOutlined/>,
     }
 }
 
@@ -77,7 +84,7 @@ const ToolBar = ({ buttonConfig, cardConfig, handleConfirm}) => {
     const [openModal] = useState(false);
     return (
         <>
-            <div style={{ backgroundColor: 'white', marginBottom: '5px', padding: '3px 4px 3px 4px' }}>
+            <div style={{ padding: '4px 4px' }}>
                 <Space size={0}>
                     {
                         buttonConfig.map((item, index) => {
