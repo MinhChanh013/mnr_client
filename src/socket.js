@@ -1,5 +1,7 @@
 import { io } from "socket.io-client";
 import { ev_code } from "./constants";
+import store from "./store";
+import { showMessage } from "./store/slices/MessageSlices";
 
 const URL = process.env.REACT_APP_SOCKET_URL ?? "http://10.10.11.150:8888";
 export const socket = io(URL, {
@@ -13,7 +15,12 @@ export const socketReceiveReponse = (
   func = () => {}
 ) => {
   if (data.request_type === type ?? "") {
-    // toastr["success"](data.note_state);
+    store.dispatch(
+      showMessage({
+        type: "success",
+        content: data.note_state,
+      })
+    );
     if (isCheckReponse || data.event_code.includes(ev_code)) {
       func();
       // $("#loadlist").trigger("click");
