@@ -13,8 +13,13 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-import { dataConverTable } from "../../utils/dataTable.utils.js";
+import {
+  basicRenderColumns,
+  dataConverTable,
+} from "../../utils/dataTable.utils.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
+import { v4 as uuidv4 } from "uuid";
+
 export default function Msg566Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -35,7 +40,7 @@ export default function Msg566Container() {
     }
   }, []);
 
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
@@ -59,13 +64,13 @@ export default function Msg566Container() {
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
-      width: 100,
+      width: 130,
       type: columnTypes.TextEditor,
     },
     {
       key: "IssueDate",
       name: "Ngày Vận Đơn",
-      width: 100,
+      width: 150,
       type: columnTypes.DatePicker,
     },
     {
@@ -146,7 +151,7 @@ export default function Msg566Container() {
       width: 220,
       type: columnTypes.TextEditor,
     },
-  ];
+  ]);
 
   const buttonConfirm = async (props) => {
     switch (props.type) {
@@ -189,7 +194,13 @@ export default function Msg566Container() {
       dispatch(setLoading(true));
       const resultDataMsg566 = await load(formData);
       if (resultDataMsg566) {
-        setRows(dataConverTable(resultDataMsg566, columns));
+        const newResultDataMsg566 = resultDataMsg566.data.map((item) => {
+          return {
+            ...item,
+            ID: uuidv4(),
+          };
+        });
+        setRows(newResultDataMsg566);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",

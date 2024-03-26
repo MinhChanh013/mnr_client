@@ -19,8 +19,8 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-import { dataConverTable } from "../../utils/dataTable.utils.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 export default function Msg3661Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -41,7 +41,7 @@ export default function Msg3661Container() {
     }
   }, []);
 
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "IDRef",
       name: "IDRef",
@@ -140,7 +140,7 @@ export default function Msg3661Container() {
       width: 300,
       type: columnTypes.TextEditor,
     },
-  ];
+  ]);
 
   const buttonConfirm = async (props) => {
     switch (props.type) {
@@ -191,7 +191,7 @@ export default function Msg3661Container() {
       dispatch(setLoading(true));
       const resultDataMsg3661 = await load(formData);
       if (resultDataMsg3661) {
-        setRows(dataConverTable(resultDataMsg3661, columns));
+        setRows(resultDataMsg3661.data);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",

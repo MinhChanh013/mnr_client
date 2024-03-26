@@ -27,6 +27,7 @@
     "socket.io-client": "^4.7.5",
     "sort-by": "^1.2.0",
     "swr": "^2.2.5",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

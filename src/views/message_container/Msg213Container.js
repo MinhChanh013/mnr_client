@@ -14,8 +14,8 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-import { dataConverTable } from "../../utils/dataTable.utils.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 export default function Msg213Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -24,7 +24,7 @@ export default function Msg213Container() {
   const [rows, setRows] = React.useState([]);
   const [form] = Form.useForm();
 
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
@@ -69,7 +69,7 @@ export default function Msg213Container() {
       name: "Khóa Tham Chiếu",
       type: columnTypes.TextEditor,
     },
-  ];
+  ]);
 
   const buttonConfirm = async (props) => {
     switch (props.type) {
@@ -131,7 +131,7 @@ export default function Msg213Container() {
       dispatch(setLoading(true));
       const resultDataMsg213 = await load(formData);
       if (resultDataMsg213) {
-        setRows(dataConverTable(resultDataMsg213, columns));
+        setRows(resultDataMsg213.data ?? []);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
