@@ -36,7 +36,7 @@ const VesselButton = ({ children, onClick }) => (
 
 function VesselLabel({ children }) {
   return (
-    <Text style={{ minWidth: "100px", fontWeight: "bold" }}>{children}</Text>
+    <Text style={{ minWidth: "100px" }}>{children}</Text>
   );
 }
 

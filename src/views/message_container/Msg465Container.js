@@ -304,11 +304,11 @@ const Msg465Container = () => {
             >
                 <Col span={6}>
                     <Card
-                        title="465 - GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS KHÔNG CẦN CHỨNG TỪ HQ"
-                        style={{ borderRadius: "0px" }}
+                        title={'[465] \n GETOUT CONT KHÔNG CẦN CHỨNG TỪ HQ'}
+                        style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
-                        <Row style={{ padding: "0 24px" }}>
+                        <Row style={{ padding: "0 16px" }}>
                             <Col span={24}>
                                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
                             </Col>
@@ -362,7 +362,7 @@ const Msg465Container = () => {
                                     },
                                     {
                                         type: filterType.radio,
-                                        label: "Tình Trạng Container",
+                                        label: "Tình Trạng Container Ra Khỏi Cảng",
                                         config: {
                                             name: "isLF",
                                             defaultValue: "",
@@ -372,11 +372,11 @@ const Msg465Container = () => {
                                                     value: "",
                                                 },
                                                 {
-                                                    label: "Đã ra khỏi cảng",
+                                                    label: "Đã ra",
                                                     value: "1",
                                                 },
                                                 {
-                                                    label: "Chưa ra khỏi cảng",
+                                                    label: "Chưa ra",
                                                     value: "2",
                                                 },
                                             ],
@@ -415,8 +415,8 @@ const Msg465Container = () => {
                 </Col>
                 <Col span={18}>
                     <Card
-                        style={{ borderRadius: "0px", height: "100%"}}
-                        className="b-card"
+                        style={{ borderRadius: "0px", height: "calc(100vh - 111px)"}}
+                        className="main-card"
                     >
                         <ToolBar
                             buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel]}
