@@ -8,7 +8,8 @@ import DataGrid, {
     columnTypes,
     selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { searchVessels, load } from "../../apis/message_container/CSHT365.js";
+import { socket } from "../../socket.js";
+import { searchVessels, load, send } from "../../apis/message_container/CSHT365.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
@@ -23,6 +24,11 @@ const Msg365ContainerCSHT = () => {
     const gridRef = React.createRef();
     const onFocus = () => { };
     const columns = [
+        {
+            key: "IDRef",
+            name: "IDRef",
+            visible: true,
+        },
         {
             key: "JobStatus",
             name: "Hành Động",
@@ -182,7 +188,7 @@ const Msg365ContainerCSHT = () => {
         },
     ];
 
-    const buttonConfirm = (props) => {
+    const buttonConfirm = async (props) => {
         if (props.type === 'load') {
             const dataFormFilter = form.getFieldsValue();
             const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -204,7 +210,49 @@ const Msg365ContainerCSHT = () => {
         }
 
         if (props.type === 'send') {
-
+            const idMsgRowData = gridRef.current?.getSelectedRows();
+            const listMsgRowSelect = [];
+            idMsgRowData.forEach((idMsgSelected) => {
+              listMsgRowSelect.push(
+                rows[rows.findIndex((item) => item.IDRef === idMsgSelected)]
+              );
+            });
+            try {
+              const data = await send(listMsgRowSelect);
+              if (data) {
+                if (data.deny) {
+                  message.error(data.deny)
+                  return;
+                }
+                if (data.data && data.data.dont_send_again) {
+                  message.success(data.data.dont_send_again)
+                }
+      
+                if (data.data && data.data.xmlComplete.length > 0) {
+                  console.log(data.xmlComplete);
+                  message.success('"Thông điệp đã được đưa vào hàng đợi!"');
+                  socket.emit("mess_to_sock", "click");
+                }
+      
+                if (data.msgGroupId) {
+                  message.success('Thông điệp đã được đưa vào hàng đợi!');
+                  socket.emit("mess_to_sock", data.msgGroupId);
+                }
+      
+                if (data.result) {
+                  alert(data.result);
+                }
+                if (data.msgRef_array) {
+                  for (let i = 0; i < data.msgRef_array.length; i++) {
+                    // var cntrNo = data.msgRef_array[i].split(":")[0];
+                    // var msgRef = data.msgRef_array[i].split(":")[1].toUpperCase();
+                    // var trarr = $("#contenttable tr");
+                  }
+                }
+              }
+            } catch (error) {
+              console.log(error);
+            }
         }
 
         if (props.type === 'delete') {
@@ -332,8 +380,8 @@ const Msg365ContainerCSHT = () => {
                         <DataGrid
                             ref={gridRef}
                             direction="ltr"
-                            columnKeySelected="ID"
-                            selection={selectionTypes.single}
+                            columnKeySelected="IDRef"
+                            selection={selectionTypes.multi}
                             columns={columns}
                             rows={rows}
                             setRows={setRows}

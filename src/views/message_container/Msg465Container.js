@@ -193,7 +193,7 @@ const Msg465Container = () => {
             const listMsgRowSelect = [];
             idMsgRowData.forEach((idMsgSelected) => {
                 listMsgRowSelect.push(
-                    rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+                    rows[rows.findIndex((item) => item.IDRef === idMsgSelected)]
                 );
             });
             try {
