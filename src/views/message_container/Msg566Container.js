@@ -14,6 +14,7 @@ import ToolBar, {
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { dataConverTable } from "../../utils/dataTable.utils.js";
+import { showMessage } from "../../store/slices/MessageSlices.js";
 export default function Msg566Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -189,6 +190,11 @@ export default function Msg566Container() {
       const resultDataMsg566 = await load(formData);
       if (resultDataMsg566) {
         setRows(dataConverTable(resultDataMsg566, columns));
+        dispatch(
+          showMessage({
+            content: "Nạp dữ liệu thành công",
+          })
+        );
       }
     } catch (error) {
       console.log(error);
@@ -310,7 +316,11 @@ export default function Msg566Container() {
             className="b-card"
           >
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.cancel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid
