@@ -8,7 +8,7 @@ export const socket = io(URL, {
   autoConnect: false,
 });
 
-export const socketReceiveReponse = (
+export const socketReceiveReponse = async (
   data,
   type,
   isCheckReponse,
@@ -22,7 +22,11 @@ export const socketReceiveReponse = (
       })
     );
     if (isCheckReponse || data.event_code.includes(ev_code)) {
-      func();
+      try {
+        await func();
+      } catch (error) {
+        console.log(error);
+      }
       // $("#loadlist").trigger("click");
       // append_msglog(data.note_state, "b");
     }

@@ -19,8 +19,8 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-import { dataConverTable } from "../../utils/dataTable.utils.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 export default function Msg3665Container() {
   const gridRef = React.createRef();
@@ -42,7 +42,7 @@ export default function Msg3665Container() {
     }
   }, []);
 
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
@@ -185,14 +185,14 @@ export default function Msg3665Container() {
       type: columnTypes.TextEditor,
       editable: true,
     },
-  ];
+  ]);
 
   const handleLoadData = async (formData) => {
     dispatch(setLoading(true));
     try {
       const resultDataMsg3665 = await load(formData);
       if (resultDataMsg3665) {
-        setRows(dataConverTable(resultDataMsg3665, columns));
+        setRows(resultDataMsg3665.data ?? []);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
