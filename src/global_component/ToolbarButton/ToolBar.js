@@ -5,6 +5,7 @@ import {
     CloseOutlined,
     CloudDownloadOutlined,
     DeleteOutlined,
+    PlusCircleOutlined,
     SendOutlined,
     WarningOutlined,
 } from "@ant-design/icons";
@@ -56,6 +57,14 @@ export const toolBarButtonTypes = {
         icon: <DeleteOutlined style={{ stroke: "#f54f40", strokeWidth: 30 }} />,
         alert: true,
         message: 'Bạn có muốn xóa dữ liệu?'
+    },
+    add: {
+        id: 'add',
+        label: "Thêm dòng",
+        fontColor: "#039cfd",
+        icon: <PlusCircleOutlined style={{ stroke: "#039cfd", strokeWidth: 30 }} />,
+        alert: false,
+        message: ''
     },
 }
 
