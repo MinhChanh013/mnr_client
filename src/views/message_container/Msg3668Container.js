@@ -439,7 +439,7 @@ export default function Msg3668Container() {
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
-              pagination={paginationTypes.pagination}
+              pagination={paginationTypes.scroll}
             />
           </Card>
         </Col>

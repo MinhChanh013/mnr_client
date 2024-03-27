@@ -89,7 +89,7 @@ const DataGrid = forwardRef(
       setRows,
       onFocus,
       limit = 20,
-      pagination = paginationTypes.pagination
+      pagination = paginationTypes.scroll
     },
     ref
   ) => {
