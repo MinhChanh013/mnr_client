@@ -11,6 +11,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
+  paginationTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
@@ -433,11 +434,12 @@ export default function Msg3668Container() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
               columns={columns}
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+              pagination={paginationTypes.pagination}
             />
           </Card>
         </Col>
