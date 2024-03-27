@@ -139,6 +139,7 @@ const DataGrid = forwardRef(
         onSelectedCellChange={
           typeof onFocus === "function" ? onFocus : () => {}
         }
+        enableVirtualization
         onFill={handleFill}
         onCopy={handleCopy}
         onPaste={handlePaste}

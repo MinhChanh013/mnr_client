@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
+import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "cont";
 const msgId = "3668";
@@ -156,9 +157,6 @@ socket.on("sock_to_client", (data) => {
     data,
     msgId,
     data.response_func === "29" || data.response_func === "27",
-    load({
-      fromdate: "2023/03/13 00:00:00",
-      todate: "2024/03/01 00:00:00",
-    })
+    () => load(store.getState().filterForm)
   );
 });

@@ -1,5 +1,6 @@
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
+import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "cont";
 const msgId = "212";
@@ -90,6 +91,6 @@ socket.on("sock_to_client", (data) => {
     data,
     "212.1",
     data.response_func === "32" || data.response_func === "27",
-    () => load({})
+    () => load(store.getState().filterForm)
   );
 });

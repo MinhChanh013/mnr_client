@@ -13,9 +13,8 @@ import ToolBar, {
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
-import {
-  basicRenderColumns
-} from "../../utils/dataTable.utils.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
 const Msg212Container = () => {
   const gridRef = React.createRef();
@@ -150,21 +149,24 @@ const Msg212Container = () => {
   };
 
   const buttonConfirm = async (props) => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const formData = {
+      voyagekey:
+        Object.keys(dataVesselSelect).length > 0
+          ? dataVesselSelect.VoyageKey
+          : "",
+    };
     switch (props.type) {
       case "load":
-        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-        const formData = {
-          voyagekey:
-            Object.keys(dataVesselSelect).length > 0
-              ? dataVesselSelect.VoyageKey
-              : "",
-        };
         handleLoadData(
           Object.keys(dataVesselSelect).length > 0 ? formData : {}
         );
         break;
       case "send":
         try {
+          dispatch(
+            updateForm(Object.keys(dataVesselSelect).length > 0 ? formData : {})
+          );
           await send(vesselSelectRef.current?.getSelectedVessel(), dispatch);
         } catch (error) {
           console.log(error);

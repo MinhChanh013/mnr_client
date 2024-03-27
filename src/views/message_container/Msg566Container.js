@@ -19,6 +19,7 @@ import {
 } from "../../utils/dataTable.utils.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { v4 as uuidv4 } from "uuid";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
 export default function Msg566Container() {
   const onFocus = () => {};
@@ -154,23 +155,20 @@ export default function Msg566Container() {
   ]);
 
   const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+
+    const formData = {
+      ...dataFormFilter,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
     switch (props.type) {
       case "load":
-        const dataFormFilter = form.getFieldsValue();
-        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-
-        const formData = {
-          ...dataFormFilter,
-          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
-        };
         handleLoadData(formData);
         break;
       case "send":
-        const dataVesselSelectSelect =
-          vesselSelectRef.current?.getSelectedVessel();
-        const formDataFilter = form.getFieldsValue();
-        const isLF = formDataFilter.isLF;
-        const voyagekey = dataVesselSelectSelect.VoyageKey;
+        const isLF = dataFormFilter.isLF;
+        const voyagekey = dataVesselSelect.VoyageKey;
         const idMsgRowData = gridRef.current?.getSelectedRows();
         const listMsgRowSelect = [];
         idMsgRowData.forEach((idMsgSelected) => {
@@ -179,6 +177,7 @@ export default function Msg566Container() {
           );
         });
         try {
+          dispatch(updateForm(formData));
           await send(listMsgRowSelect, isLF, voyagekey, dispatch);
         } catch (error) {
           console.log(error);
