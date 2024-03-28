@@ -30,7 +30,6 @@ import Msg365ContainerCSHT from "./views/message_container/Msg365ContainerCSHT.j
 import Msg465Container from "./views/message_container/Msg465Container.js";
 import Msg367Container from "./views/message_container/Msg367Container.js";
 
-
 import ContainerMNF from "./views/Category/Container/ContainerMNF.js";
 import ContainerSizeType from "./views/Category/Container/ContainerSizeType.js";
 import ContainerStock from "./views/Category/Container/ContainerStock.js";
@@ -44,6 +43,8 @@ import LiquidMNF from "./views/Category/Liquid/LiquidMNF.js";
 import LiquidGetin from "./views/Category/Liquid/LiquidGetin.js";
 import LiquidGetout from "./views/Category/Liquid/LiquidGetout.js";
 import LiquidType from "./views/Category/Liquid/LiquidType.js";
+
+import SysConfig from "./views/General/SysConfig.js";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,8 @@ const router = createBrowserRouter([
       { path: "/LiquidGetin", element: <LiquidGetin /> },
       { path: "/LiquidGetout", element: <LiquidGetout /> },
       { path: "/LiquidType", element: <LiquidType /> },
+
+      { path: "/SysConfig", element: <SysConfig /> },
     ],
   },
   { path: "/login", element: <Login /> },
