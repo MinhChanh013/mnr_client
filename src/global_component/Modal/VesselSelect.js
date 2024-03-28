@@ -35,14 +35,32 @@ const VesselButton = ({ children, onClick }) => (
 );
 
 function VesselLabel({ children }) {
-  return (
-    <Text style={{ minWidth: "100px" }}>{children}</Text>
-  );
+  return <Text style={{ minWidth: "100px" }}>{children}</Text>;
 }
 
 function VesselValue({ children }) {
   return <Text style={{ minWidth: "100px" }}>{children}</Text>;
 }
+
+// Remove error "ResizeObserver loop completed with undelivered notifications."
+const debounce = (callback) => {
+  let tid;
+  return function (...args) {
+    const ctx = "";
+    tid && clearTimeout(tid);
+    tid = setTimeout(() => {
+      callback.apply(ctx, args);
+    }, 0);
+  };
+};
+
+const _ = window.ResizeObserver;
+window.ResizeObserver = class ResizeObserver extends _ {
+  constructor(callback) {
+    callback = debounce(callback, 20);
+    super(callback);
+  }
+};
 
 const VesselSelect = forwardRef(({ data }, ref) => {
   const vesselTable = useRef();
