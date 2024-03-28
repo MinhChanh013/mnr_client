@@ -5,12 +5,13 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
+import { Pagination } from "antd";
 import ReactDataGrid, { SelectColumn, textEditor } from "react-data-grid";
 import { renderCellEditDatePicker } from "./renderCellEditDatePicker";
-import { Col, Pagination, Row } from "antd";
 
 export const selectionTypes = {
   multi: "multi",
@@ -89,6 +90,7 @@ const DataGrid = forwardRef(
       setRows,
       onFocus,
       limit = 20,
+      maxHeight = 600,
       pagination = paginationTypes.scroll
     },
     ref
@@ -97,6 +99,7 @@ const DataGrid = forwardRef(
     const [selectedRows, setSelectedRows] = useState(() => new Set());
     const [currentRows, setCurrenRows] = useState([])
     const [currentPage, setCurrenPage] = useState(1)
+    const reactDataGridRef = useRef()
 
     useEffect(() => {
       const start_index = (currentPage - 1) * limit
@@ -122,9 +125,7 @@ const DataGrid = forwardRef(
           })
           break;
         case "pagination":
-          // const idArrRowCurrent = dataRowCurrent.map((item) => item[columnKeySelected])
           setCurrenRows(dataRowCurrent)
-          // setSelectedRows(prevSelectedRows => new Set([...prevSelectedRows, ...idArrRowCurrent]))
           break;
         default:
           break;
@@ -133,17 +134,15 @@ const DataGrid = forwardRef(
 
     useEffect(() => {
       if (pagination === "scroll") {
-        window.addEventListener("scroll", handleScroll);
+        reactDataGridRef.current?.element.addEventListener("scroll", handleScroll)
       }
       return () => {
-        window.removeEventListener("scroll", handleScroll)
+        reactDataGridRef.current?.element.removeEventListener("scroll", handleScroll)
       }
     }, [rows])
 
     const rateScreen = useMemo(() => {
-      const heightBody = Math.max(document.body.scrollHeight, document.body.offsetHeight,
-        document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight)
-      return Math.ceil(heightBody / (limit * 30))
+      return Math.ceil(maxHeight / (limit * 30))
     }, [])
 
     const columnsCombined = useMemo(() => {
@@ -187,9 +186,11 @@ const DataGrid = forwardRef(
     );
 
     const handleScroll = () => {
+      const dataGridScrollTop = reactDataGridRef.current.element.scrollTop;
+      const dataGridScrollHeight = reactDataGridRef.current.element.scrollHeight;
+      const dataGridClientHeight = reactDataGridRef.current.element.clientHeight;
       if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 10 &&
-        pagination === "scroll" && rows.length > 0
+        dataGridScrollTop + 20 >= dataGridScrollHeight - dataGridClientHeight
       ) {
         setCurrenPage(prevPage => {
           return prevPage + 1
@@ -200,8 +201,9 @@ const DataGrid = forwardRef(
     return (
       <>
         <ReactDataGrid
+          ref={reactDataGridRef}
           className={`rdg-light ${className} ${pagination === "scroll" ? "fill-grid" : ""}`}
-          style={{ height: 'calc(100% - 40px)', ...style }}
+          style={{ height: 'calc(100% - 40px)', maxHeight: maxHeight, ...style }}
           defaultColumnOptions={{ sortable: true, resizable: true }}
           sortColumns={sortColumns}
           onSortColumnsChange={setSortColumns}
