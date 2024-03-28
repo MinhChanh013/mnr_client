@@ -59,12 +59,10 @@ function Login() {
   const handleSubmit = async (e) => {
     try {
       setIsLoading(true);
-      console.log(e);
       const res = await loginApi({
         username: e.username,
         password: e.password,
       });
-      console.log(res);
       if (res && res.access_token) {
         localStorage.setItem("token", res.access_token);
         success();

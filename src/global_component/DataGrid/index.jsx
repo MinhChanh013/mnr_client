@@ -45,7 +45,7 @@ const getEditCell = (key, cellType) => {
 const handleRenderColumn = ({
   type = columnTypes.TextEditor,
   editable = true,
-  visible = false,
+  visible = true,
   render,
   key,
   selection,
@@ -59,7 +59,7 @@ const handleRenderColumn = ({
   };
 
   // Hide column when visible = true
-  if (visible) return null;
+  if (!visible) return null;
 
   // custom renderCell
   if (typeof render === "function") column["renderCell"] = render;
@@ -177,6 +177,9 @@ const DataGrid = forwardRef(
         return {
           getSelectedRows: () => {
             return selectedRows;
+          },
+          setSelectedRows: () => {
+            setSelectedRows(new Set());
           },
         };
       },
