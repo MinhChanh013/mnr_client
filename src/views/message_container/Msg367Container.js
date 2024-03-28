@@ -187,13 +187,15 @@ const Msg367Container = () => {
                         className="b-card"
                     >
                         <Row style={{ padding: "0 24px" }}>
-                            <Space direction='vertical' size={8}>
+                            {/* <Space direction='vertical' size={8}>
                                 <Row gutter={[8, 8]}>
                                     <Col span={24}>
-                                        <Space>
+                                        <Col span={24}>
                                             <Checkbox defaultChecked={true}> Tự động gửi truy vấn với QR Code mới</Checkbox>
+                                        </Col>
+                                        <Col span={24}>
                                             <Checkbox defaultChecked={true}>Truy vấn Biên Lai</Checkbox>
-                                        </Space>
+                                        </Col>
                                     </Col>
                                     <Col span={24}>
                                         <TextArea />
@@ -289,115 +291,100 @@ const Msg367Container = () => {
                                         </Row>
                                     </Col>
                                 </Row>
-                            </Space>
-                            {/* <Filter
+                            </Space> */}
+                            <Filter
                                 filterRef={filterRef}
                                 items={[
                                     {
-                                        type: filterType.radio,
-                                        label: "Hướng",
+                                        type: filterType.input,
+                                        label: "Mã HQGS",
+                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            defaultValue: "1",
-                                            options: [
-                                                {
-                                                    label: "Tất cả",
-                                                    value: "",
-                                                },
-                                                {
-                                                    label: "Nhập",
-                                                    value: "1",
-                                                },
-                                                {
-                                                    label: "Xuất",
-                                                    value: "2",
-                                                },
-                                                {
-                                                    label: "Nội địa",
-                                                    value: "3",
-                                                },
-                                            ],
+                                            style: {marginBottom: '22px'}
                                         },
                                     },
                                     {
-                                        type: filterType.radio,
-                                        label: "Loại hàng",
+                                        type: filterType.input,
+                                        label: "Mã Đơn Vị",
+                                        direction: 'horizontal',
                                         config: {
-                                            name: "isLF",
-                                            defaultValue: "",
-                                            options: [
-                                                {
-                                                    label: "Tất cả",
-                                                    value: "",
-                                                },
-                                                {
-                                                    label: "Hàng ngoại",
-                                                    value: "1",
-                                                },
-                                                {
-                                                    label: "Hàng nội",
-                                                    value: "2",
-                                                },
-                                            ],
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
                                         },
                                     },
                                     {
-                                        type: filterType.radio,
-                                        label: "Tình Trạng Container",
+                                        type: filterType.input,
+                                        label: "Luồng",
+                                        direction: 'horizontal',
                                         config: {
-                                            name: "isLF",
-                                            defaultValue: "",
-                                            options: [
-                                                {
-                                                    label: "Tất cả",
-                                                    value: "",
-                                                },
-                                                {
-                                                    label: "Đã ra khỏi cảng",
-                                                    value: "1",
-                                                },
-                                                {
-                                                    label: "Chưa ra khỏi cảng",
-                                                    value: "2",
-                                                },
-                                            ],
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
                                         },
                                     },
                                     {
-                                        type: filterType.radio,
-                                        label: "Trạng thái thông điệp",
+                                        type: filterType.input,
+                                        label: "Tình Trạng TK",
+                                        direction: 'horizontal',
                                         config: {
-                                            name: "marker",
-                                            defaultValue: "",
-                                            options: [
-                                                {
-                                                    label: "Tất cả",
-                                                    value: "",
-                                                },
-                                                {
-                                                    label: "Thành công",
-                                                    value: "SuccessMarker",
-                                                },
-                                                {
-                                                    label: "Thất bại",
-                                                    value: "ErrorMarker",
-                                                },
-                                                {
-                                                    label: "Chưa gửi",
-                                                    value: "UnMarker",
-                                                },
-                                            ],
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
+                                        },
+                                    },
+                                    {
+                                        type: filterType.input,
+                                        label: "Số Chì HQ",
+                                        direction: 'horizontal',
+                                        config: {
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
+                                        },
+                                    },
+                                    {
+                                        type: filterType.input,
+                                        label: "Số Vận Đơn",
+                                        direction: 'horizontal',
+                                        config: {
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
+                                        },
+                                    },
+                                    {
+                                        type: filterType.input,
+                                        label: "Số Container",
+                                        direction: 'horizontal',
+                                        config: {
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
+                                        },
+                                    },
+                                    {
+                                        type: filterType.input,
+                                        label: "Số Tờ Khai",
+                                        direction: 'horizontal',
+                                        config: {
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
+                                        },
+                                    },
+                                    {
+                                        type: filterType.input,
+                                        label: "Mã ĐK HQ",
+                                        direction: 'horizontal',
+                                        config: {
+                                            name: "imextype",
+                                            style: {marginBottom: '22px'}
                                         },
                                     },
                                 ]}
-                            /> */}
+                            />
                         </Row>
                     </Card>
                 </Col>
                 <Col span={18}>
                     <Card
                         style={{ borderRadius: "0px", height: "100%", height: '85vh' }}
-                        className="b-card"
+                        className="main-card"
                     >
                         <ToolBar
                             buttonConfig={[toolBarButtonTypes.newdeclare, toolBarButtonTypes.send]}

@@ -11,6 +11,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
+  paginationTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
@@ -21,6 +22,9 @@ import ToolBar, {
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { v4 as uuidv4 } from "uuid";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
+
 export default function Msg3668Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -179,25 +183,23 @@ export default function Msg3668Container() {
   ]);
 
   const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
+
+    delete dataFormFilter.dateFromTo;
+    const formData = {
+      ...dataFormFilter,
+      fromdate,
+      todate,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
     switch (props.type) {
       case "load":
-        const dataFormFilter = form.getFieldsValue();
-        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-        let fromdate, todate;
-        if (dataFormFilter.dateFromTo) {
-          fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-            FORMAT_DATETIME
-          );
-          todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-        }
-
-        delete dataFormFilter.dateFromTo;
-        const formData = {
-          ...dataFormFilter,
-          fromdate,
-          todate,
-          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
-        };
         handleLoadData(formData);
         break;
       case "send":
@@ -209,6 +211,7 @@ export default function Msg3668Container() {
           );
         });
         try {
+          dispatch(updateForm(formData));
           await send(listMsgRowSelect, dispatch);
         } catch (error) {
           console.log(error);
@@ -229,7 +232,13 @@ export default function Msg3668Container() {
       dispatch(setLoading(true));
       const resultDataMsg3668 = await load(formData);
       if (resultDataMsg3668) {
-        setRows(resultDataMsg3668.data);
+        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+          return {
+            ...item,
+            ID: uuidv4(),
+          };
+        });
+        setRows(newResultDataMsg3668);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -425,11 +434,12 @@ export default function Msg3668Container() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
               columns={columns}
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+              pagination={paginationTypes.scroll}
             />
           </Card>
         </Col>

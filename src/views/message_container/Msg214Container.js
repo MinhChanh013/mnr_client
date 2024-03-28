@@ -2,6 +2,7 @@
 import { Card, Col, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 import { load, searchVessels, send } from "../../apis/message_container/214.js";
 import DataGrid, {
   columnTypes,
@@ -12,12 +13,9 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-import {
-  basicRenderColumns,
-  dataConverTable,
-} from "../../utils/dataTable.utils.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
-import { v4 as uuidv4 } from "uuid";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
 export default function Msg214Container() {
   const onFocus = () => {};
@@ -152,12 +150,12 @@ export default function Msg214Container() {
   ]);
 
   const buttonConfirm = async (props) => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const formData = {
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
     switch (props.type) {
       case "load":
-        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-        const formData = {
-          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
-        };
         handleLoadData(formData);
         break;
       case "send":
@@ -169,6 +167,7 @@ export default function Msg214Container() {
           );
         });
         try {
+          dispatch(updateForm(formData));
           await send(listMsgRowSelect, dispatch);
         } catch (error) {
           console.log(error);

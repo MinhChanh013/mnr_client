@@ -1,6 +1,6 @@
 import { Form, Input } from "antd";
 
-export default function InputFilter({ name = "", placeholder = "" }) {
+export default function InputFilter({ name = "", placeholder = "", style = {} }) {
   const formInstance = Form.useFormInstance();
   return (
     <Input
