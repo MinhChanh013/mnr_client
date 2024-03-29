@@ -16,6 +16,7 @@ import ToolBar, {
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 export default function Msg213Container() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -72,48 +73,33 @@ export default function Msg213Container() {
   ]);
 
   const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    let startDate, finishDate;
+    if (dataFormFilter.dateFromTo) {
+      startDate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      finishDate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
+
+    delete dataFormFilter.dateFromTo;
+    const formData = {
+      ...dataFormFilter,
+      startDate,
+      finishDate,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
     switch (props.type) {
       case "load":
-        const dataFormFilter = form.getFieldsValue();
-        const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-        let startDate, finishDate;
-        if (dataFormFilter.dateFromTo) {
-          startDate = dayjs(dataFormFilter.dateFromTo[0]).format(
-            FORMAT_DATETIME
-          );
-          finishDate = dayjs(dataFormFilter.dateFromTo[1]).format(
-            FORMAT_DATETIME
-          );
-        }
-
-        delete dataFormFilter.dateFromTo;
-        const formData = {
-          ...dataFormFilter,
-          startDate,
-          finishDate,
-          voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
-        };
         handleLoadData(formData);
         break;
       case "send":
-        const FormFilter = form.getFieldsValue();
-        console.log(FormFilter);
-        let startDateFilter, finishDateFilter;
-        if (FormFilter.dateFromTo) {
-          startDateFilter = dayjs(FormFilter.dateFromTo[0]).format(
-            FORMAT_DATETIME
-          );
-          finishDateFilter = dayjs(FormFilter.dateFromTo[1]).format(
-            FORMAT_DATETIME
-          );
-        }
-
         try {
+          dispatch(updateForm(formData));
           await send(
             {
-              startDate: startDateFilter,
-              finishDate: finishDateFilter,
-              imextype: FormFilter.imextype,
+              startDate,
+              finishDate,
+              imextype: dataFormFilter.imextype,
             },
             dispatch
           );

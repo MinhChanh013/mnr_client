@@ -5,6 +5,7 @@ import {
     CloseOutlined,
     CloudDownloadOutlined,
     DeleteOutlined,
+    PlusCircleOutlined,
     SendOutlined,
     WarningOutlined,
     FileExcelOutlined,
@@ -77,7 +78,15 @@ export const toolBarButtonTypes = {
         label: "Xuất Excel",
         fontColor: "#2399fa",
         icon: <FileExcelOutlined/>,
-    }
+    },
+    add: {
+        id: 'add',
+        label: "Thêm dòng",
+        fontColor: "#039cfd",
+        icon: <PlusCircleOutlined style={{ stroke: "#039cfd", strokeWidth: 30 }} />,
+        alert: false,
+        message: ''
+    },
 }
 
 const ToolBar = ({ buttonConfig, cardConfig, handleConfirm}) => {
