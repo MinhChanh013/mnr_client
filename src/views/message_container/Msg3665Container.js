@@ -11,7 +11,6 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  paginationTypes,
   selectionTypes,
   paginationTypes,
 } from "../../global_component/DataGrid/index.jsx";
@@ -410,12 +409,7 @@ export default function Msg3665Container() {
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
-<<<<<<< src/views/message_container/Msg3665Container.js
-              pagination={paginationTypes.scroll}
               limit={5}
-=======
-              
->>>>>>> src/views/message_container/Msg3665Container.js
             />
           </Card>
         </Col>
