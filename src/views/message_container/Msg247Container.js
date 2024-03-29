@@ -273,7 +273,7 @@ const Msg247Container = () => {
       >
         <Col span={6}>
           <Card
-            title="247 - GỬI THÔNG TIN THAY ĐỔI LOẠI HÀNG HÓA (CONTAINER)"
+            title={'[247] \r\n GỬI THÔNG TIN THAY ĐỔI LOẠI HÀNG HÓA (CONTAINER)'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -375,8 +375,7 @@ const Msg247Container = () => {
         </Col>
         <Col span={18}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}

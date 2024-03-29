@@ -317,7 +317,6 @@ const Msg217 = () => {
         </Col>
         <Col span={18}>
           <Card
-            style={{ borderRadius: "0px", height: "calc(100vh - 111px)" }}
             className="main-card"
           >
             <Row>

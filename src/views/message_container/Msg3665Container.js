@@ -13,6 +13,7 @@ import DataGrid, {
   columnTypes,
   paginationTypes,
   selectionTypes,
+  paginationTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
@@ -265,7 +266,7 @@ export default function Msg3665Container() {
       >
         <Col span={6}>
           <Card
-            title="366.5 - HIỆU CHỈNH THÔNG TIN GETIN CHO CONTAINER HẠ BÃI/VÀO CẢNG"
+            title={'[366.5] \r\n HIỆU CHỈNH THÔNG TIN GETIN CHO CONTAINER HẠ BÃI/VÀO CẢNG'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -389,8 +390,7 @@ export default function Msg3665Container() {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[
@@ -410,7 +410,12 @@ export default function Msg3665Container() {
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+<<<<<<< src/views/message_container/Msg3665Container.js
+              pagination={paginationTypes.scroll}
               limit={5}
+=======
+              
+>>>>>>> src/views/message_container/Msg3665Container.js
             />
           </Card>
         </Col>

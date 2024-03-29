@@ -297,7 +297,7 @@ const Msg214ContainerCSHT = () => {
             >
                 <Col span={6}>
                     <Card
-                        title="[CSHT].214 - DS CONTAINER CỦA TK CHƯA NỘP PHÍ"
+                        title={'[CSHT].214 \n DS CONTAINER CỦA TK CHƯA NỘP PHÍ'}
                         style={{ borderRadius: "0px" }}
                         className="b-card"
                     >
@@ -411,8 +411,7 @@ const Msg214ContainerCSHT = () => {
                 </Col>
                 <Col span={18}>
                     <Card
-                        style={{ borderRadius: "0px", height: "100%" }}
-                        className="b-card"
+                        className="main-card"
                     >
                         <ToolBar
                             buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}

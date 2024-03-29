@@ -183,7 +183,7 @@ const Msg212Container = () => {
         <Col span={7}>
           <Card
             style={{ marginTop: "10px" }}
-            title="212. CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI"
+            title={'[212] \r\n CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI'}
           >
             <Row gutter={[24, 24]}>
               <Col span={24}>
@@ -194,8 +194,7 @@ const Msg212Container = () => {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}

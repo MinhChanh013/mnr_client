@@ -182,8 +182,8 @@ const Msg367Container = () => {
             >
                 <Col span={6}>
                     <Card
-                        title="367 [CONTAINER] -TỜ KHAI ĐỦ ĐIỀU KIỆN QUA KVGS"
-                        style={{ borderRadius: "0px", height: '85vh' }}
+                        title={'[367] \n TỜ KHAI ĐỦ ĐIỀU KIỆN QUA KVGS'}
+                        style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
                         <Row style={{ padding: "0 24px" }}>
@@ -296,84 +296,95 @@ const Msg367Container = () => {
                                 filterRef={filterRef}
                                 items={[
                                     {
+                                        type: filterType.checkbox,
+                                        config: {
+                                            name: 'check',
+                                            label: 'Tự động truy vấn QR Code mới',
+                                            defaultChecked: true,
+                                        }
+                                    },
+                                    {
+                                        type: filterType.checkbox,
+                                        config: {
+                                            name: 'check',
+                                            label: 'Truy vấn biên lai',
+                                            defaultChecked: true,
+                                        }
+                                    },
+                                    {
+                                        type: filterType.textarea,
+                                        config: {},
+                                    },
+                                    {
                                         type: filterType.input,
                                         label: "Mã HQGS",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: { fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Mã Đơn Vị",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: {fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Luồng",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: {fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Tình Trạng TK",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: { fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Số Chì HQ",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: {fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Số Vận Đơn",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: { fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Số Container",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: { fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Số Tờ Khai",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: {fontWeight: 'bold'}
                                         },
                                     },
                                     {
                                         type: filterType.input,
                                         label: "Mã ĐK HQ",
-                                        direction: 'horizontal',
                                         config: {
                                             name: "imextype",
-                                            style: {marginBottom: '22px'}
+                                            style: {fontWeight: 'bold'}
                                         },
                                     },
                                 ]}
@@ -382,10 +393,7 @@ const Msg367Container = () => {
                     </Card>
                 </Col>
                 <Col span={18}>
-                    <Card
-                        style={{ borderRadius: "0px", height: "100%", height: '85vh' }}
-                        className="main-card"
-                    >
+                    <Card className="main-card" >
                         <ToolBar
                             buttonConfig={[toolBarButtonTypes.newdeclare, toolBarButtonTypes.send]}
                             handleConfirm={buttonConfirm}

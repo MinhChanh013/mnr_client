@@ -29,6 +29,7 @@ import Msg365Container from "./views/message_container/Msg365Container.js";
 import Msg365ContainerCSHT from "./views/message_container/Msg365ContainerCSHT.js";
 import Msg465Container from "./views/message_container/Msg465Container.js";
 import Msg367Container from "./views/message_container/Msg367Container.js";
+import Msg211 from "./views/message_common/Msg211.js";
 
 import ContainerMNF from "./views/Category/Container/ContainerMNF.js";
 import ContainerSizeType from "./views/Category/Container/ContainerSizeType.js";
@@ -57,6 +58,7 @@ const router = createBrowserRouter([
       { path: "/msg212_container", element: <Msg212Container /> },
       { path: "/msg253_common", element: <Msg253 /> },
       { path: "/msg217_common", element: <Msg217 /> },
+      { path: "/msg211_common", element: <Msg211 /> },
       { path: "/msg901_common", element: <Msg901 /> },
       { path: "/msg_history", element: <MsgHistory /> },
       { path: "/msg227_common", element: <Msg227 /> },

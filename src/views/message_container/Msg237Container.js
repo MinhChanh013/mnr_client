@@ -220,7 +220,7 @@ export default function Msg237Container() {
                 color: "#1b618c",
               },
             }}
-            title="237 - GỬI THÔNG TIN THAY ĐỔI CHÌ NIÊM PHONG CONTAINER"
+            title={'[237] \r\n GỬI THÔNG TIN THAY ĐỔI CHÌ NIÊM PHONG CONTAINER'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -318,8 +318,7 @@ export default function Msg237Container() {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}

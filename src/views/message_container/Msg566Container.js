@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
 export default function Msg566Container() {
-  const onFocus = () => {};
+  const onFocus = () => { };
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -223,7 +223,7 @@ export default function Msg566Container() {
                 color: "#1b618c",
               },
             }}
-            title="566 - XIN SỐ ĐỊNH DANH"
+            title={'[566] \r\n XIN SỐ ĐỊNH DANH'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -322,8 +322,7 @@ export default function Msg566Container() {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[

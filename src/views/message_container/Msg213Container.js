@@ -141,7 +141,7 @@ export default function Msg213Container() {
                 color: "#1b618c",
               },
             }}
-            title="213 - DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC"
+            title={'[213] \r\n DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -187,8 +187,7 @@ export default function Msg213Container() {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
