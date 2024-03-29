@@ -15,7 +15,6 @@ import DataGrid, {
   paginationTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
@@ -24,8 +23,9 @@ import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 
-export default function Msg566Package() {
+export default function Msg215PackageCSHT() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -68,55 +68,73 @@ export default function Msg566Package() {
     },
     {
       key: "BillOfLading",
-      name: "Nhập/Xuất",
+      name: "Số Tờ Khai",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "CargoCtrlNo",
-      name: "Tên Tàu",
+      name: "Ngày Tờ Khai",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "CntrNo",
-      name: "Số Chuyến",
+      name: "Mã LH",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "GetIn",
-      name: "Ngày Cập/Rời",
+      name: "Mã HQ mở TK",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "TransportIdentity",
-      name: "Số Vận Đơn",
+      name: "Tên Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "NumberOfJourney",
-      name: "Ngày Vận Đơn",
+      name: "Số Chuyến",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "ArrivalDeparture",
-      name: "Mô Tả Hàng Hóa",
+      name: "Ngày Tàu Đến",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "MsgRef",
-      name: "Ghi Chú",
+      name: "Số Vận Đơn",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
-      name: "Cấp Lại",
+      name: "Số Định Danh",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Số Lượng Hàng",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Đơn Vị Tính",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Ghi Chú",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -134,13 +152,13 @@ export default function Msg566Package() {
     },
     {
       key: "MsgRef",
-      name: "Nội dung Phản Hồi",
+      name: "Nội Dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
-      name: "Khóa tham chiếu",
+      name: "Khóa Tham Chiếu",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -223,7 +241,7 @@ export default function Msg566Package() {
                 color: "#1b618c",
               },
             }}
-            title={"[566] \r\n XIN SỐ ĐỊNH DANH HÀNG KIỆN"}
+            title={"[CSHT.215 ] \r\n DS HÀNG KIỆN CỦA TK CHƯA NỘP PHÍ"}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -236,6 +254,32 @@ export default function Msg566Package() {
                 items={[
                   {
                     type: filterType.radio,
+                    label: "Hướng",
+                    config: {
+                      name: "imextype",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Nhập",
+                          value: "1",
+                        },
+                        {
+                          label: "Xuất",
+                          value: "2",
+                        },
+                        {
+                          label: "Nội địa",
+                          value: "3",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
                     label: "Loại hàng",
                     config: {
                       name: "isLF",
@@ -246,24 +290,62 @@ export default function Msg566Package() {
                           value: "",
                         },
                         {
-                          label: "Hàng nhập khẩu",
+                          label: "Hàng ngoại",
                           value: "1",
                         },
                         {
-                          label: "Hàng nội địa",
+                          label: "Hàng nội",
                           value: "2",
                         },
                       ],
                     },
                   },
                   {
-                    type: filterType.input,
-                    label: "Số Cont",
+                    type: filterType.radio,
+                    label: "Trạng thái thông điệp",
                     config: {
+                      name: "marker",
                       defaultValue: "",
-                      name: "cntrNo",
-                      placeholder: "",
-                      value: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Thành công",
+                          value: "SuccessMarker",
+                        },
+                        {
+                          label: "Thất bại",
+                          value: "ErrorMarker",
+                        },
+                        {
+                          label: "Chưa gửi",
+                          value: "UnMarker",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: filterType.radio,
+                    label: "Trạng thái hàng hoá",
+                    config: {
+                      name: "getout",
+                      defaultValue: "",
+                      options: [
+                        {
+                          label: "Tất cả",
+                          value: "",
+                        },
+                        {
+                          label: "Chưa ra khỏi cảng",
+                          value: "1",
+                        },
+                        {
+                          label: "Đã ra khỏi cảng",
+                          value: "2",
+                        },
+                      ],
                     },
                   },
                 ]}

@@ -46,7 +46,7 @@ const getEditCell = (key, cellType) => {
 const handleRenderColumn = ({
   type = columnTypes.TextEditor,
   editable = true,
-  visible = true,
+  visible = false,
   render,
   key,
   selection,
@@ -60,7 +60,7 @@ const handleRenderColumn = ({
   };
 
   // Hide column when visible = true
-  if (!visible) return null;
+  if (visible) return null;
 
   // custom renderCell
   if (typeof render === "function") column["renderCell"] = render;

@@ -3,7 +3,8 @@ import { UNAUTHORIZED_ERROR } from "../constants/errors";
 
 const http = axios.create({
   baseURL:
-    "http://" + window.location.hostname + ":" + process.env.REACT_APP_BASE_URL,
+    // "http://" + window.location.hostname + ":" + process.env.REACT_APP_BASE_URL,
+    "http://10.10.11.150:3003",
 });
 
 http.interceptors.request.use(async (config) => {

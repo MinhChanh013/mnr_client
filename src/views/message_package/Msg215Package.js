@@ -23,9 +23,8 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 
-export default function Msg566Package() {
+export default function Msg215Package() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -68,55 +67,55 @@ export default function Msg566Package() {
     },
     {
       key: "BillOfLading",
-      name: "Nhập/Xuất",
+      name: "Tên tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "CargoCtrlNo",
-      name: "Tên Tàu",
+      name: "Hô Hiệu Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "CntrNo",
-      name: "Số Chuyến",
+      name: "Số IMO",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "GetIn",
-      name: "Ngày Cập/Rời",
+      name: "Số Chuyến",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "TransportIdentity",
-      name: "Số Vận Đơn",
+      name: "Ngày tàu đến/đi",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "NumberOfJourney",
-      name: "Ngày Vận Đơn",
+      name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "ArrivalDeparture",
-      name: "Mô Tả Hàng Hóa",
+      name: "Số Định Danh",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "MsgRef",
-      name: "Ghi Chú",
+      name: "Loại Sai Khác",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
-      name: "Cấp Lại",
+      name: "Chi Tiết Sai Khác",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -223,7 +222,7 @@ export default function Msg566Package() {
                 color: "#1b618c",
               },
             }}
-            title={"[566] \r\n XIN SỐ ĐỊNH DANH HÀNG KIỆN"}
+            title={"[215] \r\n DANH SÁCH HÀNG KIỆN SAI KHÁC"}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -231,43 +230,6 @@ export default function Msg566Package() {
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "isLF",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Hàng nhập khẩu",
-                          value: "1",
-                        },
-                        {
-                          label: "Hàng nội địa",
-                          value: "2",
-                        },
-                      ],
-                    },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Số Cont",
-                    config: {
-                      defaultValue: "",
-                      name: "cntrNo",
-                      placeholder: "",
-                      value: "",
-                    },
-                  },
-                ]}
-              />
             </Row>
           </Card>
         </Col>
