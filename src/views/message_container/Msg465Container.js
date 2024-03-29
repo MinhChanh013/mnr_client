@@ -322,6 +322,7 @@ const Msg465Container = () => {
                                         config: {
                                             name: "imextype",
                                             defaultValue: 3,
+                                            style: {fontWeight: 'bold'},
                                             options: [
                                                 {
                                                     label: 'Tất cả',
@@ -344,6 +345,7 @@ const Msg465Container = () => {
                                         config: {
                                             name: "isLF",
                                             defaultValue: "",
+                                            style: {fontWeight: 'bold'},
                                             options: [
                                                 {
                                                     label: "Tất cả",
@@ -366,6 +368,7 @@ const Msg465Container = () => {
                                         config: {
                                             name: "isLF",
                                             defaultValue: "",
+                                            style: {fontWeight: 'bold'},
                                             options: [
                                                 {
                                                     label: "Tất cả",
@@ -415,7 +418,7 @@ const Msg465Container = () => {
                 </Col>
                 <Col span={18}>
                     <Card
-                        style={{ borderRadius: "0px", height: "calc(100vh - 111px)"}}
+                        
                         className="main-card"
                     >
                         <ToolBar

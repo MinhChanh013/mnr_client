@@ -215,7 +215,7 @@ export default function Msg3661Container() {
                 color: "#1b618c",
               },
             }}
-            title="366.1 - GỬI YÊU CẦU HỦY DANH SÁCH CONTAINER HẠ BÃI/VÀO CẢNG"
+            title={'[366.1] \r\n GỬI YÊU CẦU HỦY DANH SÁCH CONTAINER HẠ BÃI/VÀO CẢNG'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -313,8 +313,7 @@ export default function Msg3661Container() {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[

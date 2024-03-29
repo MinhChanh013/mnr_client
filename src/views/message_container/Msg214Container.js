@@ -20,7 +20,7 @@ import { showMessage } from "../../store/slices/MessageSlices.js";
 import { v4 as uuidv4 } from "uuid";
 
 export default function Msg214Container() {
-  const onFocus = () => {};
+  const onFocus = () => { };
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -219,7 +219,7 @@ export default function Msg214Container() {
                 color: "#1b618c",
               },
             }}
-            title="214 - DANH SÁCH CONTAINER SAI KHÁC"
+            title={'[214] \r\n DANH SÁCH CONTAINER SAI KHÁC'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -232,8 +232,7 @@ export default function Msg214Container() {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}

@@ -11,6 +11,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
+  paginationTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
@@ -253,7 +254,7 @@ export default function Msg3668Container() {
                 color: "#1b618c",
               },
             }}
-            title="366.8 - GỬI GETIN CONTAINER"
+            title={'[366.8] \r\n GỬI GETIN CONTAINER'}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -408,10 +409,7 @@ export default function Msg3668Container() {
           </Card>
         </Col>
         <Col span={17}>
-          <Card
-            style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
-          >
+          <Card  className="main-card" >
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.load,
@@ -430,7 +428,9 @@ export default function Msg3668Container() {
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
-            />
+              pagination={paginationTypes.scroll}
+              limit={5}      
+              />
           </Card>
         </Col>
       </Row>

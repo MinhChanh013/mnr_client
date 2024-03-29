@@ -326,7 +326,7 @@ const Msg365_container = () => {
       >
         <Col span={6}>
           <Card
-            title="365 - GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS"
+            title={'[365] \r\n GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS'}
             style={{ borderRadius: "0px", height: '85vh' }}
             className="b-card"
           >
@@ -411,8 +411,7 @@ const Msg365_container = () => {
         </Col>
         <Col span={18}>
           <Card
-            style={{ borderRadius: "0px", height: "100%", height: '85vh' }}
-            className="b-card"
+            className="main-card"
           >
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.deletegetout, toolBarButtonTypes.cancel]}

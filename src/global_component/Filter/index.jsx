@@ -3,6 +3,8 @@ import { Fragment, useMemo } from "react";
 import RadioGroupFilter from "./RadioGroupFilter";
 import InputFilter from "./InputFilter";
 import RangePickerFilter from "./RangePickerFilter";
+import TextAreaFilter from "./TextAreaFilter";
+import CheckboxFilter from "./CheckboxFilter";
 
 const { Text } = Typography;
 
@@ -11,12 +13,16 @@ const pickComponent = (type) =>
   [filterType.radio]: RadioGroupFilter,
   [filterType.input]: InputFilter,
   [filterType.rangePicker]: RangePickerFilter,
+  [filterType.textarea]: TextAreaFilter,
+  [filterType.checkbox]: CheckboxFilter,
 }[type]);
 
 export const filterType = {
   radio: "radio",
   input: "input",
   rangePicker: "rangePicker",
+  textarea: "textarea",
+  checkbox: "checkbox",
 };
 
 export const Filter = (
@@ -37,35 +43,33 @@ export const Filter = (
   return (
     <Form form={form} initialValues={initValues}>
       <Row gutter={[0, 0]} style={{ marginTop: '10px' }}>
-        {items.map(({ type, label, config, divider, direction }, index) => {
+        {items.map(({ type, label, config, divider }, index) => {
           const Component = pickComponent(type);
           return (
             <Fragment key={`${label}-${index}`}>
-              <Col span={24} >
-                <Space direction={direction || 'vertical'} style={{ alignItems: 'center' }}>
-                  <Typography style={config.style || {}} strong={true}>{label}</Typography>
-                  <Space style={{ display: "block"}}>
-                    <Form.Item name={config.name} >
-                      <Component {...config} />
-                    </Form.Item>
-                  </Space>
-                </Space>
-                {
-                  divider === true
-                    ?
-                    <>
-                      {items.length - 1 !== index && (
-                        <Divider
-                          style={{
-                            marginTop: "10px",
-                            borderColor: "#d1cccc",
-                          }}
-                        />
-                      )}
-                    </>
-                    : ''
-                }
+              <Col span={type === 'input' ? 8 :  24} >
+                <Typography style={config.style || {}} strong={true}>{label}</Typography>
               </Col>
+              <Col span={type === 'input' ? 16 : 24}>
+                <Form.Item name={config.name} >
+                  <Component {...config} />
+                </Form.Item>
+              </Col>
+              {
+              divider === true
+                ?
+                <>
+                  {items.length - 1 !== index && (
+                    <Divider
+                      style={{
+                        marginTop: "10px",
+                        borderColor: "#d1cccc",
+                      }}
+                    />
+                  )}
+                </>
+                : ''
+            }
             </Fragment>
           );
         })}

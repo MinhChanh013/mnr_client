@@ -1,6 +1,7 @@
-import { Card, Col, Row, Form, message } from "antd";
+import { Card, Col, Row, Form, message, Typography, Select, Space, Upload, Button } from "antd";
 import { useState, useEffect } from "react";
 import * as React from "react";
+import { socket } from "../../socket.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
@@ -8,175 +9,68 @@ import DataGrid, {
     columnTypes,
     selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { socket } from "../../socket.js";
-import { searchVessels, load, send } from "../../apis/message_container/CSHT365.js";
+import { searchVessels, load, send } from "../../apis/message_container/465.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import dayjs from "dayjs";
+import { UploadOutlined } from "@ant-design/icons";
 
-const Msg365ContainerCSHT = () => {
+const Msg211 = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
+    const [rows, setRows] = React.useState([]);
     const vesselSelectRef = React.useRef();
     const [vesselData, setVessel] = useState([]);
-    const [rows, setRows] = React.useState([]);
     const gridRef = React.createRef();
     const onFocus = () => { };
     const columns = [
         {
-            key: "IDRef",
-            name: "IDRef",
+            key: 'IDRef',
+            name: 'IDRef',
             visible: true,
+            editable: false
         },
         {
-            key: "JobStatus",
-            name: "Hành Động",
+            key: "TransportIdentity",
+            name: "Tên Tàu",
             width: 180,
             type: columnTypes.TextEditor,
             editable: true,
         },
         {
-            key: "StatusMarker",
-            name: "Trạng Thái",
+            key: "TransportCallSign",
+            name: "Call Sign",
             width: 100,
             type: columnTypes.TextEditor,
         },
         {
-            key: "ImExType",
-            name: "Nhập/Xuất",
+            key: "TransportIMO",
+            name: "Số IMO",
             width: 100,
             type: columnTypes.TextEditor,
         },
         {
-            key: "TransportIdentity",
-            name: "Tên Tàu",
+            key: "ETA",
+            name: "Ngày Tàu Đến",
             width: 100,
             type: columnTypes.TextEditor,
         },
         {
-            key: "NumberOfJourney",
-            name: "Số Chuyến",
+            key: "ETD",
+            name: "Ngày Tàu Rời",
             width: 150,
             type: columnTypes.TextEditor,
         },
         {
-            key: "ArrivalDeparture",
-            name: "Ngày Tàu Đến/Rời",
+            key: "InboundVoyage",
+            name: "Chuyến Nhập",
             width: 200,
             type: columnTypes.DatePicker,
         },
         {
-            key: "BillOfLading",
-            name: "Số Vận Đơn",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "CargoCtrlNo",
-            name: "Số Định Danh",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "CntrNo",
-            name: "Số Container",
-            width: 200,
-            type: columnTypes.DatePicker,
-        },
-        {
-            key: "StatusOfGood",
-            name: "Full/Empty",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "GetIn",
-            name: "Ngày Getin",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "GetOut",
-            name: "Ngày Getout",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "SealNo",
-            name: "Số Chì",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "CargoWeight",
-            name: "Tổng Trọng Lượng",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "WeightUnitCode",
-            name: "ĐVT",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "GetOutType",
-            name: "Phương Án Ra",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "GetOutTruck",
-            name: "BKS Phương Tiện",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "JobModeOut",
-            name: "Hình Thức Ra",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "DeclareNo",
-            name: "Số Tờ Khai",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "DeclareIssueDate",
-            name: "Ngày Tờ Khai",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "NatureOfTransaction",
-            name: "MÃ LH",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "DeclarationOffice",
-            name: "Mã HQ Mở TK",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "AcceptanceNo",
-            name: "Số Tiếp Nhận",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "AcceptanceTime",
-            name: "Ngày Tiếp Nhận",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "ResponseText",
-            name: "Nội Dung Phản Hồi",
+            key: "OutboundVoyage",
+            name: "Chuyến Xuất",
             width: 150,
             type: columnTypes.TextEditor,
         },
@@ -186,11 +80,13 @@ const Msg365ContainerCSHT = () => {
             width: 150,
             type: columnTypes.TextEditor,
         },
+
     ];
 
     const buttonConfirm = async (props) => {
         if (props.type === 'load') {
             const dataFormFilter = form.getFieldsValue();
+            console.log(dataFormFilter);
             const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
             let fromdate, todate;
             if (dataFormFilter.dateFromTo) {
@@ -204,7 +100,8 @@ const Msg365ContainerCSHT = () => {
                 ...dataFormFilter,
                 fromdate,
                 todate,
-                voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+                voyagekey: Object.keys(dataVesselSelect).length > 0 ? dataVesselSelect.VoyageKey : "",
+                imextype: Number(dataFormFilter.imextype),
             };
             handleLoadData(formData);
         }
@@ -253,14 +150,6 @@ const Msg365ContainerCSHT = () => {
             } catch (error) {
                 console.log(error);
             }
-        }
-
-        if (props.type === 'delete') {
-
-        }
-
-        if (props.type === 'save') {
-
         }
     }
 
@@ -331,64 +220,76 @@ const Msg365ContainerCSHT = () => {
                 gutter={[8, 8]}
                 style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
             >
-                <Col span={6}>
+                <Col span={24}>
                     <Card
-                        title={'[CSHT].365 \n GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS'}
-                        style={{ borderRadius: "0px", height: '85vh' }}
+                        title={'[211] \r\n SƠ ĐỒ VỊ TRÍ XẾP DỠ'}
+                        style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
-                        <Row style={{ padding: "0 24px" }}>
-                            <Col span={24}>
-                                <VesselSelect data={vesselData} ref={vesselSelectRef} />
+                        <Row >
+                            <Col span={4}>
+                                <ToolBar
+                                    buttonConfig={[toolBarButtonTypes.send]}
+                                    handleConfirm={buttonConfirm}
+                                />
                             </Col>
-
-                            <Col span={24}>
+                            <Col span={4}>
                                 <Filter
                                     filterRef={filterRef}
                                     items={[
                                         {
                                             type: filterType.radio,
-                                            label: "Hướng",
                                             config: {
-                                                name: "imextype",
-                                                defaultValue: "1",
+                                                name: 'imextype',
+                                                defaultValue: 1,
                                                 options: [
-                                                    {
-                                                        label: "Nhập",
-                                                        value: "1",
-                                                    },
-                                                    {
-                                                        label: "Xuất",
-                                                        value: "2",
-                                                    },
-                                                ],
+                                                    { label: 'Đăng ký', value: 1 },
+                                                    { label: 'Sửa đổi', value: 2 }
+                                                ]
                                             },
                                         },
                                     ]}
                                 />
                             </Col>
+                            <Col span={16}>
+                                <Row gutter={[0, 16]}>
+                                    <Col span={9}>
+                                        <Typography>Loại hàng</Typography>
+                                    </Col>
+                                    <Col span={9}>
+                                        <Select
+                                        style={{width: '100%'}}
+                                        className="b-select"
+                                         options={[
+                                            {
+                                                value: 'cont',
+                                                label: 'Hàng Container',
+                                            },
+                                            {
+                                                value: 'package',
+                                                label: 'Hàng Kiện',
+                                            },
+                                            {
+                                                value: 'dispatch',
+                                                label: 'Hàng Rời',
+                                            },
+                                            {
+                                                value: 'liquid',
+                                                label: 'Hàng Lỏng',
+                                            },
+                                        ]} />
+                                    </Col>
+                                    <Col span={9}>
+                                        <Typography>{"Tệp đính kèm (< 25MB)"}</Typography>
+                                    </Col>
+                                    <Col span={9}>
+                                        <Upload>
+                                            <Button icon={<UploadOutlined />} style={{borderRadius: 0, backgroundColor : '#bcb9b930'}}>Chọn tệp</Button>
+                                        </Upload>
+                                    </Col>
+                                </Row>
+                            </Col>
                         </Row>
-                    </Card>
-                </Col>
-                <Col span={18}>
-                    <Card
-                        
-                        className="main-card"
-                    >
-                        <ToolBar
-                            buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
-                            handleConfirm={buttonConfirm}
-                        />
-                        <DataGrid
-                            ref={gridRef}
-                            direction="ltr"
-                            columnKeySelected="IDRef"
-                            selection={selectionTypes.multi}
-                            columns={columns}
-                            rows={rows}
-                            setRows={setRows}
-                            onFocus={onFocus}
-                        />
                     </Card>
                 </Col>
             </Row>
@@ -396,4 +297,4 @@ const Msg365ContainerCSHT = () => {
     );
 };
 
-export default Msg365ContainerCSHT;
+export default Msg211;
