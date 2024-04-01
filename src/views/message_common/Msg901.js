@@ -168,25 +168,7 @@ const Msg901 = () => {
 
   const buttonConfirm = async (props) => {
     if (props.type === 'load') {
-      const dataFormFilter = form.getFieldsValue();
-      console.log(dataFormFilter);
-      const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-      let fromdate, todate;
-      if (dataFormFilter.dateFromTo) {
-        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-          FORMAT_DATETIME
-        );
-        todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-      }
-      delete dataFormFilter.dateFromTo;
-      const formData = {
-        ...dataFormFilter,
-        fromdate,
-        todate,
-        voyagekey: Object.keys(dataVesselSelect).length > 0 ? dataVesselSelect.VoyageKey : "",
-        imextype: Number(dataFormFilter.imextype),
-      };
-      handleLoadData(formData);
+      handleLoadData();
     }
 
     if (props.type === 'send') {
@@ -235,19 +217,6 @@ const Msg901 = () => {
       }
     }
   }
-
-  useEffect(async () => {
-    try {
-      const loadVessel = await searchVessels({});
-      if (loadVessel.success) {
-        setVessel(loadVessel.data);
-      } else {
-
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [])
 
   const handleLoadData = async (formData) => {
     try {

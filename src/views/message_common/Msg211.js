@@ -2,7 +2,6 @@ import { Card, Col, Row, Form, message, Typography, Select, Space, Upload, Butto
 import { useState, useEffect } from "react";
 import * as React from "react";
 import { socket } from "../../socket.js";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
@@ -85,25 +84,6 @@ const Msg211 = () => {
 
     const buttonConfirm = async (props) => {
         if (props.type === 'load') {
-            const dataFormFilter = form.getFieldsValue();
-            console.log(dataFormFilter);
-            const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-            let fromdate, todate;
-            if (dataFormFilter.dateFromTo) {
-                fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-                    FORMAT_DATETIME
-                );
-                todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-            }
-            delete dataFormFilter.dateFromTo;
-            const formData = {
-                ...dataFormFilter,
-                fromdate,
-                todate,
-                voyagekey: Object.keys(dataVesselSelect).length > 0 ? dataVesselSelect.VoyageKey : "",
-                imextype: Number(dataFormFilter.imextype),
-            };
-            handleLoadData(formData);
         }
 
         if (props.type === 'send') {
@@ -153,64 +133,7 @@ const Msg211 = () => {
         }
     }
 
-    useEffect(async () => {
-        try {
-            const loadVessel = await searchVessels({});
-            if (loadVessel.success) {
-                setVessel(loadVessel.data);
-            } else {
 
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }, [])
-
-    const handleLoadData = async (formData) => {
-        try {
-            dispatch(setLoading(true));
-            const resultDataMsg465 = await load(formData);
-            if (resultDataMsg465.data.length > 0) {
-                const dataMsg465 = resultDataMsg465.data.map((row) => {
-                    return columns.reduce((acc, column) => {
-                        // handle logic data
-                        const keyValue = column.key;
-                        const rowValue = row[keyValue];
-                        switch (keyValue) {
-                            case "ImExType":
-                                acc[keyValue] =
-                                    rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                                break;
-                            case "StatusMarker":
-                                if (row["SuccessMarker"]) {
-                                    acc[keyValue] = "Thành công";
-                                } else if (row["ErrorMarker"]) {
-                                    acc[keyValue] = "Thất bại";
-                                } else acc[keyValue] = "Chưa gửi";
-                                break;
-                            case "StatusOfGood":
-                                rowValue === 1
-                                    ? (acc[keyValue] = "Full")
-                                    : (acc[keyValue] = "Empty");
-                                break;
-                            default:
-                                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
-                                break;
-                        }
-                        return acc;
-                    }, {});
-                });
-                setRows(dataMsg465);
-            } else {
-                console.log('-----------------')
-                setRows([]);
-                message.error('Không tìm thấy dữ liệu dữ liệu!');
-            }
-            dispatch(setLoading(false));
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     const filterRef = React.useRef();
 
