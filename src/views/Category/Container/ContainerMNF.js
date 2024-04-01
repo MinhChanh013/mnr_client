@@ -197,7 +197,7 @@ export default function ContainerMNF() {
               },
             }}
             title="MANIFEST - LOADING LIST (CONTAINER)"
-            style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>

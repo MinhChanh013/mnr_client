@@ -27,7 +27,7 @@ const Msg365ContainerCSHT = () => {
         {
             key: "IDRef",
             name: "IDRef",
-            visible: true,
+            visible: false,
         },
         {
             key: "JobStatus",
@@ -334,7 +334,7 @@ const Msg365ContainerCSHT = () => {
                 <Col span={6}>
                     <Card
                         title={'[CSHT].365 \n GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS'}
-                        style={{ borderRadius: "0px", height: '85vh' }}
+                        style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
                         <Row style={{ padding: "0 24px" }}>

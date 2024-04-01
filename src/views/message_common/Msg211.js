@@ -9,7 +9,7 @@ import DataGrid, {
     columnTypes,
     selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { searchVessels, load, send } from "../../apis/message_container/465.js";
+import {  send } from "../../apis/message_common/211.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
@@ -28,7 +28,7 @@ const Msg211 = () => {
         {
             key: 'IDRef',
             name: 'IDRef',
-            visible: true,
+            visible: false,
             editable: false
         },
         {

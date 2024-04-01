@@ -210,7 +210,7 @@ export default function PackageMNF() {
               },
             }}
             title="THÔNG TIN HÀNG KIỆN GETIN"
-            style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>

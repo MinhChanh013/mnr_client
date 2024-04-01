@@ -31,7 +31,7 @@ export default function Msg213Container() {
       name: "ID",
       width: 180,
       editable: false,
-      visible: true,
+      visible: false,
     },
     {
       key: "STT",
@@ -132,7 +132,10 @@ export default function Msg213Container() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
         <Col span={7}>
           <Card
             styles={{
@@ -142,7 +145,7 @@ export default function Msg213Container() {
               },
             }}
             title={'[213] \r\n DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC'}
-            style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>

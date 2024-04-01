@@ -41,7 +41,7 @@ const Msg212Container = () => {
       name: "ID",
       width: 180,
       editable: false,
-      visible: true,
+      visible: false,
     },
     {
       key: "TransportIdentity",
@@ -179,7 +179,10 @@ const Msg212Container = () => {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
         <Col span={7}>
           <Card
             style={{ marginTop: "10px" }}
