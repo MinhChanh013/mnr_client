@@ -15,7 +15,6 @@ import DataGrid, {
   paginationTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
@@ -23,9 +22,8 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 
-export default function Msg566Package() {
+export default function Msg341Package() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -80,13 +78,13 @@ export default function Msg566Package() {
     },
     {
       key: "CntrNo",
-      name: "Số Chuyến",
+      name: "Chuyến Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "GetIn",
-      name: "Ngày Cập/Rời",
+      name: "Ngày Tàu Đến/Rời",
       width: 200,
       type: columnTypes.DatePicker,
     },
@@ -98,25 +96,49 @@ export default function Msg566Package() {
     },
     {
       key: "NumberOfJourney",
-      name: "Ngày Vận Đơn",
+      name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "ArrivalDeparture",
-      name: "Mô Tả Hàng Hóa",
+      name: "Ngày Ra Cảng",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "MsgRef",
-      name: "Ghi Chú",
+      name: "Đơn Vị Tính",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
-      name: "Cấp Lại",
+      name: "SL Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "SL Còn Lại",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Lần Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Phương Án Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Hình Thức Ra",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -134,13 +156,13 @@ export default function Msg566Package() {
     },
     {
       key: "MsgRef",
-      name: "Nội dung Phản Hồi",
+      name: "Nội Dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
-      name: "Khóa tham chiếu",
+      name: "Khóa Tham Chiếu",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -215,7 +237,7 @@ export default function Msg566Package() {
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+        <Col span={24}>
           <Card
             styles={{
               title: {
@@ -223,72 +245,33 @@ export default function Msg566Package() {
                 color: "#1b618c",
               },
             }}
-            title={"[566] \r\n XIN SỐ ĐỊNH DANH HÀNG KIỆN"}
+            title={"[341] \r\n GỬI GETOUT HÀNG KIỆN QUA KVGS KHÔNG TKHQ"}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>
-              <Col span={24}>
-                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
-              </Col>
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "isLF",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Hàng nhập khẩu",
-                          value: "1",
-                        },
-                        {
-                          label: "Hàng nội địa",
-                          value: "2",
-                        },
-                      ],
-                    },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Số Cont",
-                    config: {
-                      defaultValue: "",
-                      name: "cntrNo",
-                      placeholder: "",
-                      value: "",
-                    },
-                  },
-                ]}
-              />
+              <Card className="main-card">
+                <ToolBar
+                  buttonConfig={[
+                    toolBarButtonTypes.load,
+                    toolBarButtonTypes.send,
+                  ]}
+                  handleConfirm={buttonConfirm}
+                />
+                <DataGrid
+                  ref={gridRef}
+                  direction="ltr"
+                  columnKeySelected="ID"
+                  selection={selectionTypes.multi}
+                  columns={columns}
+                  rows={rows}
+                  setRows={setRows}
+                  onFocus={onFocus}
+                  pagination={paginationTypes.scroll}
+                  limit={5}
+                />
+              </Card>
             </Row>
-          </Card>
-        </Col>
-        <Col span={17}>
-          <Card className="main-card">
-            <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
-              handleConfirm={buttonConfirm}
-            />
-            <DataGrid
-              ref={gridRef}
-              direction="ltr"
-              columnKeySelected="ID"
-              selection={selectionTypes.multi}
-              columns={columns}
-              rows={rows}
-              setRows={setRows}
-              onFocus={onFocus}
-              pagination={paginationTypes.scroll}
-              limit={5}
-            />
           </Card>
         </Col>
       </Row>

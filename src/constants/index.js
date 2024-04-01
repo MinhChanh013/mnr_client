@@ -1,5 +1,17 @@
-import { BookOutlined, BoxPlotOutlined, ClusterOutlined, FileTextOutlined, GoldOutlined, InboxOutlined, RadarChartOutlined, ReconciliationOutlined, SettingOutlined, ShareAltOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
-
+import {
+  BookOutlined,
+  BoxPlotOutlined,
+  ClusterOutlined,
+  FileTextOutlined,
+  GoldOutlined,
+  InboxOutlined,
+  RadarChartOutlined,
+  ReconciliationOutlined,
+  SettingOutlined,
+  ShareAltOutlined,
+  UnorderedListOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 export const itemsMenu = [
   {
@@ -21,6 +33,7 @@ export const itemsMenu = [
         key: "message:1",
         child: [
           {
+            href: "/msg211_common",
             key: "message:1:1",
             label: "Sơ đồ vị trí xếp dỡ",
             icon: (
@@ -33,6 +46,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg253_common",
             key: "message:1:2",
             label: "253- Tàu xuất/ nhập cảnh",
             icon: (
@@ -45,6 +59,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg217_common",
             key: "message:1:3",
             label: "217- Container rút hàng",
             icon: (
@@ -57,6 +72,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg252_common",
             key: "message:1:4",
             label: "252 - Hàng hóa vào kho qua TKVC",
             icon: (
@@ -69,6 +85,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg367_common",
             key: "message:1:5",
             label: "367 - Tờ khai hàng hóa chưa getin",
             icon: (
@@ -81,6 +98,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg901_common",
             key: "message:1:6",
             label: "901 - Thông tin biên lai thu phí",
             icon: (
@@ -93,6 +111,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg_history",
             key: "message:1:7",
             label: "Truy vấn thông điệp",
             icon: (
@@ -112,6 +131,7 @@ export const itemsMenu = [
         key: "message:2",
         child: [
           {
+            href: "/msg212_container",
             key: "message:2:1",
             label: "212 - Container được dỡ xuống cảng",
             icon: (
@@ -124,6 +144,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg566_container",
             key: "message:2:2",
             label: "566 - Xin số định danh hàng container",
             icon: (
@@ -136,6 +157,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg214_container",
             key: "message:2:3",
             label: "214 - Danh sách container sai khác",
             icon: (
@@ -148,6 +170,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg213_container",
             key: "message:2:4",
             label: "213 - Danh sách Container soi chiếu trước",
             icon: (
@@ -160,6 +183,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg3668_container",
             key: "message:2:5",
             label: "366.8 - Container Getin",
             icon: (
@@ -171,7 +195,9 @@ export const itemsMenu = [
               />
             ),
           },
-          {key: "message:2:6",
+          {
+            href: "/msg3665_container",
+            key: "message:2:6",
             label: "366.5 - Hiệu chỉnh Container Getin",
             icon: (
               <lord-icon
@@ -183,6 +209,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg3661_container",
             key: "message:2:7",
             label: "366.1 - Hủy Container Getin",
             icon: (
@@ -195,6 +222,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg237_container",
             key: "message:2:8",
             label: "237 - Thay đổi chì niêm phong Container",
             icon: (
@@ -207,6 +235,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg247_container",
             key: "message:2:9",
             label: "247 - Điều hướng Container",
             icon: (
@@ -219,6 +248,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg363_container",
             key: "message:2:10",
             label: "363 - Container đủ điều kiện qua KVGS",
             icon: (
@@ -231,6 +261,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg367_container",
             key: "message:2:11",
             label: "367 - TK đủ điều kiện qua KVGS",
             icon: (
@@ -243,6 +274,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg365_container",
             key: "message:2:12",
             label: "365 - Container Getout có TKHQ",
             icon: (
@@ -255,6 +287,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg465_container",
             key: "message:2:13",
             label: "465 - Container Getout không TKHQ",
             icon: (
@@ -267,6 +300,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg214_container_CSHT",
             key: "message:2:14",
             label: "[CSHT].214 - Tờ khai chưa nộp phí",
             icon: (
@@ -279,6 +313,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg365_container_CSHT",
             key: "message:2:15",
             label: "[CSHT].365 - Container Getout",
             icon: (
@@ -298,6 +333,7 @@ export const itemsMenu = [
         key: "message:3",
         child: [
           {
+            href: "/msg212_package",
             key: "message:3:1",
             label: "212 - Hàng kiện được dỡ xuống cảng",
             icon: (
@@ -310,6 +346,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg566_package",
             key: "message:3:2",
             label: "566 - Xin số định danh cho hàng kiện",
             icon: (
@@ -322,6 +359,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg215_package",
             key: "message:3:3",
             label: "215 - Danh sách hàng kiện sai khác",
             icon: (
@@ -334,6 +372,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg2668_package",
             key: "message:3:4",
             label: "266.8 - Hàng kiện Getin",
             icon: (
@@ -346,6 +385,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg207_package",
             key: "message:3:5",
             label: "207 - Xác nhận getin hết hàng",
             icon: (
@@ -358,6 +398,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg2665_package",
             key: "message:3:6",
             label: "266.5 - Hiệu chỉnh hàng kiện Getin",
             icon: (
@@ -370,6 +411,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg2661_package",
             key: "message:3:7",
             label: "266.1 - Hủy hàng kiện Getin",
             icon: (
@@ -381,7 +423,9 @@ export const itemsMenu = [
               />
             ),
           },
-          { key: "message:3:8",
+          {
+            href: "/msg257_package",
+            key: "message:3:8",
             label: "257 - Điều hướng hàng kiện",
             icon: (
               <lord-icon
@@ -393,6 +437,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg297_package",
             key: "message:3:9",
             label: "297 - Chỉ định tờ khai xuất khẩu",
             icon: (
@@ -404,7 +449,9 @@ export const itemsMenu = [
               />
             ),
           },
-          { key: "message:3:10",
+          {
+            href: "/msg367_package",
+            key: "message:3:10",
             label: "367 - TK đủ điều kiện qua KVGS",
             icon: (
               <lord-icon
@@ -416,6 +463,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg223_package",
             key: "message:3:11",
             label: "223 - Hàng kiện đủ điều kiện qua KVGS",
             icon: (
@@ -428,6 +476,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg321_package",
             key: "message:3:12",
             label: "321 - Hàng kiện Getout có TKHQ",
             icon: (
@@ -440,6 +489,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg341_package",
             key: "message:3:13",
             label: "341 - Hàng kiện Getout không TKHQ",
             icon: (
@@ -452,6 +502,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: "/msg215_package_CSHT",
             key: "message:3:14",
             label: "215[CSHT] - TK chưa nộp phí",
             icon: (
@@ -463,7 +514,9 @@ export const itemsMenu = [
               />
             ),
           },
-          {  key: "message:3:15",
+          {
+            href: "/msg321_package_CSHT",
+            key: "message:3:15",
             label: "321[CSHT] - Hàng kiện Getout có TKHQ",
             icon: (
               <lord-icon
@@ -847,6 +900,7 @@ export const itemsMenu = [
         icon: <BoxPlotOutlined />,
         child: [
           {
+            href: "/ContainerMNF",
             label: "Manifest - Loading list",
             icon: (
               <lord-icon
@@ -859,6 +913,7 @@ export const itemsMenu = [
             key: "directory:1",
           },
           {
+            href:"/ContainerStock",
             label: "Thông tin container biến động",
             icon: (
               <lord-icon
@@ -871,6 +926,7 @@ export const itemsMenu = [
             key: "directory:2",
           },
           {
+            href:"/ContainerSizeType",
             label: "Loại và kích cỡ container",
             key: "directory:3",
             icon: (
@@ -890,6 +946,7 @@ export const itemsMenu = [
         icon: <InboxOutlined />,
         child: [
           {
+            href:"/PackageMNF",
             label: "Manifest - Loading list",
             key: "directory:4",
             icon: (
@@ -902,6 +959,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href:"/PackageGetin",
             label: "Thông tin hàng kiện getin",
             key: "directory:5",
             icon: (
@@ -914,6 +972,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href:"/PackageGetout",
             label: "Thông tin hàng kiện getout",
             key: "directory:6",
             icon: (
@@ -933,6 +992,7 @@ export const itemsMenu = [
         icon: <GoldOutlined />,
         child: [
           {
+            href:"/BulkMNF",
             label: "Manifest - Loading list",
             key: "directory:7",
             icon: (
@@ -945,6 +1005,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href:"/BulkGetin",
             label: "Thông tin hàng rời getin",
             key: "directory:8",
             icon: (
@@ -957,6 +1018,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href:"/BulkGetout",
             label: "Thông tin hàng rời getout",
             key: "directory:9",
             icon: (
@@ -976,6 +1038,7 @@ export const itemsMenu = [
         icon: <ReconciliationOutlined />,
         child: [
           {
+            href:"/LiquidMNF",
             label: "Manifest - Loading list",
             key: "directory:10",
             icon: (
@@ -988,6 +1051,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href:"/LiquidGetin",
             label: "Thông tin hàng lỏng getin",
             key: "directory:11",
             icon: (
@@ -1000,6 +1064,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href:"/LiquidGetout",
             label: "Thông tin hàng lỏng getout",
             key: "directory:12",
             icon: (
@@ -1012,6 +1077,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href:"/LiquidType",
             label: "Loại hàng lỏng",
             key: "directory:13",
             icon: (
@@ -1280,7 +1346,7 @@ export const itemsMenu = [
   },
 ];
 
-export const FORMAT_DATETIME = 'YYYY-MM-DD HH:mm:ss';
+export const FORMAT_DATETIME = "YYYY-MM-DD HH:mm:ss";
 export const ev_code = [
   "MESSAGE_TRANSMIT_FAILED",
   "ASKING_MESSAGE_CREATION_FAILED",

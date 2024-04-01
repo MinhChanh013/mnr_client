@@ -15,7 +15,6 @@ import DataGrid, {
   paginationTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
@@ -24,8 +23,9 @@ import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 
-export default function Msg566Package() {
+export default function Msg321PackageCSHT() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -80,13 +80,13 @@ export default function Msg566Package() {
     },
     {
       key: "CntrNo",
-      name: "Số Chuyến",
+      name: "Chuyến Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "GetIn",
-      name: "Ngày Cập/Rời",
+      name: "Ngày Tàu Đến/Rời",
       width: 200,
       type: columnTypes.DatePicker,
     },
@@ -98,25 +98,73 @@ export default function Msg566Package() {
     },
     {
       key: "NumberOfJourney",
-      name: "Ngày Vận Đơn",
+      name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "ArrivalDeparture",
-      name: "Mô Tả Hàng Hóa",
+      name: "Ngày Ra Cảng",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "MsgRef",
-      name: "Ghi Chú",
+      name: "Đơn Vị Tính",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
-      name: "Cấp Lại",
+      name: "SL Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "SL Còn lại",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Lần Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Phương Án Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Hình Thức Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Số Tờ Khai",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Ngày Tờ Khai",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Mã LH",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Mã HQ Mở TK",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -140,7 +188,7 @@ export default function Msg566Package() {
     },
     {
       key: "MsgRef",
-      name: "Khóa tham chiếu",
+      name: "Khóa Tham Chiếu",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -223,7 +271,7 @@ export default function Msg566Package() {
                 color: "#1b618c",
               },
             }}
-            title={"[566] \r\n XIN SỐ ĐỊNH DANH HÀNG KIỆN"}
+            title={"[CSHT.321] \r\n GỬI GETOUT HÀNG KIỆN QUA KVGS"}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -236,9 +284,9 @@ export default function Msg566Package() {
                 items={[
                   {
                     type: filterType.radio,
-                    label: "Loại hàng",
+                    label: "Hướng",
                     config: {
-                      name: "isLF",
+                      name: "imextype",
                       defaultValue: "",
                       options: [
                         {
@@ -246,23 +294,22 @@ export default function Msg566Package() {
                           value: "",
                         },
                         {
-                          label: "Hàng nhập khẩu",
+                          label: "Nhập khẩu",
                           value: "1",
                         },
                         {
-                          label: "Hàng nội địa",
+                          label: "Xuất khẩu",
                           value: "2",
                         },
                       ],
                     },
                   },
                   {
-                    type: filterType.input,
-                    label: "Số Cont",
+                    type: filterType.rangePicker,
+                    label: "Khoản",
                     config: {
-                      defaultValue: "",
-                      name: "cntrNo",
-                      placeholder: "",
+                      name: "dateFromTo",
+                      placeholder: ["Từ", "Đến"],
                       value: "",
                     },
                   },

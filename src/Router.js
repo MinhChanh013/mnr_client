@@ -46,6 +46,21 @@ import LiquidGetout from "./views/Category/Liquid/LiquidGetout.js";
 import LiquidType from "./views/Category/Liquid/LiquidType.js";
 
 import SysConfig from "./views/General/SysConfig.js";
+import Msg212Package from "./views/message_package/Msg212Package.js";
+import Msg566Package from "./views/message_package/Msg566Package.js";
+import Msg215Package from "./views/message_package/Msg215Package.js";
+import Msg2668Package from "./views/message_package/Msg2668Package.js";
+import Msg207Package from "./views/message_package/Msg207Package.js";
+import Msg2665Package from "./views/message_package/Msg2665Package.js";
+import Msg2661Package from "./views/message_package/Msg2661Package.js";
+import Msg257Package from "./views/message_package/Msg257Package.js";
+import Msg297Package from "./views/message_package/Msg297Package.js";
+import Msg367Package from "./views/message_package/Msg367Package.js";
+import Msg233Package from "./views/message_package/Msg223Package.js";
+import Msg321Package from "./views/message_package/Msg321Package.js";
+import Msg341Package from "./views/message_package/Msg341Package.js";
+import Msg215PackageCSHT from "./views/message_package/Msg215PackageCSHT.js";
+import Msg321PackageCSHT from "./views/message_package/Msg321PackageCSHT.js";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +92,22 @@ const router = createBrowserRouter([
       { path: "/msg214_container_CSHT", element: <Msg214ContainerCSHT /> },
       { path: "/msg365_container_CSHT", element: <Msg365ContainerCSHT /> },
       { path: "/msg367Container", element: <Msg367Container /> },
+
+      { path: "/msg212_package", element: <Msg212Package /> },
+      { path: "/msg566_package", element: <Msg566Package /> },
+      { path: "/msg215_package", element: <Msg215Package /> },
+      { path: "/msg2668_package", element: <Msg2668Package /> },
+      { path: "/msg207_package", element: <Msg207Package /> },
+      { path: "/msg2665_package", element: <Msg2665Package /> },
+      { path: "/msg2661_package", element: <Msg2661Package /> },
+      { path: "/msg257_package", element: <Msg257Package /> },
+      { path: "/msg297_package", element: <Msg297Package /> },
+      { path: "/msg367_package", element: <Msg367Package /> },
+      { path: "/msg233_package", element: <Msg233Package /> },
+      { path: "/msg321_package", element: <Msg321Package /> },
+      { path: "/msg341_package", element: <Msg341Package /> },
+      { path: "/msg215_package_CSHT", element: <Msg215PackageCSHT /> },
+      { path: "/msg321_package_CSHT", element: <Msg321PackageCSHT /> },
 
       { path: "/ContainerMNF", element: <ContainerMNF /> },
       { path: "/ContainerSizeType", element: <ContainerSizeType /> },

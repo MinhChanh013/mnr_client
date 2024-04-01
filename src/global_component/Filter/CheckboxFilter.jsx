@@ -11,7 +11,7 @@ export default function CheckboxFilter({
         <Checkbox
             name={name}
             defaultChecked={defaultChecked}
-            onChange={(event) => formInstance.setFieldValue(name, event.target.value)}
+            onChange={(event) => formInstance.setFieldValue(name, event.target.checked)}
         >
             {label}
         </Checkbox>

@@ -23,9 +23,8 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 
-export default function Msg566Package() {
+export default function Msg212Package() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -55,26 +54,26 @@ export default function Msg566Package() {
     },
     {
       key: "JobStatus",
-      name: "Hành Động",
+      name: "Tên tàu",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "StatusMarker",
-      name: "Trạng Thái",
+      name: "Hô Hiệu Tàu",
       width: 100,
       type: columnTypes.TextEditor,
     },
     {
       key: "BillOfLading",
-      name: "Nhập/Xuất",
+      name: "Số IMO",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "CargoCtrlNo",
-      name: "Tên Tàu",
+      name: "Ngày tàu đến/đi",
       width: 150,
       type: columnTypes.TextEditor,
     },
@@ -86,61 +85,31 @@ export default function Msg566Package() {
     },
     {
       key: "GetIn",
-      name: "Ngày Cập/Rời",
+      name: "Số Vận Đơn",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "TransportIdentity",
-      name: "Số Vận Đơn",
+      name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "NumberOfJourney",
-      name: "Ngày Vận Đơn",
+      name: "Số Lượng Hàng Hóa",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "ArrivalDeparture",
-      name: "Mô Tả Hàng Hóa",
+      name: "ĐVT",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "MsgRef",
-      name: "Ghi Chú",
-      width: 300,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "MsgRef",
-      name: "Cấp Lại",
-      width: 300,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "MsgRef",
-      name: "Số Tiếp Nhận",
-      width: 300,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "MsgRef",
-      name: "Ngày Tiếp Nhận",
-      width: 300,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "MsgRef",
-      name: "Nội dung Phản Hồi",
-      width: 300,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "MsgRef",
-      name: "Khóa tham chiếu",
+      name: "Khóa Tham Chiếu",
       width: 300,
       type: columnTypes.TextEditor,
     },
@@ -223,7 +192,7 @@ export default function Msg566Package() {
                 color: "#1b618c",
               },
             }}
-            title={"[566] \r\n XIN SỐ ĐỊNH DANH HÀNG KIỆN"}
+            title={"[212] \r\n HÀNG KIỆN ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI"}
             style={{ borderRadius: "0px" }}
             className="b-card"
           >
@@ -231,50 +200,16 @@ export default function Msg566Package() {
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "isLF",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Hàng nhập khẩu",
-                          value: "1",
-                        },
-                        {
-                          label: "Hàng nội địa",
-                          value: "2",
-                        },
-                      ],
-                    },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Số Cont",
-                    config: {
-                      defaultValue: "",
-                      name: "cntrNo",
-                      placeholder: "",
-                      value: "",
-                    },
-                  },
-                ]}
-              />
             </Row>
           </Card>
         </Col>
         <Col span={17}>
           <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid
