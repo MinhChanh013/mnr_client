@@ -3,7 +3,7 @@ import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "package";
-const msgId = "212";
+const msgId = "2665";
 
 const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
@@ -15,10 +15,8 @@ export const load = async (formData) => {
   return data;
 };
 
-export const send = async (params, dispatch) => {
-  const { VoyageKey, VesselName, CallSign, IMO, ETA } = params;
-
-  if (!VoyageKey) {
+export const send = async (rows = [], dispatch) => {
+  if (rows.length === 0) {
     dispatch(
       showMessage({
         type: "error",
@@ -28,15 +26,7 @@ export const send = async (params, dispatch) => {
     return;
   }
 
-  const formData = {
-    voyagekey: VoyageKey,
-    vsslname: VesselName,
-    callsign: CallSign,
-    imo: IMO,
-    eta: ETA,
-  };
-
-  const data = await poster(cpath("send"), formData);
+  const data = await poster(cpath("send"), rows);
   if (data) {
     if (data.deny) {
       dispatch(
@@ -89,8 +79,8 @@ export const searchVessels = async ({ vesselName }) => {
 socket.on("sock_to_client", (data) => {
   socketReceiveReponse(
     data,
-    "212.1",
-    data.response_func === "32" || data.response_func === "27",
+    "2665",
+    data.response_func === "29" || data.response_func === "27",
     () => load(store.getState().filterForm)
   );
 });

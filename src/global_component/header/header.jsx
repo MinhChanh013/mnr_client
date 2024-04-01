@@ -5,11 +5,10 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import "@silevis/reactgrid/styles.css";
-import { Avatar, Card, Dropdown, Space, Typography, Drawer } from "antd";
+import { Avatar, Card, Drawer, Dropdown, Space, Typography } from "antd";
 import * as React from "react";
 import Nav from "../Nav/Nav";
 import NavMobile from "../Nav/NavMobile";
-import { socket } from "../../socket"
 
 const items = [
   {
@@ -40,6 +39,7 @@ const Header = () => {
       }
     });
   }, []);
+
 
   return (
     <>

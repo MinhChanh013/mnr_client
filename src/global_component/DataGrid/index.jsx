@@ -102,6 +102,11 @@ const DataGrid = forwardRef(
     const reactDataGridRef = useRef()
 
     useEffect(() => {
+      setCurrenRows([])
+      setCurrenPage(1)
+    }, [rows])
+
+    useEffect(() => {
       const start_index = (currentPage - 1) * limit
       const dataRowCurrent = rows.slice(start_index, start_index + limit)
       switch (pagination) {
