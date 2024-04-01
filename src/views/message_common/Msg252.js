@@ -223,9 +223,6 @@ const Msg252 = () => {
           }
           if (data.msgRef_array) {
             for (let i = 0; i < data.msgRef_array.length; i++) {
-              // var cntrNo = data.msgRef_array[i].split(":")[0];
-              // var msgRef = data.msgRef_array[i].split(":")[1].toUpperCase();
-              // var trarr = $("#contenttable tr");
             }
           }
         }
@@ -234,19 +231,6 @@ const Msg252 = () => {
       }
     }
   }
-
-  useEffect(async () => {
-    try {
-      const loadVessel = await searchVessels({});
-      if (loadVessel.success) {
-        setVessel(loadVessel.data);
-      } else {
-
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [])
 
   const handleLoadData = async (formData) => {
     try {

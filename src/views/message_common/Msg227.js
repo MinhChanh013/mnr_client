@@ -183,7 +183,6 @@ const Msg227 = () => {
         fromdate,
         todate,
         voyagekey: Object.keys(dataVesselSelect).length > 0 ? dataVesselSelect.VoyageKey : "",
-        imextype: Number(dataFormFilter.imextype),
       };
       handleLoadData(formData);
     }

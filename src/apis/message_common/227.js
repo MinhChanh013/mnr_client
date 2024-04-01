@@ -12,7 +12,6 @@ export const load = async (params) => {
 
   const formData = {
     voyagekey,
-    imextype,
     fromdate,
     todate,
     marker,

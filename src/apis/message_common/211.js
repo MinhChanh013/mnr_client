@@ -11,6 +11,13 @@ const cpath = (action) => {
 
 export const send = async (params, dispatch) => {
 
+  const {itemType, file} = params;
+
+  const formData = {
+    itemType: itemType,
+    file: file,
+  };
+
   const data = await poster(cpath("send"), formData);
   if (data) {
     if (data.deny) {
@@ -45,11 +52,3 @@ export const send = async (params, dispatch) => {
   return data;
 };
 
-socket.on("sock_to_client", (data) => {
-  socketReceiveReponse(
-    data,
-    "212.1",
-    data.response_func === "32" || data.response_func === "27",
-    () => load(store.getState().filterForm)
-  );
-});
