@@ -47,7 +47,7 @@ export default function Msg566Container() {
       name: "ID",
       width: 180,
       editable: false,
-      visible: true,
+      visible: false,
     },
     {
       key: "JobStatus",
@@ -214,7 +214,10 @@ export default function Msg566Container() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
         <Col span={7}>
           <Card
             styles={{
@@ -224,7 +227,7 @@ export default function Msg566Container() {
               },
             }}
             title={'[566] \r\n XIN SỐ ĐỊNH DANH'}
-            style={{ borderRadius: "0px" }}
+            style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>

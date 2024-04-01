@@ -211,7 +211,7 @@ export default function PackageMNF() {
               },
             }}
             title="MANIFEST - LOADING LIST (HÀNG KIỆN)"
-            style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>

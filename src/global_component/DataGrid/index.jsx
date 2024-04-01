@@ -99,7 +99,12 @@ const DataGrid = forwardRef(
     const [selectedRows, setSelectedRows] = useState(() => new Set());
     const [currentRows, setCurrenRows] = useState([])
     const [currentPage, setCurrenPage] = useState(1)
-    const reactDataGridRef = useRef()
+    const reactDataGridRef = useRef();
+
+    useEffect(() => {
+      setCurrenRows([]);
+      setCurrenPage(1);
+    }, [rows]);
 
     useEffect(() => {
       const start_index = (currentPage - 1) * limit

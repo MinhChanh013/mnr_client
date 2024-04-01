@@ -180,7 +180,7 @@ export default function ContainerMNF() {
               },
             }}
             title="THÔNG TIN HÀNG LỎNG GETOUT"
-            style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>

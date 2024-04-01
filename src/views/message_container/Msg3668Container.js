@@ -26,7 +26,7 @@ import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
 export default function Msg3668Container() {
-  const onFocus = () => {};
+  const onFocus = () => { };
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -50,8 +50,7 @@ export default function Msg3668Container() {
       key: "ID",
       name: "ID",
       width: 180,
-      editable: false,
-      visible: true,
+      visible: false,
     },
     {
       key: "JobStatus",
@@ -253,17 +252,14 @@ export default function Msg3668Container() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
         <Col span={7}>
           <Card
-            styles={{
-              title: {
-                textAlign: "center",
-                color: "#1b618c",
-              },
-            }}
             title={'[366.8] \r\n GỬI GETIN CONTAINER'}
-            style={{ borderRadius: "0px" }}
+            style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 8px" }}>
@@ -417,7 +413,7 @@ export default function Msg3668Container() {
           </Card>
         </Col>
         <Col span={17}>
-          <Card  className="main-card" >
+          <Card className="main-card" >
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.load,
@@ -437,8 +433,8 @@ export default function Msg3668Container() {
               setRows={setRows}
               onFocus={onFocus}
               pagination={paginationTypes.scroll}
-              limit={5}      
-              />
+              limit={5}
+            />
           </Card>
         </Col>
       </Row>

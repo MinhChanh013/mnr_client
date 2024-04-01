@@ -27,7 +27,7 @@ const Msg465Container = () => {
         {
             key: 'IDRef',
             name: 'IDRef',
-            visible: true,
+            visible: false,
             editable: false
         },
         {

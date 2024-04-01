@@ -27,7 +27,7 @@ const Msg214ContainerCSHT = () => {
         {
             key: "ID",
             name: "ID",
-            visible: true,
+            visible: false,
         },
         {
             key: "JobStatus",
@@ -298,7 +298,7 @@ const Msg214ContainerCSHT = () => {
                 <Col span={6}>
                     <Card
                         title={'[CSHT].214 \n DS CONTAINER CỦA TK CHƯA NỘP PHÍ'}
-                        style={{ borderRadius: "0px" }}
+                                    style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
                         <Row style={{ padding: "0 24px" }}>

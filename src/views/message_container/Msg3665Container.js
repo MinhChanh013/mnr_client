@@ -50,8 +50,7 @@ export default function Msg3665Container() {
       key: "ID",
       name: "ID",
       width: 180,
-      editable: false,
-      visible: true,
+      visible: false,
     },
     {
       key: "JobStatus",
@@ -266,7 +265,7 @@ export default function Msg3665Container() {
         <Col span={6}>
           <Card
             title={'[366.5] \r\n HIỆU CHỈNH THÔNG TIN GETIN CHO CONTAINER HẠ BÃI/VÀO CẢNG'}
-            style={{ borderRadius: "0px" }}
+                        style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 24px" }}>

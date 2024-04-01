@@ -28,7 +28,7 @@ const Msg363Container = () => {
     {
       key: 'ID',
       name: 'ID',
-      visible: true,
+      visible: false,
     },
     {
       key: "JobStatus",
@@ -303,7 +303,7 @@ const Msg363Container = () => {
         <Col span={6}>
           <Card
             title={'[363] \r\n HỎI THÔNG TIN (NHẬP/XUẤT) ĐỦ ĐIỀU KIỆN QUA KVSG'}
-            style={{ borderRadius: "0px", height: '85vh' }}
+            style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
             <Row style={{ padding: "0 24px" }}>
