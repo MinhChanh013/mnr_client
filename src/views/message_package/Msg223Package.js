@@ -12,8 +12,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  paginationTypes,
-  selectionTypes,
+  selectionTypes
 } from "../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -23,7 +22,7 @@ import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
-export default function Msg233Package() {
+export default function Msg223Package() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -32,15 +31,18 @@ export default function Msg233Package() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      const res = await searchVessels("");
-      if (res) {
-        setDataViewsels(res.data);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    fetchDataVessels();
   }, []);
 
   const columns = basicRenderColumns([
@@ -49,7 +51,7 @@ export default function Msg233Package() {
       name: "ID",
       width: 180,
       editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -224,42 +226,30 @@ export default function Msg233Package() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
         <Col span={24}>
           <Card
-            styles={{
-              title: {
-                textAlign: "center",
-                color: "#1b618c",
-              },
-            }}
-            title={"[233] \r\n HÀNG KIỆN ĐỦ ĐIỀU KIỆN QUA KVGS"}
-            style={{ borderRadius: "0px" }}
+            title={"[223] \r\n HÀNG KIỆN ĐỦ ĐIỀU KIỆN QUA KVGS"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
-              <Card className="main-card">
-                <ToolBar
-                  buttonConfig={[
-                    toolBarButtonTypes.load,
-                    toolBarButtonTypes.send,
-                  ]}
-                  handleConfirm={buttonConfirm}
-                />
-                <DataGrid
-                  ref={gridRef}
-                  direction="ltr"
-                  columnKeySelected="ID"
-                  selection={selectionTypes.multi}
-                  columns={columns}
-                  rows={rows}
-                  setRows={setRows}
-                  onFocus={onFocus}
-                  pagination={paginationTypes.scroll}
-                  limit={5}
-                />
-              </Card>
-            </Row>
+            <ToolBar
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              handleConfirm={buttonConfirm}
+            />
+            <DataGrid
+              ref={gridRef}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.multi}
+              columns={columns}
+              rows={rows}
+              setRows={setRows}
+              onFocus={onFocus}
+            />
           </Card>
         </Col>
       </Row>

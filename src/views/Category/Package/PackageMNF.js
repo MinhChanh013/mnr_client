@@ -211,10 +211,10 @@ export default function PackageMNF() {
               },
             }}
             title="MANIFEST - LOADING LIST (HÀNG KIỆN)"
-                        style={{ borderRadius: "0px", height: '100%' }}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>

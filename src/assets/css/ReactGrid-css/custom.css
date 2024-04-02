@@ -48,7 +48,7 @@
 .main-card {
   height: calc(100vh - 111px);
   border-radius: 0px;
-  
+
   .ant-card-body {
     padding: 0px;
     height: 100%;

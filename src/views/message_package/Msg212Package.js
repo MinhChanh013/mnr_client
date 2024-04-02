@@ -12,8 +12,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  paginationTypes,
-  selectionTypes,
+  selectionTypes
 } from "../../global_component/DataGrid/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
@@ -33,24 +32,26 @@ export default function Msg212Package() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      const res = await searchVessels("");
-      if (res) {
-        setDataViewsels(res.data);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    fetchDataVessels();
   }, []);
-
   const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
       width: 180,
       editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -183,33 +184,27 @@ export default function Msg212Package() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
+        <Col span={6}>
           <Card
-            styles={{
-              title: {
-                textAlign: "center",
-                color: "#1b618c",
-              },
-            }}
             title={"[212] \r\n HÀNG KIỆN ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI"}
-            style={{ borderRadius: "0px" }}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card className="main-card">
             <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-              ]}
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid
@@ -221,8 +216,6 @@ export default function Msg212Package() {
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
-              pagination={paginationTypes.scroll}
-              limit={5}
             />
           </Card>
         </Col>

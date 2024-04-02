@@ -26,7 +26,7 @@ import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
 export default function Msg3668Container() {
-  const onFocus = () => { };
+  const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -34,15 +34,18 @@ export default function Msg3668Container() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      const res = await searchVessels("");
-      if (res) {
-        setDataViewsels(res.data);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    fetchDataVessels();
   }, []);
 
   const columns = basicRenderColumns([
@@ -258,11 +261,11 @@ export default function Msg3668Container() {
       >
         <Col span={7}>
           <Card
-            title={'[366.8] \r\n GỬI GETIN CONTAINER'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[366.8] \r\n GỬI GETIN CONTAINER"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row className="b-row" style={{ padding: "0 8px" }} gutter={[16, 16]}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
@@ -414,7 +417,7 @@ export default function Msg3668Container() {
           </Card>
         </Col>
         <Col span={17}>
-          <Card className="main-card" >
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.load,

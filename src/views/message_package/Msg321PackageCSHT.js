@@ -12,9 +12,10 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  paginationTypes,
-  selectionTypes,
+  selectionTypes
 } from "../../global_component/DataGrid/index.jsx";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
@@ -22,8 +23,6 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 
 export default function Msg321PackageCSHT() {
   const onFocus = () => {};
@@ -34,15 +33,18 @@ export default function Msg321PackageCSHT() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      const res = await searchVessels("");
-      if (res) {
-        setDataViewsels(res.data);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    fetchDataVessels();
   }, []);
 
   const columns = basicRenderColumns([
@@ -51,7 +53,7 @@ export default function Msg321PackageCSHT() {
       name: "ID",
       width: 180,
       editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -262,63 +264,62 @@ export default function Msg321PackageCSHT() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
+        <Col span={6}>
           <Card
-            styles={{
-              title: {
-                textAlign: "center",
-                color: "#1b618c",
-              },
-            }}
             title={"[CSHT.321] \r\n GỬI GETOUT HÀNG KIỆN QUA KVGS"}
-            style={{ borderRadius: "0px" }}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Hướng",
-                    config: {
-                      name: "imextype",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Nhập khẩu",
-                          value: "1",
-                        },
-                        {
-                          label: "Xuất khẩu",
-                          value: "2",
-                        },
-                      ],
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Nhập khẩu",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất khẩu",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.rangePicker,
-                    label: "Khoản",
-                    config: {
-                      name: "dateFromTo",
-                      placeholder: ["Từ", "Đến"],
-                      value: "",
+                    {
+                      type: filterType.rangePicker,
+                      label: "Khoản",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              </Col>
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card className="main-card">
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
@@ -333,8 +334,6 @@ export default function Msg321PackageCSHT() {
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
-              pagination={paginationTypes.scroll}
-              limit={5}
             />
           </Card>
         </Col>

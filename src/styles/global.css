@@ -1,5 +1,5 @@
 .b-header {
-  background-color: #1B618C;
+  background-color: #1b618c;
   border-radius: 0px;
   border: 0px;
   border-bottom: 1px solid #bfb6b6;
@@ -39,7 +39,7 @@
 }
 
 .b__nav-mobile {
-  background-color: #1B618C !important;
+  background-color: #1b618c !important;
 }
 .b__nav-mobile .ant-drawer-title {
   color: #fff;
@@ -90,7 +90,7 @@
   }
 }
 .b-nav {
-  background-color: #1B618C;
+  background-color: #1b618c;
   border-color: transparent;
 }
 .b-nav .ant-menu-item-selected::after,
@@ -145,7 +145,7 @@
   height: 18px;
 }
 .b__sub .b__nav-sub .ant-menu-item-selected {
-  color: #1B618C;
+  color: #1b618c;
 }
 .b__sub .b__subnav-item {
   width: 100%;
@@ -202,7 +202,7 @@
   }
 }
 .b-navMobile {
-  background-color: #1B618C !important;
+  background-color: #1b618c !important;
 }
 .b-navMobile .ant-menu-submenu-title {
   gap: 8px !important;
@@ -228,7 +228,11 @@
 .b-navMobile .ant-menu-sub.ant-menu-inline .ant-menu-item-selected span {
   color: #1c6a9a !important;
 }
-.b-navMobile .ant-menu-sub.ant-menu-inline .ant-menu-item-selected lord-icon .body.ready {
+.b-navMobile
+  .ant-menu-sub.ant-menu-inline
+  .ant-menu-item-selected
+  lord-icon
+  .body.ready {
   --lord-icon-primary-base: #6666 !important ;
 }
 .b-navMobile .ant-menu-sub.ant-menu-inline .ant-menu-title-content {
@@ -237,4 +241,4 @@
 .b-navMobile .ant-menu-sub.ant-menu-inline lord-icon {
   width: 26px;
   height: 26px;
-}/*# sourceMappingURL=global.css.map */
+} /*# sourceMappingURL=global.css.map */

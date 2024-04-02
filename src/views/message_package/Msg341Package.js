@@ -12,8 +12,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  paginationTypes,
-  selectionTypes,
+  selectionTypes
 } from "../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -32,15 +31,18 @@ export default function Msg341Package() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      const res = await searchVessels("");
-      if (res) {
-        setDataViewsels(res.data);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    fetchDataVessels();
   }, []);
 
   const columns = basicRenderColumns([
@@ -49,7 +51,7 @@ export default function Msg341Package() {
       name: "ID",
       width: 180,
       editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -236,42 +238,30 @@ export default function Msg341Package() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
         <Col span={24}>
           <Card
-            styles={{
-              title: {
-                textAlign: "center",
-                color: "#1b618c",
-              },
-            }}
             title={"[341] \r\n GỬI GETOUT HÀNG KIỆN QUA KVGS KHÔNG TKHQ"}
-            style={{ borderRadius: "0px" }}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
-              <Card className="main-card">
-                <ToolBar
-                  buttonConfig={[
-                    toolBarButtonTypes.load,
-                    toolBarButtonTypes.send,
-                  ]}
-                  handleConfirm={buttonConfirm}
-                />
-                <DataGrid
-                  ref={gridRef}
-                  direction="ltr"
-                  columnKeySelected="ID"
-                  selection={selectionTypes.multi}
-                  columns={columns}
-                  rows={rows}
-                  setRows={setRows}
-                  onFocus={onFocus}
-                  pagination={paginationTypes.scroll}
-                  limit={5}
-                />
-              </Card>
-            </Row>
+            <ToolBar
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              handleConfirm={buttonConfirm}
+            />
+            <DataGrid
+              ref={gridRef}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.multi}
+              columns={columns}
+              rows={rows}
+              setRows={setRows}
+              onFocus={onFocus}
+            />
           </Card>
         </Col>
       </Row>

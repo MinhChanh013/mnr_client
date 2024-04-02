@@ -1,16 +1,26 @@
 import { Col, ConfigProvider, Empty, Menu, Row, } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { generateString } from '../../utils';
+import { useNavigate } from 'react-router-dom';
 
 const SubNav = (props) => {
-    const { itemMenu } = props
+    const { itemMenu, funcClose, activeNav } = props
+    const navigate = useNavigate()
     const [itemSelected, settItemSelected] = useState()
     const [keySelected, setKeySelected] = useState("")
-    const items = useMemo(() => {
-        settItemSelected()
-        setKeySelected("")
-        return itemMenu.child
-    }, [itemMenu])
+    const items = useMemo(() => itemMenu.child, [itemMenu])
+
+    useEffect(() => {
+        if (activeNav) {
+            const navActive = localStorage.getItem("nav").split(",")
+            if (navActive && navActive.length > 0) {
+                const keySelected = navActive[navActive.length - 2]
+                setKeySelected(keySelected)
+                settItemSelected(items[items.findIndex((item) => item.key === keySelected)])
+            }
+        }
+    }, [activeNav, items])
+
     return (
         <Row className='b__sub' gutter={[16, 16]} >
             <Col xl={4} lg={5} md={6}>
@@ -42,7 +52,11 @@ const SubNav = (props) => {
                         {itemSelected.child.map((sub, index) => (
                             <Col
                                 className={window.location.href.includes(sub.href) ? "active" : ""}
-                                onClick={() => window.location.href = sub.href}
+                                onClick={() => {
+                                    navigate(sub.href)
+                                    localStorage.setItem("nav", [sub.key, keySelected, itemMenu.key]);
+                                    funcClose()
+                                }}
                                 style={{ '--i': index + 1 }} xl={5} lg={7} md={11}
                                 key={sub.key + generateString(5)}>
                                 {sub.icon}
@@ -62,8 +76,8 @@ const SubNav = (props) => {
                         }
                     />
                 }
-            </Col>
-        </Row>
+            </Col >
+        </Row >
     )
 }
 
