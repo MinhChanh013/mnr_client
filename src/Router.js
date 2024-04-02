@@ -1,66 +1,66 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Dashboard from "./views/Dashboard/Dashboard.js";
-import Layout from "./global_component/Layout/Layout.js";
-import NotFound from "./views/not_found/NotFound.jsx";
 import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./global_component/Layout/Layout.js";
 import { reConnect, socket } from "./socket.js";
+import Dashboard from "./views/Dashboard/Dashboard.js";
+import NotFound from "./views/not_found/NotFound.jsx";
 
-import Msg3668Container from "./views/message_container/Msg3668Container.js";
-import Msg212Container from "./views/message_container/Msg212Container.js";
 import "./assets/css/ReactGrid-css/custom.css";
-import Msg253 from "./views/message_common/Msg253.js";
-import Msg217 from "./views/message_common/Msg217.js";
-import Msg901 from "./views/message_common/Msg901.js";
-import MsgHistory from "./views/message_common/MsgHistory.js";
 import Login from "./views/login/Login.js";
+import Msg211 from "./views/message_common/Msg211.js";
+import Msg217 from "./views/message_common/Msg217.js";
 import Msg227 from "./views/message_common/Msg227.js";
 import Msg252 from "./views/message_common/Msg252.js";
+import Msg253 from "./views/message_common/Msg253.js";
 import Msg367point8 from "./views/message_common/Msg367point8.js";
+import Msg901 from "./views/message_common/Msg901.js";
+import MsgHistory from "./views/message_common/MsgHistory.js";
+import Msg212Container from "./views/message_container/Msg212Container.js";
 import Msg213 from "./views/message_container/Msg213Container.js";
 import Msg214 from "./views/message_container/Msg214Container.js";
-import Msg237 from "./views/message_container/Msg237Container.js";
-import Msg3665Container from "./views/message_container/Msg3665Container.js";
-import Msg247Container from "./views/message_container/Msg247Container.js";
-import Msg566Container from "./views/message_container/Msg566Container.js";
-import Msg3661Container from "./views/message_container/Msg3661Container.js";
-import Msg363Container from "./views/message_container/Msg363Container.js";
 import Msg214ContainerCSHT from "./views/message_container/Msg214ContainerCSHT.js";
+import Msg237 from "./views/message_container/Msg237Container.js";
+import Msg247Container from "./views/message_container/Msg247Container.js";
+import Msg363Container from "./views/message_container/Msg363Container.js";
 import Msg365Container from "./views/message_container/Msg365Container.js";
 import Msg365ContainerCSHT from "./views/message_container/Msg365ContainerCSHT.js";
-import Msg465Container from "./views/message_container/Msg465Container.js";
+import Msg3661Container from "./views/message_container/Msg3661Container.js";
+import Msg3665Container from "./views/message_container/Msg3665Container.js";
+import Msg3668Container from "./views/message_container/Msg3668Container.js";
 import Msg367Container from "./views/message_container/Msg367Container.js";
-import Msg211 from "./views/message_common/Msg211.js";
+import Msg465Container from "./views/message_container/Msg465Container.js";
+import Msg566Container from "./views/message_container/Msg566Container.js";
 
+import BulkGetin from "./views/Category/Bulk/BulkGetin.js";
+import BulkGetout from "./views/Category/Bulk/BulkGetout.js";
+import BulkMNF from "./views/Category/Bulk/BulkMNF.js";
 import ContainerMNF from "./views/Category/Container/ContainerMNF.js";
 import ContainerSizeType from "./views/Category/Container/ContainerSizeType.js";
 import ContainerStock from "./views/Category/Container/ContainerStock.js";
-import PackageMNF from "./views/Category/Package/PackageMNF.js";
-import PackageGetin from "./views/Category/Package/PackageGetin.js";
-import PackageGetout from "./views/Category/Package/packageGetout.js";
-import BulkMNF from "./views/Category/Bulk/BulkMNF.js";
-import BulkGetin from "./views/Category/Bulk/BulkGetin.js";
-import BulkGetout from "./views/Category/Bulk/BulkGetout.js";
-import LiquidMNF from "./views/Category/Liquid/LiquidMNF.js";
 import LiquidGetin from "./views/Category/Liquid/LiquidGetin.js";
 import LiquidGetout from "./views/Category/Liquid/LiquidGetout.js";
+import LiquidMNF from "./views/Category/Liquid/LiquidMNF.js";
 import LiquidType from "./views/Category/Liquid/LiquidType.js";
+import PackageGetin from "./views/Category/Package/PackageGetin.js";
+import PackageGetout from "./views/Category/Package/packageGetout.js";
+import PackageMNF from "./views/Category/Package/PackageMNF.js";
 
 import SysConfig from "./views/General/SysConfig.js";
-import Msg212Package from "./views/message_package/Msg212Package.js";
-import Msg566Package from "./views/message_package/Msg566Package.js";
-import Msg215Package from "./views/message_package/Msg215Package.js";
-import Msg2668Package from "./views/message_package/Msg2668Package.js";
 import Msg207Package from "./views/message_package/Msg207Package.js";
-import Msg2665Package from "./views/message_package/Msg2665Package.js";
-import Msg2661Package from "./views/message_package/Msg2661Package.js";
-import Msg257Package from "./views/message_package/Msg257Package.js";
-import Msg297Package from "./views/message_package/Msg297Package.js";
-import Msg367Package from "./views/message_package/Msg367Package.js";
-import Msg233Package from "./views/message_package/Msg223Package.js";
-import Msg321Package from "./views/message_package/Msg321Package.js";
-import Msg341Package from "./views/message_package/Msg341Package.js";
+import Msg212Package from "./views/message_package/Msg212Package.js";
+import Msg215Package from "./views/message_package/Msg215Package.js";
 import Msg215PackageCSHT from "./views/message_package/Msg215PackageCSHT.js";
+import Msg223Package from "./views/message_package/Msg223Package.js";
+import Msg257Package from "./views/message_package/Msg257Package.js";
+import Msg2661Package from "./views/message_package/Msg2661Package.js";
+import Msg2665Package from "./views/message_package/Msg2665Package.js";
+import Msg2668Package from "./views/message_package/Msg2668Package.js";
+import Msg297Package from "./views/message_package/Msg297Package.js";
+import Msg321Package from "./views/message_package/Msg321Package.js";
 import Msg321PackageCSHT from "./views/message_package/Msg321PackageCSHT.js";
+import Msg341Package from "./views/message_package/Msg341Package.js";
+import Msg367Package from "./views/message_package/Msg367Package.js";
+import Msg566Package from "./views/message_package/Msg566Package.js";
 
 const router = createBrowserRouter([
   {
@@ -103,7 +103,7 @@ const router = createBrowserRouter([
       { path: "/msg257_package", element: <Msg257Package /> },
       { path: "/msg297_package", element: <Msg297Package /> },
       { path: "/msg367_package", element: <Msg367Package /> },
-      { path: "/msg233_package", element: <Msg233Package /> },
+      { path: "/msg223_package", element: <Msg223Package /> },
       { path: "/msg321_package", element: <Msg321Package /> },
       { path: "/msg341_package", element: <Msg341Package /> },
       { path: "/msg215_package_CSHT", element: <Msg215PackageCSHT /> },

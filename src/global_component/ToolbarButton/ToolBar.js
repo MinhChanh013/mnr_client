@@ -98,7 +98,7 @@ const ToolBar = ({ buttonConfig, cardConfig, handleConfirm}) => {
                     {
                         buttonConfig.map((item, index) => {
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     {
                                         index !== 0
                                             ?
@@ -152,7 +152,7 @@ const ToolBar = ({ buttonConfig, cardConfig, handleConfirm}) => {
                                     >
                                         {item.label.toUpperCase()}
                                     </Button >
-                                </>
+                                </React.Fragment>
                             )
                         })
                     }

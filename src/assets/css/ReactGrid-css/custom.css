@@ -26,6 +26,15 @@
   border-color: #dededede;
 }
 
+.b-horizontal-filter {
+  font-size: 14px !important;
+  margin: 5px 0 5px !important;
+}
+
+.b-horizontal-filter::after,
+.b-horizontal-filter::before {
+  border-color: #ffb13d !important;
+}
 .b-card {
   border-radius: 0px;
   height: 100%;
@@ -48,7 +57,7 @@
 .main-card {
   height: calc(100vh - 111px);
   border-radius: 0px;
-  
+
   .ant-card-body {
     padding: 0px;
     height: 100%;

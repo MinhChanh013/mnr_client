@@ -6,10 +6,9 @@ import { useSelector } from 'react-redux';
 const Loading = () => {
     const isLoading = useSelector(isLoadingSelector);
     return (
-        <Modal className='modal-loading' visible={isLoading} footer={false} closeIcon={false}>
+        <Modal className='modal-loading' open={isLoading} footer={false} closeIcon={false}>
             <Spin spinning tip="Loading...." size="large" />
         </Modal>
-
     )
 }
 

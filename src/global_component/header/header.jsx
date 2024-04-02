@@ -31,6 +31,8 @@ const itemsMenu = [
 
 const Header = () => {
   const [activeMenuMobile, setActiveMenuMobile] = React.useState(false);
+  const [keySelected, setKeySelected] = React.useState()
+  const [defaultOpenKeys, setDefaultOpenKeys] = React.useState()
   React.useEffect(() => {
     window.addEventListener("resize", () => {
       const width = document.body.clientWidth;
@@ -39,6 +41,20 @@ const Header = () => {
       }
     });
   }, []);
+
+  const handleCloseMenuMobile = () => {
+    setActiveMenuMobile(false)
+  }
+
+  React.useEffect(() => {
+    if (activeMenuMobile) {
+      const navActive = localStorage.getItem("nav").split(",")
+      if (navActive && navActive.length > 0) {
+        setKeySelected(navActive)
+        setDefaultOpenKeys(navActive.slice(1))
+      }
+    }
+  }, [activeMenuMobile])
 
 
   return (
@@ -100,10 +116,13 @@ const Header = () => {
                 <Drawer
                   className="b__nav-mobile"
                   title="Menu"
-                  onClose={() => setActiveMenuMobile(false)}
+                  onClose={handleCloseMenuMobile}
                   open={activeMenuMobile}
                 >
-                  <NavMobile />
+                  <NavMobile
+                    keySelected={keySelected}
+                    defaultOpenKeys={defaultOpenKeys}
+                    funcClose={handleCloseMenuMobile} />
                 </Drawer>
               </Space>
             </Space>

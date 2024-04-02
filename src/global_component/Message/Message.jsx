@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { messageSelectors } from '../../store/selectors/Message';
 
@@ -7,11 +7,13 @@ const Message = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const messageRedux = useSelector(messageSelectors);
 
-    if (messageRedux) {
-        messageApi.open({
-            ...messageRedux
-        });
-    }
+    useEffect(() => {
+        if (!!messageRedux.content) {
+            messageApi.open({
+                ...messageRedux
+            });
+        }
+    }, [messageApi, messageRedux])
 
     return (
         <>

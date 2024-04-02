@@ -1,28 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Form, Row } from "antd";
-import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import {
   load,
-  searchVessels,
-  send,
+  searchVessels
 } from "../../apis/message_container/3668.js";
-import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  paginationTypes,
-  selectionTypes,
+  selectionTypes
 } from "../../global_component/DataGrid/index.jsx";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
-import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 
 export default function Msg367Package() {
   const onFocus = () => {};
@@ -33,15 +28,18 @@ export default function Msg367Package() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      const res = await searchVessels("");
-      if (res) {
-        setDataViewsels(res.data);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    fetchDataVessels();
   }, []);
 
   const columns = basicRenderColumns([
@@ -50,7 +48,7 @@ export default function Msg367Package() {
       name: "ID",
       width: 180,
       editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -96,7 +94,7 @@ export default function Msg367Package() {
       type: columnTypes.DatePicker,
     },
     {
-      key: "ArrivalDeparture",
+      key: "ArrivalDeparturee",
       name: "Ngày Tàu Đến/Rời",
       width: 200,
       type: columnTypes.DatePicker,
@@ -202,73 +200,73 @@ export default function Msg367Package() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+      <Row
+        gutter={[8, 8]}
+        style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
+      >
+        <Col span={6}>
           <Card
-            styles={{
-              title: {
-                textAlign: "center",
-                color: "#1b618c",
-              },
-            }}
-            title={"[5367] \r\n [HÀNG KIỆN] - TỜ KHAI ĐỦ ĐIỀU KIỆN QUA KVGS"}
-            style={{ borderRadius: "0px" }}
+            title={"[367] \r\n [HÀNG KIỆN] - TỜ KHAI ĐỦ ĐIỀU KIỆN QUA KVGS"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.checkbox,
-                    label: "Loại hàng",
-                    config: {
-                      name: "autosend",
-                      label: "Tự động gửi truy vấn với QR Code mới",
+            <Row className="b-row" gutter={[16, 16]}>
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.checkbox,
+                      label: "Loại hàng",
+                      config: {
+                        name: "autosend",
+                        label: "Tự động gửi truy vấn với QR Code mới",
+                      },
                     },
-                  },
-                  {
-                    type: filterType.checkbox,
-                    label: "Loại hàng",
-                    config: {
-                      name: "allow_send_again",
-                      label: "Gởi lại (trường hợp tờ khai đã tồn tại trong hệ thống)",
+                    {
+                      type: filterType.checkbox,
+                      label: "Loại hàng",
+                      config: {
+                        name: "allow_send_again",
+                        label:
+                          "Gởi lại (trường hợp tờ khai đã tồn tại trong hệ thống)",
+                      },
                     },
-                  },
-                  {
-                    type: filterType.textarea,
-                    label: "QR Code",
-                    config: {
-                      name: "qrCode",
-                      defaultValue: "",
+                    {
+                      type: filterType.textarea,
+                      label: "QR Code",
+                      config: {
+                        name: "qrCode",
+                        defaultValue: "",
+                      },
                     },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Số Tờ Khai",
-                    config: {
-                      defaultValue: "",
-                      name: "declareNo",
-                      placeholder: "",
-                      value: "",
+                    {
+                      type: filterType.input,
+                      label: "Số Tờ Khai",
+                      config: {
+                        defaultValue: "",
+                        name: "declareNo",
+                        placeholder: "",
+                        value: "",
+                      },
                     },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Mã ĐK HQ",
-                    config: {
-                      defaultValue: "",
-                      name: "declareOffice",
-                      placeholder: "",
-                      value: "",
+                    {
+                      type: filterType.input,
+                      label: "Mã ĐK HQ",
+                      config: {
+                        defaultValue: "",
+                        name: "declareOffice",
+                        placeholder: "",
+                        value: "",
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              </Col>
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card className="main-card">
             <ToolBar
               buttonConfig={[
@@ -286,8 +284,6 @@ export default function Msg367Package() {
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
-              pagination={paginationTypes.scroll}
-              limit={5}
             />
           </Card>
         </Col>

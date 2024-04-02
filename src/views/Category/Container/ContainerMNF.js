@@ -197,10 +197,10 @@ export default function ContainerMNF() {
               },
             }}
             title="MANIFEST - LOADING LIST (CONTAINER)"
-                        style={{ borderRadius: "0px", height: '100%' }}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>

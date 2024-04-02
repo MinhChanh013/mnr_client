@@ -312,7 +312,7 @@ const Msg465Container = () => {
                         style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
-                        <Row sclassName="b-row" gutter={[16,16]}>
+                        <Row className="b-row" gutter={[16,16]}>
                             <Col span={24}>
                                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
                             </Col>

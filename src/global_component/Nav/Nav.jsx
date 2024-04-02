@@ -6,6 +6,7 @@ import { itemsMenu } from '../../constants';
 const Nav = () => {
     const [activeNav, setActiveNav] = useState(false)
     const [navSelected, setNavSelected] = useState()
+    const [keySelected, setKeySelected] = useState()
 
     const handleActiveNav = (itemNav) => {
         setActiveNav(true)
@@ -28,6 +29,19 @@ const Nav = () => {
         })
     }, [])
 
+    const handleCloseNav = () => {
+        setActiveNav(false)
+    }
+
+    useEffect(() => {
+        if (!activeNav) {
+            const navActive = localStorage.getItem("nav").split(",")
+            if (navActive && navActive.length > 0) {
+                setKeySelected(navActive[navActive.length - 1])
+            }
+        }
+    }, [activeNav])
+
     return (
         <>
             <ConfigProvider
@@ -42,13 +56,20 @@ const Nav = () => {
                 }}
             >
                 <Menu
-                    onDeselect={() => setActiveNav(!activeNav)}
-                    onSelect={item => handleActiveNav(item)}
+                    onDeselect={(item) => {
+                        handleActiveNav(item)
+                        setActiveNav(!activeNav)
+                    }}
+                    onSelect={item => {
+                        handleActiveNav(item)
+                        setKeySelected(item.key)
+                    }}
                     triggerSubMenuAction="click"
                     className='b-nav'
                     onClick={(item) => handlePlayIcon(item)}
                     mode='horizontal'
                     items={itemsMenu}
+                    selectedKeys={keySelected}
                 />
             </ConfigProvider>
             <Drawer
@@ -58,13 +79,11 @@ const Nav = () => {
                 placement={"top"}
                 closable={true}
                 closeIcon={null}
-                onClose={() => {
-                    setActiveNav(false)
-                }}
+                onClose={handleCloseNav}
                 open={activeNav}
                 key={"top"}
             >
-                <SubNav itemMenu={navSelected} />
+                <SubNav activeNav={activeNav} itemMenu={navSelected} funcClose={handleCloseNav} />
             </Drawer>
         </>
     );

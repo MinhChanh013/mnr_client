@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -22,7 +24,7 @@ const Msg365_container = () => {
   const [vesselData, setVessel] = useState([]);
   const [rows, setRows] = React.useState([]);
   const gridRef = React.createRef();
-  const onFocus = () => { };
+  const onFocus = () => {};
   const columns = [
     {
       key: "IDRef",
@@ -189,14 +191,12 @@ const Msg365_container = () => {
   ];
 
   const buttonConfirm = async (props) => {
-    if (props.type === 'load') {
+    if (props.type === "load") {
       const dataFormFilter = form.getFieldsValue();
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       let fromdate, todate;
       if (dataFormFilter.dateFromTo) {
-        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-          FORMAT_DATETIME
-        );
+        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
         todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
       }
       let type = form.getFieldsValue();
@@ -211,7 +211,7 @@ const Msg365_container = () => {
       handleLoadData(formData);
     }
 
-    if (props.type === 'send') {
+    if (props.type === "send") {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
       idMsgRowData.forEach((idMsgSelected) => {
@@ -223,11 +223,11 @@ const Msg365_container = () => {
         const data = await send(listMsgRowSelect);
         if (data) {
           if (data.deny) {
-            message.error(data.deny)
+            message.error(data.deny);
             return;
           }
           if (data.data && data.data.dont_send_again) {
-            message.success(data.data.dont_send_again)
+            message.success(data.data.dont_send_again);
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
@@ -237,7 +237,7 @@ const Msg365_container = () => {
           }
 
           if (data.msgGroupId) {
-            message.success('Thông điệp đã được đưa vào hàng đợi!');
+            message.success("Thông điệp đã được đưa vào hàng đợi!");
             socket.emit("mess_to_sock", data.msgGroupId);
           }
 
@@ -295,14 +295,13 @@ const Msg365_container = () => {
         setRows(dataMsg365);
       } else {
         setRows([]);
-        message.error('Không tìm thấy dữ liệu!');
+        message.error("Không tìm thấy dữ liệu!");
       }
       dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
   };
-
 
   useEffect(() => {
     async function searchvessel() {
@@ -311,16 +310,14 @@ const Msg365_container = () => {
         if (loadVessel.success) {
           setVessel(loadVessel.data);
         } else {
-
         }
       } catch (error) {
         console.log(error);
       }
     }
 
-    searchvessel()
-  }, [])
-
+    searchvessel();
+  }, []);
 
   return (
     <>
@@ -330,8 +327,8 @@ const Msg365_container = () => {
       >
         <Col span={6}>
           <Card
-            title={'[365] \r\n GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[365] \r\n GỬI GETOUT CONTAINER (NHẬP/XUẤT) QUA KVGS"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
             <Row className="b-row" gutter={[16, 16]}>
@@ -355,7 +352,7 @@ const Msg365_container = () => {
                           },
                           {
                             label: "Nhập",
-                            value: 1,
+                            value: 2,
                           },
                           {
                             label: "Xuất",
@@ -415,11 +412,14 @@ const Msg365_container = () => {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.deletegetout, toolBarButtonTypes.cancel]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.deletegetout,
+                toolBarButtonTypes.cancel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

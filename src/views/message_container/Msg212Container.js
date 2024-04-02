@@ -24,15 +24,18 @@ const Msg212Container = () => {
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
 
-  React.useEffect(async () => {
-    try {
-      const res = await searchVessels("");
-      if (res) {
-        setDataViewsels(res.data);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    fetchDataVessels();
   }, []);
 
   const columns = basicRenderColumns([
@@ -184,7 +187,7 @@ const Msg212Container = () => {
       >
         <Col span={7}>
           <Card
-            title={'[212] \r\n CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI'}
+            title={"[212] \r\n CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI"}
             className="b-card"
           >
             <Row className="b-row" gutter={[24, 24]}>
@@ -195,9 +198,7 @@ const Msg212Container = () => {
           </Card>
         </Col>
         <Col span={17}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}
