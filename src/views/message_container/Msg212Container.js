@@ -40,8 +40,7 @@ const Msg212Container = () => {
       key: "ID",
       name: "ID",
       width: 180,
-      editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "TransportIdentity",
@@ -185,10 +184,10 @@ const Msg212Container = () => {
       >
         <Col span={7}>
           <Card
-            style={{ marginTop: "10px" }}
             title={'[212] \r\n CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI'}
+            className="b-card"
           >
-            <Row gutter={[24, 24]}>
+            <Row className="b-row" gutter={[24, 24]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>

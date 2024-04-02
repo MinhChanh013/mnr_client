@@ -18,7 +18,7 @@ import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 export default function Msg213Container() {
-  const onFocus = () => {};
+  const onFocus = () => { };
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -30,8 +30,7 @@ export default function Msg213Container() {
       key: "ID",
       name: "ID",
       width: 180,
-      editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "STT",
@@ -145,46 +144,48 @@ export default function Msg213Container() {
               },
             }}
             title={'[213] \r\n DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC'}
-                        style={{ borderRadius: "0px", height: '100%' }}
+            style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Hướng",
-                    config: {
-                      name: "imextype",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Nhập Khẩu",
-                          value: "1",
-                        },
-                        {
-                          label: "Xuất Khẩu",
-                          value: "2",
-                        },
-                      ],
+            <Row className="b-row">
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Nhập Khẩu",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất Khẩu",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.rangePicker,
-                    label: "Khoản",
-                    config: {
-                      name: "dateFromTo",
-                      placeholder: ["Từ", "Đến"],
-                      value: "",
+                    {
+                      type: filterType.rangePicker,
+                      label: "Khoản",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              </Col>
             </Row>
           </Card>
         </Col>

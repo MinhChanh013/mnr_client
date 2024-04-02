@@ -45,7 +45,7 @@ export default function ContainerMNF() {
       name: "STT",
       width: 80,
       editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "BillOfLading",

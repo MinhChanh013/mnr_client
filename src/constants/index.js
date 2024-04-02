@@ -85,9 +85,9 @@ export const itemsMenu = [
             ),
           },
           {
-            href: "/msg367_common",
+            href: "/msg3678_common",
             key: "message:1:5",
-            label: "367 - Tờ khai hàng hóa chưa getin",
+            label: "367.8 - Tờ khai hàng hóa chưa getin",
             icon: (
               <lord-icon
                 src="https://cdn.lordicon.com/lyrrgrsl.json"

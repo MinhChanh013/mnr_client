@@ -1,86 +1,14 @@
-import { Card, Col, Row, Form, message, Typography, Select, Space, Upload, Button } from "antd";
-import { useState, useEffect } from "react";
+import { Card, Col, Row, message, Typography, Select, Upload, Button } from "antd";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
-import DataGrid, {
-    columnTypes,
-    selectionTypes,
-} from "../../global_component/DataGrid/index.jsx";
 import {  send } from "../../apis/message_common/211.js";
-import { FORMAT_DATETIME } from "../../constants/index.js";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../store/slices/LoadingSlices.js";
-import dayjs from "dayjs";
 import { UploadOutlined } from "@ant-design/icons";
 
 const Msg211 = () => {
-    const [form] = Form.useForm();
-    const dispatch = useDispatch();
-    const [rows, setRows] = React.useState([]);
-    const vesselSelectRef = React.useRef();
-    const [vesselData, setVessel] = useState([]);
+    const [rows] = React.useState([]);
     const gridRef = React.createRef();
-    const onFocus = () => { };
-    const columns = [
-        {
-            key: 'IDRef',
-            name: 'IDRef',
-            visible: false,
-            editable: false
-        },
-        {
-            key: "TransportIdentity",
-            name: "Tên Tàu",
-            width: 180,
-            type: columnTypes.TextEditor,
-            editable: true,
-        },
-        {
-            key: "TransportCallSign",
-            name: "Call Sign",
-            width: 100,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "TransportIMO",
-            name: "Số IMO",
-            width: 100,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "ETA",
-            name: "Ngày Tàu Đến",
-            width: 100,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "ETD",
-            name: "Ngày Tàu Rời",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "InboundVoyage",
-            name: "Chuyến Nhập",
-            width: 200,
-            type: columnTypes.DatePicker,
-        },
-        {
-            key: "OutboundVoyage",
-            name: "Chuyến Xuất",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-        {
-            key: "MsgRef",
-            name: "Khóa Tham Chiếu",
-            width: 150,
-            type: columnTypes.TextEditor,
-        },
-
-    ];
 
     const buttonConfirm = async (props) => {
         if (props.type === 'load') {

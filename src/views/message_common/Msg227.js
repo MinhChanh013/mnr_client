@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
@@ -27,7 +26,7 @@ const Msg227 = () => {
     {
       key: 'IDRef',
       name: 'IDRef',
-      visible: false,
+      visible: true,
       editable: false
     },
     {
@@ -234,17 +233,21 @@ const Msg227 = () => {
     }
   }
 
-  useEffect(async () => {
-    try {
-      const loadVessel = await searchVessels({});
-      if (loadVessel.success) {
-        setVessel(loadVessel.data);
-      } else {
-
+  useEffect(() => {
+    async function searchvessel() {
+      try {
+        const loadVessel = await searchVessels({});
+        if (loadVessel.success) {
+          setVessel(loadVessel.data);
+        } else {
+  
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+
+    searchvessel()
   }, [])
 
   const handleLoadData = async (formData) => {
@@ -293,7 +296,6 @@ const Msg227 = () => {
     }
   };
 
-  const filterRef = React.useRef();
 
   return (
     <>
@@ -307,7 +309,7 @@ const Msg227 = () => {
             style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 16px" }}>
+            <Row className="b-row">
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>

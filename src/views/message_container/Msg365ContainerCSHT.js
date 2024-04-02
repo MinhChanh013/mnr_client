@@ -27,7 +27,7 @@ const Msg365ContainerCSHT = () => {
         {
             key: "IDRef",
             name: "IDRef",
-            visible: false,
+            visible: true,
         },
         {
             key: "JobStatus",
@@ -264,17 +264,21 @@ const Msg365ContainerCSHT = () => {
         }
     }
 
-    useEffect(async () => {
-        try {
-            const loadVessel = await searchVessels({});
-            if (loadVessel.success) {
-                setVessel(loadVessel.data);
-            } else {
+    useEffect(() => {
+        async function searchvessel() {
+            try {
+                const loadVessel = await searchVessels({});
+                if (loadVessel.success) {
+                    setVessel(loadVessel.data);
+                } else {
 
+                }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
         }
+
+        searchvessel()
     }, [])
 
     const handleLoadData = async (formData) => {
@@ -337,11 +341,10 @@ const Msg365ContainerCSHT = () => {
                         style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
-                        <Row style={{ padding: "0 24px" }}>
+                        <Row className="b-row" gutter={[16, 16]}>
                             <Col span={24}>
                                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
                             </Col>
-
                             <Col span={24}>
                                 <Filter
                                     filterRef={filterRef}
@@ -372,7 +375,7 @@ const Msg365ContainerCSHT = () => {
                 </Col>
                 <Col span={18}>
                     <Card
-                        
+
                         className="main-card"
                     >
                         <ToolBar

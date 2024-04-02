@@ -1,9 +1,8 @@
 import { Card, Col, Row, Form, message, Input, Space, Typography } from "antd";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
@@ -20,14 +19,14 @@ const Msg252 = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const vesselSelectRef = React.useRef();
-  const [vesselData, setVessel] = useState([]);
+  const [vesselData] = useState([]);
   const gridRef = React.createRef();
   const onFocus = () => { };
   const columns = [
     {
       key: 'IDRef',
       name: 'IDRef',
-      visible: false,
+      visible: true,
       editable: false
     },
     {
@@ -278,7 +277,6 @@ const Msg252 = () => {
     }
   };
 
-  const filterRef = React.useRef();
 
   return (
     <>
@@ -292,7 +290,7 @@ const Msg252 = () => {
             style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row gutter={[16,16]} style={{ padding: "0 16px" }}>
+            <Row gutter={[16,16]} className="b-row">
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>

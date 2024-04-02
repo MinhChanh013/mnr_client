@@ -6,8 +6,6 @@ import RadioGroupFilter from "./RadioGroupFilter";
 import RangePickerFilter from "./RangePickerFilter";
 import TextAreaFilter from "./TextAreaFilter";
 
-const { Text } = Typography;
-
 const pickComponent = (type) =>
 ({
   [filterType.radio]: RadioGroupFilter,
