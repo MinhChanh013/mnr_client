@@ -2,6 +2,7 @@ import { Col, ConfigProvider, Empty, Menu, Row, } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { generateString } from '../../utils';
 import { useNavigate } from 'react-router-dom';
+import { handleActiveNav } from '../../utils/nav.utils';
 
 const SubNav = (props) => {
     const { itemMenu, funcClose, activeNav } = props
@@ -11,14 +12,11 @@ const SubNav = (props) => {
     const items = useMemo(() => itemMenu.child, [itemMenu])
 
     useEffect(() => {
-        if (activeNav) {
-            const navActive = localStorage.getItem("nav").split(",")
-            if (navActive && navActive.length > 0) {
-                const keySelected = navActive[navActive.length - 2]
-                setKeySelected(keySelected)
-                settItemSelected(items[items.findIndex((item) => item.key === keySelected)])
-            }
-        }
+        handleActiveNav(activeNav, (navActive) => {
+            const keySelected = navActive[navActive.length - 2]
+            setKeySelected(keySelected)
+            settItemSelected(items[items.findIndex((item) => item.key === keySelected)])
+        })
     }, [activeNav, items])
 
     return (

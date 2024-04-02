@@ -2,6 +2,7 @@ import { ConfigProvider, Drawer, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import SubNav from '../SubNav/SubNav';
 import { itemsMenu } from '../../constants';
+import { handleActiveNav as handleActiveNavUtil } from "../../utils/nav.utils"
 
 const Nav = () => {
     const [activeNav, setActiveNav] = useState(false)
@@ -34,12 +35,9 @@ const Nav = () => {
     }
 
     useEffect(() => {
-        if (!activeNav) {
-            const navActive = localStorage.getItem("nav").split(",")
-            if (navActive && navActive.length > 0) {
-                setKeySelected(navActive[navActive.length - 1])
-            }
-        }
+        handleActiveNavUtil(!activeNav, (navActive) => {
+            setKeySelected(navActive[navActive.length - 1])
+        })
     }, [activeNav])
 
     return (

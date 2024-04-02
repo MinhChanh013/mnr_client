@@ -9,6 +9,7 @@ import { Avatar, Card, Drawer, Dropdown, Space, Typography } from "antd";
 import * as React from "react";
 import Nav from "../Nav/Nav";
 import NavMobile from "../Nav/NavMobile";
+import { handleActiveNav } from "../../utils/nav.utils";
 
 const items = [
   {
@@ -47,13 +48,10 @@ const Header = () => {
   }
 
   React.useEffect(() => {
-    if (activeMenuMobile) {
-      const navActive = localStorage.getItem("nav").split(",")
-      if (navActive && navActive.length > 0) {
-        setKeySelected(navActive)
-        setDefaultOpenKeys(navActive.slice(1))
-      }
-    }
+    handleActiveNav(activeMenuMobile, (navActive) => {
+      setKeySelected(navActive)
+      setDefaultOpenKeys(navActive.slice(1))
+    })
   }, [activeMenuMobile])
 
 

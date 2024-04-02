@@ -22,7 +22,6 @@ const NavMobile = ({ funcClose, keySelected, defaultOpenKeys }) => {
         funcClose()
     }
 
-
     return (
         <>
             {defaultOpenKeys ?
