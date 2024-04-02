@@ -1,8 +1,6 @@
-import { Card, Col, Row, Form, message, Input, Space, Typography } from "antd";
-import { useState, useEffect } from "react";
+import { Card, Col, Row, message, Input, Space, Typography } from "antd";
 import * as React from "react";
 import { socket } from "../../socket.js";
-import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
@@ -12,21 +10,17 @@ import DataGrid, {
 import { load, send } from "../../apis/message_common/901.js"
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
-import dayjs from "dayjs";
 
 const Msg901 = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
-  const vesselSelectRef = React.useRef();
-  const [vesselData, setVessel] = useState([]);
   const gridRef = React.createRef();
   const onFocus = () => { };
   const columns = [
     {
       key: 'IDRef',
       name: 'IDRef',
-      visible: false,
+      visible: true,
       editable: false
     },
     {
@@ -278,7 +272,7 @@ const Msg901 = () => {
             style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 16px" }}>
+            <Row className="b-row">
               <Col span={24}>
                 <Filter
                   filterRef={filterRef}

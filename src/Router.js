@@ -91,7 +91,7 @@ const router = createBrowserRouter([
       { path: "/msg465_container", element: <Msg465Container /> },
       { path: "/msg214_container_CSHT", element: <Msg214ContainerCSHT /> },
       { path: "/msg365_container_CSHT", element: <Msg365ContainerCSHT /> },
-      { path: "/msg367Container", element: <Msg367Container /> },
+      { path: "/msg367_container", element: <Msg367Container /> },
 
       { path: "/msg212_package", element: <Msg212Package /> },
       { path: "/msg566_package", element: <Msg566Package /> },

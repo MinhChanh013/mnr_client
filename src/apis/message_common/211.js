@@ -1,6 +1,5 @@
 import { poster } from "../../services/BaseService";
-import { socket, socketReceiveReponse } from "../../socket";
-import store from "../../store";
+import { socket } from "../../socket";
 import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "common";
 const msgId = "211";

@@ -50,7 +50,7 @@ export default function Msg3668Container() {
       key: "ID",
       name: "ID",
       width: 180,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -262,153 +262,154 @@ export default function Msg3668Container() {
             style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
+            <Row className="b-row" style={{ padding: "0 8px" }} gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
-
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Hướng",
-                    config: {
-                      name: "imextype",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Nhập",
-                          value: "1",
-                        },
-                        {
-                          label: "Xuất",
-                          value: "2",
-                        },
-                        {
-                          label: "Nội địa",
-                          value: "3",
-                        },
-                      ],
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Nhập",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất",
+                            value: "2",
+                          },
+                          {
+                            label: "Nội địa",
+                            value: "3",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "isLF",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Hàng ngoại",
-                          value: "1",
-                        },
-                        {
-                          label: "Hàng nội",
-                          value: "2",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng",
+                      config: {
+                        name: "isLF",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Hàng ngoại",
+                            value: "1",
+                          },
+                          {
+                            label: "Hàng nội",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái thông điệp",
-                    config: {
-                      name: "marker",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Thành công",
-                          value: "SuccessMarker",
-                        },
-                        {
-                          label: "Thất bại",
-                          value: "ErrorMarker",
-                        },
-                        {
-                          label: "Chưa gửi",
-                          value: "UnMarker",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái thông điệp",
+                      config: {
+                        name: "marker",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Thành công",
+                            value: "SuccessMarker",
+                          },
+                          {
+                            label: "Thất bại",
+                            value: "ErrorMarker",
+                          },
+                          {
+                            label: "Chưa gửi",
+                            value: "UnMarker",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái container ra khỏi cảng",
-                    config: {
-                      name: "getout",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Chưa ra",
-                          value: "1",
-                        },
-                        {
-                          label: "Đã ra",
-                          value: "2",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái container ra khỏi cảng",
+                      config: {
+                        name: "getout",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Chưa ra",
+                            value: "1",
+                          },
+                          {
+                            label: "Đã ra",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "fe",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Full",
-                          value: "1",
-                        },
-                        {
-                          label: "Empty",
-                          value: "0",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng",
+                      config: {
+                        name: "fe",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Full",
+                            value: "1",
+                          },
+                          {
+                            label: "Empty",
+                            value: "0",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.rangePicker,
-                    label: "Khoản",
-                    config: {
-                      name: "dateFromTo",
-                      placeholder: ["Từ", "Đến"],
-                      value: "",
+                    {
+                      type: filterType.rangePicker,
+                      label: "Khoản",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
                     },
-                  },
-                  {
-                    type: filterType.input,
-                    label: "Số Cont",
-                    config: {
-                      defaultValue: "",
-                      name: "cntrNo",
-                      placeholder: "",
-                      value: "",
+                    {
+                      type: filterType.input,
+                      label: "Số Cont",
+                      config: {
+                        defaultValue: "",
+                        name: "cntrNo",
+                        placeholder: "",
+                        value: "",
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              </Col>
             </Row>
           </Card>
         </Col>

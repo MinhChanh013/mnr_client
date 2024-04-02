@@ -1,4 +1,4 @@
-import { Card, Checkbox, Col, Input, Row, Space, message } from "antd";
+import { Card, Col, Input, Row, message } from "antd";
 import * as React from "react";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
@@ -7,9 +7,7 @@ import DataGrid, {
     selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { send } from "../../apis/message_container/367.js";
-import Typography from "antd/es/typography/Typography.js";
 
-const { TextArea } = Input;
 
 const Msg367Container = () => {
     const [declareNo, setDeclareNo] = React.useState('');
@@ -186,209 +184,106 @@ const Msg367Container = () => {
                         style={{ borderRadius: "0px", height: '100%' }}
                         className="b-card"
                     >
-                        <Row style={{ padding: "0 24px" }}>
-                            {/* <Space direction='vertical' size={8}>
-                                <Row gutter={[8, 8]}>
-                                    <Col span={24}>
-                                        <Col span={24}>
-                                            <Checkbox defaultChecked={true}> Tự động gửi truy vấn với QR Code mới</Checkbox>
-                                        </Col>
-                                        <Col span={24}>
-                                            <Checkbox defaultChecked={true}>Truy vấn Biên Lai</Checkbox>
-                                        </Col>
-                                    </Col>
-                                    <Col span={24}>
-                                        <TextArea />
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Mã HQGS</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Mã Đơn Vị</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Luồng</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Tình Trạng TK</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Số Chì HQ</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Số Vận Đơn</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Số Container</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Số Tờ Khai</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input onChange={(e) => { setDeclareNo(e.target.value); console.log(e.target.value) }} />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span={24}>
-                                        <Row>
-                                            <Col span={8}>
-                                                <Typography>Mã ĐK HQ</Typography>
-                                            </Col>
-                                            <Col span={16}>
-                                                <Input onChange={(e) => { setHQno(e.target.value); console.log(e.target.value) }} />
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </Space> */}
-                            <Filter
-                                filterRef={filterRef}
-                                items={[
-                                    {
-                                        type: filterType.checkbox,
-                                        config: {
-                                            name: 'check',
-                                            label: 'Tự động truy vấn QR Code mới',
-                                            defaultChecked: true,
-                                        }
-                                    },
-                                    {
-                                        type: filterType.checkbox,
-                                        config: {
-                                            name: 'check',
-                                            label: 'Truy vấn biên lai',
-                                            defaultChecked: true,
-                                        }
-                                    },
-                                    {
-                                        type: filterType.textarea,
-                                        config: {},
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Mã HQGS",
-                                        config: {
-                                            name: "imextype",
-                                            style: { fontWeight: 'bold'}
+                        <Row className="b-row" gutter={[16, 16]}>
+                            <Col span={24}>
+                                <Filter
+                                    filterRef={filterRef}
+                                    items={[
+                                        {
+                                            type: filterType.checkbox,
+                                            config: {
+                                                name: 'check',
+                                                label: 'Tự động truy vấn QR Code mới',
+                                                defaultChecked: true,
+                                            }
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Mã Đơn Vị",
-                                        config: {
-                                            name: "imextype",
-                                            style: {fontWeight: 'bold'}
+                                        {
+                                            type: filterType.checkbox,
+                                            config: {
+                                                name: 'check',
+                                                label: 'Truy vấn biên lai',
+                                                defaultChecked: true,
+                                            }
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Luồng",
-                                        config: {
-                                            name: "imextype",
-                                            style: {fontWeight: 'bold'}
+                                        {
+                                            type: filterType.textarea,
+                                            config: {},
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Tình Trạng TK",
-                                        config: {
-                                            name: "imextype",
-                                            style: { fontWeight: 'bold'}
+                                        {
+                                            type: filterType.input,
+                                            label: "Mã HQGS",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Số Chì HQ",
-                                        config: {
-                                            name: "imextype",
-                                            style: {fontWeight: 'bold'}
+                                        {
+                                            type: filterType.input,
+                                            label: "Mã Đơn Vị",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Số Vận Đơn",
-                                        config: {
-                                            name: "imextype",
-                                            style: { fontWeight: 'bold'}
+                                        {
+                                            type: filterType.input,
+                                            label: "Luồng",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Số Container",
-                                        config: {
-                                            name: "imextype",
-                                            style: { fontWeight: 'bold'}
+                                        {
+                                            type: filterType.input,
+                                            label: "Tình Trạng TK",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Số Tờ Khai",
-                                        config: {
-                                            name: "imextype",
-                                            style: {fontWeight: 'bold'}
+                                        {
+                                            type: filterType.input,
+                                            label: "Số Chì HQ",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
                                         },
-                                    },
-                                    {
-                                        type: filterType.input,
-                                        label: "Mã ĐK HQ",
-                                        config: {
-                                            name: "imextype",
-                                            style: {fontWeight: 'bold'}
+                                        {
+                                            type: filterType.input,
+                                            label: "Số Vận Đơn",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
                                         },
-                                    },
-                                ]}
-                            />
+                                        {
+                                            type: filterType.input,
+                                            label: "Số Container",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
+                                        },
+                                        {
+                                            type: filterType.input,
+                                            label: "Số Tờ Khai",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
+                                        },
+                                        {
+                                            type: filterType.input,
+                                            label: "Mã ĐK HQ",
+                                            config: {
+                                                name: "imextype",
+                                                style: { fontWeight: 'bold' }
+                                            },
+                                        },
+                                    ]}
+                                />
+                            </Col>
                         </Row>
                     </Card>
                 </Col>

@@ -27,7 +27,7 @@ const Msg365_container = () => {
     {
       key: "IDRef",
       name: "IDRef",
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -304,18 +304,22 @@ const Msg365_container = () => {
   };
 
 
-  useEffect(async () => {
-    try {
-      const loadVessel = await searchVessels({});
-      if (loadVessel.success) {
-        setVessel(loadVessel.data);
-      } else {
+  useEffect(() => {
+    async function searchvessel() {
+      try {
+        const loadVessel = await searchVessels({});
+        if (loadVessel.success) {
+          setVessel(loadVessel.data);
+        } else {
 
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
-  }, []);
+
+    searchvessel()
+  }, [])
 
 
   return (
@@ -330,82 +334,83 @@ const Msg365_container = () => {
             style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 24px" }}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>
-
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Hướng",
-                    config: {
-                      name: "imextype",
-                      defaultValue: 3,
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: 3,
-                        },
-                        {
-                          label: "Nhập",
-                          value: 1,
-                        },
-                        {
-                          label: "Xuất",
-                          value: 1,
-                        },
-                      ],
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: 3,
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: 3,
+                          },
+                          {
+                            label: "Nhập",
+                            value: 1,
+                          },
+                          {
+                            label: "Xuất",
+                            value: 1,
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Tình Trạng Container",
-                    config: {
-                      name: "isLF",
-                      defaultValue: "1",
-                      options: [
-                        {
-                          label: "Đã Getin",
-                          value: "1",
-                        },
-                        {
-                          label: "Chưa Getin",
-                          value: "2",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Tình Trạng Container",
+                      config: {
+                        name: "isLF",
+                        defaultValue: "1",
+                        options: [
+                          {
+                            label: "Đã Getin",
+                            value: "1",
+                          },
+                          {
+                            label: "Chưa Getin",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái thông điệp",
-                    config: {
-                      name: "marker",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Thành công",
-                          value: "SuccessMarker",
-                        },
-                        {
-                          label: "Thất bại",
-                          value: "ErrorMarker",
-                        },
-                        {
-                          label: "Chưa gửi",
-                          value: "UnMarker",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái thông điệp",
+                      config: {
+                        name: "marker",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Thành công",
+                            value: "SuccessMarker",
+                          },
+                          {
+                            label: "Thất bại",
+                            value: "ErrorMarker",
+                          },
+                          {
+                            label: "Chưa gửi",
+                            value: "UnMarker",
+                          },
+                        ],
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              </Col>
             </Row>
           </Card>
         </Col>

@@ -27,6 +27,8 @@
 }
 
 .b-card {
+  border-radius: 0px;
+  height: 100%;
   .ant-card-body {
     padding: 12px 0px;
   }
@@ -37,6 +39,10 @@
     color: navy;
     white-space: break-spaces;
   }
+}
+
+.b-row {
+  padding: 0px 16px;
 }
 
 .main-card {

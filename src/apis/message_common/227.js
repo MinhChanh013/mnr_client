@@ -16,6 +16,7 @@ export const load = async (params) => {
     todate,
     marker,
     getout,
+    imextype,
     fe,
   };
 

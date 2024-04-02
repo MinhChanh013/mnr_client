@@ -42,7 +42,7 @@ export default function Msg214Container() {
       name: "ID",
       width: 180,
       editable: false,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -222,10 +222,10 @@ export default function Msg214Container() {
               },
             }}
             title={'[214] \r\n DANH SÁCH CONTAINER SAI KHÁC'}
-                        style={{ borderRadius: "0px", height: '100%' }}
+            style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 8px" }}>
+            <Row className="b-row">
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>

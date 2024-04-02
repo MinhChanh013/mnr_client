@@ -27,7 +27,7 @@ const Msg247Container = () => {
     {
       key: "ID",
       name: "ID",
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -250,18 +250,22 @@ const Msg247Container = () => {
   };
 
 
-  useEffect(async () => {
-    try {
-      const loadVessel = await searchVessels({});
-      if (loadVessel.success) {
-        setVessel(loadVessel.data);
-      } else {
+  useEffect(() => {
+    async function searchvessel() {
+      try {
+        const loadVessel = await searchVessels({});
+        if (loadVessel.success) {
+          setVessel(loadVessel.data);
+        } else {
 
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
-  }, []);
+
+    searchvessel()
+  }, [])
 
   const filterRef = React.useRef();
 
@@ -274,102 +278,104 @@ const Msg247Container = () => {
         <Col span={6}>
           <Card
             title={'[247] \r\n GỬI THÔNG TIN THAY ĐỔI LOẠI HÀNG HÓA (CONTAINER)'}
-                        style={{ borderRadius: "0px", height: '100%' }}
+            style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 24px" }}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>
-              <Filter
-                filterRef={filterRef}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Hướng (mới)",
-                    config: {
-                      name: "imextype",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Nhập",
-                          value: "1",
-                        },
-                        {
-                          label: "Xuất",
-                          value: "2",
-                        },
-                      ],
+              <Col span={24}>
+                <Filter
+                  filterRef={filterRef}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng (mới)",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Nhập",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng (mới)",
-                    config: {
-                      name: "isLF",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Hàng ngoại",
-                          value: "1",
-                        },
-                        {
-                          label: "Hàng nội",
-                          value: "2",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng (mới)",
+                      config: {
+                        name: "isLF",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Hàng ngoại",
+                            value: "1",
+                          },
+                          {
+                            label: "Hàng nội",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái thông điệp",
-                    config: {
-                      name: "marker",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Thành công",
-                          value: "SuccessMarker",
-                        },
-                        {
-                          label: "Thất bại",
-                          value: "ErrorMarker",
-                        },
-                        {
-                          label: "Chưa gửi",
-                          value: "UnMarker",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái thông điệp",
+                      config: {
+                        name: "marker",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Thành công",
+                            value: "SuccessMarker",
+                          },
+                          {
+                            label: "Thất bại",
+                            value: "ErrorMarker",
+                          },
+                          {
+                            label: "Chưa gửi",
+                            value: "UnMarker",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái container ra khỏi cảng",
-                    config: {
-                      name: "getout",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Chưa ra",
-                          value: "1",
-                        },
-                        {
-                          label: "Đã ra",
-                          value: "2",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái container ra khỏi cảng",
+                      config: {
+                        name: "getout",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Chưa ra",
+                            value: "1",
+                          },
+                          {
+                            label: "Đã ra",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              </Col>
             </Row>
           </Card>
         </Col>

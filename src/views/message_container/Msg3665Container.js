@@ -27,7 +27,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function Msg3665Container() {
   const gridRef = React.createRef();
-  const onFocus = () => {};
+  const onFocus = () => { };
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
@@ -50,7 +50,7 @@ export default function Msg3665Container() {
       key: "ID",
       name: "ID",
       width: 180,
-      visible: false,
+      visible: true,
     },
     {
       key: "JobStatus",
@@ -265,128 +265,129 @@ export default function Msg3665Container() {
         <Col span={6}>
           <Card
             title={'[366.5] \r\n HIỆU CHỈNH THÔNG TIN GETIN CHO CONTAINER HẠ BÃI/VÀO CẢNG'}
-                        style={{ borderRadius: "0px", height: '100%' }}
+            style={{ borderRadius: "0px", height: '100%' }}
             className="b-card"
           >
-            <Row style={{ padding: "0 24px" }}>
+            <Row className="b-row"  gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
-
-              <Filter
-                form={form}
-                items={[
-                  {
-                    type: filterType.radio,
-                    label: "Hướng",
-                    config: {
-                      name: "imextype",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Nhập",
-                          value: "1",
-                        },
-                        {
-                          label: "Xuất",
-                          value: "2",
-                        },
-                        {
-                          label: "Nội địa",
-                          value: "3",
-                        },
-                      ],
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Nhập",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất",
+                            value: "2",
+                          },
+                          {
+                            label: "Nội địa",
+                            value: "3",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái thông điệp",
-                    config: {
-                      name: "marker",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Thành công",
-                          value: "SuccessMarker",
-                        },
-                        {
-                          label: "Thất bại",
-                          value: "ErrorMarker",
-                        },
-                        {
-                          label: "Chưa gửi",
-                          value: "UnMarker",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái thông điệp",
+                      config: {
+                        name: "marker",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Thành công",
+                            value: "SuccessMarker",
+                          },
+                          {
+                            label: "Thất bại",
+                            value: "ErrorMarker",
+                          },
+                          {
+                            label: "Chưa gửi",
+                            value: "UnMarker",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Trạng thái container ra khỏi cảng",
-                    config: {
-                      name: "getout",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Chưa ra",
-                          value: "1",
-                        },
-                        {
-                          label: "Đã ra",
-                          value: "2",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Trạng thái container ra khỏi cảng",
+                      config: {
+                        name: "getout",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Chưa ra",
+                            value: "1",
+                          },
+                          {
+                            label: "Đã ra",
+                            value: "2",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.radio,
-                    label: "Loại hàng",
-                    config: {
-                      name: "fe",
-                      defaultValue: "",
-                      options: [
-                        {
-                          label: "Tất cả",
-                          value: "",
-                        },
-                        {
-                          label: "Full",
-                          value: "1",
-                        },
-                        {
-                          label: "Empty",
-                          value: "0",
-                        },
-                      ],
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng",
+                      config: {
+                        name: "fe",
+                        defaultValue: "",
+                        options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Full",
+                            value: "1",
+                          },
+                          {
+                            label: "Empty",
+                            value: "0",
+                          },
+                        ],
+                      },
                     },
-                  },
-                  {
-                    type: filterType.rangePicker,
-                    label: "Khoản",
-                    config: {
-                      name: "dateFromTo",
-                      placeholder: ["Từ", "Đến"],
-                      value: "",
+                    {
+                      type: filterType.rangePicker,
+                      label: "Khoản",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
                     },
-                  },
-                ]}
-              />
+                  ]}
+                />
+              </Col>
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card
             className="main-card"
           >
