@@ -1,14 +1,10 @@
-import useSWR from "swr";
-import { fetcher } from "../services/BaseService";
+import { useEffect } from "react";
+import { handleActiveNav } from "../utils/nav.utils";
 
-const useNav = () => {
-  const { data, error, isLoading } = useSWR("/nav", fetcher);
-
-  return {
-    data,
-    isLoading,
-    error,
-  };
+export const useActiveNav = (dependency, isCheck, handleActive) => {
+  useEffect(() => {
+    handleActiveNav(isCheck, (navActive) => {
+      handleActive(navActive);
+    });
+  }, [...dependency]);
 };
-
-export default useNav;

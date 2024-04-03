@@ -22,22 +22,19 @@ const NavMobile = ({ funcClose, keySelected, defaultOpenKeys }) => {
         funcClose()
     }
 
-
     return (
         <>
-            {defaultOpenKeys ?
-                <Menu
-                    onSelect={({ keyPath }) => {
-                        localStorage.setItem("nav", keyPath);
-                        handleActiveNav(keyPath)
-                    }}
-                    className='b-navMobile'
-                    items={convertChildToChildren(itemsMenu)}
-                    mode="inline"
-                    selectedKeys={keySelected}
-                    defaultOpenKeys={defaultOpenKeys}
-                /> : ""
-            }
+            <Menu
+                onSelect={({ keyPath }) => {
+                    localStorage.setItem("nav", keyPath);
+                    handleActiveNav(keyPath)
+                }}
+                className='b-navMobile'
+                items={convertChildToChildren(itemsMenu)}
+                mode="inline"
+                selectedKeys={keySelected}
+                defaultOpenKeys={defaultOpenKeys}
+            />
         </>
     )
 }

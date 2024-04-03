@@ -7,6 +7,7 @@ import {
 import "@silevis/reactgrid/styles.css";
 import { Avatar, Card, Drawer, Dropdown, Space, Typography } from "antd";
 import * as React from "react";
+import { useActiveNav } from "../../hooks/useNav";
 import Nav from "../Nav/Nav";
 import NavMobile from "../Nav/NavMobile";
 
@@ -46,16 +47,10 @@ const Header = () => {
     setActiveMenuMobile(false)
   }
 
-  React.useEffect(() => {
-    if (activeMenuMobile) {
-      const navActive = localStorage.getItem("nav").split(",")
-      if (navActive && navActive.length > 0) {
-        setKeySelected(navActive)
-        setDefaultOpenKeys(navActive.slice(1))
-      }
-    }
-  }, [activeMenuMobile])
-
+  useActiveNav([activeMenuMobile], activeMenuMobile, (navActive) => {
+    setKeySelected(navActive)
+    setDefaultOpenKeys(navActive.slice(1))
+  })
 
   return (
     <>
