@@ -7,9 +7,9 @@ import {
 import "@silevis/reactgrid/styles.css";
 import { Avatar, Card, Drawer, Dropdown, Space, Typography } from "antd";
 import * as React from "react";
+import { useActiveNav } from "../../hooks/useNav";
 import Nav from "../Nav/Nav";
 import NavMobile from "../Nav/NavMobile";
-import { handleActiveNav } from "../../utils/nav.utils";
 
 const items = [
   {
@@ -47,13 +47,10 @@ const Header = () => {
     setActiveMenuMobile(false)
   }
 
-  React.useEffect(() => {
-    handleActiveNav(activeMenuMobile, (navActive) => {
-      setKeySelected(navActive)
-      setDefaultOpenKeys(navActive.slice(1))
-    })
-  }, [activeMenuMobile])
-
+  useActiveNav([activeMenuMobile], activeMenuMobile, (navActive) => {
+    setKeySelected(navActive)
+    setDefaultOpenKeys(navActive.slice(1))
+  })
 
   return (
     <>

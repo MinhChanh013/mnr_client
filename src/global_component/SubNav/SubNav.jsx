@@ -1,8 +1,8 @@
 import { Col, ConfigProvider, Empty, Menu, Row, } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
-import { generateString } from '../../utils';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleActiveNav } from '../../utils/nav.utils';
+import { useActiveNav } from '../../hooks/useNav';
+import { generateString } from '../../utils';
 
 const SubNav = (props) => {
     const { itemMenu, funcClose, activeNav } = props
@@ -11,13 +11,11 @@ const SubNav = (props) => {
     const [keySelected, setKeySelected] = useState("")
     const items = useMemo(() => itemMenu.child, [itemMenu])
 
-    useEffect(() => {
-        handleActiveNav(activeNav, (navActive) => {
-            const keySelected = navActive[navActive.length - 2]
-            setKeySelected(keySelected)
-            settItemSelected(items[items.findIndex((item) => item.key === keySelected)])
-        })
-    }, [activeNav, items])
+    useActiveNav([activeNav, items], activeNav, (navActive) => {
+        const keySelected = navActive[navActive.length - 2]
+        setKeySelected(keySelected)
+        settItemSelected(items[items.findIndex((item) => item.key === keySelected)])
+    })
 
     return (
         <Row className='b__sub' gutter={[16, 16]} >
