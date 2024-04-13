@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row } from "antd";
-import dayjs from "dayjs";
+import { Card, Col, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -8,8 +7,7 @@ import {
   load,
   searchVessels,
   send,
-} from "../../apis/message_container/3668.js";
-import { FORMAT_DATETIME } from "../../constants/index.js";
+} from "../../apis/message_package/2661.js";
 import DataGrid, {
   columnTypes,
   selectionTypes
@@ -30,7 +28,6 @@ export default function Msg2661Package() {
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
   
-  const [form] = Form.useForm();
   React.useEffect(() => {
     async function fetchDataVessels() {
       try {
@@ -67,67 +64,67 @@ export default function Msg2661Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "ImExType",
       name: "Nhập/Xuất",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "TransportIdentity",
       name: "Tên Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CntrNo",
+      key: "NumberOfJourney",
       name: "Số Chuyến",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "GetIn",
+      key: "ArrivalDeparture",
       name: "Ngày Tàu Đến/Đi",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "CargoCtrlNo",
       name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
+      key: "GetIn",
       name: "Ngày GetIn",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "Content",
       name: "Ghi Chú",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Nội dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
@@ -141,19 +138,8 @@ export default function Msg2661Package() {
   ]);
 
   const buttonConfirm = async (props) => {
-    const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-    let fromdate, todate;
-    if (dataFormFilter.dateFromTo) {
-      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
-      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-    }
-
-    delete dataFormFilter.dateFromTo;
     const formData = {
-      ...dataFormFilter,
-      fromdate,
-      todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
     switch (props.type) {
@@ -185,15 +171,15 @@ export default function Msg2661Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg2661 = await load(formData);
+      if (resultDataMsg2661) {
+        const newResultDataMsg2661 = resultDataMsg2661.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg2661);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",

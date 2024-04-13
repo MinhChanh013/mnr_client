@@ -37,7 +37,7 @@ export const send = async (rows = [], dispatch) => {
       );
       return;
     }
-    if (data.data && data.data.xmlComplete.length > 0) {
+    if (data.data && data.data.xmlComplete) {
       dispatch(
         showMessage({
           type: "success",

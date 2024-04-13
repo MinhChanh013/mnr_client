@@ -8,7 +8,7 @@ import {
   load,
   searchVessels,
   send,
-} from "../../apis/message_container/3668.js";
+} from "../../apis/message_package/CSHT215.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -211,15 +211,15 @@ export default function Msg215PackageCSHT() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg215CSHT = await load(formData);
+      if (resultDataMsg215CSHT) {
+        const newResultDataMsg215CSHT = resultDataMsg215CSHT.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg215CSHT);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",

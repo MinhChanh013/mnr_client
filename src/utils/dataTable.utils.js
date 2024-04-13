@@ -23,6 +23,18 @@ export const dataConverTable = ({ column, row }) => {
     case "StatusOfGood":
       rowValue === 1 ? (dataConvert = "Full") : (dataConvert = "Empty");
       break;
+    case "Remark":
+      rowValue
+        ? (dataConvert = rowValue)
+        : row["DiffType"] === 1
+        ? (dataConvert = "Không có trong danh sách HQ thông báo")
+        : (dataConvert = "Có trong danh sách HQ thông báo nhưng không hạ bải");
+      break;
+    case "Voyage":
+      row["ImExType"] === "1"
+        ? (dataConvert = row["InboundVoyage"])
+        : (dataConvert = row["OutboundVoyage"]);
+      break;
     case "ArrivalDeparture":
     case "IssueDate":
     case "AcceptanceTime":

@@ -1,18 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row } from "antd";
-import dayjs from "dayjs";
+import { Card, Col, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
-import { FORMAT_DATETIME } from "../../constants/index.js";
+import { load, searchVessels, send } from "../../apis/message_package/341.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -25,11 +19,9 @@ import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 export default function Msg341Package() {
   const onFocus = () => {};
   const gridRef = React.createRef();
-  const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
-  const [form] = Form.useForm();
 
   React.useEffect(() => {
     async function fetchDataVessels() {
@@ -67,97 +59,97 @@ export default function Msg341Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "ImExType",
       name: "Nhập/Xuất",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "TransportIdentity",
       name: "Tên Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CntrNo",
+      key: "NumberOfJourney",
       name: "Chuyến Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "GetIn",
+      key: "ArrivalDeparture",
       name: "Ngày Tàu Đến/Rời",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "CargoCtrlNo",
       name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
+      key: "GetOut",
       name: "Ngày Ra Cảng",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "PieceUnitCode",
       name: "Đơn Vị Tính",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "CargoPieceGetOut",
       name: "SL Ra",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "RemainCargoPiece",
       name: "SL Còn Lại",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "Seq",
       name: "Lần Ra",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "JobModeOut",
       name: "Phương Án Ra",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "GetOutType",
       name: "Hình Thức Ra",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Nội Dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
@@ -171,24 +163,9 @@ export default function Msg341Package() {
   ]);
 
   const buttonConfirm = async (props) => {
-    const dataFormFilter = form.getFieldsValue();
-    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-    let fromdate, todate;
-    if (dataFormFilter.dateFromTo) {
-      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
-      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-    }
-
-    delete dataFormFilter.dateFromTo;
-    const formData = {
-      ...dataFormFilter,
-      fromdate,
-      todate,
-      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
-    };
     switch (props.type) {
       case "load":
-        handleLoadData(formData);
+        handleLoadData({});
         break;
       case "send":
         const idMsgRowData = gridRef.current?.getSelectedRows();
@@ -199,7 +176,7 @@ export default function Msg341Package() {
           );
         });
         try {
-          dispatch(updateForm(formData));
+          dispatch(updateForm({}));
           await send(listMsgRowSelect, dispatch);
         } catch (error) {
           console.log(error);
@@ -215,15 +192,15 @@ export default function Msg341Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg341 = await load(formData);
+      if (resultDataMsg341) {
+        const newResultDataMsg341 = resultDataMsg341.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg341);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",

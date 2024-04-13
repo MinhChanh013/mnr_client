@@ -8,7 +8,7 @@ import {
   load,
   searchVessels,
   send,
-} from "../../apis/message_container/3668.js";
+} from "../../apis/message_package/207.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -68,49 +68,49 @@ export default function Msg207Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "ImExType",
       name: "Hướng",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "TransportIdentity",
       name: "Tên Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CntrNo",
+      key: "Voyage",
       name: "Số Chuyến",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "GetIn",
+      key: "BillOfLading",
       name: "Ngày tàu đến/đi",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "CargoCtrlNo",
       name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "AcceptanceNo",
       name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
+      key: "AcceptanceTime",
       name: "Lần GetIn (Cuối)",
       width: 200,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Ghi Chú",
       width: 300,
       type: columnTypes.TextEditor,
@@ -125,7 +125,7 @@ export default function Msg207Package() {
       key: "MsgRef",
       name: "Ngày Tiếp Nhận",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
       key: "MsgRef",
@@ -186,15 +186,15 @@ export default function Msg207Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg207 = await load(formData);
+      if (resultDataMsg207) {
+        const newResultDataMsg207 = resultDataMsg207.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg207);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",

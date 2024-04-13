@@ -8,7 +8,7 @@ import {
   load,
   searchVessels,
   send,
-} from "../../apis/message_container/3668.js";
+} from "../../apis/message_package/2665.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -67,13 +67,13 @@ export default function Msg2665Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "ImExType",
       name: "Nhập/Xuất",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
@@ -82,70 +82,70 @@ export default function Msg2665Package() {
       key: "CntrNo",
       name: "Ngày GetIn Cũ",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "GetIn",
+      key: "NewGetIn",
       name: "Ngày GetIn Mới",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "OldTransportIdentity",
       name: "Tên Tàu Cũ",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "NewTransportIdentity",
       name: "Tên Tàu Mới",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
+      key: "OldNumberOfJourney",
       name: "Chuyến Tàu Cũ",
       width: 200,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "NewNumberOfJourney",
       name: "Chuyến Tàu Mới",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "OldArrivalDeparture",
       name: "Ngày Tàu Đến/Đi Cũ",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "NewArrivalDeparture",
       name: "Ngày Tàu Đến/Đi Mới",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "Content",
       name: "Ghi Chú",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Nội Dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
@@ -159,19 +159,8 @@ export default function Msg2665Package() {
   ]);
 
   const buttonConfirm = async (props) => {
-    const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-    let fromdate, todate;
-    if (dataFormFilter.dateFromTo) {
-      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
-      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-    }
-
-    delete dataFormFilter.dateFromTo;
     const formData = {
-      ...dataFormFilter,
-      fromdate,
-      todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
     switch (props.type) {
@@ -203,15 +192,15 @@ export default function Msg2665Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg2665 = await load(formData);
+      if (resultDataMsg2665) {
+        const newResultDataMsg2665 = resultDataMsg2665.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg2665);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
