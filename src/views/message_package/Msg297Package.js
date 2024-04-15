@@ -17,6 +17,8 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 
 export default function Msg297Package() {
   const onFocus = () => {};
@@ -132,9 +134,21 @@ export default function Msg297Package() {
 
   const buttonConfirm = async (props) => {
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const dataFormFilter = form.getFieldsValue();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
+    delete dataFormFilter.dateFromTo;
+
     const formData = {
+      ...dataFormFilter,
+      fromdate,
+      todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
+
     switch (props.type) {
       case "load":
         handleLoadData(formData);
@@ -191,12 +205,57 @@ export default function Msg297Package() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={24}>
+        <Col span={7}>
           <Card
             title={"[297] \r\n CHỈ ĐỊNH TỜ KHAI XUẤT HÀNG KIỆN"}
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
+            <Row className="b-row" gutter={[16, 16]}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.rangePicker,
+                      label: "Lọc Theo Ngày GetIn",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: " Số Định Danh",
+                      config: {
+                        defaultValue: "",
+                        name: "cargoctrlno",
+                        placeholder: "",
+                        value: "",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: "Số Vận Đơn",
+                      config: {
+                        defaultValue: "",
+                        name: "billoflading",
+                        placeholder: "",
+                        value: "",
+                      },
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={17}>
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}

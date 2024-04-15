@@ -129,31 +129,31 @@ export default function Msg215PackageCSHT() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "ContainerLocation",
       name: "Đơn Vị Tính",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "Content",
       name: "Ghi Chú",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Nội Dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
@@ -283,19 +283,15 @@ export default function Msg215PackageCSHT() {
                       label: "Loại hàng",
                       config: {
                         name: "isLF",
-                        defaultValue: "",
+                        defaultValue: "F",
                         options: [
                           {
-                            label: "Tất cả",
-                            value: "",
-                          },
-                          {
                             label: "Hàng ngoại",
-                            value: "1",
+                            value: "F",
                           },
                           {
                             label: "Hàng nội",
-                            value: "2",
+                            value: "L",
                           },
                         ],
                       },
@@ -339,11 +335,11 @@ export default function Msg215PackageCSHT() {
                           },
                           {
                             label: "Chưa ra khỏi cảng",
-                            value: "1",
+                            value: "0",
                           },
                           {
                             label: "Đã ra khỏi cảng",
-                            value: "2",
+                            value: "1",
                           },
                         ],
                       },

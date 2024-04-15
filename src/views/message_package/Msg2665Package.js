@@ -4,15 +4,11 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_package/2665.js";
+import { load, searchVessels, send } from "../../apis/message_package/2665.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -21,6 +17,8 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 
 export default function Msg2665Package() {
   const onFocus = () => {};
@@ -30,7 +28,7 @@ export default function Msg2665Package() {
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
-  
+
   React.useEffect(() => {
     async function fetchDataVessels() {
       try {
@@ -160,7 +158,17 @@ export default function Msg2665Package() {
 
   const buttonConfirm = async (props) => {
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const dataFormFilter = form.getFieldsValue();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
+    delete dataFormFilter.dateFromTo;
     const formData = {
+      ...dataFormFilter,
+      fromdate,
+      todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
     switch (props.type) {
@@ -219,12 +227,55 @@ export default function Msg2665Package() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={24}>
+        <Col span={7}>
           <Card
             title={"[2665] \r\n HIỆU CHỈNH THÔNG TIN GETIN CHO HÀNG KIỆN"}
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
+            <Row className="b-row" gutter={[16, 16]}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "1",
+                        options: [
+                          {
+                            label: "Nhập khẩu",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất khẩu",
+                            value: "2",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.rangePicker,
+                      label: "Khoản",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={17}>
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}
