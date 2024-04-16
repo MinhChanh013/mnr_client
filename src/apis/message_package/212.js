@@ -28,6 +28,7 @@ export const send = async (params, dispatch) => {
     return;
   }
 
+
   const formData = {
     voyagekey: VoyageKey,
     vsslname: VesselName,
@@ -47,7 +48,7 @@ export const send = async (params, dispatch) => {
       );
       return;
     }
-    if (data.data && data.data.xmlComplete.length > 0) {
+    if (data.data && data.data.xmlComplete) {
       dispatch(
         showMessage({
           type: "success",

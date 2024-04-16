@@ -1,18 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Form, Row } from "antd";
-import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
-import { FORMAT_DATETIME } from "../../constants/index.js";
+import { load, searchVessels, send } from "../../apis/message_package/2661.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -21,6 +15,10 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../constants/index.js";
 
 export default function Msg2661Package() {
   const onFocus = () => {};
@@ -29,8 +27,8 @@ export default function Msg2661Package() {
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
-  
   const [form] = Form.useForm();
+
   React.useEffect(() => {
     async function fetchDataVessels() {
       try {
@@ -67,67 +65,67 @@ export default function Msg2661Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "ImExType",
       name: "Nhập/Xuất",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "TransportIdentity",
       name: "Tên Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CntrNo",
+      key: "NumberOfJourney",
       name: "Số Chuyến",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "GetIn",
+      key: "ArrivalDeparture",
       name: "Ngày Tàu Đến/Đi",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "CargoCtrlNo",
       name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
+      key: "GetIn",
       name: "Ngày GetIn",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "Content",
       name: "Ghi Chú",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Nội dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
@@ -141,17 +139,20 @@ export default function Msg2661Package() {
   ]);
 
   const buttonConfirm = async (props) => {
-    const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-    let fromdate, todate;
+    const dataFormFilter = form.getFieldsValue();
+    let fromdate, todate, isLF;
     if (dataFormFilter.dateFromTo) {
       fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
       todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
     }
-
+    isLF = dataFormFilter.localforeign ?? "";
     delete dataFormFilter.dateFromTo;
+    delete dataFormFilter.localforeign;
+
     const formData = {
       ...dataFormFilter,
+      isLF,
       fromdate,
       todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
@@ -185,15 +186,15 @@ export default function Msg2661Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg2661 = await load(formData);
+      if (resultDataMsg2661) {
+        const newResultDataMsg2661 = resultDataMsg2661.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg2661);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -212,12 +213,73 @@ export default function Msg2661Package() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={24}>
+        <Col span={7}>
           <Card
             title={"[2661] \r\n HỦY DANH SÁCH HÀNG KIỆN GETIN"}
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
+            <Row className="b-row" gutter={[16, 16]}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng",
+                      config: {
+                        name: "localforeign",
+                        defaultValue: "F",
+                        options: [
+                          {
+                            label: "Hàng ngoại",
+                            value: "F",
+                          },
+                          {
+                            label: "Hàng nội",
+                            value: "L",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "1",
+                        options: [
+                          {
+                            label: "Nhập khẩu",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất khẩu",
+                            value: "2",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.rangePicker,
+                      label: "Lọc Theo Ngày GetIn",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={17}>
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}

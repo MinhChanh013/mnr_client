@@ -8,7 +8,7 @@ import {
   load,
   searchVessels,
   send,
-} from "../../apis/message_container/3668.js";
+} from "../../apis/message_package/212.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -54,59 +54,59 @@ export default function Msg212Package() {
       visible: true,
     },
     {
-      key: "JobStatus",
+      key: "TransportIdentity",
       name: "Tên tàu",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
-      key: "StatusMarker",
+      key: "TransportCallSign",
       name: "Hô Hiệu Tàu",
       width: 100,
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "TransportIMONumber",
       name: "Số IMO",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "ArrivalDeparture",
       name: "Ngày tàu đến/đi",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "CntrNo",
+      key: "NumberOfJourney",
       name: "Số Chuyến",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "GetIn",
+      key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "CargoCtrlNo",
       name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "CargoPiece",
       name: "Số Lượng Hàng Hóa",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
+      key: "PieceUnitCode",
       name: "ĐVT",
       width: 200,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
@@ -137,21 +137,12 @@ export default function Msg212Package() {
         handleLoadData(formData);
         break;
       case "send":
-        const idMsgRowData = gridRef.current?.getSelectedRows();
-        const listMsgRowSelect = [];
-        idMsgRowData.forEach((idMsgSelected) => {
-          listMsgRowSelect.push(
-            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
-          );
-        });
         try {
           dispatch(updateForm(formData));
-          await send(listMsgRowSelect, dispatch);
+          await send(dataVesselSelect, dispatch);
         } catch (error) {
           console.log(error);
         }
-        break;
-      case "cancelgetin":
         break;
       default:
         break;
@@ -161,15 +152,15 @@ export default function Msg212Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg212 = await load(formData);
+      if (resultDataMsg212) {
+        const newResultDataMsg212 = resultDataMsg212.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg212);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
