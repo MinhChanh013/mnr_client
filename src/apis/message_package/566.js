@@ -16,7 +16,7 @@ export const load = async (formData) => {
 };
 
 export const send = async (params, dispatch) => {
-  const { isLF, Voyagekey, rows } = params;
+  const { rows } = params;
 
   if (rows.length === 0) {
     dispatch(
@@ -28,13 +28,7 @@ export const send = async (params, dispatch) => {
     return;
   }
 
-  const formData = {
-    isLF: isLF,
-    voyagekey: Voyagekey,
-    datas: rows,
-  };
-
-  const data = await poster(cpath("send"), formData);
+  const data = await poster(cpath("send"), params);
   if (data) {
     if (data.deny) {
       dispatch(
@@ -45,7 +39,11 @@ export const send = async (params, dispatch) => {
       );
       return;
     }
-    if (data.data && data.data.xmlComplete.length > 0) {
+
+    if (data.data && data.data.dont_send_again.length > 0) {
+    }
+
+    if (data.data && data.data.xmlComplete) {
       dispatch(
         showMessage({
           type: "success",

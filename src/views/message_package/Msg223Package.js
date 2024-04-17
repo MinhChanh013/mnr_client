@@ -1,18 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Form, Row } from "antd";
-import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
-import { FORMAT_DATETIME } from "../../constants/index.js";
+import { load, searchVessels, send } from "../../apis/message_package/223.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -21,6 +15,10 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../constants/index.js";
 
 export default function Msg223Package() {
   const onFocus = () => {};
@@ -67,100 +65,118 @@ export default function Msg223Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "ImExType",
       name: "Nhập/Xuất",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "DeclareNo",
       name: "Số Tờ Khai",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CntrNo",
+      key: "DeclareIssueDate",
       name: "Ngày Tờ Khai",
       width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "GetIn",
-      name: "Mã CCHQ Mở TK",
-      width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "DeclarationOffice",
+      name: "Mã CCHQ Mở TK",
+      width: 200,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "DeclarationOfficeControl",
+      name: "Mã CCHQ GS",
+      width: 200,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CustomsStatus",
       name: "Trạng Thái TK",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "EnterpriseIdentity",
       name: "MST DN",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "ArrivalDeparture",
+      key: "EnterpriseName",
       name: "Tên Doanh Nghiệp",
       width: 200,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "TransportIdentity",
       name: "Tên Tàu",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "NumberOfJourney",
       name: "Chuyến Tàu",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "ArrivalDeparture",
       name: "Ngày Tàu Đến/Rời",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "CargoCtrlNo",
       name: "Số Định Danh",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "GetIn",
       name: "Ngày GetIn",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
+      width: 300,
+      type: columnTypes.DatePicker,
+    },
+    {
+      key: "ResponseText",
+      name: "Nội dung phản hồi",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Khóa tham chiếu",
       width: 300,
       type: columnTypes.TextEditor,
     },
   ]);
 
   const buttonConfirm = async (props) => {
-    const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const dataFormFilter = form.getFieldsValue();
     let fromdate, todate;
     if (dataFormFilter.dateFromTo) {
       fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
@@ -168,6 +184,7 @@ export default function Msg223Package() {
     }
 
     delete dataFormFilter.dateFromTo;
+    delete dataFormFilter.localforeign;
     const formData = {
       ...dataFormFilter,
       fromdate,
@@ -203,15 +220,15 @@ export default function Msg223Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg223 = await load(formData);
+      if (resultDataMsg223) {
+        const newResultDataMsg223 = resultDataMsg223.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg223);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -230,13 +247,66 @@ export default function Msg223Package() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={24}>
+         <Col span={7}>
           <Card
             title={"[223] \r\n HÀNG KIỆN ĐỦ ĐIỀU KIỆN QUA KVGS"}
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <ToolBar
+            <Row className="b-row" gutter={[16, 16]}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "1",
+                        options: [
+                          {
+                            label: "Nhập khẩu",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất khẩu",
+                            value: "2",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.rangePicker,
+                      label: "Lọc Theo Ngày GetIn",
+                      config: {
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: "Số Vận Đơn",
+                      config: {
+                        defaultValue: "",
+                        name: "billoflading",
+                        placeholder: "",
+                        value: "",
+                      },
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={17}>
+          <Card className="main-card">
+          <ToolBar
               buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}
             />

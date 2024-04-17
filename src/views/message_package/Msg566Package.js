@@ -4,15 +4,11 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
+import { load, searchVessels, send } from "../../apis/message_package/566.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
@@ -68,73 +64,73 @@ export default function Msg566Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "BillOfLading",
+      key: "ImExType",
       name: "Nhập/Xuất",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CargoCtrlNo",
+      key: "transportIdentity",
       name: "Tên Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "CntrNo",
+      key: "numberOfJourney",
       name: "Số Chuyến",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "GetIn",
+      key: "arrivalDeparture",
       name: "Ngày Cập/Rời",
       width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "TransportIdentity",
+      key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "NumberOfJourney",
+      key: "IssueDate",
       name: "Ngày Vận Đơn",
       width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "ArrivalDeparture",
-      name: "Mô Tả Hàng Hóa",
-      width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "CommodityDescription",
+      name: "Mô Tả Hàng Hóa",
+      width: 200,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "content",
       name: "Ghi Chú",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "isUpdate",
       name: "Cấp Lại",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 300,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Nội dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
@@ -177,7 +173,14 @@ export default function Msg566Package() {
         });
         try {
           dispatch(updateForm(formData));
-          await send(listMsgRowSelect, dispatch);
+          await send(
+            {
+              rows: listMsgRowSelect,
+              isLF: dataFormFilter.isLF,
+              voyagekey: dataVesselSelect.VoyageKey,
+            },
+            dispatch
+          );
         } catch (error) {
           console.log(error);
         }
@@ -192,15 +195,15 @@ export default function Msg566Package() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+      const resultDataMsg566 = await load(formData);
+      if (resultDataMsg566) {
+        const newResultDataMsg566 = resultDataMsg566.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg3668);
+        setRows(newResultDataMsg566);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -238,19 +241,15 @@ export default function Msg566Package() {
                       label: "Loại hàng",
                       config: {
                         name: "isLF",
-                        defaultValue: "",
+                        defaultValue: "nhapkhau",
                         options: [
                           {
-                            label: "Tất cả",
-                            value: "",
-                          },
-                          {
                             label: "Hàng nhập khẩu",
-                            value: "1",
+                            value: "nhapkhau",
                           },
                           {
                             label: "Hàng nội địa",
-                            value: "2",
+                            value: "noidia",
                           },
                         ],
                       },
@@ -260,7 +259,7 @@ export default function Msg566Package() {
                       label: "Số Cont",
                       config: {
                         defaultValue: "",
-                        name: "cntrNo",
+                        name: "billOfLading",
                         placeholder: "",
                         value: "",
                       },

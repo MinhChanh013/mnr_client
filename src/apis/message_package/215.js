@@ -16,6 +16,15 @@ export const load = async (formData) => {
 };
 
 export const send = async (rows = [], dispatch) => {
+  if (rows.length === 0) {
+    dispatch(
+      showMessage({
+        type: "error",
+        content: "Chọn một chuyến tàu để gởi thông điệp!",
+      })
+    );
+    return;
+  }
   const data = await poster(cpath("send"), rows);
   if (data) {
     if (data.deny) {
