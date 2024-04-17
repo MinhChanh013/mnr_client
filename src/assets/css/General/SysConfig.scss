@@ -1,0 +1,12 @@
+.SysConfig-menu {
+  border-radius: 8px;
+  .ant-menu-item {
+    color: var(--primary-color);
+    font-weight: 700;
+    height: 60px;
+  }
+  .ant-menu-item-selected {
+    color: white;
+    background-color: var(--primary-color);
+  }
+}

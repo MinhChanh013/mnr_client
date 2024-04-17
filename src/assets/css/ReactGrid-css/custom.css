@@ -1,15 +1,14 @@
 @import "@silevis/reactgrid/styles.css";
 
-.b-table {
-  width: 100%;
-  overflow: auto;
-  color: "red";
-  height: 400px;
-}
-
-.b-table .rg-header-cell {
+.rdg-header-row .rdg-cell {
+  height: 42px;
+  color: white;
+  padding-block-start: unset !important;
+  font-weight: 500;
+  display: flex;
   justify-content: center;
-  background: rgba(134, 229, 255, 0.5) !important;
+  align-items: center;
+  background-color: #1b618c;
 }
 
 .b-field {
