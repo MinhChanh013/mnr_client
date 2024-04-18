@@ -8,16 +8,12 @@ const cpath = (action) => {
 
 ///--process
 export const load = async (params) => {
-  const { voyagekey, imextype, fromdate, todate, marker, getout, fe } = params;
+  const { imextype, fromdate, todate,  } = params;
 
   const formData = {
-    voyagekey,
     imextype,
     fromdate,
     todate,
-    marker,
-    getout,
-    fe,
   };
 
   const data = await poster(cpath("view"), formData);

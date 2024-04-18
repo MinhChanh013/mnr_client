@@ -6,24 +6,11 @@ const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
 };
 
-///---validate
-const validateSend = () => {
-  throw new Error();
-};
-
 ///--process
 export const load = async (params) => {
-  const { voyagekey, imextype, fromdate, todate, marker, getout, fe } = params;
+  const { fromdate, todate, billOfLading, cntrNo, cargoType, cargoCode } = params;
 
-  const formData = {
-    voyagekey,
-    imextype,
-    fromdate,
-    todate,
-    marker,
-    getout,
-    fe,
-  };
+  const formData = { fromdate, todate, billOfLading, cntrNo, cargoType, cargoCode };
 
   const data = await poster(cpath("view"), formData);
   return data;

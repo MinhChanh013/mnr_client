@@ -1,30 +1,39 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row } from "antd";
+import { Card, Col, Form, Row } from "antd";
+import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels, send } from "../../apis/message_container/212.js";
+import { v4 as uuidv4 } from "uuid";
+import {
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_container/3668.js";
+import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes,
+  selectionTypes
 } from "../../global_component/DataGrid/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
-const Msg212Container = () => {
-  const gridRef = React.createRef();
+export default function Msg212Liquid() {
   const onFocus = () => {};
+  const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
+    document.title = 'Hàng lỏng được xếp dỡ xuống cảng kho bãi';
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
@@ -37,107 +46,131 @@ const Msg212Container = () => {
     }
     fetchDataVessels();
   }, []);
-
   const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
       width: 180,
+      editable: false,
       visible: true,
     },
     {
-      key: "TransportIdentity",
+      key: "JobStatus",
       name: "Tên tàu",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
-      key: "TransportCallSign",
+      key: "StatusMarker",
       name: "Hô Hiệu Tàu",
-      width: 180,
+      width: 100,
       type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "TransportIMONumber",
-      name: "Số IMO",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "ArrivalDeparture",
-      name: "Ngày tàu đến/đi",
-      width: 180,
-      type: columnTypes.DatePicker,
-      editable: true,
-    },
-    {
-      key: "NumberOfJourney",
-      name: "Số Chuyến",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "BillOfLading",
-      name: "Số Vận Đơn",
-      width: 180,
+      name: "Số IMO",
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "CargoCtrlNo",
-      name: "Số Định Danh",
-      width: 180,
+      name: "Ngày tàu đến/đi",
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "CntrNo",
-      name: "Số Container",
-      width: 180,
+      name: "Số Chuyến",
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
-      key: "SealNo",
-      name: "Số Chì",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
+      key: "GetIn",
+      name: "Số Vận Đơn",
+      width: 200,
+      type: columnTypes.DatePicker,
     },
     {
-      key: "StatusOfGood",
-      name: "Full/Empty",
-      width: 180,
+      key: "TransportIdentity",
+      name: "Số Định Danh",
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
-      key: "CommodityDescription",
-      name: "Mô Tả Hàng Hóa",
-      width: 180,
+      key: "NumberOfJourney",
+      name: "Số Lượng Hàng Hóa",
+      width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
-
+    {
+      key: "ArrivalDeparture",
+      name: "ĐVT",
+      width: 200,
+      type: columnTypes.DatePicker,
+    },
     {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
-      width: 180,
+      width: 300,
       type: columnTypes.TextEditor,
-      editable: true,
     },
   ]);
 
+  const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
+
+    delete dataFormFilter.dateFromTo;
+    const formData = {
+      ...dataFormFilter,
+      fromdate,
+      todate,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
+    switch (props.type) {
+      case "load":
+        handleLoadData(formData);
+        break;
+      case "send":
+        const idMsgRowData = gridRef.current?.getSelectedRows();
+        const listMsgRowSelect = [];
+        idMsgRowData.forEach((idMsgSelected) => {
+          listMsgRowSelect.push(
+            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+          );
+        });
+        try {
+          dispatch(updateForm(formData));
+          await send(listMsgRowSelect, dispatch);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+      case "cancelgetin":
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleLoadData = async (formData) => {
-    dispatch(setLoading(true));
     try {
-      const resultDataMsg3665 = await load(formData);
-      if (resultDataMsg3665) {
-        setRows(resultDataMsg3665.data ?? []);
+      dispatch(setLoading(true));
+      const resultDataMsg3668 = await load(formData);
+      if (resultDataMsg3668) {
+        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
+          return {
+            ...item,
+            ID: uuidv4(),
+          };
+        });
+        setRows(newResultDataMsg3668);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -150,35 +183,6 @@ const Msg212Container = () => {
     dispatch(setLoading(false));
   };
 
-  const buttonConfirm = async (props) => {
-    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-    const formData = {
-      voyagekey:
-        Object.keys(dataVesselSelect).length > 0
-          ? dataVesselSelect.VoyageKey
-          : "",
-    };
-    switch (props.type) {
-      case "load":
-        handleLoadData(
-          Object.keys(dataVesselSelect).length > 0 ? formData : {}
-        );
-        break;
-      case "send":
-        try {
-          dispatch(
-            updateForm(Object.keys(dataVesselSelect).length > 0 ? formData : {})
-          );
-          await send(vesselSelectRef.current?.getSelectedVessel(), dispatch);
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <>
       <Row
@@ -187,10 +191,11 @@ const Msg212Container = () => {
       >
         <Col span={6}>
           <Card
-            title={"[212] \r\n CONTAINER ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI"}
+            title={"[212] \r\n HÀNG LỎNG ĐƯỢC XẾP DỠ XUỐNG CẢNG/KHO/BÃI"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row className="b-row" gutter={[24, 24]}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
@@ -207,7 +212,7 @@ const Msg212Container = () => {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
               columns={columns}
               rows={rows}
               setRows={setRows}
@@ -218,5 +223,4 @@ const Msg212Container = () => {
       </Row>
     </>
   );
-};
-export default Msg212Container;
+}
