@@ -20,9 +20,10 @@ import {
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
+import { ExportExcel } from "../../assets/js/excelFunction.js";
 
 export default function Msg566Container() {
-  const onFocus = () => { };
+  const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ export default function Msg566Container() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
@@ -186,6 +187,11 @@ export default function Msg566Container() {
           console.log(error);
         }
         break;
+      case "export excel":
+        // handleLoadData(formData);
+        ExportExcel(columns, rows);
+        console.log("export excel");
+        break;
       default:
         break;
     }
@@ -229,11 +235,11 @@ export default function Msg566Container() {
                 color: "#1b618c",
               },
             }}
-            title={'[566] \r\n XIN SỐ ĐỊNH DANH'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[566] \r\n XIN SỐ ĐỊNH DANH"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row className="b-row" gutter={[16,16]}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
@@ -336,6 +342,7 @@ export default function Msg566Container() {
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
                 toolBarButtonTypes.cancel,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

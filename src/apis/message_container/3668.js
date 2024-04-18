@@ -121,12 +121,7 @@ export const send = async (rows = [], dispatch) => {
 };
 
 export const clearGetin = async (rows = []) => {
-  validateClearGetin();
-
   const idRefs = rows.map((p) => p.IDRef);
-  if (idRefs.length === 0) {
-    return;
-  }
 
   const formData = {
     IDRefs: idRefs,
