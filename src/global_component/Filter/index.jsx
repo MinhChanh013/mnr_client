@@ -7,13 +7,13 @@ import RangePickerFilter from "./RangePickerFilter";
 import TextAreaFilter from "./TextAreaFilter";
 const { Text } = Typography;
 const pickComponent = (type) =>
-({
-  [filterType.radio]: RadioGroupFilter,
-  [filterType.input]: InputFilter,
-  [filterType.rangePicker]: RangePickerFilter,
-  [filterType.textarea]: TextAreaFilter,
-  [filterType.checkbox]: CheckboxFilter,
-}[type]);
+  ({
+    [filterType.radio]: RadioGroupFilter,
+    [filterType.input]: InputFilter,
+    [filterType.rangePicker]: RangePickerFilter,
+    [filterType.textarea]: TextAreaFilter,
+    [filterType.checkbox]: CheckboxFilter,
+  }[type]);
 
 export const filterType = {
   radio: "radio",
@@ -40,34 +40,35 @@ export const Filter = (
 
   return (
     <Form form={form} initialValues={initValues}>
-      <Row gutter={[0, 0]} style={{ marginTop: '10px' }}>
+      <Row gutter={[0, 0]} style={{ marginTop: "10px" }}>
         {items.map(({ type, label, config, divider = true }, index) => {
           const Component = pickComponent(type);
           return (
             <Fragment key={`${label}-${index}`}>
-              <Col span={type === 'input' ? 8 : 24} >
-                <Text style={config.style || {}} strong>{label}</Text>
+              <Col span={type === "input" ? 8 : 24}>
+                <Text style={config.style || {}} strong>
+                  {label}
+                </Text>
               </Col>
-              <Col span={type === 'input' ? 16 : 24}>
-                <Form.Item style={{ marginBottom: "4px" }} name={config.name} >
+              <Col span={type === "input" ? 16 : 24}>
+                <Form.Item style={{ marginBottom: "4px" }} name={config.name}>
                   <Component {...config} />
                 </Form.Item>
               </Col>
-              {
-                divider === true
-                  ?
-                  <>
-                    {items.length - 1 !== index && (
-                      <Divider
-                        style={{
-                          marginTop: "10px",
-                          borderColor: "#d1cccc",
-                        }}
-                      />
-                    )}
-                  </>
-                  : ''
-              }
+              {divider === true ? (
+                <>
+                  {items.length - 1 !== index && (
+                    <Divider
+                      style={{
+                        margin: "10px 0px",
+                        borderColor: "#d1cccc",
+                      }}
+                    />
+                  )}
+                </>
+              ) : (
+                ""
+              )}
             </Fragment>
           );
         })}

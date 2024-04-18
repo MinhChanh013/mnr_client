@@ -13,6 +13,9 @@ import { Pagination, Typography, Flex, Space, Divider } from "antd";
 import ReactDataGrid, { SelectColumn, textEditor } from "react-data-grid";
 import { renderCellEditDatePicker } from "./renderCellEditDatePicker";
 
+import { useDispatch } from "react-redux";
+import { setSelectedQuantity } from "../../store/slices/SelectedQuantitySlices.js";
+
 export const selectionTypes = {
   multi: "multi",
   single: "single",
@@ -128,6 +131,14 @@ const DataGrid = forwardRef(
     const [currentRows, setCurrenRows] = useState([]);
     const [currentPage, setCurrenPage] = useState(1);
     const reactDataGridRef = useRef();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      if (selection === selectionTypes.multi) {
+        console.log([...selectedRows].length);
+        dispatch(setSelectedQuantity([...selectedRows].length));
+      }
+    }, [selectedRows]);
 
     const handleSelected = (idRowSelected) => {
       if (selection === selectionTypes.multi) {
