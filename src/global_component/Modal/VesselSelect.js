@@ -9,7 +9,7 @@ import React, {
 } from "react";
 
 import { textEditor } from "react-data-grid";
-import DataGrid, { columnTypes } from "../DataGrid";
+import DataGrid, { columnTypes, selectionTypes } from "../DataGrid";
 import "./vessel-select.scss";
 import dayjs from "dayjs";
 import { FORMAT_DATETIME } from "../../constants";
@@ -75,28 +75,33 @@ const VesselSelect = forwardRef(({ data }, ref) => {
       name: "ID",
       editable: false,
       visible: true,
+      editable: false,
     },
     {
       key: "VesselName",
       name: "Tên tàu",
       width: 180,
       renderEditCell: textEditor,
+      editable: false,
     },
     {
       key: "VoyageStatus",
       name: "C.Nhập/Xuất",
       width: 120,
       renderEditCell: textEditor,
+      editable: false,
     },
     {
       key: "ETA",
       name: "Ngày Cập",
       type: columnTypes.DatePicker,
+      editable: false,
     },
     {
       key: "ETD",
       name: "Ngày Rời",
       type: columnTypes.DatePicker,
+      editable: false,
     },
   ];
 
@@ -227,6 +232,14 @@ const VesselSelect = forwardRef(({ data }, ref) => {
         className="vessel-modal"
         onOk={handleConfirmsSelect}
         onCancel={() => setOpen(false)}
+        footer={[
+          <Button key="back" onClick={() => setOpen(false)}>
+            Hủy
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleConfirmsSelect}>
+            Chọn
+          </Button>,
+        ]}
         title={
           <Text style={{ width: "100%", fontSize: "1rem" }}>
             Chọn Chuyến Tàu
@@ -242,7 +255,9 @@ const VesselSelect = forwardRef(({ data }, ref) => {
             rows={viewvessels}
             selectedRows={vesselRowSelect}
             setSelectedRows={setVesselRowSelect}
-            selection="single"
+            selection={selectionTypes.single}
+            onCellClick
+            onCellDoubleClick = {handleConfirmsSelect}
           />
         </Card>
       </Modal>

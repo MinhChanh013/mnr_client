@@ -9,7 +9,7 @@ import React, {
   useState,
 } from "react";
 
-import { Pagination, Typography } from "antd";
+import { Pagination, Typography, Flex, Space, Divider } from "antd";
 import ReactDataGrid, { SelectColumn, textEditor } from "react-data-grid";
 import { renderCellEditDatePicker } from "./renderCellEditDatePicker";
 
@@ -116,8 +116,10 @@ const DataGrid = forwardRef(
       setRows,
       onFocus,
       limit = 20,
-      maxHeight = 800,
+      maxHeight = 720,
       pagination = paginationTypes.scroll,
+      onCellClick = false,
+      onCellDoubleClick,
     },
     ref
   ) => {
@@ -126,6 +128,20 @@ const DataGrid = forwardRef(
     const [currentRows, setCurrenRows] = useState([]);
     const [currentPage, setCurrenPage] = useState(1);
     const reactDataGridRef = useRef();
+
+    const handleSelected = (idRowSelected) => {
+      if (selection === selectionTypes.multi) {
+        setSelectedRows(idRowSelected);
+      }
+      if (selection === selectionTypes.single) {
+        let value = idRowSelected;
+        if (typeof value === "object") {
+          const rowSelectedArr = [...value];
+          value = rowSelectedArr[rowSelectedArr.length - 1];
+        }
+        setSelectedRows(() => new Set([value]));
+      }
+    };
 
     useEffect(() => {
       setCurrenRows([]);
@@ -193,8 +209,19 @@ const DataGrid = forwardRef(
     }, [rows]);
 
     const rateScreen = useMemo(() => {
-      return Math.ceil(maxHeight / (limit * 30));
+      return Math.ceil(maxHeight / (limit * 40));
     }, []);
+
+    const summaryRows = useMemo(() => {
+      let cntrNoCount = new Set(rows.map((obj) => obj["CntrNo"]));
+      return [
+        {
+          id: "total_0",
+          totalCount: rows.length,
+          cntrNoCount: [...cntrNoCount].length,
+        },
+      ];
+    }, [rows]);
 
     const columnsCombined = useMemo(() => {
       return [SelectColumn, ...columns]
@@ -235,7 +262,6 @@ const DataGrid = forwardRef(
       },
       [selectedRows]
     );
-
     const handleScroll = () => {
       const dataGridScrollTop = reactDataGridRef.current.element.scrollTop;
       const dataGridScrollHeight =
@@ -273,7 +299,7 @@ const DataGrid = forwardRef(
           renderers={{
             noRowsFallback: (
               <Title
-                level={4}
+                level={5}
                 style={{ color: "#818181", gridColumn: "1/-1", margin: "10px" }}
               >
                 --- Không có dữ liệu ---
@@ -302,31 +328,70 @@ const DataGrid = forwardRef(
           onFill={handleFill}
           onCopy={handleCopy}
           onPaste={handlePaste}
-          onSelectedRowsChange={setSelectedRows}
-          onCellClick={(args, event) => {
-            if (args.column.key === "title") {
-              event.preventGridDefault();
-              args.selectCell(true);
+          onSelectedRowsChange={(row) => {
+            handleSelected(row);
+          }}
+          onCellClick={(args) => {
+            if (onCellClick && args.column.key !== "select-row") {
+              handleSelected(args.row.ID);
             }
           }}
+          onCellDoubleClick={(args) => {
+            if (
+              typeof onCellDoubleClick === "function" &&
+              args.column.key !== "select-row"
+            )
+              onCellDoubleClick();
+          }}
         />
-        {pagination === "pagination" && rows && rows.length > 0 ? (
-          <Pagination
-            style={{
-              marginTop: 10,
-              marginRight: 10,
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-            pageSize={limit}
-            showSizeChanger={false}
-            onChange={(pageChange) => setCurrenPage(pageChange)}
-            defaultCurrent={currentPage}
-            total={rows.length}
-          />
-        ) : (
-          ""
-        )}
+        <Flex align="center" justify="space-between">
+          <Space style={{ padding: "10px 20px" }}>
+            <Typography
+              level={5}
+              style={{
+                textAlign: "center",
+                fontWeight: "600",
+                color: "#555555",
+              }}
+            >
+              Số dòng: {summaryRows[0].totalCount}
+            </Typography>
+            {rows.some((obj) => "CntrNo" in obj) ? (
+              <>
+                <Divider type="vertical" style={{ borderColor: "#818181" }} />
+                <Typography
+                  level={5}
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "600",
+                    color: "#555555",
+                  }}
+                >
+                  Số công: {summaryRows[0].cntrNoCount}
+                </Typography>
+              </>
+            ) : (
+              ""
+            )}
+          </Space>
+          {pagination === "pagination" && rows && rows.length > 0 ? (
+            <Pagination
+              style={{
+                marginTop: 10,
+                marginRight: 10,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+              pageSize={limit}
+              showSizeChanger={false}
+              onChange={(pageChange) => setCurrenPage(pageChange)}
+              defaultCurrent={currentPage}
+              total={rows.length}
+            />
+          ) : (
+            ""
+          )}
+        </Flex>
       </>
     );
   }
