@@ -1,4 +1,6 @@
-import { Card, Col, Row, message, Input, Space, Typography } from "antd";
+import { Card, Col, Row, message, Input, Space, Typography, Form } from "antd";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME, FORMAT_DATEYEAR } from "../../constants/index.js";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
@@ -15,6 +17,7 @@ const Msg253 = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const gridRef = React.createRef();
+  const [form] = Form.useForm();
   const onFocus = () => { };
   const columns = [
     {
@@ -76,10 +79,21 @@ const Msg253 = () => {
   ];
 
   const buttonConfirm = async (props) => {
-    if (props.type === 'load') {
-      handleLoadData();
+    const dataFormFilter = form.getFieldsValue();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATEYEAR);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATEYEAR);
     }
-
+    delete dataFormFilter.dateFromTo;
+    const formData = {
+      ...dataFormFilter,
+      fromdate,
+      todate,
+    };
+    if (props.type === 'load') {
+      handleLoadData(formData);
+    }
     if (props.type === 'send') {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
@@ -173,7 +187,6 @@ const Msg253 = () => {
     }
   };
 
-  const filterRef = React.useRef();
 
   return (
     <>
@@ -190,14 +203,16 @@ const Msg253 = () => {
             <Row className="b-row">
               <Col span={24}>
                 <Filter
-                  filterRef={filterRef}
+                  form={form}
                   items={[
                     {
                       type: filterType.rangePicker,
+                      label: "Khoản",
                       config: {
-                        name: 'date',
-                        placeholder: 'Từ ngày đến ngày',
-                      }
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
+                        value: "",
+                      },
                     },
                     {
                       type: filterType.radio,

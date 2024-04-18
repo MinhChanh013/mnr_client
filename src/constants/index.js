@@ -536,6 +536,7 @@ export const itemsMenu = [
         child: [
           {
             key: "message:4:1",
+            href: "/msg212_bulk",
             label: "212 - Hàng kiện được dỡ xuống cảng",
             icon: (
               <lord-icon
@@ -548,6 +549,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:2",
+            href: "/msg566_bulk",
             label: "566 - Xin số định danh cho hàng rời",
             icon: (
               <lord-icon
@@ -560,6 +562,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:3",
+            href: "/msg216_bulk",
             label: "216 - Danh sách hàng rời sai khác",
             icon: (
               <lord-icon
@@ -572,6 +575,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:4",
+            href: "/msg4668_bulk",
             label: "466.8 - Hàng rời Getin",
             icon: (
               <lord-icon
@@ -584,6 +588,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:5",
+            href: "/msg207_bulk",
             label: "207 - Xác nhận getin hết hàng",
             icon: (
               <lord-icon
@@ -596,6 +601,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:6",
+            href: "/msg4665_bulk",
             label: "466.5 - Hiệu chỉnh hàng rời Getin",
             icon: (
               <lord-icon
@@ -608,6 +614,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:7",
+            href: "/msg4661_bulk",
             label: "466.1 - Hủy Getin hàng rời",
             icon: (
               <lord-icon
@@ -620,6 +627,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:8",
+            href: "/msg267_bulk",
             label: "267 - Điều hướng hàng rời",
             icon: (
               <lord-icon
@@ -632,6 +640,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:9",
+            href: "/msg297_bulk",
             label: "297 - Chỉ định tờ khai xuất khẩu",
             icon: (
               <lord-icon
@@ -644,6 +653,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:10",
+            href: "/msg367_bulk",
             label: "367 - TK đủ điều kiện qua KVGS",
             icon: (
               <lord-icon
@@ -656,6 +666,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:11",
+            href: "/msg223_bulk",
             label: "223 - Hàng kiện đủ điều kiện qua KVGS",
             icon: (
               <lord-icon
@@ -668,6 +679,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:12",
+            href: "/msg421_bulk",
             label: "421 - Hàng rời Getout có TKHQ",
             icon: (
               <lord-icon
@@ -680,6 +692,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:13",
+            href: "/msg441_bulk",
             label: "441 - Hàng rời Getout không TKHQ",
             icon: (
               <lord-icon
@@ -692,6 +705,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:14",
+            href: "/msg216_bulk_csht",
             label: "216[CSHT] - TK chưa nộp phí",
             icon: (
               <lord-icon
@@ -704,6 +718,7 @@ export const itemsMenu = [
           },
           {
             key: "message:4:15",
+            href: "/msg421_bulk_csht",
             label: "421[CSHT] - Hàng rời Getout có TKHQ",
             icon: (
               <lord-icon
@@ -723,6 +738,7 @@ export const itemsMenu = [
         child: [
           {
             label: "212 - Hàng kiện được dỡ xuống cảng",
+            href: "/msg212_liquid",
             key: "message:5:1",
             icon: (
               <lord-icon
@@ -735,6 +751,7 @@ export const itemsMenu = [
           },
           {
             label: "566 - Xin số định danh cho hàng lỏng",
+            href: "/msg566_liquid",
             key: "message:5:2",
             icon: (
               <lord-icon
@@ -747,6 +764,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:3",
+            href: "/msg226_liquid",
             label: "226 - Danh sách hàng lỏng sai khác",
             icon: (
               <lord-icon
@@ -759,6 +777,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:4",
+            href: "/msg1668_liquid",
             label: "166.8 - Hàng lỏng Getin",
             icon: (
               <lord-icon
@@ -771,6 +790,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:5",
+            href: "/msg207_liquid",
             label: "207 - Xác nhận getin hết hàng",
             icon: (
               <lord-icon
@@ -783,6 +803,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:6",
+            href: "/msg1665_liquid",
             label: "166.5 - Hiệu chỉnh hàng lỏng Getin",
             icon: (
               <lord-icon
@@ -795,6 +816,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:7",
+            href: "/msg1661_liquid",
             label: "166.1 - Hủy Getin hàng lỏng",
             icon: (
               <lord-icon
@@ -807,6 +829,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:8",
+            href: "/msg277_liquid",
             label: "277 - Điều hướng hàng lỏng",
             icon: (
               <lord-icon
@@ -819,6 +842,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:9",
+            href: "/msg297_liquid",
             label: "297 - Chỉ định tờ khai xuất khẩu",
             icon: (
               <lord-icon
@@ -831,6 +855,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:10",
+            href: "/msg367_liquid",
             label: "367 - TK đủ điều kiện qua KVGS",
             icon: (
               <lord-icon
@@ -843,6 +868,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:11",
+            href: "/msg223_liquid",
             label: "223 - Hàng lỏng đủ điều kiện qua KVGS",
             icon: (
               <lord-icon
@@ -855,6 +881,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:12",
+            href: "/msg121_liquid",
             label: "121 - Hàng lỏng Getout có TKHQ",
             icon: (
               <lord-icon
@@ -867,6 +894,7 @@ export const itemsMenu = [
           },
           {
             key: "message:5:13",
+            href: "/msg141_liquid",
             label: "141 - Hàng rời Getout không TKHQ",
             icon: (
               <lord-icon
@@ -913,7 +941,7 @@ export const itemsMenu = [
             key: "directory:1",
           },
           {
-            href:"/ContainerStock",
+            href: "/ContainerStock",
             label: "Thông tin container biến động",
             icon: (
               <lord-icon
@@ -926,7 +954,7 @@ export const itemsMenu = [
             key: "directory:2",
           },
           {
-            href:"/ContainerSizeType",
+            href: "/ContainerSizeType",
             label: "Loại và kích cỡ container",
             key: "directory:3",
             icon: (
@@ -946,7 +974,7 @@ export const itemsMenu = [
         icon: <InboxOutlined />,
         child: [
           {
-            href:"/PackageMNF",
+            href: "/PackageMNF",
             label: "Manifest - Loading list",
             key: "directory:4",
             icon: (
@@ -959,7 +987,7 @@ export const itemsMenu = [
             ),
           },
           {
-            href:"/PackageGetin",
+            href: "/PackageGetin",
             label: "Thông tin hàng kiện getin",
             key: "directory:5",
             icon: (
@@ -972,7 +1000,7 @@ export const itemsMenu = [
             ),
           },
           {
-            href:"/PackageGetout",
+            href: "/PackageGetout",
             label: "Thông tin hàng kiện getout",
             key: "directory:6",
             icon: (
@@ -992,7 +1020,7 @@ export const itemsMenu = [
         icon: <GoldOutlined />,
         child: [
           {
-            href:"/BulkMNF",
+            href: "/BulkMNF",
             label: "Manifest - Loading list",
             key: "directory:7",
             icon: (
@@ -1005,7 +1033,7 @@ export const itemsMenu = [
             ),
           },
           {
-            href:"/BulkGetin",
+            href: "/BulkGetin",
             label: "Thông tin hàng rời getin",
             key: "directory:8",
             icon: (
@@ -1018,7 +1046,7 @@ export const itemsMenu = [
             ),
           },
           {
-            href:"/BulkGetout",
+            href: "/BulkGetout",
             label: "Thông tin hàng rời getout",
             key: "directory:9",
             icon: (
@@ -1038,7 +1066,7 @@ export const itemsMenu = [
         icon: <ReconciliationOutlined />,
         child: [
           {
-            href:"/LiquidMNF",
+            href: "/LiquidMNF",
             label: "Manifest - Loading list",
             key: "directory:10",
             icon: (
@@ -1051,7 +1079,7 @@ export const itemsMenu = [
             ),
           },
           {
-            href:"/LiquidGetin",
+            href: "/LiquidGetin",
             label: "Thông tin hàng lỏng getin",
             key: "directory:11",
             icon: (
@@ -1064,7 +1092,7 @@ export const itemsMenu = [
             ),
           },
           {
-            href:"/LiquidGetout",
+            href: "/LiquidGetout",
             label: "Thông tin hàng lỏng getout",
             key: "directory:12",
             icon: (
@@ -1077,7 +1105,7 @@ export const itemsMenu = [
             ),
           },
           {
-            href:"/LiquidType",
+            href: "/LiquidType",
             label: "Loại hàng lỏng",
             key: "directory:13",
             icon: (
@@ -1347,6 +1375,7 @@ export const itemsMenu = [
 ];
 
 export const FORMAT_DATETIME = "YYYY-MM-DD HH:mm:ss";
+export const FORMAT_DATEYEAR = "DD/MM/YYYY";
 export const ev_code = [
   "MESSAGE_TRANSMIT_FAILED",
   "ASKING_MESSAGE_CREATION_FAILED",
