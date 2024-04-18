@@ -9,10 +9,11 @@ import React, {
 } from "react";
 
 import { textEditor } from "react-data-grid";
-import DataGrid, { columnTypes } from "../DataGrid";
+import DataGrid, { columnTypes, selectionTypes } from "../DataGrid";
 import "./vessel-select.scss";
 import dayjs from "dayjs";
 import { FORMAT_DATETIME } from "../../constants";
+import SearchBox from "../SearchBox";
 
 const { Text } = Typography;
 
@@ -66,6 +67,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
   const vesselTable = useRef();
   const [vesselRowSelect, setVesselRowSelect] = useState(() => new Set());
   const [open, setOpen] = useState(false);
+  const [dataTable, setDataTable] = useState([]);
   const [viewvessels, setViewvessels] = useState({});
   const [vesselSelect, setVesselSelect] = useState({});
 
@@ -75,28 +77,33 @@ const VesselSelect = forwardRef(({ data }, ref) => {
       name: "ID",
       editable: false,
       visible: true,
+      editable: false,
     },
     {
       key: "VesselName",
       name: "Tên tàu",
       width: 180,
       renderEditCell: textEditor,
+      editable: false,
     },
     {
       key: "VoyageStatus",
       name: "C.Nhập/Xuất",
       width: 120,
       renderEditCell: textEditor,
+      editable: false,
     },
     {
       key: "ETA",
       name: "Ngày Cập",
       type: columnTypes.DatePicker,
+      editable: false,
     },
     {
       key: "ETD",
       name: "Ngày Rời",
       type: columnTypes.DatePicker,
+      editable: false,
     },
   ];
 
@@ -124,6 +131,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
         }, {});
       });
       setViewvessels(dataViewsels);
+      setDataTable(dataViewsels);
     }
   }, [data]);
 
@@ -227,10 +235,27 @@ const VesselSelect = forwardRef(({ data }, ref) => {
         className="vessel-modal"
         onOk={handleConfirmsSelect}
         onCancel={() => setOpen(false)}
+        footer={[
+          <Button key="back" onClick={() => setOpen(false)}>
+            Hủy
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleConfirmsSelect}>
+            Chọn
+          </Button>,
+        ]}
         title={
-          <Text style={{ width: "100%", fontSize: "1rem" }}>
-            Chọn Chuyến Tàu
-          </Text>
+          <Flex
+            style={{ paddingRight: "40px" }}
+            justify="space-between"
+            align="center"
+          >
+            <Text style={{ fontSize: "1rem" }}>Chọn Chuyến Tàu</Text>
+            <SearchBox
+              style={{ width: "34%" }}
+              data={dataTable}
+              onChange={setViewvessels}
+            />
+          </Flex>
         }
       >
         <Card className="vessel-select">
@@ -242,7 +267,9 @@ const VesselSelect = forwardRef(({ data }, ref) => {
             rows={viewvessels}
             selectedRows={vesselRowSelect}
             setSelectedRows={setVesselRowSelect}
-            selection="single"
+            selection={selectionTypes.single}
+            onCellClick
+            onCellDoubleClick={handleConfirmsSelect}
           />
         </Card>
       </Modal>

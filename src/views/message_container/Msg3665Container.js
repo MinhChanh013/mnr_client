@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row } from "antd";
+import { Card, Col, Form, Row, Flex } from "antd";
 import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
@@ -24,8 +24,10 @@ import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { v4 as uuidv4 } from "uuid";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 
 export default function Msg3665Container() {
+  const [dataTable, setDataTable] = React.useState([]);
   const gridRef = React.createRef();
   const onFocus = () => {};
   const vesselSelectRef = React.useRef();
@@ -203,6 +205,7 @@ export default function Msg3665Container() {
             ID: uuidv4(),
           };
         });
+        setDataTable(newResultDataMsg3665);
         setRows(newResultDataMsg3665);
         dispatch(
           showMessage({
@@ -394,14 +397,21 @@ export default function Msg3665Container() {
         </Col>
         <Col span={18}>
           <Card className="main-card">
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex justify="space-between" style={{ padding: "10px 20px" }}>
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.cancel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"

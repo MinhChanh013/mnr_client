@@ -49,8 +49,6 @@ import PackageGetin from "./views/Category/Package/PackageGetin.js";
 import PackageGetout from "./views/Category/Package/packageGetout.js";
 import PackageMNF from "./views/Category/Package/PackageMNF.js";
 
-import SysConfig from "./views/General/SysConfig.js";
-
 //===== MESSAGE PACKAGE =======//
 import Msg207Package from "./views/message_package/Msg207Package.js";
 import Msg212Package from "./views/message_package/Msg212Package.js";
@@ -68,6 +66,7 @@ import Msg341Package from "./views/message_package/Msg341Package.js";
 import Msg367Package from "./views/message_package/Msg367Package.js";
 import Msg566Package from "./views/message_package/Msg566Package.js";
 
+import SysConfig from "./views/General/SysConfig/SysConfig.js";
 //===== MESSAGE BULK =======//
 import Msg207Bulk from "./views/message_bulk/Msg207Bulk.js";
 import Msg212Bulk from "./views/message_bulk/Msg212Bulk.js";

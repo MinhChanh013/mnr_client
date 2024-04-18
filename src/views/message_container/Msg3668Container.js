@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row } from "antd";
+import { Card, Col, Form, Row, Flex, Input } from "antd";
 import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
@@ -25,7 +25,12 @@ import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
+import useDebounce from "../../hooks/useDebounce.js";
+
+const { Search } = Input;
+
 export default function Msg3668Container() {
+  const [searchValue, setSearchValue] = React.useState("");
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -33,6 +38,15 @@ export default function Msg3668Container() {
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
+
+  const debounced = useDebounce(searchValue, 500);
+  React.useEffect(() => {
+    if (!debounced.trim()) {
+      return;
+    }
+    console.log(SearchTable(rows, debounced));
+    console.log(debounced);
+  }, [debounced]);
 
   React.useEffect(() => {
     async function fetchDataVessels() {
@@ -47,7 +61,20 @@ export default function Msg3668Container() {
     }
     fetchDataVessels();
   }, []);
-
+  const SearchTable = ({ data, searchValue }) => {
+    const filteredData = data.filter((row) => {
+      return (
+        row.values
+          .join(",")
+          .toLowerCase()
+          .includes(searchValue.toLowerCase()) ||
+        row.values.some((value) =>
+          value.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      );
+    });
+    return filteredData;
+  };
   const columns = basicRenderColumns([
     {
       key: "ID",
@@ -418,15 +445,25 @@ export default function Msg3668Container() {
         </Col>
         <Col span={17}>
           <Card className="main-card">
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancelgetin,
-                toolBarButtonTypes.cancel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex justify="space-between" style={{ padding: "10px 20px" }}>
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.cancelgetin,
+                  toolBarButtonTypes.cancel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <Search
+                style={{ width: "20%" }}
+                placeholder="Tìm kiếm"
+                className="HeaderSearch"
+                onChange={(e) => {
+                  setSearchValue(e);
+                }}
+              ></Search>
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"

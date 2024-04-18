@@ -1,32 +1,42 @@
-@import '../../../node_modules/@silevis/reactgrid/styles.scss';
+// @import "../../../node_modules/@silevis/reactgrid/styles.scss";
 
-// $primary-color: #3579f8;
-.b-table {
-    width: 100%;
-    overflow: auto;
-    height: 400px;
-}
+// // $primary-color: #3579f8;
+// .b-table {
+//   width: 100%;
+//   overflow: auto;
+//   height: 400px;
+//   .rdg-header-row .rdg-cell {
+//     height: 42px;
+//     color: white;
+//     padding-block-start: unset !important;
+//     font-weight: 500;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     background-color: red;
+//   }
+// }
 
-.b-table .rg-header-cell {
-    justify-content: center;
-    background: rgba(134, 229, 255, 0.5) !important;
-}
+// .b-table .rg-header-cell {
+//   justify-content: center;
+//   background: rgba(134, 229, 255, 0.5) !important;
+// }
 
- .rg-checkbox-cell {
-}
+// .rg-checkbox-cell {
+// }
 
- .rg-text-cell  {
-}
+// .rg-text-cell {
+// }
 
- .rg-text-celleditor {
-}
+// .rg-text-celleditor {
+// }
 
-.rg-cell-focus {
-}
+// .rg-cell-focus {
+// }
 
-.rg-partial-area-selected-range {
-}
+// .rg-partial-area-selected-range {
+// }
 
-revo-grid {
-    height: 500px !important;
-}
+// revo-grid {
+//   height: 500px !important;
+// }
