@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import {
+  clearGetin,
   load,
   searchVessels,
   send,
@@ -247,6 +248,9 @@ export default function Msg3668Container() {
         }
         break;
       case "cancelgetin":
+        dispatch(setLoading(true));
+        await clearGetin();
+        dispatch(setLoading(false));
         break;
       case "cancel":
         // await cancelSending();
