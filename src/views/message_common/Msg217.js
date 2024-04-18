@@ -253,9 +253,9 @@ const Msg217 = () => {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg465 = await load(formData);
-      if (resultDataMsg465.data.length > 0) {
-        const dataMsg465 = resultDataMsg465.data.map((row) => {
+      const resultDataMsg217 = await load(formData);
+      if (resultDataMsg217.data.length > 0) {
+        const dataMsg465 = resultDataMsg217.data.map((row) => {
           return columns.reduce((acc, column) => {
             // handle logic data
             const keyValue = column.key;

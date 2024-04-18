@@ -253,9 +253,9 @@ const Msg227 = () => {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg465 = await load(formData);
-      if (resultDataMsg465.data.length > 0) {
-        const dataMsg465 = resultDataMsg465.data.map((row) => {
+      const resultDataMsg227 = await load(formData);
+      if (resultDataMsg227.data.length > 0) {
+        const dataMsg465 = resultDataMsg227.data.map((row) => {
           return columns.reduce((acc, column) => {
             // handle logic data
             const keyValue = column.key;
@@ -286,7 +286,6 @@ const Msg227 = () => {
         });
         setRows(dataMsg465);
       } else {
-        console.log('-----------------')
         setRows([]);
         message.error('Không tìm thấy dữ liệu dữ liệu!');
       }

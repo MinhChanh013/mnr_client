@@ -1,4 +1,4 @@
-import { Card, Col, Row, message, Input, Space, Typography } from "antd";
+import { Card, Col, Row, message, Input, Space, Typography, Form } from "antd";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
@@ -14,6 +14,7 @@ import { setLoading } from "../../store/slices/LoadingSlices.js";
 const Msg901 = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
+  const [form] = Form.useForm();
   const gridRef = React.createRef();
   const onFocus = () => { };
   const columns = [
@@ -77,82 +78,82 @@ const Msg901 = () => {
       name: "Mã Doanh Nghiệp",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "PartnerNameInVN",
       name: "Tên Doanh Nghiệp",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "Address",
       name: "Địa Chỉ",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "TaxCode",
       name: "MST",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "ContactName",
       name: "Người Nộp Phí",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "Phone",
       name: "SĐT",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "Email",
       name: "Email",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "CustomsDeclare",
       name: "Số tờ khai",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "CustomsDeclareDate",
       name: "Ngày tờ khai",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "CustomsDeclareType",
       name: "Mã loại hình TK",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "TariffTypeCode",
       name: "Mã loại hình HH",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "TransportCode",
       name: "Mã phương tiện VC",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "DestinationCode",
       name: "Mã địa điểm lưu kho",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "CustomsGoodsItems",
       name: "Chi tiết phí",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "CustomsDeclarations",
       name: "Danh sách TK",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "JournalMemo",
       name: "Diễn Giải Chi Tiết",
       width: 150,
       type: columnTypes.TextEditor,
-    },{
+    }, {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
       width: 150,
@@ -161,8 +162,12 @@ const Msg901 = () => {
   ];
 
   const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const formData = {
+      ...dataFormFilter,
+    };
     if (props.type === 'load') {
-      handleLoadData();
+      handleLoadData(formData);
     }
 
     if (props.type === 'send') {
@@ -215,9 +220,9 @@ const Msg901 = () => {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg465 = await load(formData);
-      if (resultDataMsg465.data.length > 0) {
-        const dataMsg465 = resultDataMsg465.data.map((row) => {
+      const resultDataMsg901 = await load(formData);
+      if (resultDataMsg901.data.length > 0) {
+        const dataMsg901 = resultDataMsg901.data.map((row) => {
           return columns.reduce((acc, column) => {
             // handle logic data
             const keyValue = column.key;
@@ -246,9 +251,8 @@ const Msg901 = () => {
             return acc;
           }, {});
         });
-        setRows(dataMsg465);
+        setRows(dataMsg901);
       } else {
-        console.log('-----------------')
         setRows([]);
         message.error('Không tìm thấy dữ liệu dữ liệu!');
       }
@@ -258,7 +262,6 @@ const Msg901 = () => {
     }
   };
 
-  const filterRef = React.useRef();
 
   return (
     <>
@@ -275,13 +278,13 @@ const Msg901 = () => {
             <Row className="b-row">
               <Col span={24}>
                 <Filter
-                  filterRef={filterRef}
+                  form={form}
                   items={[
                     {
                       type: filterType.input,
                       label: "Số Biên Lai",
                       config: {
-                        name: "BLno",
+                        name: "receiptNo",
                         style: { fontWeight: 'bold' }
                       },
                     },
@@ -289,7 +292,7 @@ const Msg901 = () => {
                       type: filterType.input,
                       label: "Số Tờ Khai",
                       config: {
-                        name: "DeclareNo",
+                        name: "declareNo",
                         style: { fontWeight: 'bold' }
                       },
                     },
@@ -297,7 +300,7 @@ const Msg901 = () => {
                       type: filterType.input,
                       label: "Số Vận Đơn",
                       config: {
-                        name: "Billoflading",
+                        name: "billOfLading",
                         style: { fontWeight: 'bold' }
                       },
                     },
@@ -306,7 +309,7 @@ const Msg901 = () => {
                       label: "Số Container",
                       divider: true,
                       config: {
-                        name: "Cntrno",
+                        name: "cntrNo",
                         style: { fontWeight: 'bold' }
                       },
                     },

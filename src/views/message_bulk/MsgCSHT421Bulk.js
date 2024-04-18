@@ -1,28 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Form, Row } from "antd";
+import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels, send } from "../../apis/message_container/566.js";
+import { v4 as uuidv4 } from "uuid";
+import {
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_container/3668.js";
+import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes,
+  selectionTypes
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
-import { setLoading } from "../../store/slices/LoadingSlices.js";
-import {
-  basicRenderColumns,
-  dataConverTable,
-} from "../../utils/dataTable.utils.js";
-import { showMessage } from "../../store/slices/MessageSlices.js";
-import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { showMessage } from "../../store/slices/MessageSlices.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
-export default function Msg566Container() {
-  const onFocus = () => { };
+export default function Msg421BulkCSHT() {
+  const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -30,7 +33,8 @@ export default function Msg566Container() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect( () => {
+  React.useEffect(() => {
+    document.title = '[CSHT] Gửi Getout hàng rời có TKHQ';
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
@@ -67,92 +71,128 @@ export default function Msg566Container() {
     },
     {
       key: "BillOfLading",
-      name: "Số Vận Đơn",
-      width: 130,
+      name: "Nhập/Xuất",
+      width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "IssueDate",
-      name: "Ngày Vận Đơn",
+      key: "CargoCtrlNo",
+      name: "Tên Tàu",
       width: 150,
-      type: columnTypes.DatePicker,
+      type: columnTypes.TextEditor,
     },
     {
       key: "CntrNo",
-      name: "Số Container",
+      name: "Chuyến Tàu",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
-      key: "SealNo",
-      name: "Niêm Chì",
+      key: "GetIn",
+      name: "Ngày Tàu Đến/Rời",
       width: 200,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "CommodityDescription",
-      name: "Mô Tả Hàng Hóa",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "StatusOfGood",
-      name: "Full/Empty",
-      width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
       key: "TransportIdentity",
-      name: "Tên Tàu",
-      width: 200,
+      name: "Số Vận Đơn",
+      width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "NumberOfJourney",
-      name: "Số Chuyến",
+      name: "Số Định Danh",
       width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "ArrivalDeparture",
-      name: "Ngày Cập/Rời",
-      width: 150,
+      name: "Ngày Ra Cảng",
+      width: 200,
       type: columnTypes.DatePicker,
     },
     {
-      key: "Content",
-      name: "Ghi Chú",
-      width: 180,
+      key: "MsgRef",
+      name: "Đơn Vị Tính",
+      width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "IsUpdate",
-      name: "Cấp Lại",
-      width: 220,
+      key: "MsgRef",
+      name: "SL Ra",
+      width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "AcceptanceNo",
+      key: "MsgRef",
+      name: "SL Còn lại",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Lần Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Phương Án Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Hình Thức Ra",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Số Tờ Khai",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Ngày Tờ Khai",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Mã LH",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
+      name: "Mã HQ Mở TK",
+      width: 300,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "MsgRef",
       name: "Số Tiếp Nhận",
-      width: 220,
+      width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "AcceptanceTime",
+      key: "MsgRef",
       name: "Ngày Tiếp Nhận",
-      width: 220,
-      type: columnTypes.DatePicker,
+      width: 300,
+      type: columnTypes.TextEditor,
     },
     {
-      key: "ResponseText",
-      name: "Nội Dung Phản Hồi",
-      width: 220,
+      key: "MsgRef",
+      name: "Nội dung Phản Hồi",
+      width: 300,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
-      width: 220,
+      width: 300,
       type: columnTypes.TextEditor,
     },
   ]);
@@ -160,9 +200,17 @@ export default function Msg566Container() {
   const buttonConfirm = async (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
 
+    delete dataFormFilter.dateFromTo;
     const formData = {
       ...dataFormFilter,
+      fromdate,
+      todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
     switch (props.type) {
@@ -170,8 +218,6 @@ export default function Msg566Container() {
         handleLoadData(formData);
         break;
       case "send":
-        const isLF = dataFormFilter.isLF;
-        const voyagekey = dataVesselSelect.VoyageKey;
         const idMsgRowData = gridRef.current?.getSelectedRows();
         const listMsgRowSelect = [];
         idMsgRowData.forEach((idMsgSelected) => {
@@ -181,10 +227,12 @@ export default function Msg566Container() {
         });
         try {
           dispatch(updateForm(formData));
-          await send(listMsgRowSelect, isLF, voyagekey, dispatch);
+          await send(listMsgRowSelect, dispatch);
         } catch (error) {
           console.log(error);
         }
+        break;
+      case "cancelgetin":
         break;
       default:
         break;
@@ -194,15 +242,15 @@ export default function Msg566Container() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg566 = await load(formData);
-      if (resultDataMsg566) {
-        const newResultDataMsg566 = resultDataMsg566.data.map((item) => {
+      const resultDataMsg3668 = await load(formData);
+      if (resultDataMsg3668) {
+        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
           return {
             ...item,
             ID: uuidv4(),
           };
         });
-        setRows(newResultDataMsg566);
+        setRows(newResultDataMsg3668);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -223,17 +271,11 @@ export default function Msg566Container() {
       >
         <Col span={6}>
           <Card
-            styles={{
-              title: {
-                textAlign: "center",
-                color: "#1b618c",
-              },
-            }}
-            title={'[566] \r\n XIN SỐ ĐỊNH DANH'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[CSHT.421] \r\n GỬI GETOUT HÀNG RỜI QUA KVGS"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row className="b-row" gutter={[16,16]}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
@@ -243,9 +285,9 @@ export default function Msg566Container() {
                   items={[
                     {
                       type: filterType.radio,
-                      label: "Loại hàng",
+                      label: "Hướng",
                       config: {
-                        name: "isLF",
+                        name: "imextype",
                         defaultValue: "",
                         options: [
                           {
@@ -253,71 +295,22 @@ export default function Msg566Container() {
                             value: "",
                           },
                           {
-                            label: "Hàng ngoại",
+                            label: "Nhập khẩu",
                             value: "1",
                           },
                           {
-                            label: "Hàng nội",
+                            label: "Xuất khẩu",
                             value: "2",
                           },
                         ],
                       },
                     },
                     {
-                      type: filterType.radio,
-                      label: "Loại hàng",
+                      type: filterType.rangePicker,
+                      label: "Khoản",
                       config: {
-                        name: "fe",
-                        defaultValue: "",
-                        options: [
-                          {
-                            label: "Tất cả",
-                            value: "",
-                          },
-                          {
-                            label: "Full",
-                            value: "1",
-                          },
-                          {
-                            label: "Empty",
-                            value: "0",
-                          },
-                        ],
-                      },
-                    },
-                    {
-                      type: filterType.radio,
-                      label: "Trạng thái thông điệp",
-                      config: {
-                        name: "marker",
-                        defaultValue: "",
-                        options: [
-                          {
-                            label: "Tất cả",
-                            value: "",
-                          },
-                          {
-                            label: "Thành công",
-                            value: "SuccessMarker",
-                          },
-                          {
-                            label: "Thất bại",
-                            value: "ErrorMarker",
-                          },
-                          {
-                            label: "Chưa gửi",
-                            value: "UnMarker",
-                          },
-                        ],
-                      },
-                    },
-                    {
-                      type: filterType.input,
-                      label: "Số Cont",
-                      config: {
-                        defaultValue: "",
-                        name: "billOfLading",
-                        placeholder: "",
+                        name: "dateFromTo",
+                        placeholder: ["Từ", "Đến"],
                         value: "",
                       },
                     },
@@ -328,22 +321,16 @@ export default function Msg566Container() {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancel,
-              ]}
+              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
               columns={columns}
               rows={rows}
               setRows={setRows}
