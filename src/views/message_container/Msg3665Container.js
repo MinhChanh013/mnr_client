@@ -193,9 +193,6 @@ export default function Msg3665Container() {
       editable: true,
     },
   ]);
-  const handleSearchData = (value) => {
-    setRows(value);
-  };
 
   const handleLoadData = async (formData) => {
     dispatch(setLoading(true));
@@ -410,8 +407,9 @@ export default function Msg3665Container() {
                 handleConfirm={buttonConfirm}
               />
               <SearchBox
+                style={{ width: "24%" }}
                 data={dataTable}
-                onChange={handleSearchData}
+                onChange={setRows}
               ></SearchBox>
             </Flex>
             <DataGrid

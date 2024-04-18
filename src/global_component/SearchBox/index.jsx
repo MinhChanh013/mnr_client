@@ -31,7 +31,7 @@ const SearchBox = (props) => {
 
   return (
     <Search
-      style={{ width: "20%" }}
+      style={props.style}
       placeholder="Tìm kiếm"
       className="HeaderSearch"
       onChange={(e) => {

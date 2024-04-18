@@ -13,6 +13,7 @@ import DataGrid, { columnTypes, selectionTypes } from "../DataGrid";
 import "./vessel-select.scss";
 import dayjs from "dayjs";
 import { FORMAT_DATETIME } from "../../constants";
+import SearchBox from "../SearchBox";
 
 const { Text } = Typography;
 
@@ -66,6 +67,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
   const vesselTable = useRef();
   const [vesselRowSelect, setVesselRowSelect] = useState(() => new Set());
   const [open, setOpen] = useState(false);
+  const [dataTable, setDataTable] = useState([]);
   const [viewvessels, setViewvessels] = useState({});
   const [vesselSelect, setVesselSelect] = useState({});
 
@@ -129,6 +131,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
         }, {});
       });
       setViewvessels(dataViewsels);
+      setDataTable(dataViewsels);
     }
   }, [data]);
 
@@ -241,9 +244,18 @@ const VesselSelect = forwardRef(({ data }, ref) => {
           </Button>,
         ]}
         title={
-          <Text style={{ width: "100%", fontSize: "1rem" }}>
-            Chọn Chuyến Tàu
-          </Text>
+          <Flex
+            style={{ paddingRight: "40px" }}
+            justify="space-between"
+            align="center"
+          >
+            <Text style={{ fontSize: "1rem" }}>Chọn Chuyến Tàu</Text>
+            <SearchBox
+              style={{ width: "34%" }}
+              data={dataTable}
+              onChange={setViewvessels}
+            />
+          </Flex>
         }
       >
         <Card className="vessel-select">
@@ -257,7 +269,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
             setSelectedRows={setVesselRowSelect}
             selection={selectionTypes.single}
             onCellClick
-            onCellDoubleClick = {handleConfirmsSelect}
+            onCellDoubleClick={handleConfirmsSelect}
           />
         </Card>
       </Modal>
