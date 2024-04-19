@@ -2,12 +2,14 @@ import { Card, Col, Row, message, Input, Space, Typography, Form } from "antd";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { load, send } from "../../apis/message_common/901.js"
+import { load, send } from "../../apis/message_common/901.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 
@@ -16,13 +18,13 @@ const MsgHistory = () => {
   const [rows, setRows] = React.useState([]);
   const [form] = Form.useForm();
   const gridRef = React.createRef();
-  const onFocus = () => { };
+  const onFocus = () => {};
   const columns = [
     {
-      key: 'IDRef',
-      name: 'IDRef',
+      key: "IDRef",
+      name: "IDRef",
       visible: true,
-      editable: false
+      editable: false,
     },
     {
       key: "InvForm",
@@ -78,82 +80,98 @@ const MsgHistory = () => {
       name: "Mã Doanh Nghiệp",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "PartnerNameInVN",
       name: "Tên Doanh Nghiệp",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "Address",
       name: "Địa Chỉ",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "TaxCode",
       name: "MST",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "ContactName",
       name: "Người Nộp Phí",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "Phone",
       name: "SĐT",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "Email",
       name: "Email",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "CustomsDeclare",
       name: "Số tờ khai",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "CustomsDeclareDate",
       name: "Ngày tờ khai",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "CustomsDeclareType",
       name: "Mã loại hình TK",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "TariffTypeCode",
       name: "Mã loại hình HH",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "TransportCode",
       name: "Mã phương tiện VC",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "DestinationCode",
       name: "Mã địa điểm lưu kho",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "CustomsGoodsItems",
       name: "Chi tiết phí",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "CustomsDeclarations",
       name: "Danh sách TK",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "JournalMemo",
       name: "Diễn Giải Chi Tiết",
       width: 150,
       type: columnTypes.TextEditor,
-    }, {
+    },
+    {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
       width: 150,
@@ -166,11 +184,11 @@ const MsgHistory = () => {
     const formData = {
       ...dataFormFilter,
     };
-    if (props.type === 'load') {
+    if (props.type === "load") {
       handleLoadData(formData);
     }
 
-    if (props.type === 'send') {
+    if (props.type === "send") {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
       idMsgRowData.forEach((idMsgSelected) => {
@@ -182,11 +200,11 @@ const MsgHistory = () => {
         const data = await send(listMsgRowSelect);
         if (data) {
           if (data.deny) {
-            message.error(data.deny)
+            message.error(data.deny);
             return;
           }
           if (data.data && data.data.dont_send_again) {
-            message.success(data.data.dont_send_again)
+            message.success(data.data.dont_send_again);
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
@@ -196,7 +214,7 @@ const MsgHistory = () => {
           }
 
           if (data.msgGroupId) {
-            message.success('Thông điệp đã được đưa vào hàng đợi!');
+            message.success("Thông điệp đã được đưa vào hàng đợi!");
             socket.emit("mess_to_sock", data.msgGroupId);
           }
 
@@ -215,7 +233,11 @@ const MsgHistory = () => {
         console.log(error);
       }
     }
-  }
+
+    if (props.type === "export_excel") {
+      gridRef.current?.exportExcel();
+    }
+  };
 
   const handleLoadData = async (formData) => {
     try {
@@ -254,14 +276,13 @@ const MsgHistory = () => {
         setRows(dataMsg901);
       } else {
         setRows([]);
-        message.error('Không tìm thấy dữ liệu dữ liệu!');
+        message.error("Không tìm thấy dữ liệu dữ liệu!");
       }
       dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
   };
-
 
   return (
     <>
@@ -271,8 +292,8 @@ const MsgHistory = () => {
       >
         <Col span={6}>
           <Card
-            title={'TRUY VẤN THÔNG ĐIỆP'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"TRUY VẤN THÔNG ĐIỆP"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
             <Row className="b-row">
@@ -285,7 +306,7 @@ const MsgHistory = () => {
                       label: "Số Biên Lai",
                       config: {
                         name: "receiptNo",
-                        style: { fontWeight: 'bold' }
+                        style: { fontWeight: "bold" },
                       },
                     },
                     {
@@ -293,7 +314,7 @@ const MsgHistory = () => {
                       label: "Số Tờ Khai",
                       config: {
                         name: "declareNo",
-                        style: { fontWeight: 'bold' }
+                        style: { fontWeight: "bold" },
                       },
                     },
                     {
@@ -301,7 +322,7 @@ const MsgHistory = () => {
                       label: "Số Vận Đơn",
                       config: {
                         name: "billOfLading",
-                        style: { fontWeight: 'bold' }
+                        style: { fontWeight: "bold" },
                       },
                     },
                     {
@@ -310,7 +331,7 @@ const MsgHistory = () => {
                       divider: true,
                       config: {
                         name: "cntrNo",
-                        style: { fontWeight: 'bold' }
+                        style: { fontWeight: "bold" },
                       },
                     },
                     {
@@ -319,18 +340,18 @@ const MsgHistory = () => {
                       divider: true,
                       config: {
                         name: "type",
-                        defaultValue: 'cont',
+                        defaultValue: "cont",
                         options: [
-                          { label: 'Hàng Cont', value: 'cont' },
-                          { label: 'Hàng Kiện', value: 'package' },
-                          { label: 'Hàng rời', value: 'dispatch' },
-                        ]
+                          { label: "Hàng Cont", value: "cont" },
+                          { label: "Hàng Kiện", value: "package" },
+                          { label: "Hàng rời", value: "dispatch" },
+                        ],
                       },
                     },
                     {
                       type: filterType.rangePicker,
                       divider: true,
-                      label: 'Khoảng',
+                      label: "Khoảng",
                       config: {
                         name: "date",
                         // placeholder: 'Khoảng',
@@ -343,17 +364,19 @@ const MsgHistory = () => {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <Row>
               <Col span={18}>
                 <ToolBar
-                  buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+                  buttonConfig={[
+                    toolBarButtonTypes.load,
+                    toolBarButtonTypes.send,
+                    toolBarButtonTypes.exportexcel,
+                  ]}
                   handleConfirm={buttonConfirm}
                 />
               </Col>
-              <Col span={6} style={{ paddingTop: '4px' }}>
+              <Col span={6} style={{ paddingTop: "4px" }}>
                 <Space>
                   <Typography>Tìm:</Typography>
                   <Input />
@@ -370,9 +393,7 @@ const MsgHistory = () => {
               setRows={setRows}
               onFocus={onFocus}
             />
-
           </Card>
-
         </Col>
       </Row>
     </>

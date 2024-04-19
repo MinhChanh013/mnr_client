@@ -84,5 +84,4 @@ const ImportExcel = async (file) => {
   });
 };
 
-
 export { ImportExcel, ExportExcel };

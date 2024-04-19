@@ -102,6 +102,9 @@ export default function ContainerMNF() {
   };
   const buttonConfirm = (props) => {
     switch (props.type) {
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       case "load":
         handleSelectFilterData();
         handleLoadData();
@@ -273,6 +276,7 @@ export default function ContainerMNF() {
                 toolBarButtonTypes.delete,
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.save,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

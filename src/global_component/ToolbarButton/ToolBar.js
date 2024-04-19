@@ -82,7 +82,7 @@ export const toolBarButtonTypes = {
     icon: <SendOutlined style={{ stroke: "#2399fa", strokeWidth: 30 }} />,
   },
   exportexcel: {
-    id: "export excel",
+    id: "export_excel",
     label: "Xuất Excel",
     fontColor: "#2399fa",
     icon: <FileExcelOutlined />,

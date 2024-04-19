@@ -67,6 +67,9 @@ export default function ContainerSizeType() {
       case "add":
         setRows([NewItem, ...rows]);
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -138,6 +141,7 @@ export default function ContainerSizeType() {
                 toolBarButtonTypes.add,
                 toolBarButtonTypes.delete,
                 toolBarButtonTypes.save,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

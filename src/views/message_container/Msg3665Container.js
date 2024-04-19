@@ -257,6 +257,9 @@ export default function Msg3665Container() {
       case "cancel":
         // await cancelSending();
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -403,6 +406,7 @@ export default function Msg3665Container() {
                   toolBarButtonTypes.load,
                   toolBarButtonTypes.send,
                   toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
                 ]}
                 handleConfirm={buttonConfirm}
               />

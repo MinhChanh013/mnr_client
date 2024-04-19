@@ -18,7 +18,7 @@ import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 export default function Msg213Container() {
-  const onFocus = () => { };
+  const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -106,6 +106,9 @@ export default function Msg213Container() {
           console.log(error);
         }
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -143,8 +146,8 @@ export default function Msg213Container() {
                 color: "#1b618c",
               },
             }}
-            title={'[213] \r\n DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[213] \r\n DANH SÁCH CONTAINER SOI CHIẾU TRƯỚC"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
             <Row className="b-row">
@@ -190,11 +193,13 @@ export default function Msg213Container() {
           </Card>
         </Col>
         <Col span={17}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

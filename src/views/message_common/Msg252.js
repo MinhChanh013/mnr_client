@@ -3,7 +3,9 @@ import { useState } from "react";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -21,13 +23,13 @@ const Msg252 = () => {
   const vesselSelectRef = React.useRef();
   const [vesselData] = useState([]);
   const gridRef = React.createRef();
-  const onFocus = () => { };
+  const onFocus = () => {};
   const columns = [
     {
-      key: 'IDRef',
-      name: 'IDRef',
+      key: "IDRef",
+      name: "IDRef",
       visible: true,
-      editable: false
+      editable: false,
     },
     {
       key: "JobStatus",
@@ -165,15 +167,13 @@ const Msg252 = () => {
   ];
 
   const buttonConfirm = async (props) => {
-    if (props.type === 'load') {
+    if (props.type === "load") {
       const dataFormFilter = form.getFieldsValue();
       console.log(dataFormFilter);
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       let fromdate, todate;
       if (dataFormFilter.dateFromTo) {
-        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-          FORMAT_DATETIME
-        );
+        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
         todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
       }
       delete dataFormFilter.dateFromTo;
@@ -181,13 +181,16 @@ const Msg252 = () => {
         ...dataFormFilter,
         fromdate,
         todate,
-        voyagekey: Object.keys(dataVesselSelect).length > 0 ? dataVesselSelect.VoyageKey : "",
+        voyagekey:
+          Object.keys(dataVesselSelect).length > 0
+            ? dataVesselSelect.VoyageKey
+            : "",
         imextype: Number(dataFormFilter.imextype),
       };
       handleLoadData(formData);
     }
 
-    if (props.type === 'send') {
+    if (props.type === "send") {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
       idMsgRowData.forEach((idMsgSelected) => {
@@ -199,11 +202,11 @@ const Msg252 = () => {
         const data = await send(listMsgRowSelect);
         if (data) {
           if (data.deny) {
-            message.error(data.deny)
+            message.error(data.deny);
             return;
           }
           if (data.data && data.data.dont_send_again) {
-            message.success(data.data.dont_send_again)
+            message.success(data.data.dont_send_again);
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
@@ -213,7 +216,7 @@ const Msg252 = () => {
           }
 
           if (data.msgGroupId) {
-            message.success('Thông điệp đã được đưa vào hàng đợi!');
+            message.success("Thông điệp đã được đưa vào hàng đợi!");
             socket.emit("mess_to_sock", data.msgGroupId);
           }
 
@@ -221,15 +224,18 @@ const Msg252 = () => {
             alert(data.result);
           }
           if (data.msgRef_array) {
-            for (let i = 0; i < data.msgRef_array.length; i++) {
-            }
+            for (let i = 0; i < data.msgRef_array.length; i++) {}
           }
         }
       } catch (error) {
         console.log(error);
       }
     }
-  }
+
+    if (props.type === "export_excel") {
+      gridRef.current?.exportExcel();
+    }
+  };
 
   const handleLoadData = async (formData) => {
     try {
@@ -268,14 +274,13 @@ const Msg252 = () => {
         setRows(dataMsg465);
       } else {
         setRows([]);
-        message.error('Không tìm thấy dữ liệu dữ liệu!');
+        message.error("Không tìm thấy dữ liệu dữ liệu!");
       }
       dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
   };
-
 
   return (
     <>
@@ -285,16 +290,16 @@ const Msg252 = () => {
       >
         <Col span={6}>
           <Card
-            title={'[252] \r\n HÀNG HÓA VÀO KHO QUA TKVC'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[252] \r\n HÀNG HÓA VÀO KHO QUA TKVC"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row gutter={[16,16]} className="b-row">
+            <Row gutter={[16, 16]} className="b-row">
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>
               <Col>
-                <Row gutter={[16,16]}>
+                <Row gutter={[16, 16]}>
                   <Col span={24}>
                     <Row>
                       <Col span={8}>
@@ -321,17 +326,19 @@ const Msg252 = () => {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <Row>
               <Col span={18}>
                 <ToolBar
-                  buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send,]}
+                  buttonConfig={[
+                    toolBarButtonTypes.load,
+                    toolBarButtonTypes.send,
+                    toolBarButtonTypes.exportexcel,
+                  ]}
                   handleConfirm={buttonConfirm}
                 />
               </Col>
-              <Col span={6} style={{ paddingTop: '4px' }}>
+              <Col span={6} style={{ paddingTop: "4px" }}>
                 <Space>
                   <Typography>Tìm:</Typography>
                   <Input />
@@ -348,9 +355,7 @@ const Msg252 = () => {
               setRows={setRows}
               onFocus={onFocus}
             />
-
           </Card>
-
         </Col>
       </Row>
     </>

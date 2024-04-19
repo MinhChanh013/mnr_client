@@ -18,14 +18,14 @@ import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 
 export default function Msg214Container() {
-  const onFocus = () => { };
+  const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
@@ -176,6 +176,9 @@ export default function Msg214Container() {
           console.log(error);
         }
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       case "cancelgetin":
         break;
       case "cancel":
@@ -224,8 +227,8 @@ export default function Msg214Container() {
                 color: "#1b618c",
               },
             }}
-            title={'[214] \r\n DANH SÁCH CONTAINER SAI KHÁC'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[214] \r\n DANH SÁCH CONTAINER SAI KHÁC"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
             <Row className="b-row">
@@ -236,11 +239,13 @@ export default function Msg214Container() {
           </Card>
         </Col>
         <Col span={17}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

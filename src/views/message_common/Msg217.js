@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -21,13 +23,13 @@ const Msg217 = () => {
   const vesselSelectRef = React.useRef();
   const [vesselData, setVessel] = useState([]);
   const gridRef = React.createRef();
-  const onFocus = () => { };
+  const onFocus = () => {};
   const columns = [
     {
-      key: 'IDRef',
-      name: 'IDRef',
+      key: "IDRef",
+      name: "IDRef",
       visible: true,
-      editable: false
+      editable: false,
     },
     {
       key: "JobStatus",
@@ -165,15 +167,13 @@ const Msg217 = () => {
   ];
 
   const buttonConfirm = async (props) => {
-    if (props.type === 'load') {
+    if (props.type === "load") {
       const dataFormFilter = form.getFieldsValue();
       console.log(dataFormFilter);
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       let fromdate, todate;
       if (dataFormFilter.dateFromTo) {
-        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-          FORMAT_DATETIME
-        );
+        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
         todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
       }
       delete dataFormFilter.dateFromTo;
@@ -181,12 +181,15 @@ const Msg217 = () => {
         ...dataFormFilter,
         fromdate,
         todate,
-        voyagekey: Object.keys(dataVesselSelect).length > 0 ? dataVesselSelect.VoyageKey : "",
+        voyagekey:
+          Object.keys(dataVesselSelect).length > 0
+            ? dataVesselSelect.VoyageKey
+            : "",
       };
       handleLoadData(formData);
     }
 
-    if (props.type === 'send') {
+    if (props.type === "send") {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
       idMsgRowData.forEach((idMsgSelected) => {
@@ -198,11 +201,11 @@ const Msg217 = () => {
         const data = await send(listMsgRowSelect);
         if (data) {
           if (data.deny) {
-            message.error(data.deny)
+            message.error(data.deny);
             return;
           }
           if (data.data && data.data.dont_send_again) {
-            message.success(data.data.dont_send_again)
+            message.success(data.data.dont_send_again);
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
@@ -212,7 +215,7 @@ const Msg217 = () => {
           }
 
           if (data.msgGroupId) {
-            message.success('Thông điệp đã được đưa vào hàng đợi!');
+            message.success("Thông điệp đã được đưa vào hàng đợi!");
             socket.emit("mess_to_sock", data.msgGroupId);
           }
 
@@ -231,7 +234,11 @@ const Msg217 = () => {
         console.log(error);
       }
     }
-  }
+
+    if (props.type === "export_excel") {
+      gridRef.current?.exportExcel();
+    }
+  };
 
   useEffect(() => {
     async function searchvessel() {
@@ -240,15 +247,14 @@ const Msg217 = () => {
         if (loadVessel.success) {
           setVessel(loadVessel.data);
         } else {
-  
         }
       } catch (error) {
         console.log(error);
       }
     }
 
-    searchvessel()
-  }, [])
+    searchvessel();
+  }, []);
 
   const handleLoadData = async (formData) => {
     try {
@@ -286,16 +292,15 @@ const Msg217 = () => {
         });
         setRows(dataMsg465);
       } else {
-        console.log('-----------------')
+        console.log("-----------------");
         setRows([]);
-        message.error('Không tìm thấy dữ liệu dữ liệu!');
+        message.error("Không tìm thấy dữ liệu dữ liệu!");
       }
       dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
   };
-
 
   return (
     <>
@@ -305,8 +310,8 @@ const Msg217 = () => {
       >
         <Col span={6}>
           <Card
-            title={'[217] \r\n CONTAINER RÚT HÀNG'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[217] \r\n CONTAINER RÚT HÀNG"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
             <Row className="b-row">
@@ -317,17 +322,20 @@ const Msg217 = () => {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <Row>
               <Col span={18}>
                 <ToolBar
-                  buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel, toolBarButtonTypes.exportexcel]}
+                  buttonConfig={[
+                    toolBarButtonTypes.load,
+                    toolBarButtonTypes.send,
+                    toolBarButtonTypes.cancel,
+                    toolBarButtonTypes.exportexcel,
+                  ]}
                   handleConfirm={buttonConfirm}
                 />
               </Col>
-              <Col span={6} style={{ paddingTop: '4px' }}>
+              <Col span={6} style={{ paddingTop: "4px" }}>
                 <Space>
                   <Typography>Tìm:</Typography>
                   <Input />
@@ -344,9 +352,7 @@ const Msg217 = () => {
               setRows={setRows}
               onFocus={onFocus}
             />
-
           </Card>
-
         </Col>
       </Row>
     </>

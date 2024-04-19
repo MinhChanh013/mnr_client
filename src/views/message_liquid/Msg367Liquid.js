@@ -3,13 +3,10 @@ import { Card, Col, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels
-} from "../../apis/message_container/3668.js";
+import { load, searchVessels } from "../../apis/message_container/3668.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, {
@@ -29,7 +26,7 @@ export default function Msg367Liquid() {
   const [form] = Form.useForm();
 
   React.useEffect(() => {
-    document.title = 'Tờ khai đủ điều kiện qua KVGS';
+    document.title = "Tờ khai đủ điều kiện qua KVGS";
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
@@ -170,6 +167,9 @@ export default function Msg367Liquid() {
         break;
       case "cancelgetin":
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -273,6 +273,7 @@ export default function Msg367Liquid() {
               buttonConfig={[
                 toolBarButtonTypes.newdeclare,
                 toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

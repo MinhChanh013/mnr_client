@@ -208,6 +208,9 @@ export default function ContainerStock() {
       case "add":
         setRows([NewItem, ...rows]);
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -360,6 +363,7 @@ export default function ContainerStock() {
                 toolBarButtonTypes.delete,
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.save,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />
