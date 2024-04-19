@@ -12,6 +12,7 @@ import React, {
 import { Pagination, Typography, Flex, Space, Divider } from "antd";
 import ReactDataGrid, { SelectColumn, textEditor } from "react-data-grid";
 import { renderCellEditDatePicker } from "./renderCellEditDatePicker";
+import { ExportExcel } from "../../assets/js/excelFunction";
 
 import { useDispatch } from "react-redux";
 import { setSelectedQuantity } from "../../store/slices/SelectedQuantitySlices.js";
@@ -259,6 +260,8 @@ const DataGrid = forwardRef(
       }
     }, []);
 
+    const handleExportExcel = useCallback(() => ExportExcel(columns, rows), []);
+
     useImperativeHandle(
       ref,
       () => {
@@ -269,6 +272,7 @@ const DataGrid = forwardRef(
           setSelectedRows: () => {
             setSelectedRows(new Set());
           },
+          exportExcel: () => handleExportExcel(),
         };
       },
       [selectedRows]

@@ -169,6 +169,9 @@ export default function Msg215Package() {
         break;
       case "cancelgetin":
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -220,7 +223,11 @@ export default function Msg215Package() {
         <Col span={18}>
           <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

@@ -3,25 +3,27 @@ import { useState } from "react";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import {  send } from "../../apis/message_common/3678.js";
+import { send } from "../../apis/message_common/3678.js";
 
 const Msg367point8 = () => {
   const [rows, setRows] = React.useState([]);
   const vesselSelectRef = React.useRef();
   const [vesselData] = useState([]);
   const gridRef = React.createRef();
-  const onFocus = () => { };
+  const onFocus = () => {};
   const columns = [
     {
-      key: 'IDRef',
-      name: 'IDRef',
+      key: "IDRef",
+      name: "IDRef",
       visible: true,
-      editable: false
+      editable: false,
     },
     {
       key: "JobStatus",
@@ -159,10 +161,10 @@ const Msg367point8 = () => {
   ];
 
   const buttonConfirm = async (props) => {
-    if (props.type === 'load') {
+    if (props.type === "load") {
     }
 
-    if (props.type === 'send') {
+    if (props.type === "send") {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
       idMsgRowData.forEach((idMsgSelected) => {
@@ -174,11 +176,11 @@ const Msg367point8 = () => {
         const data = await send(listMsgRowSelect);
         if (data) {
           if (data.deny) {
-            message.error(data.deny)
+            message.error(data.deny);
             return;
           }
           if (data.data && data.data.dont_send_again) {
-            message.success(data.data.dont_send_again)
+            message.success(data.data.dont_send_again);
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
@@ -188,7 +190,7 @@ const Msg367point8 = () => {
           }
 
           if (data.msgGroupId) {
-            message.success('Thông điệp đã được đưa vào hàng đợi!');
+            message.success("Thông điệp đã được đưa vào hàng đợi!");
             socket.emit("mess_to_sock", data.msgGroupId);
           }
 
@@ -207,8 +209,11 @@ const Msg367point8 = () => {
         console.log(error);
       }
     }
-  }
 
+    if (props.type === "export_excel") {
+      gridRef.current?.exportExcel();
+    }
+  };
 
   return (
     <>
@@ -218,16 +223,16 @@ const Msg367point8 = () => {
       >
         <Col span={6}>
           <Card
-            title={'[367.8] \r\n TRẠNG THÁI TỜ KHAI KHI HÀNG HÓA CHƯA GETIN'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[367.8] \r\n TRẠNG THÁI TỜ KHAI KHI HÀNG HÓA CHƯA GETIN"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row gutter={[16,16]} className="b-row">
+            <Row gutter={[16, 16]} className="b-row">
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>
               <Col>
-                <Row gutter={[16,16]}>
+                <Row gutter={[16, 16]}>
                   <Col span={24}>
                     <Row>
                       <Col span={8}>
@@ -254,17 +259,19 @@ const Msg367point8 = () => {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <Row>
               <Col span={18}>
                 <ToolBar
-                  buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send,]}
+                  buttonConfig={[
+                    toolBarButtonTypes.load,
+                    toolBarButtonTypes.send,
+                    toolBarButtonTypes.exportexcel,
+                  ]}
                   handleConfirm={buttonConfirm}
                 />
               </Col>
-              <Col span={6} style={{ paddingTop: '4px' }}>
+              <Col span={6} style={{ paddingTop: "4px" }}>
                 <Space>
                   <Typography>Tìm:</Typography>
                   <Input />
@@ -281,9 +288,7 @@ const Msg367point8 = () => {
               setRows={setRows}
               onFocus={onFocus}
             />
-
           </Card>
-
         </Col>
       </Row>
     </>

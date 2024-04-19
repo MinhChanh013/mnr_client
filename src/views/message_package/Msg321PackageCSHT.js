@@ -12,7 +12,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
@@ -233,6 +233,9 @@ export default function Msg321PackageCSHT() {
         break;
       case "cancelgetin":
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -318,7 +321,11 @@ export default function Msg321PackageCSHT() {
         <Col span={18}>
           <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

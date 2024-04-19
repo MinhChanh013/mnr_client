@@ -4,7 +4,9 @@ import { FORMAT_DATETIME, FORMAT_DATEYEAR } from "../../constants/index.js";
 import * as React from "react";
 import { socket } from "../../socket.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -18,13 +20,13 @@ const Msg253 = () => {
   const [rows, setRows] = React.useState([]);
   const gridRef = React.createRef();
   const [form] = Form.useForm();
-  const onFocus = () => { };
+  const onFocus = () => {};
   const columns = [
     {
-      key: 'IDRef',
-      name: 'IDRef',
+      key: "IDRef",
+      name: "IDRef",
       visible: true,
-      editable: false
+      editable: false,
     },
     {
       key: "TransportIdentity",
@@ -75,7 +77,6 @@ const Msg253 = () => {
       width: 150,
       type: columnTypes.TextEditor,
     },
-    
   ];
 
   const buttonConfirm = async (props) => {
@@ -91,10 +92,10 @@ const Msg253 = () => {
       fromdate,
       todate,
     };
-    if (props.type === 'load') {
+    if (props.type === "load") {
       handleLoadData(formData);
     }
-    if (props.type === 'send') {
+    if (props.type === "send") {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
       idMsgRowData.forEach((idMsgSelected) => {
@@ -106,11 +107,11 @@ const Msg253 = () => {
         const data = await send(listMsgRowSelect);
         if (data) {
           if (data.deny) {
-            message.error(data.deny)
+            message.error(data.deny);
             return;
           }
           if (data.data && data.data.dont_send_again) {
-            message.success(data.data.dont_send_again)
+            message.success(data.data.dont_send_again);
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
@@ -120,7 +121,7 @@ const Msg253 = () => {
           }
 
           if (data.msgGroupId) {
-            message.success('Thông điệp đã được đưa vào hàng đợi!');
+            message.success("Thông điệp đã được đưa vào hàng đợi!");
             socket.emit("mess_to_sock", data.msgGroupId);
           }
 
@@ -139,7 +140,11 @@ const Msg253 = () => {
         console.log(error);
       }
     }
-  }
+
+    if (props.type === "export_excel") {
+      gridRef.current?.exportExcel();
+    }
+  };
 
   const handleLoadData = async (formData) => {
     try {
@@ -177,16 +182,15 @@ const Msg253 = () => {
         });
         setRows(dataMsg465);
       } else {
-        console.log('-----------------')
+        console.log("-----------------");
         setRows([]);
-        message.error('Không tìm thấy dữ liệu dữ liệu!');
+        message.error("Không tìm thấy dữ liệu dữ liệu!");
       }
       dispatch(setLoading(false));
     } catch (error) {
       console.log(error);
     }
   };
-
 
   return (
     <>
@@ -196,8 +200,8 @@ const Msg253 = () => {
       >
         <Col span={6}>
           <Card
-            title={'[253] \r\n THÔNG TIN TÀU XUẤT NHẬP CẢNH'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[253] \r\n THÔNG TIN TÀU XUẤT NHẬP CẢNH"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
             <Row className="b-row">
@@ -216,14 +220,14 @@ const Msg253 = () => {
                     },
                     {
                       type: filterType.radio,
-                      label: 'Hướng',
+                      label: "Hướng",
                       config: {
-                        name: 'imextype',
+                        name: "imextype",
                         defaultValue: 1,
                         options: [
-                          {label: 'Nhập', value: 1},
-                          {label: 'Xuất', value: 2}
-                        ]
+                          { label: "Nhập", value: 1 },
+                          { label: "Xuất", value: 2 },
+                        ],
                       },
                     },
                   ]}
@@ -240,11 +244,15 @@ const Msg253 = () => {
             <Row>
               <Col span={18}>
                 <ToolBar
-                  buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+                  buttonConfig={[
+                    toolBarButtonTypes.load,
+                    toolBarButtonTypes.send,
+                    toolBarButtonTypes.exportexcel,
+                  ]}
                   handleConfirm={buttonConfirm}
                 />
               </Col>
-              <Col span={6} style={{ paddingTop: '4px' }}>
+              <Col span={6} style={{ paddingTop: "4px" }}>
                 <Space>
                   <Typography>Tìm:</Typography>
                   <Input />

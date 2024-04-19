@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import ToolBar, { toolBarButtonTypes } from "../../global_component/ToolbarButton/ToolBar.js";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -15,7 +17,6 @@ import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import dayjs from "dayjs";
 
-
 const Msg363Container = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -23,11 +24,11 @@ const Msg363Container = () => {
   const [vesselData, setVessel] = useState([]);
   const [rows, setRows] = React.useState([]);
   const gridRef = React.createRef();
-  const onFocus = () => { };
+  const onFocus = () => {};
   const columns = [
     {
-      key: 'ID',
-      name: 'ID',
+      key: "ID",
+      name: "ID",
       visible: true,
     },
     {
@@ -160,14 +161,12 @@ const Msg363Container = () => {
   ];
 
   const buttonConfirm = async (props) => {
-    if (props.type === 'load') {
+    if (props.type === "load") {
       const dataFormFilter = form.getFieldsValue();
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       let fromdate, todate;
       if (dataFormFilter.dateFromTo) {
-        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(
-          FORMAT_DATETIME
-        );
+        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
         todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
       }
       delete dataFormFilter.dateFromTo;
@@ -178,7 +177,7 @@ const Msg363Container = () => {
       handleLoadData(formData);
     }
 
-    if (props.type === 'send') {
+    if (props.type === "send") {
       const idMsgRowData = gridRef.current?.getSelectedRows();
       const listMsgRowSelect = [];
       idMsgRowData.forEach((idMsgSelected) => {
@@ -190,11 +189,11 @@ const Msg363Container = () => {
         const data = await send(listMsgRowSelect);
         if (data) {
           if (data.deny) {
-            message.error(data.deny)
+            message.error(data.deny);
             return;
           }
           if (data.data && data.data.dont_send_again) {
-            message.success(data.data.dont_send_again)
+            message.success(data.data.dont_send_again);
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
@@ -204,7 +203,7 @@ const Msg363Container = () => {
           }
 
           if (data.msgGroupId) {
-            message.success('Thông điệp đã được đưa vào hàng đợi!');
+            message.success("Thông điệp đã được đưa vào hàng đợi!");
             socket.emit("mess_to_sock", data.msgGroupId);
           }
 
@@ -224,14 +223,16 @@ const Msg363Container = () => {
       }
     }
 
-    if (props.type === 'delete') {
-
+    if (props.type === "delete") {
     }
 
-    if (props.type === 'save') {
-
+    if (props.type === "save") {
     }
-  }
+
+    if (props.type === "export_excel") {
+      gridRef.current?.exportExcel();
+    }
+  };
 
   const handleLoadData = async (formData) => {
     try {
@@ -269,9 +270,9 @@ const Msg363Container = () => {
         });
         setRows(dataMsg3663);
       } else {
-        console.log('-----------------')
+        console.log("-----------------");
         setRows([]);
-        message.error('Không tìm thấy dữ liệu!');
+        message.error("Không tìm thấy dữ liệu!");
       }
       dispatch(setLoading(false));
     } catch (error) {
@@ -286,15 +287,14 @@ const Msg363Container = () => {
         if (loadVessel.success) {
           setVessel(loadVessel.data);
         } else {
-
         }
       } catch (error) {
         console.log(error);
       }
     }
 
-    searchvessel()
-  }, [])
+    searchvessel();
+  }, []);
 
   const filterRef = React.useRef();
 
@@ -306,11 +306,11 @@ const Msg363Container = () => {
       >
         <Col span={6}>
           <Card
-            title={'[363] \r\n HỎI THÔNG TIN (NHẬP/XUẤT) ĐỦ ĐIỀU KIỆN QUA KVSG'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={"[363] \r\n HỎI THÔNG TIN (NHẬP/XUẤT) ĐỦ ĐIỀU KIỆN QUA KVSG"}
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row className="b-row"  gutter={[16, 16]}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>
@@ -387,11 +387,14 @@ const Msg363Container = () => {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send, toolBarButtonTypes.cancel]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.cancel,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

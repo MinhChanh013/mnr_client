@@ -212,6 +212,9 @@ export default function Msg223Package() {
         break;
       case "cancelgetin":
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -247,7 +250,7 @@ export default function Msg223Package() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-         <Col span={7}>
+        <Col span={7}>
           <Card
             title={"[223] \r\n HÀNG KIỆN ĐỦ ĐIỀU KIỆN QUA KVGS"}
             style={{ borderRadius: "0px", height: "100%" }}
@@ -306,8 +309,12 @@ export default function Msg223Package() {
         </Col>
         <Col span={17}>
           <Card className="main-card">
-          <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+            <ToolBar
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

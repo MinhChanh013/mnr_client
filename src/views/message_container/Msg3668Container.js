@@ -228,6 +228,7 @@ export default function Msg3668Container() {
       todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
+
     switch (props.type) {
       case "load":
         handleLoadData(formData);
@@ -251,6 +252,9 @@ export default function Msg3668Container() {
         dispatch(setLoading(true));
         await clearGetin();
         dispatch(setLoading(false));
+        break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
         break;
       case "cancel":
         // await cancelSending();
@@ -456,6 +460,7 @@ export default function Msg3668Container() {
                   toolBarButtonTypes.send,
                   toolBarButtonTypes.cancelgetin,
                   toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
                 ]}
                 handleConfirm={buttonConfirm}
               />

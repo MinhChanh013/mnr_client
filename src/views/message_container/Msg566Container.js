@@ -187,10 +187,8 @@ export default function Msg566Container() {
           console.log(error);
         }
         break;
-      case "export excel":
-        // handleLoadData(formData);
-        ExportExcel(columns, rows);
-        console.log("export excel");
+      case "export_excel":
+        gridRef.current?.exportExcel();
         break;
       default:
         break;
@@ -334,9 +332,7 @@ export default function Msg566Container() {
           </Card>
         </Col>
         <Col span={18}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.load,

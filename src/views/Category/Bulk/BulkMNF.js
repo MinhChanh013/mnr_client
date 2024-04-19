@@ -131,6 +131,9 @@ export default function BulkMNF() {
       case "save":
         handleSaveData();
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -281,6 +284,7 @@ export default function BulkMNF() {
                 toolBarButtonTypes.delete,
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.save,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

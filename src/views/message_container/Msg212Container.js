@@ -174,6 +174,9 @@ const Msg212Container = () => {
           console.log(error);
         }
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -200,7 +203,11 @@ const Msg212Container = () => {
         <Col span={18}>
           <Card className="main-card">
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid

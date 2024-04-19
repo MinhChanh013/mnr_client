@@ -23,7 +23,7 @@ import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
 export default function Msg3661Container() {
-  const onFocus = () => { };
+  const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ export default function Msg3661Container() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
@@ -184,6 +184,9 @@ export default function Msg3661Container() {
       case "cancel":
         // await cancelSending();
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -221,11 +224,13 @@ export default function Msg3661Container() {
                 color: "#1b618c",
               },
             }}
-            title={'[366.1] \r\n GỬI YÊU CẦU HỦY DANH SÁCH CONTAINER HẠ BÃI/VÀO CẢNG'}
-            style={{ borderRadius: "0px", height: '100%' }}
+            title={
+              "[366.1] \r\n GỬI YÊU CẦU HỦY DANH SÁCH CONTAINER HẠ BÃI/VÀO CẢNG"
+            }
+            style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row className="b-row" gutter={[16,16]}>
+            <Row className="b-row" gutter={[16, 16]}>
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
@@ -319,14 +324,13 @@ export default function Msg3661Container() {
           </Card>
         </Col>
         <Col span={17}>
-          <Card
-            className="main-card"
-          >
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
                 toolBarButtonTypes.cancel,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

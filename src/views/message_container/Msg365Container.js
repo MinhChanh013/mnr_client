@@ -256,6 +256,10 @@ const Msg365_container = () => {
         console.log(error);
       }
     }
+
+    if (props.type === "export_excel") {
+      gridRef.current?.exportExcel();
+    }
   };
 
   const handleLoadData = async (formData) => {
@@ -419,6 +423,7 @@ const Msg365_container = () => {
                 toolBarButtonTypes.send,
                 toolBarButtonTypes.deletegetout,
                 toolBarButtonTypes.cancel,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

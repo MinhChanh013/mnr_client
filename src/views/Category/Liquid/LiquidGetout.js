@@ -105,6 +105,9 @@ export default function ContainerMNF() {
       case "save":
         handleSaveData();
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -255,6 +258,7 @@ export default function ContainerMNF() {
                 toolBarButtonTypes.delete,
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.save,
+                toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
             />

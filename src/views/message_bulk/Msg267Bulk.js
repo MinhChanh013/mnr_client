@@ -12,7 +12,7 @@ import {
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
-  selectionTypes
+  selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -32,7 +32,7 @@ export default function Msg267Bulk() {
   const [form] = Form.useForm();
 
   React.useEffect(() => {
-    document.title = 'Điều hướng hàng rời';
+    document.title = "Điều hướng hàng rời";
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
@@ -184,6 +184,9 @@ export default function Msg267Bulk() {
         break;
       case "cancelgetin":
         break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
+        break;
       default:
         break;
     }
@@ -226,7 +229,11 @@ export default function Msg267Bulk() {
             className="b-card"
           >
             <ToolBar
-              buttonConfig={[toolBarButtonTypes.load, toolBarButtonTypes.send]}
+              buttonConfig={[
+                toolBarButtonTypes.load,
+                toolBarButtonTypes.send,
+                toolBarButtonTypes.exportexcel,
+              ]}
               handleConfirm={buttonConfirm}
             />
             <DataGrid
