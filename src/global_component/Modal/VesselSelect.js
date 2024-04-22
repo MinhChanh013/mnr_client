@@ -77,7 +77,6 @@ const VesselSelect = forwardRef(({ data }, ref) => {
       name: "ID",
       editable: false,
       visible: true,
-      editable: false,
     },
     {
       key: "VesselName",
