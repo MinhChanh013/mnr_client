@@ -272,7 +272,9 @@ export default function Msg367Liquid() {
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.newdeclare,
+                toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
+                toolBarButtonTypes.cancel,
                 toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}

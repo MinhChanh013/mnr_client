@@ -271,7 +271,9 @@ export default function Msg367Package() {
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.newdeclare,
+                toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
+                toolBarButtonTypes.cancel,
                 toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}

@@ -333,6 +333,7 @@ const Msg252 = () => {
                   buttonConfig={[
                     toolBarButtonTypes.load,
                     toolBarButtonTypes.send,
+                    toolBarButtonTypes.cancel,
                     toolBarButtonTypes.exportexcel,
                   ]}
                   handleConfirm={buttonConfirm}
