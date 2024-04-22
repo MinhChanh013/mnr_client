@@ -329,6 +329,7 @@ export default function Msg421BulkCSHT() {
               buttonConfig={[
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
+                toolBarButtonTypes.cancel,
                 toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}

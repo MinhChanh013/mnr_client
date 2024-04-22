@@ -244,6 +244,7 @@ export default function Msg4665Bulk() {
               buttonConfig={[
                 toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
+                toolBarButtonTypes.cancel,
                 toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}

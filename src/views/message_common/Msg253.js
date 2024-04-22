@@ -31,50 +31,42 @@ const Msg253 = () => {
     {
       key: "TransportIdentity",
       name: "Tên Tàu",
-      width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "TransportCallSign",
       name: "Call Sign",
-      width: 100,
       type: columnTypes.TextEditor,
     },
     {
       key: "TransportIMO",
       name: "Số IMO",
-      width: 100,
       type: columnTypes.TextEditor,
     },
     {
       key: "ETA",
       name: "Ngày Tàu Đến",
-      width: 100,
       type: columnTypes.TextEditor,
     },
     {
       key: "ETD",
       name: "Ngày Tàu Rời",
-      width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "InboundVoyage",
       name: "Chuyến Nhập",
-      width: 200,
       type: columnTypes.DatePicker,
     },
     {
       key: "OutboundVoyage",
       name: "Chuyến Xuất",
-      width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "MsgRef",
       name: "Khóa Tham Chiếu",
-      width: 150,
       type: columnTypes.TextEditor,
     },
   ];
@@ -247,6 +239,7 @@ const Msg253 = () => {
                   buttonConfig={[
                     toolBarButtonTypes.load,
                     toolBarButtonTypes.send,
+                    toolBarButtonTypes.cancel,
                     toolBarButtonTypes.exportexcel,
                   ]}
                   handleConfirm={buttonConfirm}

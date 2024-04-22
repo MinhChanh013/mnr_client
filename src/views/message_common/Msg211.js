@@ -94,7 +94,9 @@ const Msg211 = () => {
               <Col span={4}>
                 <ToolBar
                   buttonConfig={[
+                    toolBarButtonTypes.load,
                     toolBarButtonTypes.send,
+                    toolBarButtonTypes.cancel,
                     toolBarButtonTypes.exportexcel,
                   ]}
                   handleConfirm={buttonConfirm}

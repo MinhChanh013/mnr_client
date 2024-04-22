@@ -1,4 +1,4 @@
-import { Card, Col, Row, message, Input, Space, Typography } from "antd";
+import { Card, Col, Row, message, Input, Space, Typography, Form } from "antd";
 import { useState } from "react";
 import * as React from "react";
 import { socket } from "../../socket.js";
@@ -10,14 +10,21 @@ import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { send } from "../../apis/message_common/3678.js";
+import { send, load } from "../../apis/message_common/3678.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { useDispatch } from "react-redux";
+import { searchVessels } from "../../apis/message_common/217.js";
 
 const Msg367point8 = () => {
+  const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
   const vesselSelectRef = React.useRef();
-  const [vesselData] = useState([]);
+  const [vesselData, setVessel] = useState([]);
   const gridRef = React.createRef();
   const onFocus = () => {};
+  const [form] = Form.useForm();
+
   const columns = [
     {
       key: "IDRef",
@@ -160,8 +167,57 @@ const Msg367point8 = () => {
     },
   ];
 
+  const handleLoadData = async (formData) => {
+    try {
+      dispatch(setLoading(true));
+      const resultDataMsg465 = await load(formData);
+      if (resultDataMsg465.data.length > 0) {
+        const dataMsg465 = resultDataMsg465.data.map((row) => {
+          return columns.reduce((acc, column) => {
+            // handle logic data
+            const keyValue = column.key;
+            const rowValue = row[keyValue];
+            switch (keyValue) {
+              case "ImExType":
+                acc[keyValue] =
+                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
+                break;
+              case "StatusMarker":
+                if (row["SuccessMarker"]) {
+                  acc[keyValue] = "Thành công";
+                } else if (row["ErrorMarker"]) {
+                  acc[keyValue] = "Thất bại";
+                } else acc[keyValue] = "Chưa gửi";
+                break;
+              case "StatusOfGood":
+                rowValue === 1
+                  ? (acc[keyValue] = "Full")
+                  : (acc[keyValue] = "Empty");
+                break;
+              default:
+                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
+                break;
+            }
+            return acc;
+          }, {});
+        });
+        setRows(dataMsg465);
+      } else {
+        console.log("-----------------");
+        setRows([]);
+        message.error("Không tìm thấy dữ liệu dữ liệu!");
+      }
+      dispatch(setLoading(false));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const buttonConfirm = async (props) => {
+    const formData = form.getFieldsValue();
+
     if (props.type === "load") {
+      handleLoadData(formData);
     }
 
     if (props.type === "send") {
@@ -215,6 +271,22 @@ const Msg367point8 = () => {
     }
   };
 
+  React.useEffect(() => {
+    async function searchvessel() {
+      try {
+        const loadVessel = await searchVessels({});
+        if (loadVessel.success) {
+          setVessel(loadVessel.data);
+        } else {
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    searchvessel();
+  }, []);
+
   return (
     <>
       <Row
@@ -232,28 +304,27 @@ const Msg367point8 = () => {
                 <VesselSelect data={vesselData} ref={vesselSelectRef} />
               </Col>
               <Col>
-                <Row gutter={[16, 16]}>
-                  <Col span={24}>
-                    <Row>
-                      <Col span={8}>
-                        <Typography>Số Tờ Khai VCDL</Typography>
-                      </Col>
-                      <Col span={16}>
-                        <Input />
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col span={24}>
-                    <Row>
-                      <Col span={8}>
-                        <Typography>Mã HQ mở TK</Typography>
-                      </Col>
-                      <Col span={16}>
-                        <Input />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
+                <Filter
+                  form={form}
+                  items={[
+                    {
+                      type: filterType.input,
+                      label: "Số Tờ Khai VCDL",
+                      config: {
+                        name: "declareNo",
+                        placeholder: "",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: "Mã HQ mở TK",
+                      config: {
+                        name: "declareOffice",
+                        placeholder: "",
+                      },
+                    },
+                  ]}
+                />
               </Col>
             </Row>
           </Card>
@@ -266,6 +337,7 @@ const Msg367point8 = () => {
                   buttonConfig={[
                     toolBarButtonTypes.load,
                     toolBarButtonTypes.send,
+                    toolBarButtonTypes.cancel,
                     toolBarButtonTypes.exportexcel,
                   ]}
                   handleConfirm={buttonConfirm}

@@ -295,7 +295,9 @@ const Msg367Container = () => {
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.newdeclare,
+                toolBarButtonTypes.load,
                 toolBarButtonTypes.send,
+                toolBarButtonTypes.cancel,
                 toolBarButtonTypes.exportexcel,
               ]}
               handleConfirm={buttonConfirm}
