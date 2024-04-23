@@ -339,19 +339,19 @@ const Msg901 = () => {
                       label: "Loại hàng",
                       divider: true,
                       config: {
-                        name: "type",
-                        defaultValue: "cont",
+                        name: "cargoTypeAndCode",
+                        defaultValue: "cont-100",
                         options: [
-                          { label: "Hàng Cont", value: "cont" },
-                          { label: "Hàng Kiện", value: "package" },
-                          { label: "Hàng rời", value: "dispatch" },
+                          { label: "Hàng Cont", value: "cont-100" },
+                          { label: "Hàng Kiện", value: "package-101#1" },
+                          { label: "Hàng rời", value: "dispatch-101#2" },
                         ],
                       },
                     },
                     {
                       type: filterType.rangePicker,
                       divider: true,
-                      label: "Khoảng",
+                      label: "Khoảng thời gian",
                       config: {
                         name: "date",
                         // placeholder: 'Khoảng',

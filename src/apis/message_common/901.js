@@ -7,17 +7,31 @@ const cpath = (action) => {
 };
 
 ///--process
-export const load = async (params) => {
-  const { fromdate, todate, billOfLading, cntrNo, cargoType, cargoCode } = params;
+export const load = async ({
+  receiptNo,
+  declareNo,
+  billOfLading,
+  cntrNo,
+  cargoTypeAndCode = "",
+  fromdate,
+  todate,
+}) => {
+  const [cargoType, cargoCode] = cargoTypeAndCode.split("-");
 
-  const formData = { fromdate, todate, billOfLading, cntrNo, cargoType, cargoCode };
-
-  const data = await poster(cpath("view"), formData);
+  const data = await poster(cpath("view"), {
+    receiptNo,
+    declareNo,
+    billOfLading,
+    cntrNo,
+    cargoType,
+    cargoCode,
+    fromdate,
+    todate,
+  });
   return data;
 };
 
 export const send = async (rows = []) => {
-
   const formData = rows;
 
   const data = await poster(cpath("send"), formData);

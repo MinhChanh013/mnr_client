@@ -25,6 +25,7 @@ export const selectionTypes = {
 export const columnTypes = {
   DatePicker: "DatePicker",
   TextEditor: "TextEditor",
+  Checkbox: "Checkbox",
 };
 export const paginationTypes = {
   none: "none",
@@ -206,6 +207,7 @@ const DataGrid = forwardRef(
     }, [currentPage, limit, pagination, rows]);
 
     useEffect(() => {
+      rows.map((row, index) => (row["STT"] = index + 1));
       if (pagination === "scroll") {
         reactDataGridRef.current?.element.addEventListener(
           "scroll",

@@ -46,6 +46,11 @@ const Msg212Container = () => {
       visible: true,
     },
     {
+      key: "STT",
+      name: "STT",
+      width: 100,
+    },
+    {
       key: "TransportIdentity",
       name: "Tên tàu",
       width: 180,
@@ -215,7 +220,7 @@ const Msg212Container = () => {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.none}
               columns={columns}
               rows={rows}
               setRows={setRows}

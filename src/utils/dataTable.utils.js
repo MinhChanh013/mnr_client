@@ -1,10 +1,12 @@
 import dayjs from "dayjs";
+import MCheckBox from "../global_component/DataGrid/MCheckBox";
 import { FORMAT_DATETIME } from "../constants";
 
-export const dataConverTable = ({ column, row }) => {
+export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
   const keyValue = column.key;
   const rowValue = row[keyValue];
   let dataConvert;
+
   switch (keyValue) {
     case "JobStatus":
       dataConvert = row[keyValue] ?? "READY";
@@ -49,6 +51,24 @@ export const dataConverTable = ({ column, row }) => {
       dataConvert = !!row[keyValue] ? `${row[keyValue]}` : "";
       break;
   }
+
+  const typeColumn = itemColumn.type;
+  switch (typeColumn) {
+    case "Checkbox":
+      dataConvert = MCheckBox({
+        name: keyValue,
+        defaultChecked: !!parseInt(row[keyValue]),
+        value: !!parseInt(row[keyValue]),
+        onRowChange: onRowChange,
+        onCellChange: itemColumn.onCellChange,
+        row: row,
+        key: keyValue,
+      });
+      break;
+    default:
+      dataConvert = !!row[keyValue] ? `${row[keyValue]}` : "";
+      break;
+  }
   return dataConvert;
 };
 
@@ -56,7 +76,7 @@ export const basicRenderColumns = (columns = []) => {
   return columns.map((itemColumn) => {
     return {
       ...itemColumn,
-      render: (itemRender) => dataConverTable(itemRender),
+      render: (itemRender) => dataConverTable(itemRender, itemColumn),
     };
   });
 };

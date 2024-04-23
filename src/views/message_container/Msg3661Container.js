@@ -216,7 +216,7 @@ export default function Msg3661Container() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={7}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -310,7 +310,7 @@ export default function Msg3661Container() {
                     },
                     {
                       type: filterType.rangePicker,
-                      label: "Khoản",
+                      label: "Khoảng thời gian",
                       config: {
                         name: "dateFromTo",
                         placeholder: ["Từ", "Đến"],
@@ -323,7 +323,7 @@ export default function Msg3661Container() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card className="main-card">
             <ToolBar
               buttonConfig={[
