@@ -25,6 +25,7 @@ export const selectionTypes = {
 export const columnTypes = {
   DatePicker: "DatePicker",
   TextEditor: "TextEditor",
+  Checkbox: "Checkbox",
 };
 export const paginationTypes = {
   none: "none",

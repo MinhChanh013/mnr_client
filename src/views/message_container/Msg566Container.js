@@ -125,12 +125,13 @@ export default function Msg566Container() {
       name: "Ghi Chú",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "IsUpdate",
       name: "Cấp Lại",
       width: 220,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Checkbox,
     },
     {
       key: "AcceptanceNo",
