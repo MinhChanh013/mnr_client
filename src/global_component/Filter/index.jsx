@@ -5,6 +5,8 @@ import InputFilter from "./InputFilter";
 import RadioGroupFilter from "./RadioGroupFilter";
 import RangePickerFilter from "./RangePickerFilter";
 import TextAreaFilter from "./TextAreaFilter";
+import SelectFilter from "./SelectFilter";
+
 const { Text } = Typography;
 const pickComponent = (type) =>
   ({
@@ -13,6 +15,7 @@ const pickComponent = (type) =>
     [filterType.rangePicker]: RangePickerFilter,
     [filterType.textarea]: TextAreaFilter,
     [filterType.checkbox]: CheckboxFilter,
+    [filterType.select]: SelectFilter,
   }[type]);
 
 export const filterType = {
@@ -21,6 +24,7 @@ export const filterType = {
   rangePicker: "rangePicker",
   textarea: "textarea",
   checkbox: "checkbox",
+  select: "select",
 };
 
 export const Filter = (

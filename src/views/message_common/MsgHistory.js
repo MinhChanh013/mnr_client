@@ -13,10 +13,13 @@ import { load, send } from "../../apis/message_common/901.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 
+const { Text } = Typography;
+
 const MsgHistory = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
-  const [form] = Form.useForm();
+  const [formFilter] = Form.useForm();
+  const [formQueryHTHQ] = Form.useForm();
   const gridRef = React.createRef();
   const onFocus = () => {};
   const columns = [
@@ -27,160 +30,64 @@ const MsgHistory = () => {
       editable: false,
     },
     {
-      key: "InvForm",
-      name: "Mẫu Hóa Đơn",
-      width: 180,
+      name: "Số Tham Chiếu",
+      key: "MsgRef",
+      type: columnTypes.TextEditor,
+      editable: true,
+      width: 150,
+    },
+    {
+      name: "Mã Thông Điệp",
+      key: "RequestType",
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
-      key: "InvSeries",
-      name: "Ký Hiêu",
-      width: 100,
+      name: "Chức Năng Gởi",
+      key: "RequestFunction",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
-      key: "InvNumber",
-      name: "Số Hóa Đơn",
-      width: 100,
+      name: "Chức Năng Nhận",
+      key: "ResponseFunction",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
-      key: "ReceiptNo",
-      name: "Số Biên Lai",
-      width: 100,
+      name: "Số Tiếp Nhận",
+      key: "AcceptanceNo",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
-      key: "ReceiptDate",
-      name: "Ngày Biên Lai",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "ReceiptStatus",
-      name: "Trạng Thái",
-      width: 200,
+      name: "Thời Gian Tiếp Nhận",
+      key: "AcceptanceTime",
       type: columnTypes.DatePicker,
+      editable: true,
     },
     {
-      key: "TotalAmount",
-      name: "Tổng Tiền",
-      width: 150,
+      name: "Người gởi",
+      key: "CreatedBy",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
-      key: "Inactive",
-      name: "Được Lấy Hàng",
-      width: 150,
+      name: "Nội Dung Gởi",
+      key: "RequestContent",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
-      key: "PartnerCode",
-      name: "Mã Doanh Nghiệp",
-      width: 150,
+      name: "Nội Dung Nhận",
+      key: "ResponseContent",
       type: columnTypes.TextEditor,
-    },
-    {
-      key: "PartnerNameInVN",
-      name: "Tên Doanh Nghiệp",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "Address",
-      name: "Địa Chỉ",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "TaxCode",
-      name: "MST",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "ContactName",
-      name: "Người Nộp Phí",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "Phone",
-      name: "SĐT",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "Email",
-      name: "Email",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "CustomsDeclare",
-      name: "Số tờ khai",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "CustomsDeclareDate",
-      name: "Ngày tờ khai",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "CustomsDeclareType",
-      name: "Mã loại hình TK",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "TariffTypeCode",
-      name: "Mã loại hình HH",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "TransportCode",
-      name: "Mã phương tiện VC",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "DestinationCode",
-      name: "Mã địa điểm lưu kho",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "CustomsGoodsItems",
-      name: "Chi tiết phí",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "CustomsDeclarations",
-      name: "Danh sách TK",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "JournalMemo",
-      name: "Diễn Giải Chi Tiết",
-      width: 150,
-      type: columnTypes.TextEditor,
-    },
-    {
-      key: "MsgRef",
-      name: "Khóa Tham Chiếu",
-      width: 150,
-      type: columnTypes.TextEditor,
+      editable: true,
     },
   ];
 
   const buttonConfirm = async (props) => {
-    const dataFormFilter = form.getFieldsValue();
+    const dataFormFilter = formFilter.getFieldsValue();
     const formData = {
       ...dataFormFilter,
     };
@@ -298,53 +205,88 @@ const MsgHistory = () => {
           >
             <Row className="b-row">
               <Col span={24}>
+                <Text
+                  style={{
+                    display: "block",
+                    fontSize: "1.5rem",
+                    fontWeight: "bolder",
+                    textAlign: "center",
+                  }}
+                >
+                  Lọc theo
+                </Text>
                 <Filter
-                  form={form}
+                  form={formFilter}
                   items={[
                     {
-                      type: filterType.input,
-                      label: "Số Biên Lai",
+                      type: filterType.rangePicker,
+                      divider: true,
+                      label: "Khoảng",
                       config: {
-                        name: "receiptNo",
-                        style: { fontWeight: "bold" },
+                        name: "date",
                       },
                     },
                     {
                       type: filterType.input,
-                      label: "Số Tờ Khai",
+                      label: "Mã thông điệp",
+                      config: {
+                        name: "RequestType",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: "Người gởi",
+                      config: {
+                        name: "CreatedBy",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: "Message REF",
+                      config: {
+                        name: "msgref",
+                      },
+                    },
+                    {
+                      type: filterType.input,
+                      label: "Số tờ khai",
                       config: {
                         name: "declareNo",
-                        style: { fontWeight: "bold" },
                       },
                     },
+                  ]}
+                />
+              </Col>
+
+              <Col span={24} style={{ marginTop: "16px" }}>
+                <Text
+                  style={{
+                    display: "block",
+                    fontSize: "1.5rem",
+                    fontWeight: "bolder",
+                    textAlign: "center",
+                  }}
+                >
+                  Truy vấn trên HTHQ
+                </Text>
+                <Filter
+                  form={formQueryHTHQ}
+                  items={[
                     {
-                      type: filterType.input,
-                      label: "Số Vận Đơn",
+                      type: filterType.select,
+                      label: "Loại thông điệp",
                       config: {
-                        name: "billOfLading",
-                        style: { fontWeight: "bold" },
-                      },
-                    },
-                    {
-                      type: filterType.input,
-                      label: "Số Container",
-                      divider: true,
-                      config: {
-                        name: "cntrNo",
-                        style: { fontWeight: "bold" },
-                      },
-                    },
-                    {
-                      type: filterType.radio,
-                      label: "Loại hàng",
-                      divider: true,
-                      config: {
-                        name: "type",
-                        defaultValue: "cont",
+                        name: "requesttype",
                         options: [
-                          { label: "Hàng Cont", value: "cont" },
-                          { label: "Hàng Kiện", value: "package" },
-                          { label: "Hàng rời", value: "dispatch" },
+                          { value: "366", label: "366 - Getin cont" },
+                          { value: "365", label: "365 - Getout cont" },
+                          { value: "465", label: "465 - Getout cont không TK" },
+                          { value: "266", label: "266 - Getin kiện" },
+                          { value: "321", label: "321 - Getout kiện" },
+                          { value: "341", label: "341 - Getout kiện không TK" },
+                          { value: "266", label: "266 - Getin rời" },
+                          { value: "421", label: "421 - Getout rời" },
+                          { value: "441", label: "441 - Getout rời không TK" },
                         ],
                       },
                     },
@@ -354,7 +296,6 @@ const MsgHistory = () => {
                       label: "Khoảng",
                       config: {
                         name: "date",
-                        // placeholder: 'Khoảng',
                       },
                     },
                   ]}
