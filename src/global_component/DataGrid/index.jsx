@@ -206,6 +206,7 @@ const DataGrid = forwardRef(
     }, [currentPage, limit, pagination, rows]);
 
     useEffect(() => {
+      rows.map((row, index) => (row["STT"] = index + 1));
       if (pagination === "scroll") {
         reactDataGridRef.current?.element.addEventListener(
           "scroll",
