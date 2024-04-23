@@ -125,6 +125,7 @@ export default function Msg214Container() {
       name: "Chi Tiết Sai Khác",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "AcceptanceNo",
@@ -219,7 +220,7 @@ export default function Msg214Container() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={7}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -238,7 +239,7 @@ export default function Msg214Container() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card className="main-card">
             <ToolBar
               buttonConfig={[
