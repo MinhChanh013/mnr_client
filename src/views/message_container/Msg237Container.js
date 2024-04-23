@@ -313,7 +313,7 @@ export default function Msg237Container() {
                     },
                     {
                       type: filterType.rangePicker,
-                      label: "Khoản",
+                      label: "Khoảng thời gian",
                       config: {
                         name: "dateFromTo",
                         placeholder: ["Từ", "Đến"],

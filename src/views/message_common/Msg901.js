@@ -351,7 +351,7 @@ const Msg901 = () => {
                     {
                       type: filterType.rangePicker,
                       divider: true,
-                      label: "Khoảng",
+                      label: "Khoảng thời gian",
                       config: {
                         name: "date",
                         // placeholder: 'Khoảng',

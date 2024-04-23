@@ -221,7 +221,7 @@ const MsgHistory = () => {
                     {
                       type: filterType.rangePicker,
                       divider: true,
-                      label: "Khoảng",
+                      label: "Khoảng thời gian",
                       config: {
                         name: "date",
                       },
@@ -293,7 +293,7 @@ const MsgHistory = () => {
                     {
                       type: filterType.rangePicker,
                       divider: true,
-                      label: "Khoảng",
+                      label: "Khoảng thời gian",
                       config: {
                         name: "date",
                       },
