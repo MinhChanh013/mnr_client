@@ -327,7 +327,11 @@ const DataGrid = forwardRef(
           className={`rdg-light ${className} ${
             pagination === "scroll" ? "fill-grid" : ""
           }`}
-          style={{ height: "100%", maxHeight: maxHeight, ...style }}
+          style={{
+            height: "calc(100% - var(--height-toolbar) - 40px)",
+            maxHeight: maxHeight,
+            ...style,
+          }}
           defaultColumnOptions={{ sortable: true, resizable: true }}
           sortColumns={sortColumns}
           onSortColumnsChange={setSortColumns}
@@ -361,7 +365,11 @@ const DataGrid = forwardRef(
               onCellDoubleClick();
           }}
         />
-        <Flex align="center" justify="space-between">
+        <Flex
+          style={{ boxSizing: "border-box", height: "40px" }}
+          align="center"
+          justify="space-between"
+        >
           <Space style={{ padding: "10px 20px" }}>
             <Typography
               level={5}

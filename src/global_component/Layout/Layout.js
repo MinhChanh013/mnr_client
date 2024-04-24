@@ -15,8 +15,12 @@ export default function Layout() {
         <Typography
           style={{
             color: "#555555",
-            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             backgroundColor: "#e8e8e8",
+            boxSizing: "border-box",
+            height: "30px",
           }}
         >
           Copyright by CEH @ 2024 version 2.0

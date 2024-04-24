@@ -15,7 +15,7 @@ const EmailConfig = (props) => {
     <Card>
       <Form onFieldsChange={onFieldsChange} autoComplete="off">
         <Col>
-          <Typography>Mã Doanh Nghiệp Kho/Bãi/Cảng</Typography>
+          <Typography>Địa chỉ mail hệ thống</Typography>
           <Form.Item
             name="portId"
             rules={[
@@ -25,11 +25,11 @@ const EmailConfig = (props) => {
               },
             ]}
           >
-            <Input placeholder="Mã Doanh Nghiệp Kho/Bãi/Cảng" />
+            <Input />
           </Form.Item>
         </Col>
         <Col>
-          <Typography>Mã Số Thuế</Typography>
+          <Typography>Mật khẩu</Typography>
           <Form.Item
             name="portTaxCode"
             rules={[
@@ -43,7 +43,7 @@ const EmailConfig = (props) => {
           </Form.Item>
         </Col>
         <Col>
-          <Typography>Tên Doanh Nghiệp Kho/Bãi/Cảng</Typography>
+          <Typography>Máy chủ mail</Typography>
           <Form.Item
             label=""
             name="portName"
@@ -58,25 +58,10 @@ const EmailConfig = (props) => {
           </Form.Item>
         </Col>
         <Col>
-          <Typography>Mã Chi Cục HQ Giám Sát</Typography>
+          <Typography>Cổng (Port)</Typography>
           <Form.Item
             label=""
             name="customsId"
-            rules={[
-              {
-                required: true,
-                message: "không thể bỏ trống!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col>
-          <Typography>Tên Chi Cục HQ Giám Sát</Typography>
-          <Form.Item
-            label=""
-            name="customsName"
             rules={[
               {
                 required: true,

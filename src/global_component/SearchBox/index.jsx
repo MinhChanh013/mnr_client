@@ -17,7 +17,7 @@ const SearchBox = (props) => {
   const SearchTable = (data, searchValue) => {
     const filteredData = data.filter((row) => {
       for (const prop in row) {
-        if (typeof row[prop] === "string") {
+        if (typeof row[prop] === "string" && prop !== "ID") {
           const regex = new RegExp(searchValue.toLowerCase());
           if (regex.test(row[prop].toLowerCase())) {
             return true;
