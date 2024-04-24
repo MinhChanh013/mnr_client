@@ -400,7 +400,7 @@ export default function Msg3665Container() {
         </Col>
         <Col span={18}>
           <Card className="main-card">
-            <Flex justify="space-between" style={{ padding: "10px 20px" }}>
+            <Flex className="main-card-toolbar" justify="space-between">
               <ToolBar
                 buttonConfig={[
                   toolBarButtonTypes.load,

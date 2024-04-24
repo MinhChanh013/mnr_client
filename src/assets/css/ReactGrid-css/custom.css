@@ -45,11 +45,17 @@
 }
 
 .main-card {
-  height: calc(100vh - 111px);
+  min-height: calc(100vh - 111px);
+  height: 100%;
   border-radius: 0px;
 
   .ant-card-body {
     padding: 0px;
     height: 100%;
+  }
+  .main-card-toolbar {
+    box-sizing: border-box;
+    padding: 19px 20px;
+    height: var(--height-toolbar);
   }
 }

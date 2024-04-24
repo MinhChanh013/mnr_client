@@ -15,7 +15,7 @@ const CertificateNo = (props) => {
     <Card>
       <Form onFieldsChange={onFieldsChange} autoComplete="off">
         <Col>
-          <Typography>Mã Doanh Nghiệp Kho/Bãi/Cảng</Typography>
+          <Typography>Tên nhà cung cấp (Token Provider Name)</Typography>
           <Form.Item
             name="portId"
             rules={[
@@ -25,11 +25,11 @@ const CertificateNo = (props) => {
               },
             ]}
           >
-            <Input placeholder="Mã Doanh Nghiệp Kho/Bãi/Cảng" />
+            <Input />
           </Form.Item>
         </Col>
         <Col>
-          <Typography>Mã Số Thuế</Typography>
+          <Typography>Mã Pin (Token Pin Code)</Typography>
           <Form.Item
             name="portTaxCode"
             rules={[
@@ -43,7 +43,7 @@ const CertificateNo = (props) => {
           </Form.Item>
         </Col>
         <Col>
-          <Typography>Tên Doanh Nghiệp Kho/Bãi/Cảng</Typography>
+          <Typography>Số serial (Token Serial Number)</Typography>
           <Form.Item
             label=""
             name="portName"
@@ -58,7 +58,7 @@ const CertificateNo = (props) => {
           </Form.Item>
         </Col>
         <Col>
-          <Typography>Mã Chi Cục HQ Giám Sát</Typography>
+          <Typography>Ngày hết hạn (Token Expire Date)</Typography>
           <Form.Item
             label=""
             name="customsId"
@@ -69,22 +69,7 @@ const CertificateNo = (props) => {
               },
             ]}
           >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col>
-          <Typography>Tên Chi Cục HQ Giám Sát</Typography>
-          <Form.Item
-            label=""
-            name="customsName"
-            rules={[
-              {
-                required: true,
-                message: "không thể bỏ trống!",
-              },
-            ]}
-          >
-            <Input />
+            <Input.Password />
           </Form.Item>
         </Col>
       </Form>
