@@ -79,7 +79,7 @@ export const toolBarButtonTypes = {
     id: "new declare",
     label: "Quét tờ khai mới",
     fontColor: "#2399fa",
-    icon: <SendOutlined style={{ stroke: "#2399fa", strokeWidth: 30 }} />,
+    icon: <CloudDownloadOutlined style={{ stroke: "#2399fa", strokeWidth: 30 }} />,
   },
   exportexcel: {
     id: "export_excel",

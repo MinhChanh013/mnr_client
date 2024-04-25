@@ -1,4 +1,4 @@
-import { Card, Col, Input, Row, message } from "antd";
+import { Button, Card, Col, Input, Row, message } from "antd";
 import * as React from "react";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import ToolBar, {
@@ -194,6 +194,7 @@ const Msg367Container = () => {
                   items={[
                     {
                       type: filterType.checkbox,
+                      divider: false,
                       config: {
                         name: "check",
                         label: "Tự động truy vấn QR Code mới",
@@ -215,6 +216,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Mã HQGS",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -223,6 +225,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Mã Đơn Vị",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -231,6 +234,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Luồng",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -239,6 +243,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Tình Trạng TK",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -247,6 +252,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Số Chì HQ",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -255,6 +261,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Số Vận Đơn",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -263,6 +270,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Số Container",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -271,6 +279,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Số Tờ Khai",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -279,6 +288,7 @@ const Msg367Container = () => {
                     {
                       type: filterType.input,
                       label: "Mã ĐK HQ",
+                      divider: false,
                       config: {
                         name: "imextype",
                         style: { fontWeight: "bold" },
@@ -286,6 +296,7 @@ const Msg367Container = () => {
                     },
                   ]}
                 />
+                <Button>Tìm</Button>
               </Col>
             </Row>
           </Card>
