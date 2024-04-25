@@ -47,13 +47,13 @@ const Msg247Container = () => {
     {
       key: "OldImExType",
       name: "Hướng N/X Cũ",
-      width: 100,
+      width: 120,
       type: columnTypes.TextEditor,
     },
     {
       key: "NewImExType",
       name: "Hướng N/X Mới",
-      width: 100,
+      width: 120,
       type: columnTypes.TextEditor,
     },
     {
@@ -78,7 +78,7 @@ const Msg247Container = () => {
       key: "GetIn",
       name: "Ngày Getin",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
       key: "TransportIdentity",
