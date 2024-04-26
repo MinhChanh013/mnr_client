@@ -370,8 +370,12 @@ const Msg365_container = () => {
                       label: "Tình Trạng Container",
                       config: {
                         name: "isLF",
-                        defaultValue: "1",
+                        defaultValue: "",
                         options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
                           {
                             label: "Đã Getin",
                             value: "1",

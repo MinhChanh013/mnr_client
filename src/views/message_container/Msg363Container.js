@@ -78,7 +78,7 @@ const Msg363Container = () => {
       key: "DeclareIssueDate",
       name: "Ngày Tờ Khai",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
       key: "DeclarationOffice",
@@ -120,7 +120,7 @@ const Msg363Container = () => {
       key: "GetIn",
       name: "Ngày Getin",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
       key: "CHK_FE",
@@ -144,7 +144,7 @@ const Msg363Container = () => {
       key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.DatePicker,
     },
     {
       key: "ResponseText",
@@ -341,8 +341,12 @@ const Msg363Container = () => {
                       label: "Tình Trạng Container",
                       config: {
                         name: "isLF",
-                        defaultValue: "1",
+                        defaultValue: "",
                         options: [
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
                           {
                             label: "Đã Getin",
                             value: "1",
