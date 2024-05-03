@@ -169,7 +169,6 @@ const Msg227 = () => {
   const buttonConfirm = async (props) => {
     if (props.type === "load") {
       const dataFormFilter = form.getFieldsValue();
-      console.log(dataFormFilter);
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       let fromdate, todate;
       if (dataFormFilter.dateFromTo) {
@@ -209,7 +208,6 @@ const Msg227 = () => {
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
-            console.log(data.xmlComplete);
             message.success('"Thông điệp đã được đưa vào hàng đợi!"');
             socket.emit("mess_to_sock", "click");
           }

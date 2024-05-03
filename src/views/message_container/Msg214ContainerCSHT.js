@@ -287,7 +287,6 @@ const Msg214ContainerCSHT = () => {
         });
         setRows(dataMsg465);
       } else {
-        console.log("-----------------");
         setRows([]);
         message.error("Không tìm thấy dữ liệu dữ liệu!");
       }

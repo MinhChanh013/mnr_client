@@ -146,7 +146,6 @@ export default function Msg367Package() {
     // };
     switch (props.type) {
       case "new declare":
-        console.log(form.getFieldsValue());
         // handleLoadData(formData);
         break;
       case "send":

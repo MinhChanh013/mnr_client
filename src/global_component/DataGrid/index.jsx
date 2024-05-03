@@ -137,7 +137,6 @@ const DataGrid = forwardRef(
 
     useEffect(() => {
       if (selection === selectionTypes.multi) {
-        console.log([...selectedRows].length);
         dispatch(setSelectedQuantity([...selectedRows].length));
       }
     }, [selectedRows]);

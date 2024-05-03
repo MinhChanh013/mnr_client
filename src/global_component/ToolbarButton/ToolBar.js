@@ -79,7 +79,9 @@ export const toolBarButtonTypes = {
     id: "new declare",
     label: "Quét tờ khai mới",
     fontColor: "#2399fa",
-    icon: <CloudDownloadOutlined style={{ stroke: "#2399fa", strokeWidth: 30 }} />,
+    icon: (
+      <CloudDownloadOutlined style={{ stroke: "#2399fa", strokeWidth: 30 }} />
+    ),
   },
   exportexcel: {
     id: "export_excel",
@@ -102,72 +104,70 @@ const ToolBar = ({ buttonConfig, cardConfig, handleConfirm }) => {
   const SelectedQuantityRedux = useSelector(SelectedQuantitySelectors);
   return (
     <>
-      <div style={{ padding: "4px 4px" }}>
-        <Space size={0}>
-          {buttonConfig.map((item, index) => {
-            return (
-              <React.Fragment key={index}>
-                {index !== 0 ? (
-                  <Divider
-                    key={index}
-                    type="vertical"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(153, 153, 153, 0.1) 0px, rgb(179 176 176) 40%, rgb(169 167 167) 60%, rgba(153, 153, 153, 0.1) 100%)",
-                      height: "24px",
-                      width: "1.8px",
-                      paddingRight: "1px",
-                      borderRadius: 0,
-                    }}
-                  />
-                ) : (
-                  ""
-                )}
-                <Button
-                  key={item.id}
-                  type="text"
-                  icon={item.icon}
-                  onClick={() => {
-                    if (item.alert) {
-                      Modal.confirm({
-                        title: "Cảnh báo!",
-                        content: `${
-                          SelectedQuantityRedux !== 0
-                            ? item.message
-                            : item.messageNull ?? ""
-                        }`,
-                        open: { openModal },
-                        icon: <WarningOutlined />,
-                        okText: "Xác nhận",
-                        cancelText: "Hủy",
-                        onCancel: () => {
-                          return;
-                        },
-                        onOk: () => {
-                          handleConfirm({ type: item.id });
-                        },
-                        footer: (_, { OkBtn, CancelBtn }) => (
-                          <>
-                            <CancelBtn />
-                            <OkBtn />
-                          </>
-                        ),
-                      });
-                    } else {
-                      handleConfirm({ type: item.id });
-                    }
-                  }}
+      <Space size={0}>
+        {buttonConfig.map((item, index) => {
+          return (
+            <React.Fragment key={index}>
+              {index !== 0 ? (
+                <Divider
+                  key={index}
+                  type="vertical"
                   style={{
-                    color: item.fontColor,
+                    backgroundImage:
+                      "linear-gradient(rgba(153, 153, 153, 0.1) 0px, rgb(179 176 176) 40%, rgb(169 167 167) 60%, rgba(153, 153, 153, 0.1) 100%)",
+                    height: "24px",
+                    width: "1.8px",
+                    paddingRight: "1px",
+                    borderRadius: 0,
                   }}
-                >
-                  {item.label.toUpperCase()}
-                </Button>
-              </React.Fragment>
-            );
-          })}
-        </Space>
-      </div>
+                />
+              ) : (
+                ""
+              )}
+              <Button
+                key={item.id}
+                type="text"
+                icon={item.icon}
+                onClick={() => {
+                  if (item.alert) {
+                    Modal.confirm({
+                      title: "Cảnh báo!",
+                      content: `${
+                        SelectedQuantityRedux !== 0
+                          ? item.message
+                          : item.messageNull ?? ""
+                      }`,
+                      open: { openModal },
+                      icon: <WarningOutlined />,
+                      okText: "Xác nhận",
+                      cancelText: "Hủy",
+                      onCancel: () => {
+                        return;
+                      },
+                      onOk: () => {
+                        handleConfirm({ type: item.id });
+                      },
+                      footer: (_, { OkBtn, CancelBtn }) => (
+                        <>
+                          <CancelBtn />
+                          <OkBtn />
+                        </>
+                      ),
+                    });
+                  } else {
+                    handleConfirm({ type: item.id });
+                  }
+                }}
+                style={{
+                  color: item.fontColor,
+                }}
+              >
+                {item.label.toUpperCase()}
+              </Button>
+            </React.Fragment>
+          );
+        })}
+      </Space>
     </>
   );
 };
