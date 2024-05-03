@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row } from "antd";
+import { Card, Col, Flex, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -19,8 +19,10 @@ import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import dayjs from "dayjs";
 import { FORMAT_DATETIME } from "../../constants/index.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 
 export default function Msg2668Package() {
+  const [dataTable, setDataTable] = React.useState([]);
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -247,6 +249,7 @@ export default function Msg2668Package() {
           };
         });
         setRows(newResultDataMsg2668);
+        setDataTable(newResultDataMsg2668)
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -265,7 +268,7 @@ export default function Msg2668Package() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={7}>
+        <Col span={6}>
           <Card
             title={"[2668] \r\n GỬI GETIN HÀNG KIỆN VÀO KVGS"}
             style={{ borderRadius: "0px", height: "100%" }}
@@ -340,17 +343,24 @@ export default function Msg2668Package() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card className="main-card">
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancel,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"
