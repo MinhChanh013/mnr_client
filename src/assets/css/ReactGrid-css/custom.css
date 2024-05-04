@@ -55,7 +55,7 @@
   }
   .main-card-toolbar {
     box-sizing: border-box;
-    padding: 19px 20px;
+    padding: 4px;
     height: var(--height-toolbar);
   }
 }

@@ -13,7 +13,6 @@ const validateSend = (rows) => {
 
 ///--process
 export const load = async (params) => {
-  console.log(params);
   const {
     voyagekey,
     cntrnos,

@@ -45,8 +45,6 @@ export default function Msg3668Container() {
     if (!debounced.trim()) {
       return;
     }
-    console.log(SearchTable(rows, debounced));
-    console.log(debounced);
   }, [debounced]);
 
   React.useEffect(() => {

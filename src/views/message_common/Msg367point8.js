@@ -203,7 +203,6 @@ const Msg367point8 = () => {
         });
         setRows(dataMsg465);
       } else {
-        console.log("-----------------");
         setRows([]);
         message.error("Không tìm thấy dữ liệu dữ liệu!");
       }
@@ -240,7 +239,6 @@ const Msg367point8 = () => {
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
-            console.log(data.xmlComplete);
             message.success('"Thông điệp đã được đưa vào hàng đợi!"');
             socket.emit("mess_to_sock", "click");
           }
