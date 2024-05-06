@@ -65,8 +65,8 @@ export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
         key: keyValue,
       });
       break;
+    case "Select": 
     default:
-      dataConvert = !!row[keyValue] ? `${row[keyValue]}` : "";
       break;
   }
   return dataConvert;

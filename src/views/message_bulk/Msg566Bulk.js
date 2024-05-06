@@ -8,7 +8,7 @@ import {
   load,
   searchVessels,
   send,
-} from "../../apis/message_container/3668.js";
+} from "../../apis/message_bulk/566.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
