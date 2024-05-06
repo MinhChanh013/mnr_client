@@ -22,6 +22,7 @@ http.interceptors.response.use(undefined, function (error) {
     error.response &&
     error.response.status === UNAUTHORIZED_ERROR.status
   ) {
+    localStorage.clear("token");
     window.location.href = "/login";
   }
 });

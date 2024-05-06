@@ -20,7 +20,7 @@ const SubNav = (props) => {
 
     useEffect(() => {
         const navActive = localStorage.getItem("nav")?.split(",")
-        if (navActive.length > 0 && keySelected && keySelected !== navActive[1]) {
+        if (navActive?.length > 0 && keySelected && keySelected !== navActive[1]) {
             setIsBlockAnimate(true)
         } else {
             setIsBlockAnimate(false)

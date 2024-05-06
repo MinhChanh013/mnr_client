@@ -10,7 +10,13 @@ export default function Layout() {
       <Loading />
       <Message />
       <Header />
-      <Outlet />
+      <div
+        style={{
+          minHeight: "calc(100vh - var(--height-header) - 30px - 1px)",
+        }}
+      >
+        <Outlet />
+      </div>
       <Affix offsetBottom={0}>
         <Typography
           style={{

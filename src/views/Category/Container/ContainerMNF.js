@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row, Form } from "antd";
+import { Card, Col, Row, Form, Flex } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
@@ -7,6 +7,7 @@ import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
 import DataGrid, {
   columnTypes,
   selectionTypes,
+  paginationTypes,
 } from "../../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
@@ -30,15 +31,19 @@ export default function ContainerMNF() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      // const res = await searchVessels("");
-      // if (res) {
-      //   setDataViewsels(res.data);
-      // }
-    } catch (error) {
-      console.log(error);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        console.log(res);
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
+    fetchDataVessels();
   }, []);
   const NewItem = [
     {
@@ -55,37 +60,42 @@ export default function ContainerMNF() {
       key: "ID",
       name: "STT",
       width: 80,
-      editable: false,
+      editable: true,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 200,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "CntrNo",
       name: "Số Container",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "SealNo",
       name: "Số Chì",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "StatusOfGood",
       name: "Full/Empty",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "ImExType",
       name: "Hướng",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "isLF",
@@ -99,6 +109,7 @@ export default function ContainerMNF() {
       name: "Mô Tả HH",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
   ]);
 
@@ -118,12 +129,14 @@ export default function ContainerMNF() {
     try {
       const resultDataCntrMNF = await load(formData);
       if (resultDataCntrMNF) {
-        const newResultDataCntrMNF = resultDataCntrMNF.data.map((item) => {
-          return {
-            ...item,
-            ID: uuidv4(),
-          };
-        });
+        const newResultDataCntrMNF = resultDataCntrMNF.data.map(
+          (item, index) => {
+            return {
+              ...item,
+              ID: index + 1,
+            };
+          }
+        );
         setDataTable(newResultDataCntrMNF);
         setRows(newResultDataCntrMNF);
         dispatch(
@@ -164,8 +177,8 @@ export default function ContainerMNF() {
           console.log(error);
         }
         break;
-      case "cancel":
-        // await cancelSending();
+      case "add":
+        setRows([NewItem, ...rows]);
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -180,18 +193,10 @@ export default function ContainerMNF() {
       console.log(error);
     }
   };
-
-  //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
-  const filterRef = React.useRef();
-  const handleSelectFilterData = () => {
-    console.log({
-      data: getFormData(filterRef.current),
-    });
-  };
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -260,32 +265,36 @@ export default function ContainerMNF() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
-          <Card
-            style={{
-              borderRadius: "0px",
-            }}
-          >
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.add,
-                toolBarButtonTypes.delete,
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.save,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+        <Col span={18}>
+          <Card className="main-card">
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.add,
+                  toolBarButtonTypes.delete,
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.save,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
-              style={{ height: "80vh" }}
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
+              pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+              limit={5}
             />
           </Card>
         </Col>
