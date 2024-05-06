@@ -16,6 +16,7 @@ import { ExportExcel } from "../../assets/js/excelFunction";
 
 import { useDispatch } from "react-redux";
 import { setSelectedQuantity } from "../../store/slices/SelectedQuantitySlices.js";
+import { renderCellEditPassword } from "./MPassword.jsx";
 
 export const selectionTypes = {
   multi: "multi",
@@ -26,6 +27,7 @@ export const columnTypes = {
   DatePicker: "DatePicker",
   TextEditor: "TextEditor",
   Checkbox: "Checkbox",
+  Password: "Password"
 };
 export const paginationTypes = {
   none: "none",
@@ -35,11 +37,19 @@ export const paginationTypes = {
 
 const { Title } = Typography;
 
-const getEditCell = (key, cellType) => {
+const getEditCell = (key, cellType, options = [], baseColumn) => {
   switch (cellType) {
     case columnTypes.DatePicker:
       return ({ row, onRowChange }) =>
         renderCellEditDatePicker({
+          key,
+          row,
+          onRowChange,
+        });
+
+    case columnTypes.Password:
+      return ({ row, onRowChange }) =>
+        renderCellEditPassword({
           key,
           row,
           onRowChange,
@@ -58,12 +68,13 @@ const handleRenderColumn = ({
   key,
   selection,
   index,
+  baseColumn,
   ...props
 }) => {
   const column = {
     ...props,
     key,
-    renderEditCell: editable ? getEditCell(key, type) : null,
+    renderEditCell: editable ? getEditCell(key, type, props?.options ?? [], baseColumn) : null,
   };
 
   // Hide column when visible = true

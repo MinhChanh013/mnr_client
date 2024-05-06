@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Flex, Row, Typography } from "antd";
+import { Card, Col, Flex, Row, Typography, Space } from "antd";
 import * as React from "react";
 import DataGrid, {
     columnTypes,
@@ -10,19 +10,15 @@ import ToolBar, {
     toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 const { Title } = Typography;
 
 export default function User() {
     const onFocus = () => { };
     const gridRef = React.createRef();
+    const [dataTable, setDataTable] = React.useState([]);
     const [rows, setRows] = React.useState([]);
-    React.useEffect(async () => {
-        try {
 
-        } catch (error) {
-            console.log(error);
-        }
-    }, []);
     const NewItem = [
         {
             CntrSztp: "",
@@ -44,52 +40,60 @@ export default function User() {
             width: 100,
         },
         {
-            key: "TransportIdentity",
+            key: "group_user",
             name: "Nhóm người dùng",
             width: 180,
             type: columnTypes.TextEditor,
+            editable: true
         },
         {
-            key: "TransportCallSign",
+            key: "username",
             name: "Tên đăng nhập",
             width: 180,
             type: columnTypes.TextEditor,
+            editable: true
         },
         {
-            key: "TransportIMONumber",
-            name: "Tên người dùng",
+            key: "fullname",
+            name: "Họ và tên",
             width: 180,
             type: columnTypes.TextEditor,
+            editable: true
         },
         {
-            key: "ArrivalDeparture",
+            key: "password",
             name: "Mật khẩu",
             width: 180,
-            type: columnTypes.DatePicker,
+            type: columnTypes.Password,
+            editable: true
         },
         {
-            key: "NumberOfJourney",
+            key: "birthday",
             name: "Ngày sinh",
             width: 180,
-            type: columnTypes.TextEditor,
+            type: columnTypes.DatePicker,
+            editable: true
         },
         {
-            key: "BillOfLading",
+            key: "email",
             name: "Email",
             width: 180,
             type: columnTypes.TextEditor,
+            editable: true
         },
         {
-            key: "CargoCtrlNo",
+            key: "telephone",
             name: "SĐT",
             width: 180,
             type: columnTypes.TextEditor,
+            editable: true
         },
         {
-            key: "CntrNo",
+            key: "status",
             name: "Trạng thái",
             width: 180,
-            type: columnTypes.TextEditor,
+            type: columnTypes.Checkbox,
+            editable: true
         },
     ]);
 
@@ -124,15 +128,22 @@ export default function User() {
                     <Card
                         className="main-card"
                     >
-                        <ToolBar
-                            buttonConfig={[
-                                toolBarButtonTypes.load,
-                                toolBarButtonTypes.send,
-                                toolBarButtonTypes.cancel,
-                                toolBarButtonTypes.exportexcel,
-                            ]}
-                            handleConfirm={buttonConfirm}
-                        />
+
+                        <Space style={{justifyContent: 'space-between', width: '100%'}}>
+                            <ToolBar
+                                buttonConfig={[
+                                    toolBarButtonTypes.add,
+                                    toolBarButtonTypes.delete,
+                                    toolBarButtonTypes.save,
+                                ]}
+                                handleConfirm={buttonConfirm}
+                            />
+                            <SearchBox
+                                style={{ width: "100%" }}
+                                data={dataTable}
+                                onChange={setRows}
+                            ></SearchBox>
+                        </Space>
                         <DataGrid
                             ref={gridRef}
                             direction="ltr"
