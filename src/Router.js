@@ -99,6 +99,9 @@ import Msg212Liquid from "./views/message_liquid/Msg212Liquid.js";
 import Msg207Liquid from "./views/message_liquid/Msg207Liquid.js";
 import Msg141Liquid from "./views/message_liquid/Msg141Liquid.js";
 
+//===== MESSAGE LIQUID =======//
+import User from "./views/Settings/user.js";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -165,7 +168,6 @@ const router = createBrowserRouter([
       { path: "/LiquidGetin", element: <LiquidGetin /> },
       { path: "/LiquidGetout", element: <LiquidGetout /> },
       { path: "/LiquidType", element: <LiquidType /> },
-
       { path: "/SysConfig", element: <SysConfig /> },
 
       //===== MESSAGE BULK =======//
@@ -199,6 +201,10 @@ const router = createBrowserRouter([
       { path: "/msg223_liquid", element: <Msg223Liquid /> },
       { path: "/msg121_liquid", element: <Msg121Liquid /> },
       { path: "/msg141_liquid", element: <Msg141Liquid /> },
+
+      //===== SETTING =======//
+      { path: "/user_decent", element: <Msg253 /> },
+      { path: "/user", element: <User /> },
 
     ],
   },
