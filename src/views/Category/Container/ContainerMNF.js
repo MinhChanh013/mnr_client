@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Form } from "antd";
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
 import DataGrid, {
@@ -10,23 +11,36 @@ import DataGrid, {
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
+import { updateForm } from "../../../store/slices/FilterFormSlices.js";
+import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { getFormData } from "../../../utils/form.utils.js";
+import { showMessage } from "../../../store/slices/MessageSlices.js";
+import { searchVessels, load } from "../../../apis/Category/ContainerMNF.js";
+import { v4 as uuidv4 } from "uuid";
+import SearchBox from "../../../global_component/SearchBox/index.jsx";
+
 export default function ContainerMNF() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const [rows, setRows] = React.useState([]);
+  const dispatch = useDispatch();
+  const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
-  React.useEffect(async () => {
-    try {
-      // const res = await searchVessels("");
-      // if (res) {
-      //   setDataViewsels(res.data);
-      // }
-    } catch (error) {
-      console.log(error);
+  React.useEffect(() => {
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
+    fetchDataVessels();
   }, []);
   const NewItem = [
     {
@@ -100,31 +114,62 @@ export default function ContainerMNF() {
       })
     );
   };
-  const buttonConfirm = (props) => {
-    switch (props.type) {
-      case "export_excel":
-        gridRef.current?.exportExcel();
-        break;
-      case "load":
-        handleSelectFilterData();
-        handleLoadData();
-        // console.log(vesselSelectRef.current?.getSelectedVessel());
-        break;
-      case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
-        gridRef.current.setSelectedRows();
-        break;
-      case "add":
-        setRows(
-          [...NewItem, ...rows].map((item, index) => {
-            return {
-              ...item,
-              ID: index + 1,
-            };
+  const handleLoadData = async (formData) => {
+    dispatch(setLoading(true));
+    try {
+      const resultDataCntrMNF = await load(formData);
+      if (resultDataCntrMNF) {
+        const newResultDataCntrMNF = resultDataCntrMNF.data.map((item) => {
+          return {
+            ...item,
+            ID: uuidv4(),
+          };
+        });
+        setDataTable(newResultDataCntrMNF);
+        setRows(newResultDataCntrMNF);
+        dispatch(
+          showMessage({
+            content: "Nạp dữ liệu thành công",
           })
         );
-      case "save":
-        handleSaveData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+  };
+
+  const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+
+    const formData = {
+      ...dataFormFilter,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
+    switch (props.type) {
+      case "load":
+        handleLoadData(formData);
+        break;
+        const idMsgRowData = gridRef.current?.getSelectedRows();
+        const listMsgRowSelect = [];
+        idMsgRowData.forEach((idMsgSelected) => {
+          listMsgRowSelect.push(
+            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+          );
+        });
+        try {
+          dispatch(updateForm(formData));
+          // await send(listMsgRowSelect, dispatch);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+      case "cancel":
+        // await cancelSending();
+        break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
         break;
       default:
         break;
@@ -132,50 +177,6 @@ export default function ContainerMNF() {
   };
   const handleSaveData = async () => {
     try {
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleLoadData = async () => {
-    try {
-      // const resultDataMsg3668 = await load({
-      //   fromdate: "2023/03/13 00:00:00",
-      //   todate: "2024/03/01 00:00:00",
-      // });
-      // if (resultDataMsg3668) {
-      //   const dataMsg3668 = resultDataMsg3668.data.map((row) => {
-      //     return columns.reduce((acc, column) => {
-      //       // handle logic data
-      //       const keyValue = column.key;
-      //       const rowValue = row[keyValue];
-      //       switch (keyValue) {
-      //         case "ImExType":
-      //           acc[keyValue] =
-      //             rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-      //           break;
-      //         case "StatusMarker":
-      //           if (row["SuccessMarker"]) {
-      //             acc[keyValue] = "Thành công";
-      //           } else if (row["ErrorMarker"]) {
-      //             acc[keyValue] = "Thất bại";
-      //           } else acc[keyValue] = "Chưa gửi";
-      //           break;
-      //         case "StatusOfGood":
-      //           rowValue === 1
-      //             ? (acc[keyValue] = "Full")
-      //             : (acc[keyValue] = "Empty");
-      //           break;
-      //         default:
-      //           keyValue === "Select"
-      //             ? (acc[keyValue] = "select")
-      //             : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
-      //           break;
-      //       }
-      //       return acc;
-      //     }, {});
-      //   });
-      //   setRows(dataMsg3668);
-      // }
     } catch (error) {
       console.log(error);
     }
@@ -209,7 +210,7 @@ export default function ContainerMNF() {
               </Col>
 
               <Filter
-                filterRef={filterRef}
+                form={form}
                 items={[
                   {
                     type: filterType.radio,
@@ -229,10 +230,6 @@ export default function ContainerMNF() {
                         {
                           label: "Xuất",
                           value: "2",
-                        },
-                        {
-                          label: "Nội địa",
-                          value: "3",
                         },
                       ],
                     },

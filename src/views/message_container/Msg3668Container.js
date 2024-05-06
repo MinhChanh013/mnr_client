@@ -25,6 +25,7 @@ import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 
 import useDebounce from "../../hooks/useDebounce.js";
 
@@ -37,6 +38,7 @@ export default function Msg3668Container() {
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
   const [rows, setRows] = React.useState([]);
+  const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
@@ -276,6 +278,7 @@ export default function Msg3668Container() {
           };
         });
         setRows(newResultDataMsg3668);
+        setDataTable(newResultDataMsg3668);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -453,7 +456,7 @@ export default function Msg3668Container() {
         </Col>
         <Col span={17}>
           <Card className="main-card">
-            <Flex justify="space-between" style={{ padding: "10px 20px" }}>
+            <Flex className="main-card-toolbar" justify="space-between">
               <ToolBar
                 buttonConfig={[
                   toolBarButtonTypes.load,
@@ -464,14 +467,11 @@ export default function Msg3668Container() {
                 ]}
                 handleConfirm={buttonConfirm}
               />
-              <Search
-                style={{ width: "20%" }}
-                placeholder="Tìm kiếm"
-                className="HeaderSearch"
-                onChange={(e) => {
-                  setSearchValue(e);
-                }}
-              ></Search>
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
             </Flex>
             <DataGrid
               ref={gridRef}
