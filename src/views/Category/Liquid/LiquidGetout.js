@@ -11,6 +11,7 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { getFormData } from "../../../utils/form.utils.js";
+import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 export default function ContainerMNF() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -20,7 +21,7 @@ export default function ContainerMNF() {
   });
   const [dataViewsels, setDataViewsels] = React.useState([]);
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     try {
       // const res = await searchVessels("");
       // if (res) {
@@ -45,7 +46,7 @@ export default function ContainerMNF() {
       CntrNo: "",
     },
   ];
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "STT",
@@ -56,35 +57,31 @@ export default function ContainerMNF() {
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
-      width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "JobModeOut",
       name: "PHương Án Ra",
-      width: 180,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "SumCargoWeight",
       name: "Tổng Trọng Lượng",
-      width: 200,
       type: columnTypes.TextEditor,
     },
     {
       key: "Remaining",
       name: "Còn Lại",
-      width: 150,
       type: columnTypes.TextEditor,
     },
     {
       key: "WeightUnitCode",
       name: "Đơn vị tính",
-      width: 150,
       type: columnTypes.TextEditor,
     },
-  ];
+  ])
+
   const removeRow = (index) => {
     const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
     setRows(newRow);

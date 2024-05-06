@@ -14,6 +14,7 @@ import "./vessel-select.scss";
 import dayjs from "dayjs";
 import { FORMAT_DATETIME } from "../../constants";
 import SearchBox from "../SearchBox";
+import { basicRenderColumns } from "../../utils/dataTable.utils";
 
 const { Text } = Typography;
 
@@ -71,7 +72,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
   const [viewvessels, setViewvessels] = useState({});
   const [vesselSelect, setVesselSelect] = useState({});
 
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
@@ -82,14 +83,12 @@ const VesselSelect = forwardRef(({ data }, ref) => {
       key: "VesselName",
       name: "Tên tàu",
       width: 180,
-      renderEditCell: textEditor,
       editable: false,
     },
     {
       key: "VoyageStatus",
       name: "C.Nhập/Xuất",
       width: 120,
-      renderEditCell: textEditor,
       editable: false,
     },
     {
@@ -104,7 +103,7 @@ const VesselSelect = forwardRef(({ data }, ref) => {
       type: columnTypes.DatePicker,
       editable: false,
     },
-  ];
+  ]);
 
   useEffect(() => {
     if (data) {

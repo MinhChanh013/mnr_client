@@ -9,12 +9,13 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { getFormData } from "../../../utils/form.utils.js";
+import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 const { Title } = Typography;
 export default function ContainerSizeType() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const [rows, setRows] = React.useState([]);
-  React.useEffect(async () => {
+  React.useEffect(() => {
     try {
       // const res = await searchVessels("");
       // if (res) {
@@ -34,7 +35,7 @@ export default function ContainerSizeType() {
       CommodityDescription: "",
     },
   ];
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "STT",
@@ -44,16 +45,15 @@ export default function ContainerSizeType() {
     {
       key: "ComTypeCode",
       name: "Mã Loại Hàng",
-      width: 400,
       type: columnTypes.TextEditor,
     },
     {
       key: "ComTypeName",
       name: "Tên Loại Hàng",
-      width: 400,
       type: columnTypes.TextEditor,
     },
-  ];
+  ])
+
   function removeRow(index) {
     const newRow = [...rows];
     newRow.splice(index, 1);

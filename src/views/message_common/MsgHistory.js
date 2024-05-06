@@ -12,6 +12,7 @@ import DataGrid, {
 import { load, send } from "../../apis/message_common/901.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 const { Text } = Typography;
 
@@ -22,7 +23,7 @@ const MsgHistory = () => {
   const [formQueryHTHQ] = Form.useForm();
   const gridRef = React.createRef();
   const onFocus = () => {};
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "IDRef",
       name: "IDRef",
@@ -84,7 +85,7 @@ const MsgHistory = () => {
       type: columnTypes.TextEditor,
       editable: true,
     },
-  ];
+  ])
 
   const buttonConfirm = async (props) => {
     const dataFormFilter = formFilter.getFieldsValue();

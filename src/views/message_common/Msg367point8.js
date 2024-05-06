@@ -15,6 +15,7 @@ import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { useDispatch } from "react-redux";
 import { searchVessels } from "../../apis/message_common/217.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 const Msg367point8 = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const Msg367point8 = () => {
   const onFocus = () => {};
   const [form] = Form.useForm();
 
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "IDRef",
       name: "IDRef",
@@ -165,7 +166,7 @@ const Msg367point8 = () => {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ];
+  ])
 
   const handleLoadData = async (formData) => {
     try {
