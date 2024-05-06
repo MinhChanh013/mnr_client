@@ -19,6 +19,7 @@ import { searchVessels, load } from "../../../apis/Category/ContainerMNF.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
+import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 export default function ContainerMNF() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -29,18 +30,15 @@ export default function ContainerMNF() {
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
-    async function fetchDataVessels() {
-      try {
-        const res = await searchVessels("");
-        if (res) {
-          setDataViewsels(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+  React.useEffect(async () => {
+    try {
+      // const res = await searchVessels("");
+      // if (res) {
+      //   setDataViewsels(res.data);
+      // }
+    } catch (error) {
+      console.log(error);
     }
-    fetchDataVessels();
   }, []);
   const NewItem = [
     {
@@ -52,7 +50,7 @@ export default function ContainerMNF() {
       CommodityDescription: "",
     },
   ];
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "STT",
@@ -102,7 +100,8 @@ export default function ContainerMNF() {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ];
+  ]);
+
   const removeRow = (index) => {
     const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
     setRows(

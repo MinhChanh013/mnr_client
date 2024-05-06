@@ -45,7 +45,6 @@ const Msg211 = () => {
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
-            console.log(data.xmlComplete);
             message.success('"Thông điệp đã được đưa vào hàng đợi!"');
             socket.emit("mess_to_sock", "click");
           }

@@ -14,6 +14,7 @@ import DataGrid, {
 import { load, send } from "../../apis/message_common/253.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 const Msg253 = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const Msg253 = () => {
   const gridRef = React.createRef();
   const [form] = Form.useForm();
   const onFocus = () => {};
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "IDRef",
       name: "IDRef",
@@ -69,7 +70,7 @@ const Msg253 = () => {
       name: "Khóa Tham Chiếu",
       type: columnTypes.TextEditor,
     },
-  ];
+  ])
 
   const buttonConfirm = async (props) => {
     const dataFormFilter = form.getFieldsValue();
@@ -107,7 +108,6 @@ const Msg253 = () => {
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
-            console.log(data.xmlComplete);
             message.success('"Thông điệp đã được đưa vào hàng đợi!"');
             socket.emit("mess_to_sock", "click");
           }
@@ -174,7 +174,6 @@ const Msg253 = () => {
         });
         setRows(dataMsg465);
       } else {
-        console.log("-----------------");
         setRows([]);
         message.error("Không tìm thấy dữ liệu dữ liệu!");
       }

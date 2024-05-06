@@ -147,7 +147,6 @@ export default function Msg367Liquid() {
     // };
     switch (props.type) {
       case "new declare":
-        console.log(form.getFieldsValue());
         // handleLoadData(formData);
         break;
       case "send":

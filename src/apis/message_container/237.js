@@ -58,7 +58,6 @@ export const send = async (rows = [], dispatch) => {
     }
 
     if (data.data && data.data.xmlComplete.length > 0) {
-      console.log(data.xmlComplete);
       dispatch(
         showMessage({
           type: "success",

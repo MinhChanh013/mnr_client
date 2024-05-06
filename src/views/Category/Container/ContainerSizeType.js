@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Flex, Row, Typography } from "antd";
+import { Card, Col, Row, Typography } from "antd";
 import * as React from "react";
 import DataGrid, {
   columnTypes,
@@ -8,13 +8,13 @@ import DataGrid, {
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
-import { getFormData } from "../../../utils/form.utils.js";
+import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 const { Title } = Typography;
 export default function ContainerSizeType() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const [rows, setRows] = React.useState([]);
-  React.useEffect(async () => {
+  React.useEffect(() => {
     try {
       // const res = await searchVessels("");
       // if (res) {
@@ -32,7 +32,7 @@ export default function ContainerSizeType() {
       ContSize: "",
     },
   ];
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "STT",
@@ -63,7 +63,8 @@ export default function ContainerSizeType() {
       width: 400,
       type: columnTypes.TextEditor,
     },
-  ];
+  ]);
+
   function removeRow(index) {
     const newRow = [...rows];
     newRow.splice(index, 1);

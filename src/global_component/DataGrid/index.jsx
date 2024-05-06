@@ -137,7 +137,6 @@ const DataGrid = forwardRef(
 
     useEffect(() => {
       if (selection === selectionTypes.multi) {
-        console.log([...selectedRows].length);
         dispatch(setSelectedQuantity([...selectedRows].length));
       }
     }, [selectedRows]);
@@ -262,7 +261,7 @@ const DataGrid = forwardRef(
       }
     }, []);
 
-    const handleExportExcel = useCallback(() => ExportExcel(columns, rows), []);
+    const handleExportExcel = useCallback(() => ExportExcel(columns, rows), [rows]);
 
     useImperativeHandle(
       ref,
@@ -324,9 +323,8 @@ const DataGrid = forwardRef(
             ),
           }}
           ref={reactDataGridRef}
-          className={`rdg-light ${className} ${
-            pagination === "scroll" ? "fill-grid" : ""
-          }`}
+          className={`rdg-light ${className} ${pagination === "scroll" ? "fill-grid" : ""
+            }`}
           style={{
             height: "calc(100% - var(--height-toolbar) - 40px)",
             maxHeight: maxHeight,
@@ -343,7 +341,7 @@ const DataGrid = forwardRef(
           rowKeyGetter={(row) => row[columnKeySelected]}
           onRowsChange={setRows}
           onSelectedCellChange={
-            typeof onFocus === "function" ? onFocus : () => {}
+            typeof onFocus === "function" ? onFocus : () => { }
           }
           enableVirtualization
           onFill={handleFill}

@@ -15,6 +15,7 @@ import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import dayjs from "dayjs";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 const Msg227 = () => {
   const [form] = Form.useForm();
@@ -24,7 +25,7 @@ const Msg227 = () => {
   const [vesselData, setVessel] = useState([]);
   const gridRef = React.createRef();
   const onFocus = () => {};
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "IDRef",
       name: "IDRef",
@@ -164,12 +165,11 @@ const Msg227 = () => {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ];
+  ])
 
   const buttonConfirm = async (props) => {
     if (props.type === "load") {
       const dataFormFilter = form.getFieldsValue();
-      console.log(dataFormFilter);
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       let fromdate, todate;
       if (dataFormFilter.dateFromTo) {
@@ -209,7 +209,6 @@ const Msg227 = () => {
           }
 
           if (data.data && data.data.xmlComplete.length > 0) {
-            console.log(data.xmlComplete);
             message.success('"Thông điệp đã được đưa vào hàng đợi!"');
             socket.emit("mess_to_sock", "click");
           }
