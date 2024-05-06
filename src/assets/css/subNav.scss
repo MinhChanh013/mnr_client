@@ -67,6 +67,11 @@
         background-color: #2d738f6d;
       }
     }
+
+    &.blockAnimate .ant-col {
+      animation: slide_left 0s linear forwards;
+      animation-delay: 0.1s;
+    }
   }
 
   > .ant-col {

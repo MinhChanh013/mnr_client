@@ -1,5 +1,5 @@
 import { Col, ConfigProvider, Empty, Menu, Row, } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useActiveNav } from '../../hooks/useNav';
 import { generateString } from '../../utils';
@@ -7,6 +7,7 @@ import { generateString } from '../../utils';
 const SubNav = (props) => {
     const { itemMenu, funcClose, activeNav } = props
     const navigate = useNavigate()
+    const [isBlockAnimate, setIsBlockAnimate] = useState(false)
     const [itemSelected, settItemSelected] = useState()
     const [keySelected, setKeySelected] = useState("")
     const items = useMemo(() => itemMenu.child, [itemMenu])
@@ -16,6 +17,15 @@ const SubNav = (props) => {
         setKeySelected(keySelected)
         settItemSelected(items[items.findIndex((item) => item.key === keySelected)])
     })
+
+    useEffect(() => {
+        const navActive = localStorage.getItem("nav")?.split(",")
+        if (navActive.length > 0 && keySelected && keySelected !== navActive[1]) {
+            setIsBlockAnimate(true)
+        } else {
+            setIsBlockAnimate(false)
+        }
+    }, [activeNav, isBlockAnimate, keySelected])
 
     return (
         <Row className='b__sub' gutter={[16, 16]} >
@@ -44,7 +54,7 @@ const SubNav = (props) => {
             </Col>
             <Col xl={20} lg={19} md={18} >
                 {itemSelected && itemSelected.child && itemSelected.child.length > 0 ?
-                    <Row style={{ width: "100%" }} className="b__subnav-item">
+                    <Row style={{ width: "100%" }} className={`b__subnav-item ${!isBlockAnimate ? "blockAnimate" : ""}`}>
                         {itemSelected.child.map((sub, index) => (
                             <Col
                                 className={window.location.href.includes(sub.href) ? "active" : ""}

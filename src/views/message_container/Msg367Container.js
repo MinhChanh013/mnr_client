@@ -9,6 +9,7 @@ import DataGrid, {
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { send } from "../../apis/message_container/367.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 const Msg367Container = () => {
   const [declareNo, setDeclareNo] = React.useState("");
@@ -16,7 +17,7 @@ const Msg367Container = () => {
   const [rows, setRows] = React.useState([]);
   const gridRef = React.createRef();
   const onFocus = () => {};
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "StatusMarker",
       name: "Trạng Thái",
@@ -155,7 +156,7 @@ const Msg367Container = () => {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ];
+  ])
 
   const buttonConfirm = async (props) => {
     if (props.type === "send") {

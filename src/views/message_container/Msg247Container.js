@@ -16,6 +16,7 @@ import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import dayjs from "dayjs";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 const Msg247Container = () => {
   const [form] = Form.useForm();
@@ -25,7 +26,7 @@ const Msg247Container = () => {
   const [rows, setRows] = React.useState([]);
   const gridRef = React.createRef();
   const onFocus = () => {};
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
@@ -128,7 +129,7 @@ const Msg247Container = () => {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ];
+  ])
 
   const buttonConfirm = async (props) => {
     if (props.type === "load") {

@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Row } from "antd";
 import * as React from "react";
-import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
-import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
 import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../../global_component/DataGrid/index.jsx";
+import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
+import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
+import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 import { getFormData } from "../../../utils/form.utils.js";
 export default function ContainerStock() {
   const onFocus = () => {};
@@ -18,7 +19,7 @@ export default function ContainerStock() {
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     try {
       // const res = await searchVessels("");
       // if (res) {
@@ -53,7 +54,7 @@ export default function ContainerStock() {
       Remark: "",
     },
   ];
-  const columns = [
+  const columns = basicRenderColumns([
     {
       key: "ID",
       name: "STT",
@@ -189,7 +190,8 @@ export default function ContainerStock() {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ];
+  ]);
+
   function removeRow(index) {
     const newRow = [...rows];
     newRow.splice(index, 1);
