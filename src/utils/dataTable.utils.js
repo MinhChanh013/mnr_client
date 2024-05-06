@@ -66,6 +66,10 @@ export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
       });
       break;
     case "Select": 
+      break;
+    case "Password":
+      dataConvert = "*".repeat(row[keyValue] ? row[keyValue].length : '');
+      break;
     default:
       break;
   }
