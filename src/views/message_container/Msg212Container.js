@@ -6,6 +6,7 @@ import { load, searchVessels, send } from "../../apis/message_container/212.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
+  paginationTypes
 } from "../../global_component/DataGrid/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
@@ -55,77 +56,66 @@ const Msg212Container = () => {
       name: "Tên tàu",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "TransportCallSign",
       name: "Hô Hiệu Tàu",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "TransportIMONumber",
       name: "Số IMO",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "ArrivalDeparture",
       name: "Ngày tàu đến/đi",
       width: 180,
       type: columnTypes.DatePicker,
-      editable: true,
     },
     {
       key: "NumberOfJourney",
       name: "Số Chuyến",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "CargoCtrlNo",
       name: "Số Định Danh",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "CntrNo",
       name: "Số Container",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "SealNo",
       name: "Số Chì",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "StatusOfGood",
       name: "Full/Empty",
       width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
+      type: columnTypes.Checkbox,
     },
     {
       key: "CommodityDescription",
       name: "Mô Tả Hàng Hóa",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
 
     {
@@ -133,7 +123,6 @@ const Msg212Container = () => {
       name: "Khóa Tham Chiếu",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
   ]);
 
@@ -220,11 +209,13 @@ const Msg212Container = () => {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.none}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+              pagination={paginationTypes.pagination}
+              limit={5}
             />
           </Card>
         </Col>

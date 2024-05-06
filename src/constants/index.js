@@ -1284,6 +1284,7 @@ export const itemsMenu = [
         key: "user:1",
         child: [
           {
+            href: '/user',
             label: "Quản lý người dùng",
             key: "user:1:1",
             icon: (
@@ -1296,6 +1297,7 @@ export const itemsMenu = [
             ),
           },
           {
+            href: '/user_decent',
             label: "Phân quyền người dùng",
             key: "user:1:2",
             icon: (
