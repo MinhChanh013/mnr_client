@@ -3,7 +3,7 @@ import { Card, Col, Flex, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { load, searchVessels, send } from "../../apis/message_package/257.js";
+import { cancelSending, load, searchVessels, send } from "../../apis/message_package/257.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -185,7 +185,9 @@ export default function Msg257Package() {
           console.log(error);
         }
         break;
-      case "cancelgetin":
+      case "cancel":
+        dispatch(updateForm(formData));
+        await cancelSending();
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -289,10 +291,9 @@ export default function Msg257Package() {
                       type: filterType.input,
                       label: "Số Định Danh",
                       config: {
-                        defaultValue: "",
+                        defaultValue: undefined,
                         name: "cargoctrlno",
                         placeholder: "",
-                        value: "",
                       },
                     },
                   ]}

@@ -39,6 +39,7 @@ export const toolBarButtonTypes = {
     icon: <CloseOutlined style={{ stroke: "#f54f40", strokeWidth: 30 }} />,
     alert: true,
     message: "Bạn có muốn hủy gửi thông điệp?",
+    messageNull: "Không có dữ liệu dể hủy gửi thông điệp?",
   },
   cancelgetin: {
     id: "cancelgetin",
@@ -46,7 +47,9 @@ export const toolBarButtonTypes = {
     fontColor: "#f54f40",
     icon: <CloseOutlined style={{ stroke: "#f54f40", strokeWidth: 30 }} />,
     alert: true,
-    message: "Bạn có muốn hủy getin?",
+    message:
+      "Bạn có muốn xóa getin không? thao tác này sẽ xóa tất cả dữ liệu getin trong hệ thống CAS, không thể phục hồi được",
+    messageNull: "Chọn dòng để Xoá GetIn",
   },
   save: {
     id: "save",

@@ -4,7 +4,12 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { load, searchVessels, send } from "../../apis/message_package/207.js";
+import {
+  cancelSending,
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_package/207.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -114,19 +119,19 @@ export default function Msg207Package() {
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceNo",
       name: "Số Tiếp Nhận",
       width: 300,
       type: columnTypes.TextEditor,
     },
     {
-      key: "MsgRef",
+      key: "AcceptanceTime",
       name: "Ngày Tiếp Nhận",
       width: 300,
       type: columnTypes.DatePicker,
     },
     {
-      key: "MsgRef",
+      key: "ResponseText",
       name: "Nội dung Phản Hồi",
       width: 300,
       type: columnTypes.TextEditor,
@@ -174,7 +179,9 @@ export default function Msg207Package() {
           console.log(error);
         }
         break;
-      case "cancelgetin":
+      case "cancel":
+        dispatch(updateForm(formData));
+        await cancelSending();
         break;
       case "export_excel":
         gridRef.current?.exportExcel();

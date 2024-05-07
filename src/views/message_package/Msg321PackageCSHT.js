@@ -4,11 +4,6 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -24,6 +19,12 @@ import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import SearchBox from "../../global_component/SearchBox/index.jsx";
+import {
+  cancelSending,
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_package/CSHT321.js";
 
 export default function Msg321PackageCSHT() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -233,7 +234,9 @@ export default function Msg321PackageCSHT() {
           console.log(error);
         }
         break;
-      case "cancelgetin":
+      case "cancel":
+        dispatch(updateForm(formData));
+        await cancelSending();
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -246,16 +249,18 @@ export default function Msg321PackageCSHT() {
   const handleLoadData = async (formData) => {
     try {
       dispatch(setLoading(true));
-      const resultDataMsg3668 = await load(formData);
-      if (resultDataMsg3668) {
-        const newResultDataMsg3668 = resultDataMsg3668.data.map((item) => {
-          return {
-            ...item,
-            ID: uuidv4(),
-          };
-        });
-        setRows(newResultDataMsg3668);
-        setDataTable(newResultDataMsg3668);
+      const resultDataMsg321CSHT = await load(formData);
+      if (resultDataMsg321CSHT) {
+        const newResultDataMsg321CSHT = resultDataMsg321CSHT.data.map(
+          (item) => {
+            return {
+              ...item,
+              ID: uuidv4(),
+            };
+          }
+        );
+        setRows(newResultDataMsg321CSHT);
+        setDataTable(newResultDataMsg321CSHT);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",

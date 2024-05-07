@@ -5,6 +5,7 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import {
+  cancelSending,
   load,
   searchVessels,
   send,
@@ -203,7 +204,9 @@ export default function Msg215PackageCSHT() {
           console.log(error);
         }
         break;
-      case "cancelgetin":
+      case "cancel":
+        dispatch(updateForm(formData));
+        await cancelSending();
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
