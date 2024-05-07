@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
@@ -63,11 +64,24 @@ export const send = async (rows = [], dispatch) => {
   return data;
 };
 
-export const cancelSending = async (rows = []) => {
+export const cancelSending = async () => {
   const formData = { msgId: msgId };
 
-  const data = await poster(cpath("send-cancel"), formData);
-  return data;
+  try {
+    const data = await poster(cpath("send-cancel"), formData);
+    if (data.deny) {
+      message.warning(data.deny);
+      return;
+    }
+    if (!data.success) {
+      message.warning("Không hủy được");
+      return;
+    }
+    message.success("Đã hủy!");
+    load(store.getState().filterForm);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const searchVessels = async ({ vesselName }) => {

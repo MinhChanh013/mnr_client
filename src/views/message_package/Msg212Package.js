@@ -4,7 +4,12 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { load, searchVessels, send } from "../../apis/message_package/212.js";
+import {
+  cancelSending,
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_package/212.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -142,6 +147,10 @@ export default function Msg212Package() {
           console.log(error);
         }
         break;
+      case "cancel":
+        dispatch(updateForm(formData));
+        await cancelSending();
+        break;
       case "export_excel":
         gridRef.current?.exportExcel();
         break;
@@ -161,7 +170,7 @@ export default function Msg212Package() {
             ID: uuidv4(),
           };
         });
-        setDataTable(newResultDataMsg212)
+        setDataTable(newResultDataMsg212);
         setRows(newResultDataMsg212);
         dispatch(
           showMessage({

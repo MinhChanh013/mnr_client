@@ -4,7 +4,12 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { load, searchVessels, send } from "../../apis/message_package/566.js";
+import {
+  cancelSending,
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_package/566.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -187,7 +192,9 @@ export default function Msg566Package() {
           console.log(error);
         }
         break;
-      case "cancelgetin":
+      case "cancel":
+        dispatch(updateForm(formData));
+        await cancelSending();
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -264,10 +271,9 @@ export default function Msg566Package() {
                       type: filterType.input,
                       label: "Số Cont",
                       config: {
-                        defaultValue: "",
+                        defaultValue: undefined,
                         name: "billOfLading",
                         placeholder: "",
-                        value: "",
                       },
                     },
                   ]}

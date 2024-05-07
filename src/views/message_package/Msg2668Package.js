@@ -3,7 +3,13 @@ import { Card, Col, Flex, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { load, searchVessels, send } from "../../apis/message_package/2668.js";
+import {
+  cancelSending,
+  clearGetin,
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_package/2668.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -208,18 +214,18 @@ export default function Msg2668Package() {
       todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
+    const idMsgRowData = gridRef.current?.getSelectedRows();
+    const listMsgRowSelect = [];
+    idMsgRowData.forEach((idMsgSelected) => {
+      listMsgRowSelect.push(
+        rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+      );
+    });
     switch (props.type) {
       case "load":
         handleLoadData(formData);
         break;
       case "send":
-        const idMsgRowData = gridRef.current?.getSelectedRows();
-        const listMsgRowSelect = [];
-        idMsgRowData.forEach((idMsgSelected) => {
-          listMsgRowSelect.push(
-            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
-          );
-        });
         try {
           dispatch(updateForm(formData));
           await send(listMsgRowSelect, dispatch);
@@ -227,7 +233,13 @@ export default function Msg2668Package() {
           console.log(error);
         }
         break;
+      case "cancel":
+        dispatch(updateForm(formData));
+        await cancelSending();
+        break;
       case "cancelgetin":
+        dispatch(updateForm(formData));
+        await clearGetin(listMsgRowSelect);
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -249,7 +261,7 @@ export default function Msg2668Package() {
           };
         });
         setRows(newResultDataMsg2668);
-        setDataTable(newResultDataMsg2668)
+        setDataTable(newResultDataMsg2668);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -331,10 +343,8 @@ export default function Msg2668Package() {
                       type: filterType.input,
                       label: "Số Vận Đơn",
                       config: {
-                        defaultValue: "",
                         name: "billoflading",
                         placeholder: "",
-                        value: "",
                       },
                     },
                   ]}
@@ -351,6 +361,7 @@ export default function Msg2668Package() {
                   toolBarButtonTypes.load,
                   toolBarButtonTypes.send,
                   toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.cancelgetin,
                   toolBarButtonTypes.exportexcel,
                 ]}
                 handleConfirm={buttonConfirm}
