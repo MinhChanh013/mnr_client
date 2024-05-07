@@ -1,33 +1,49 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Form, Flex } from "antd";
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
 import DataGrid, {
   columnTypes,
   selectionTypes,
+  paginationTypes,
 } from "../../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
+import { updateForm } from "../../../store/slices/FilterFormSlices.js";
+import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { getFormData } from "../../../utils/form.utils.js";
+import { showMessage } from "../../../store/slices/MessageSlices.js";
+import { searchVessels, load } from "../../../apis/Category/ContainerMNF.js";
+import { v4 as uuidv4 } from "uuid";
+import SearchBox from "../../../global_component/SearchBox/index.jsx";
+
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 export default function ContainerMNF() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const [rows, setRows] = React.useState([]);
+  const dispatch = useDispatch();
+  const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
-    try {
-      // const res = await searchVessels("");
-      // if (res) {
-      //   setDataViewsels(res.data);
-      // }
-    } catch (error) {
-      console.log(error);
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        console.log(res);
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
+    fetchDataVessels();
   }, []);
   const NewItem = [
     {
@@ -44,37 +60,42 @@ export default function ContainerMNF() {
       key: "ID",
       name: "STT",
       width: 80,
-      editable: false,
+      editable: true,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 200,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "CntrNo",
       name: "Số Container",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "SealNo",
       name: "Số Chì",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "StatusOfGood",
       name: "Full/Empty",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "ImExType",
       name: "Hướng",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "isLF",
@@ -88,6 +109,7 @@ export default function ContainerMNF() {
       name: "Mô Tả HH",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
   ]);
 
@@ -102,31 +124,64 @@ export default function ContainerMNF() {
       })
     );
   };
-  const buttonConfirm = (props) => {
-    switch (props.type) {
-      case "export_excel":
-        gridRef.current?.exportExcel();
-        break;
-      case "load":
-        handleSelectFilterData();
-        handleLoadData();
-        // console.log(vesselSelectRef.current?.getSelectedVessel());
-        break;
-      case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
-        gridRef.current.setSelectedRows();
-        break;
-      case "add":
-        setRows(
-          [...NewItem, ...rows].map((item, index) => {
+  const handleLoadData = async (formData) => {
+    dispatch(setLoading(true));
+    try {
+      const resultDataCntrMNF = await load(formData);
+      if (resultDataCntrMNF) {
+        const newResultDataCntrMNF = resultDataCntrMNF.data.map(
+          (item, index) => {
             return {
               ...item,
               ID: index + 1,
             };
+          }
+        );
+        setDataTable(newResultDataCntrMNF);
+        setRows(newResultDataCntrMNF);
+        dispatch(
+          showMessage({
+            content: "Nạp dữ liệu thành công",
           })
         );
-      case "save":
-        handleSaveData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+  };
+
+  const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+
+    const formData = {
+      ...dataFormFilter,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
+    switch (props.type) {
+      case "load":
+        handleLoadData(formData);
+        break;
+        const idMsgRowData = gridRef.current?.getSelectedRows();
+        const listMsgRowSelect = [];
+        idMsgRowData.forEach((idMsgSelected) => {
+          listMsgRowSelect.push(
+            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+          );
+        });
+        try {
+          dispatch(updateForm(formData));
+          // await send(listMsgRowSelect, dispatch);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+      case "add":
+        setRows([NewItem, ...rows]);
+        break;
+      case "export_excel":
+        gridRef.current?.exportExcel();
         break;
       default:
         break;
@@ -138,62 +193,10 @@ export default function ContainerMNF() {
       console.log(error);
     }
   };
-  const handleLoadData = async () => {
-    try {
-      // const resultDataMsg3668 = await load({
-      //   fromdate: "2023/03/13 00:00:00",
-      //   todate: "2024/03/01 00:00:00",
-      // });
-      // if (resultDataMsg3668) {
-      //   const dataMsg3668 = resultDataMsg3668.data.map((row) => {
-      //     return columns.reduce((acc, column) => {
-      //       // handle logic data
-      //       const keyValue = column.key;
-      //       const rowValue = row[keyValue];
-      //       switch (keyValue) {
-      //         case "ImExType":
-      //           acc[keyValue] =
-      //             rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-      //           break;
-      //         case "StatusMarker":
-      //           if (row["SuccessMarker"]) {
-      //             acc[keyValue] = "Thành công";
-      //           } else if (row["ErrorMarker"]) {
-      //             acc[keyValue] = "Thất bại";
-      //           } else acc[keyValue] = "Chưa gửi";
-      //           break;
-      //         case "StatusOfGood":
-      //           rowValue === 1
-      //             ? (acc[keyValue] = "Full")
-      //             : (acc[keyValue] = "Empty");
-      //           break;
-      //         default:
-      //           keyValue === "Select"
-      //             ? (acc[keyValue] = "select")
-      //             : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
-      //           break;
-      //       }
-      //       return acc;
-      //     }, {});
-      //   });
-      //   setRows(dataMsg3668);
-      // }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
-  const filterRef = React.useRef();
-  const handleSelectFilterData = () => {
-    console.log({
-      data: getFormData(filterRef.current),
-    });
-  };
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -211,7 +214,7 @@ export default function ContainerMNF() {
               </Col>
 
               <Filter
-                filterRef={filterRef}
+                form={form}
                 items={[
                   {
                     type: filterType.radio,
@@ -231,10 +234,6 @@ export default function ContainerMNF() {
                         {
                           label: "Xuất",
                           value: "2",
-                        },
-                        {
-                          label: "Nội địa",
-                          value: "3",
                         },
                       ],
                     },
@@ -266,32 +265,36 @@ export default function ContainerMNF() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
-          <Card
-            style={{
-              borderRadius: "0px",
-            }}
-          >
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.add,
-                toolBarButtonTypes.delete,
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.save,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+        <Col span={18}>
+          <Card className="main-card">
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.add,
+                  toolBarButtonTypes.delete,
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.save,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
-              style={{ height: "80vh" }}
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
+              pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+              limit={5}
             />
           </Card>
         </Col>

@@ -7,6 +7,8 @@ import RangePickerFilter from "./RangePickerFilter";
 import TextAreaFilter from "./TextAreaFilter";
 import SelectFilter from "./SelectFilter";
 
+import "./Filter.scss";
+
 const { Text } = Typography;
 const pickComponent = (type) =>
   ({
