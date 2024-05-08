@@ -1,17 +1,19 @@
-import { Button, Card, Col, Input, Row, message } from "antd";
+import { Button, Card, Col, Flex, Row, message } from "antd";
 import * as React from "react";
-import { Filter, filterType } from "../../global_component/Filter/index.jsx";
-import ToolBar, {
-  toolBarButtonTypes,
-} from "../../global_component/ToolbarButton/ToolBar.js";
+import { send } from "../../apis/message_container/367.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { send } from "../../apis/message_container/367.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
+import ToolBar, {
+  toolBarButtonTypes,
+} from "../../global_component/ToolbarButton/ToolBar.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 
 const Msg367Container = () => {
+  const [dataTable, setDataTable] = React.useState([]);
   const [declareNo, setDeclareNo] = React.useState("");
   const [HQno, setHQno] = React.useState("");
   const [rows, setRows] = React.useState([]);
@@ -156,7 +158,7 @@ const Msg367Container = () => {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ])
+  ]);
 
   const buttonConfirm = async (props) => {
     if (props.type === "send") {
@@ -304,16 +306,23 @@ const Msg367Container = () => {
         </Col>
         <Col span={18}>
           <Card className="main-card">
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.newdeclare,
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancel,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.newdeclare,
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"

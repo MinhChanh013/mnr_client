@@ -65,10 +65,8 @@ export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
         key: keyValue,
       });
       break;
-    case "Select": 
-      break;
     case "Password":
-      dataConvert = "*".repeat(row[keyValue] ? row[keyValue].length : '');
+      dataConvert = "*".repeat(row[keyValue] ? row[keyValue].length : "");
       break;
     default:
       break;

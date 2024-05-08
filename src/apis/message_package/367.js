@@ -71,7 +71,7 @@ export const send = async (params, dispatch) => {
 export const cancelSending = async (rows = []) => {
   const formData = { msgId: msgId };
 
-  const data = await poster(cpath("send-cancel"), formData);
+  const data = await poster(cpath("cancel-sending"), formData);
   return data;
 };
 

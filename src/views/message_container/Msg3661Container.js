@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row } from "antd";
+import { Card, Col, Flex, Form, Row } from "antd";
 import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
+import { cancelSending } from "../../apis/cancel_sending/message/container.js";
 import {
   load,
   searchVessels,
@@ -15,14 +16,16 @@ import DataGrid, {
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { updateForm } from "../../store/slices/FilterFormSlices.js";
 export default function Msg3661Container() {
+  const [dataTable, setDataTable] = React.useState([]);
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -182,7 +185,10 @@ export default function Msg3661Container() {
         }
         break;
       case "cancel":
-        // await cancelSending();
+        await cancelSending({
+          msgId: "3661",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -198,6 +204,7 @@ export default function Msg3661Container() {
       const resultDataMsg3661 = await load(formData);
       if (resultDataMsg3661) {
         setRows(resultDataMsg3661.data);
+        setDataTable(resultDataMsg3661.data);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -325,15 +332,22 @@ export default function Msg3661Container() {
         </Col>
         <Col span={18}>
           <Card className="main-card">
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancel,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"

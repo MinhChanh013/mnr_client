@@ -1,28 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row } from "antd";
+import { Card, Col, Flex, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { load, searchVessels, send } from "../../apis/message_container/566.js";
+import { v4 as uuidv4 } from "uuid";
+import { cancelSending } from "../../apis/cancel_sending/message/container.js";
+import {
+  load,
+  searchVessels,
+  send,
+} from "../../apis/message_container/566.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
-import { setLoading } from "../../store/slices/LoadingSlices.js";
-import {
-  basicRenderColumns,
-  dataConverTable,
-} from "../../utils/dataTable.utils.js";
-import { showMessage } from "../../store/slices/MessageSlices.js";
-import { v4 as uuidv4 } from "uuid";
 import { updateForm } from "../../store/slices/FilterFormSlices.js";
-import { ExportExcel } from "../../assets/js/excelFunction.js";
+import { setLoading } from "../../store/slices/LoadingSlices.js";
+import { showMessage } from "../../store/slices/MessageSlices.js";
+import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 
 export default function Msg566Container() {
+  const [dataTable, setDataTable] = React.useState([]);
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
@@ -188,6 +191,12 @@ export default function Msg566Container() {
           console.log(error);
         }
         break;
+      case "cancel":
+        await cancelSending({
+          msgId: "566",
+          handleLoad: () => handleLoadData(formData),
+        });
+        break;
       case "export_excel":
         gridRef.current?.exportExcel();
         break;
@@ -208,6 +217,7 @@ export default function Msg566Container() {
           };
         });
         setRows(newResultDataMsg566);
+        setDataTable(newResultDataMsg566);
         dispatch(
           showMessage({
             content: "Nạp dữ liệu thành công",
@@ -334,15 +344,22 @@ export default function Msg566Container() {
         </Col>
         <Col span={18}>
           <Card className="main-card">
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.cancel,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"
