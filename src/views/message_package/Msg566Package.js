@@ -4,12 +4,7 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  cancelSending,
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_package/566.js";
+import { load, searchVessels, send } from "../../apis/message_package/566.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -25,6 +20,7 @@ import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import SearchBox from "../../global_component/SearchBox/index.jsx";
+import { cancelSending } from "../../apis/cancel_sending/message/package.js";
 
 export default function Msg566Package() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -193,8 +189,10 @@ export default function Msg566Package() {
         }
         break;
       case "cancel":
-        dispatch(updateForm(formData));
-        await cancelSending();
+        await cancelSending({
+          msgId: "566",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "export_excel":
         gridRef.current?.exportExcel();

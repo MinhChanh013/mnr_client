@@ -4,7 +4,6 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import {
-  cancelSending,
   clearGetin,
   load,
   searchVessels,
@@ -26,6 +25,7 @@ import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import dayjs from "dayjs";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import SearchBox from "../../global_component/SearchBox/index.jsx";
+import { cancelSending } from "../../apis/cancel_sending/message/package.js";
 
 export default function Msg2668Package() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -234,8 +234,10 @@ export default function Msg2668Package() {
         }
         break;
       case "cancel":
-        dispatch(updateForm(formData));
-        await cancelSending();
+        await cancelSending({
+          msgId: "2668",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "cancelgetin":
         dispatch(updateForm(formData));

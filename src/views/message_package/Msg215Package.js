@@ -3,12 +3,7 @@ import { Card, Col, Flex, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  cancelSending,
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_package/215.js";
+import { load, searchVessels, send } from "../../apis/message_package/215.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -22,6 +17,7 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { cancelSending } from "../../apis/cancel_sending/message/package.js";
 
 export default function Msg215Package() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -173,8 +169,10 @@ export default function Msg215Package() {
         }
         break;
       case "cancel":
-        dispatch(updateForm(formData));
-        await cancelSending();
+        await cancelSending({
+          msgId: "215",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
