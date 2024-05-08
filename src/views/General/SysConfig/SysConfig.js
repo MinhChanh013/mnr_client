@@ -13,10 +13,8 @@ const SysConfig = () => {
   const handleClick = ({ key }) => {
     message.info(`Click on item ${key}`);
     setCurrentItem(key);
-    //console.log(currentItem);
   };
   const onClick = () => {
-    console.log(form.getFieldsValue());
   };
   const ComponentCurrent = (props) => {
     const Component = props.component;

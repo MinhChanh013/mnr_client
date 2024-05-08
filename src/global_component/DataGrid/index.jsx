@@ -27,7 +27,7 @@ export const columnTypes = {
   DatePicker: "DatePicker",
   TextEditor: "TextEditor",
   Checkbox: "Checkbox",
-  Password: "Password"
+  Password: "Password",
 };
 export const paginationTypes = {
   none: "none",
@@ -74,7 +74,9 @@ const handleRenderColumn = ({
   const column = {
     ...props,
     key,
-    renderEditCell: editable ? getEditCell(key, type, props?.options ?? [], baseColumn) : null,
+    renderEditCell: editable
+      ? getEditCell(key, type, props?.options ?? [], baseColumn)
+      : null,
   };
 
   // Hide column when visible = true
@@ -99,6 +101,7 @@ const getComparator = (sortColumn) => {
   switch (sortColumn) {
     ////// so sánh các dữ liệu kiểu số
     case "ImExType":
+    case "SumCargoWeight":
     case "ID":
       return (a, b) => {
         return a[sortColumn] - b[sortColumn];
