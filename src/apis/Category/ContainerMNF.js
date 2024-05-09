@@ -97,7 +97,7 @@ export const del = async (rows = []) => {
     IDRefs: idRefs,
   };
 
-  const data = await poster(cpath("del-getin"), formData);
+  const data = await poster(cpath("delete"), formData);
   return data;
 };
 

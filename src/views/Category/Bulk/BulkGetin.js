@@ -167,6 +167,17 @@ export default function BulkGetin() {
     dispatch(setLoading(false));
   };
 
+  const handleDeleteData = async (index) => {
+    dispatch(setLoading(true));
+    try {
+      const listRowDel = rows.filter()
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+
+  }
+
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();

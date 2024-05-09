@@ -231,13 +231,7 @@ export default function ContainerStock() {
 
   const removeRow = (index) => {
     const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(
-      newRow.map((item) => {
-        return {
-          ...item,
-        };
-      })
-    );
+    setRows(newRow);
   };
 
   const handleLoadData = async (formData) => {
@@ -245,12 +239,7 @@ export default function ContainerStock() {
     try {
       const resultDataCntrStock = await load(formData);
       if (resultDataCntrStock) {
-        const newResultDataCntrStock = resultDataCntrStock.data.map((item) => {
-          return {
-            ...item,
-            ID: uuidv4(),
-          };
-        });
+        const newResultDataCntrStock = resultDataCntrStock.data;
         console.log(newResultDataCntrStock);
         setDataTable(newResultDataCntrStock);
         setRows(newResultDataCntrStock);

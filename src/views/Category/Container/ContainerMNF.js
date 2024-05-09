@@ -42,7 +42,7 @@ export default function ContainerMNF() {
     }
     fetchDataVessels();
   }, []);
-  
+
   const NewItem = [
     {
       ID: "",
@@ -116,6 +116,13 @@ export default function ContainerMNF() {
       type: columnTypes.TextEditor,
       editable: true,
     },
+    {
+      key: "isNew",
+      name: "isNew",
+      width: 150,
+      type: columnTypes.TextEditor,
+      visible: true,
+    },
   ]);
 
   const removeRow = (index) => {
@@ -134,12 +141,7 @@ export default function ContainerMNF() {
     try {
       const resultDataCntrMNF = await load(formData);
       if (resultDataCntrMNF) {
-        const newResultDataCntrMNF = resultDataCntrMNF.data.map((item) => {
-          return {
-            ...item,
-            ID: uuidv4(),
-          };
-        });
+        const newResultDataCntrMNF = resultDataCntrMNF.data;
         setDataTable(newResultDataCntrMNF);
         setRows(newResultDataCntrMNF);
         dispatch(
