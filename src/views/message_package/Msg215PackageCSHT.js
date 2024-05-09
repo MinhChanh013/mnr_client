@@ -385,7 +385,7 @@ export default function Msg215PackageCSHT() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}

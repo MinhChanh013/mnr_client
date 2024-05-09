@@ -1,5 +1,6 @@
-import { message } from "antd";
 import { poster } from "../../../services/BaseService";
+import store from "../../../store";
+import { showMessage } from "../../../store/slices/MessageSlices";
 
 export const cancelSending = async ({ msgId, handleLoad = () => {} }) => {
   const formData = { msgId: msgId };
@@ -7,14 +8,29 @@ export const cancelSending = async ({ msgId, handleLoad = () => {} }) => {
   try {
     const data = await poster("/msg/cont/cancel-sending", formData);
     if (data.deny) {
-      message.warning(data.deny);
+      store.dispatch(
+        showMessage({
+          type: "warning",
+          content: data.deny,
+        })
+      );
       return;
     }
     if (!data.success) {
-      message.warning("Không hủy được");
+      store.dispatch(
+        showMessage({
+          type: "warning",
+          content: "Không hủy được",
+        })
+      );
       return;
     }
-    message.success("Đã hủy!");
+    store.dispatch(
+      showMessage({
+        type: "success",
+        content: "Đã hủy!",
+      })
+    );
     handleLoad();
   } catch (error) {
     console.log(error);

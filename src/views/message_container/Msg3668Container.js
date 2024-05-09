@@ -477,7 +477,7 @@ export default function Msg3668Container() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}

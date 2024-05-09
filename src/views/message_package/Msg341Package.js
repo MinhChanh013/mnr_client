@@ -326,7 +326,7 @@ export default function Msg341Package() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}
