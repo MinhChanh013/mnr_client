@@ -22,6 +22,7 @@ export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
         dataConvert = "Thất bại";
       } else dataConvert = "Chưa gửi";
       break;
+    case "CHK_FE":
     case "StatusOfGood":
       rowValue === 1 ? (dataConvert = "Full") : (dataConvert = "Empty");
       break;
@@ -64,6 +65,8 @@ export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
         row: row,
         key: keyValue,
       });
+      break;
+    case "Select":
       break;
     case "Password":
       dataConvert = "*".repeat(row[keyValue] ? row[keyValue].length : "");

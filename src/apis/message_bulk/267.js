@@ -1,31 +1,27 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
-const msgType = "cnt-mnf-ld";
+const msgType = "bulk";
+const msgId = "267";
 const cpath = (action) => {
-  return `/category/${msgType}/${action}`;
-};
-///---validate
-const validateClearGetin = () => {
-  throw new Error();
+  return `/msg/${msgType}/${msgId}/${action}`;
 };
 
 ///--process
 export const load = async (params) => {
-  const { voyagekey, imextype, isLF } = params;
-
+  const { voyagekey, isLF, imextype } = params;
   const formData = {
-    voyagekey: voyagekey,
-    cntrclass: imextype,
-    isLF: isLF,
+    voyagekey: voyagekey ?? "",
+    isLF,
+    imextype
   };
+
   const data = await poster(cpath("view"), formData);
   return data;
 };
 
-export const save = async (rows = [], dispatch) => {
+export const send = async (rows = [], isLF, voyagekey, dispatch) => {
   if (rows.length === 0) {
     dispatch(
       showMessage({
@@ -36,7 +32,13 @@ export const save = async (rows = [], dispatch) => {
     return;
   }
 
-  const data = await poster(cpath("send"), rows);
+  const formData = {
+    datas: rows,
+    isLF,
+    voyagekey,
+  };
+
+  const data = await poster(cpath("send"), formData);
   if (data) {
     if (data.deny) {
       dispatch(
@@ -57,6 +59,7 @@ export const save = async (rows = [], dispatch) => {
     }
 
     if (data.data && data.data.xmlComplete.length > 0) {
+      console.log(data.xmlComplete);
       dispatch(
         showMessage({
           type: "success",
@@ -90,17 +93,6 @@ export const save = async (rows = [], dispatch) => {
   return data;
 };
 
-export const del = async (rows = []) => {
-  const idRefs = rows.map((p) => p.IDRef);
-
-  const formData = {
-    IDRefs: idRefs,
-  };
-
-  const data = await poster(cpath("del-getin"), formData);
-  return data;
-};
-
 export const searchVessels = async ({ vesselName }) => {
   const formData = {
     vslname: vesselName,
@@ -110,10 +102,11 @@ export const searchVessels = async ({ vesselName }) => {
   return data;
 };
 
-// socket.on("sock_to_client", (data) => {
-//   socketReceiveReponse(
-//     data,
-//     data.response_func === "29" || data.response_func === "27",
-//     () => load(store.getState().filterForm)
-//   );
-// });
+socket.on("sock_to_client", (data) => {
+  socketReceiveReponse(
+    data,
+    msgId,
+    data.response_func === "32" || data.response_func === "27",
+    () => load(store.getState().filterForm)
+  );
+});

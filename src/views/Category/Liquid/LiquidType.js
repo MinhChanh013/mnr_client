@@ -1,20 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row, Typography } from "antd";
+import { Card, Col, Row, Form, Flex, Typography } from "antd";
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
+import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
 import DataGrid, {
   columnTypes,
   selectionTypes,
+  paginationTypes,
 } from "../../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
-import { getFormData } from "../../../utils/form.utils.js";
+import { setLoading } from "../../../store/slices/LoadingSlices.js";
+import { showMessage } from "../../../store/slices/MessageSlices.js";
+import { searchVessels, load } from "../../../apis/Category/ContainerMNF.js";
+import { v4 as uuidv4 } from "uuid";
+import SearchBox from "../../../global_component/SearchBox/index.jsx";
+
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 const { Title } = Typography;
-export default function ContainerSizeType() {
+export default function LiquidType() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const [rows, setRows] = React.useState([]);
+  const dispatch = useDispatch();
+  const [dataTable, setDataTable] = React.useState([]);
   React.useEffect(() => {
     try {
       // const res = await searchVessels("");
@@ -27,6 +38,7 @@ export default function ContainerSizeType() {
   }, []);
   const NewItem = [
     {
+      ID: "",
       BillOfLading: "",
       CntrNo: "",
       SealNo: "",
@@ -38,6 +50,12 @@ export default function ContainerSizeType() {
   const columns = basicRenderColumns([
     {
       key: "ID",
+      name: "ID",
+      width: 80,
+      visible: true,
+    },
+    {
+      key: "STT",
       name: "STT",
       width: 150,
       editable: false,
@@ -52,19 +70,20 @@ export default function ContainerSizeType() {
       name: "Tên Loại Hàng",
       type: columnTypes.TextEditor,
     },
-  ])
+  ]);
 
-  function removeRow(index) {
-    const newRow = [...rows];
-    newRow.splice(index, 1);
+  const removeRow = (index) => {
+    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
     setRows(newRow);
-  }
+  };
+
   const buttonConfirm = (props) => {
     switch (props.type) {
       case "delete":
-        removeRow(1);
+        removeRow([...gridRef.current.getSelectedRows()]);
         break;
       case "add":
+        NewItem["ID"] = uuidv4();
         setRows([NewItem, ...rows]);
         break;
       case "export_excel":
@@ -74,50 +93,7 @@ export default function ContainerSizeType() {
         break;
     }
   };
-  // const handleLoadData = async () => {
-  //   try {
-  //     const resultDataMsg3668 = await load({
-  //       fromdate: "2023/03/13 00:00:00",
-  //       todate: "2024/03/01 00:00:00",
-  //     });
-  //     if (resultDataMsg3668) {
-  //       const dataMsg3668 = resultDataMsg3668.data.map((row) => {
-  //         return columns.reduce((acc, column) => {
-  //           // handle logic data
-  //           const keyValue = column.key;
-  //           const rowValue = row[keyValue];
-  //           switch (keyValue) {
-  //             case "ImExType":
-  //               acc[keyValue] =
-  //                 rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-  //               break;
-  //             case "StatusMarker":
-  //               if (row["SuccessMarker"]) {
-  //                 acc[keyValue] = "Thành công";
-  //               } else if (row["ErrorMarker"]) {
-  //                 acc[keyValue] = "Thất bại";
-  //               } else acc[keyValue] = "Chưa gửi";
-  //               break;
-  //             case "StatusOfGood":
-  //               rowValue === 1
-  //                 ? (acc[keyValue] = "Full")
-  //                 : (acc[keyValue] = "Empty");
-  //               break;
-  //             default:
-  //               keyValue === "Select"
-  //                 ? (acc[keyValue] = "select")
-  //                 : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
-  //               break;
-  //           }
-  //           return acc;
-  //         }, {});
-  //       });
-  //       setRows(dataMsg3668);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
@@ -134,27 +110,50 @@ export default function ContainerSizeType() {
         <Col span={24}>
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.add,
-                toolBarButtonTypes.delete,
-                toolBarButtonTypes.save,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
-            <DataGrid
-              ref={gridRef}
-              direction="ltr"
-              columnKeySelected="ID"
-              selection={selectionTypes.single}
-              columns={columns}
-              rows={rows}
-              setRows={setRows}
-              onFocus={onFocus}
-            />
+            <Row align={"midle"}>
+              <Col span={24} style={{ padding: "8px 12px" }}>
+                <Flex className="main-card-toolbar" justify="space-between">
+                  <Title
+                    level={3}
+                    style={{
+                      margin: "0px",
+                    }}
+                  >
+                    Kích cỡ và loại container
+                  </Title>
+                  <SearchBox
+                    style={{ width: "18%" }}
+                    data={dataTable}
+                    onChange={setRows}
+                  />
+                  <ToolBar
+                    buttonConfig={[
+                      toolBarButtonTypes.add,
+                      toolBarButtonTypes.delete,
+                      toolBarButtonTypes.save,
+                      toolBarButtonTypes.exportexcel,
+                    ]}
+                    handleConfirm={buttonConfirm}
+                  />
+                </Flex>
+              </Col>
+              <Col span={24}>
+                <DataGrid
+                  ref={gridRef}
+                  direction="ltr"
+                  columnKeySelected="ID"
+                  selection={selectionTypes.multi}
+                  pagination={paginationTypes.scroll}
+                  columns={columns}
+                  rows={rows}
+                  setRows={setRows}
+                  onFocus={onFocus}
+                  limit={5}
+                />
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>

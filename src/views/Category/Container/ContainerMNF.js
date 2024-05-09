@@ -12,9 +12,7 @@ import DataGrid, {
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
-import { updateForm } from "../../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
-import { getFormData } from "../../../utils/form.utils.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
 import { searchVessels, load } from "../../../apis/Category/ContainerMNF.js";
 import { v4 as uuidv4 } from "uuid";
@@ -35,7 +33,6 @@ export default function ContainerMNF() {
     async function fetchDataVessels() {
       try {
         const res = await searchVessels("");
-        console.log(res);
         if (res) {
           setDataViewsels(res.data);
         }
@@ -45,22 +42,30 @@ export default function ContainerMNF() {
     }
     fetchDataVessels();
   }, []);
+  
   const NewItem = [
     {
+      ID: "",
       BillOfLading: "",
       CntrNo: "",
       SealNo: "",
-      StatusOfGood: "Full",
-      isLF: "Nhập",
+      StatusOfGood: "",
+      ImExType: "",
+      IsLocalForeign: "",
       CommodityDescription: "",
     },
   ];
   const columns = basicRenderColumns([
     {
       key: "ID",
+      name: "ID",
+      width: 80,
+      visible: true,
+    },
+    {
+      key: "STT",
       name: "STT",
       width: 80,
-      editable: true,
     },
     {
       key: "BillOfLading",
@@ -98,7 +103,7 @@ export default function ContainerMNF() {
       editable: true,
     },
     {
-      key: "isLF",
+      key: "IsLocalForeign",
       name: "Nội/ngoại",
       width: 180,
       type: columnTypes.TextEditor,
@@ -116,27 +121,25 @@ export default function ContainerMNF() {
   const removeRow = (index) => {
     const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
     setRows(
-      newRow.map((item, index) => {
+      newRow.map((item) => {
         return {
           ...item,
-          ID: index + 1,
         };
       })
     );
   };
+
   const handleLoadData = async (formData) => {
     dispatch(setLoading(true));
     try {
       const resultDataCntrMNF = await load(formData);
       if (resultDataCntrMNF) {
-        const newResultDataCntrMNF = resultDataCntrMNF.data.map(
-          (item, index) => {
-            return {
-              ...item,
-              ID: index + 1,
-            };
-          }
-        );
+        const newResultDataCntrMNF = resultDataCntrMNF.data.map((item) => {
+          return {
+            ...item,
+            ID: uuidv4(),
+          };
+        });
         setDataTable(newResultDataCntrMNF);
         setRows(newResultDataCntrMNF);
         dispatch(
@@ -163,22 +166,12 @@ export default function ContainerMNF() {
       case "load":
         handleLoadData(formData);
         break;
-        const idMsgRowData = gridRef.current?.getSelectedRows();
-        const listMsgRowSelect = [];
-        idMsgRowData.forEach((idMsgSelected) => {
-          listMsgRowSelect.push(
-            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
-          );
-        });
-        try {
-          dispatch(updateForm(formData));
-          // await send(listMsgRowSelect, dispatch);
-        } catch (error) {
-          console.log(error);
-        }
-        break;
       case "add":
+        NewItem["ID"] = uuidv4();
         setRows([NewItem, ...rows]);
+        break;
+      case "delete":
+        removeRow([...gridRef.current.getSelectedRows()]);
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -242,7 +235,7 @@ export default function ContainerMNF() {
                     type: filterType.radio,
                     label: "Loại hàng",
                     config: {
-                      name: "isLF",
+                      name: "IsLocalForeign",
                       defaultValue: "",
                       options: [
                         {
@@ -282,7 +275,7 @@ export default function ContainerMNF() {
                 style={{ width: "24%" }}
                 data={dataTable}
                 onChange={setRows}
-              ></SearchBox>
+              />
             </Flex>
             <DataGrid
               ref={gridRef}

@@ -2,11 +2,12 @@ import {
   Card,
   Col,
   Row,
-  message,
   Typography,
-  Select,
-  Upload,
+  message,
   Button,
+  Upload,
+  Select,
+  Space,
 } from "antd";
 import * as React from "react";
 import { socket } from "../../socket.js";
@@ -89,87 +90,82 @@ const Msg211 = () => {
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
-            <Row>
-              <Col span={4}>
-                <ToolBar
-                  buttonConfig={[
-                    toolBarButtonTypes.load,
-                    toolBarButtonTypes.send,
-                    toolBarButtonTypes.cancel,
-                    toolBarButtonTypes.exportexcel,
-                  ]}
-                  handleConfirm={buttonConfirm}
-                />
-              </Col>
-              <Col span={4}>
-                <Filter
-                  filterRef={filterRef}
-                  items={[
-                    {
-                      type: filterType.radio,
-                      config: {
-                        name: "imextype",
-                        defaultValue: 1,
-                        options: [
-                          { label: "Đăng ký", value: 1 },
-                          { label: "Sửa đổi", value: 2 },
-                        ],
-                      },
+            <Space size={50}>
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <Filter
+                filterRef={filterRef}
+                items={[
+                  {
+                    type: filterType.radio,
+                    config: {
+                      name: "imextype",
+                      defaultValue: 1,
+                      options: [
+                        { label: "Đăng ký", value: 1 },
+                        { label: "Sửa đổi", value: 2 },
+                      ],
                     },
-                  ]}
-                />
-              </Col>
-              <Col span={16}>
-                <Row gutter={[0, 16]}>
-                  <Col span={9}>
-                    <Typography>Loại hàng</Typography>
-                  </Col>
-                  <Col span={9}>
-                    <Select
-                      style={{ width: "100%" }}
-                      className="b-select"
-                      options={[
-                        {
-                          value: "cont",
-                          label: "Hàng Container",
-                        },
-                        {
-                          value: "package",
-                          label: "Hàng Kiện",
-                        },
-                        {
-                          value: "dispatch",
-                          label: "Hàng Rời",
-                        },
-                        {
-                          value: "liquid",
-                          label: "Hàng Lỏng",
-                        },
-                      ]}
-                    />
-                  </Col>
-                  <Col span={9}>
-                    <Typography>{"Tệp đính kèm (< 25MB)"}</Typography>
-                  </Col>
-                  <Col span={9}>
-                    <Upload>
-                      <Button
-                        icon={<UploadOutlined />}
-                        style={{
-                          borderRadius: 0,
-                          backgroundColor: "#bcb9b930",
-                        }}
-                      >
-                        Chọn tệp
-                      </Button>
-                    </Upload>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+                  },
+                ]}
+              />
+              <Row gutter={[0, 16]}>
+                <Col span={12}>
+                  <Typography>Loại hàng</Typography>
+                </Col>
+                <Col span={12}>
+                  <Select
+                    style={{ width: "100%" }}
+                    className="b-select"
+                    options={[
+                      {
+                        value: "cont",
+                        label: "Hàng Container",
+                      },
+                      {
+                        value: "package",
+                        label: "Hàng Kiện",
+                      },
+                      {
+                        value: "dispatch",
+                        label: "Hàng Rời",
+                      },
+                      {
+                        value: "liquid",
+                        label: "Hàng Lỏng",
+                      },
+                    ]}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Typography>{"Tệp đính kèm (< 25MB)"}</Typography>
+                </Col>
+                <Col span={12}>
+                  <Upload>
+                    <Button
+                      icon={<UploadOutlined />}
+                      style={{
+                        borderRadius: 0,
+                        backgroundColor: "#bcb9b930",
+                      }}
+                    >
+                      Chọn tệp
+                    </Button>
+                  </Upload>
+                </Col>
+              </Row>
+            </Space>
+            
           </Card>
         </Col>
-      </Row>
+      </Row >
     </>
   );
 };

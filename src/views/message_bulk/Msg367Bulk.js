@@ -3,7 +3,6 @@ import { Card, Col, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { load, searchVessels } from "../../apis/message_container/3668.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -15,6 +14,7 @@ import ToolBar, {
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import {load, searchVessels, send} from "../../apis/message_bulk/367.js";
 
 export default function Msg367Bulk() {
   const onFocus = () => {};

@@ -1,40 +1,52 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Form, Flex } from "antd";
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
 import DataGrid, {
   columnTypes,
   selectionTypes,
+  paginationTypes,
 } from "../../../global_component/DataGrid/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
-import { getFormData } from "../../../utils/form.utils.js";
+import { setLoading } from "../../../store/slices/LoadingSlices.js";
+import { showMessage } from "../../../store/slices/MessageSlices.js";
+import { searchVessels, load } from "../../../apis/Category/BulkGetout.js";
+import { v4 as uuidv4 } from "uuid";
+import SearchBox from "../../../global_component/SearchBox/index.jsx";
+
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 
-export default function ContainerMNF() {
+export default function BulkGetout() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
-  const [rows, setRows] = React.useState(() => {
-    return [];
-  });
+  const [rows, setRows] = React.useState([]);
+  const dispatch = useDispatch();
+  const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
-    try {
-      // const res = await searchVessels("");
-      // if (res) {
-      //   setDataViewsels(res.data);
-      // }
-    } catch (error) {
-      console.log(error);
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
+    fetchDataVessels();
   }, []);
 
   const NewItem = [
     {
+      ID: "",
       BillOfLading: "",
       JobModeOut: "",
       SumCargoWeight: "",
@@ -45,15 +57,21 @@ export default function ContainerMNF() {
   const columns = basicRenderColumns([
     {
       key: "ID",
+      name: "ID",
+      width: 80,
+      visible: true,
+    },
+    {
+      key: "STT",
       name: "STT",
       width: 80,
       editable: false,
-      visible: true,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "JobModeOut",
@@ -65,16 +83,19 @@ export default function ContainerMNF() {
       key: "SumCargoWeight",
       name: "Tổng Trọng Lượng",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "Remaining",
       name: "Còn Lại",
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "WeightUnitCode",
       name: "Đơn vị tính",
       type: columnTypes.TextEditor,
+      editable: true,
     },
   ]);
 
@@ -82,18 +103,53 @@ export default function ContainerMNF() {
     const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
     setRows(newRow);
   };
+
+  const handleLoadData = async (formData) => {
+    dispatch(setLoading(true));
+    try {
+      const resultDataBulkGetout = await load(formData);
+      if (resultDataBulkGetout) {
+        const newResultDataBulkGetout = resultDataBulkGetout.data.map(
+          (item) => {
+            return {
+              ...item,
+              ID: uuidv4(),
+            };
+          }
+        );
+        console.log(newResultDataBulkGetout);
+        setDataTable(newResultDataBulkGetout);
+        setRows(newResultDataBulkGetout);
+        dispatch(
+          showMessage({
+            content: "Nạp dữ liệu thành công",
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+  };
+
   const buttonConfirm = (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+
+    const formData = {
+      ...dataFormFilter,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
     switch (props.type) {
       case "load":
-        handleSelectFilterData();
-        handleLoadData();
+        handleLoadData(formData);
         break;
       case "delete":
         removeRow([...gridRef.current.getSelectedRows()]);
-        gridRef.current.setSelectedRows();
         break;
       case "add":
-        setRows([...NewItem, ...rows]);
+        NewItem["ID"] = uuidv4();
+        setRows([NewItem, ...rows]);
         break;
       case "save":
         handleSaveData();
@@ -112,58 +168,6 @@ export default function ContainerMNF() {
     }
   };
 
-  const handleLoadData = async () => {
-    try {
-      //   const resultDataMsg3668 = await load({
-      //     fromdate: "2023/03/13 00:00:00",
-      //     todate: "2024/03/01 00:00:00",
-      //   });
-      //   if (resultDataMsg3668) {
-      //     const dataMsg3668 = resultDataMsg3668.data.map((row) => {
-      //       return columns.reduce((acc, column) => {
-      //         // handle logic data
-      //         const keyValue = column.key;
-      //         const rowValue = row[keyValue];
-      //         switch (keyValue) {
-      //           case "ImExType":
-      //             acc[keyValue] =
-      //               rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-      //             break;
-      //           case "StatusMarker":
-      //             if (row["SuccessMarker"]) {
-      //               acc[keyValue] = "Thành công";
-      //             } else if (row["ErrorMarker"]) {
-      //               acc[keyValue] = "Thất bại";
-      //             } else acc[keyValue] = "Chưa gửi";
-      //             break;
-      //           case "StatusOfGood":
-      //             rowValue === 1
-      //               ? (acc[keyValue] = "Full")
-      //               : (acc[keyValue] = "Empty");
-      //             break;
-      //           default:
-      //             keyValue === "Select"
-      //               ? (acc[keyValue] = "select")
-      //               : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
-      //             break;
-      //         }
-      //         return acc;
-      //       }, {});
-      //     });
-      //     setRows(dataMsg3668);
-      //   }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
-  const filterRef = React.useRef();
-  const handleSelectFilterData = () => {
-    console.log({
-      data: getFormData(filterRef.current),
-    });
-  };
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
@@ -185,7 +189,7 @@ export default function ContainerMNF() {
               </Col>
 
               <Filter
-                filterRef={filterRef}
+                form={form}
                 items={[
                   {
                     type: filterType.radio,
@@ -243,27 +247,36 @@ export default function ContainerMNF() {
         <Col span={17}>
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.add,
-                toolBarButtonTypes.delete,
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.save,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.add,
+                  toolBarButtonTypes.delete,
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.save,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              />
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
+              pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+              limit={5}
             />
           </Card>
         </Col>
