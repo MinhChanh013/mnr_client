@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Form, Row, Flex, Input } from "antd";
+import { Card, Col, Flex, Form, Input, Row } from "antd";
 import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 import {
   clearGetin,
   load,
@@ -17,16 +18,16 @@ import DataGrid, {
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import { v4 as uuidv4 } from "uuid";
-import { updateForm } from "../../store/slices/FilterFormSlices.js";
-import SearchBox from "../../global_component/SearchBox/index.jsx";
 
+import { cancelSending } from "../../apis/cancel_sending/message/container.js";
 import useDebounce from "../../hooks/useDebounce.js";
 
 const { Search } = Input;
@@ -228,19 +229,18 @@ export default function Msg3668Container() {
       todate,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
     };
-
+    const idMsgRowData = gridRef.current?.getSelectedRows();
+    const listMsgRowSelect = [];
+    idMsgRowData.forEach((idMsgSelected) => {
+      listMsgRowSelect.push(
+        rows[rows.findIndex((item) => item.ID === idMsgSelected)]
+      );
+    });
     switch (props.type) {
       case "load":
         handleLoadData(formData);
         break;
       case "send":
-        const idMsgRowData = gridRef.current?.getSelectedRows();
-        const listMsgRowSelect = [];
-        idMsgRowData.forEach((idMsgSelected) => {
-          listMsgRowSelect.push(
-            rows[rows.findIndex((item) => item.ID === idMsgSelected)]
-          );
-        });
         try {
           dispatch(updateForm(formData));
           await send(listMsgRowSelect, dispatch);
@@ -249,15 +249,17 @@ export default function Msg3668Container() {
         }
         break;
       case "cancelgetin":
-        dispatch(setLoading(true));
-        await clearGetin();
-        dispatch(setLoading(false));
+        dispatch(updateForm(formData));
+        await clearGetin(listMsgRowSelect);
+        break;
+      case "cancel":
+        await cancelSending({
+          msgId: "3668",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
-        break;
-      case "cancel":
-        // await cancelSending();
         break;
       default:
         break;
@@ -295,7 +297,7 @@ export default function Msg3668Container() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={7}>
+        <Col span={6}>
           <Card
             title={"[366.8] \r\n GỬI GETIN CONTAINER"}
             style={{ borderRadius: "0px", height: "100%" }}
@@ -452,7 +454,7 @@ export default function Msg3668Container() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card className="main-card">
             <Flex className="main-card-toolbar" justify="space-between">
               <ToolBar
@@ -475,7 +477,7 @@ export default function Msg3668Container() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}

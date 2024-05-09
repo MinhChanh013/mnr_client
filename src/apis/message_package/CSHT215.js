@@ -65,7 +65,7 @@ export const cancelSending = async () => {
   const formData = { msgId: msgId };
 
   try {
-    const data = await poster(cpath("send-cancel"), formData);
+    const data = await poster(cpath("cancel-sending"), formData);
     if (data.deny) {
       message.warning(data.deny);
       return;

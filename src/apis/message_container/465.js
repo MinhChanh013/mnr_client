@@ -1,5 +1,7 @@
 import { socket, socketReceiveReponse } from "../../socket";
 import { poster } from "../../services/BaseService";
+import { message } from "antd";
+import store from "../../store";
 const msgType = "cont";
 const msgId = "465";
 const cpath = (action) => {
@@ -37,11 +39,24 @@ export const send = async (rows = []) => {
   return data;
 };
 
-export const cancelSending = async (rows = []) => {
+export const cancelSending = async () => {
   const formData = { msgId: msgId };
 
-  const data = await poster(cpath("send-cancel"), formData);
-  return data;
+  try {
+    const data = await poster(cpath("cancel-sending"), formData);
+    if (data.deny) {
+      message.warning(data.deny);
+      return;
+    }
+    if (!data.success) {
+      message.warning("Không hủy được");
+      return;
+    }
+    message.success("Đã hủy!");
+    load(store.getState().filterForm);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const searchVessels = async ({ vesselName }) => {

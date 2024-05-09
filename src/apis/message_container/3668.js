@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { message } from "antd";
 import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
@@ -120,21 +121,44 @@ export const send = async (rows = [], dispatch) => {
 };
 
 export const clearGetin = async (rows = []) => {
-  const idRefs = rows.map((p) => p.IDRef);
-
-  const formData = {
-    IDRefs: idRefs,
-  };
-
-  const data = await poster(cpath("del-getin"), formData);
-  return data;
+  if (rows.length === 0) {
+    return;
+  } else {
+    const IDRefs = rows.map((row) => row.MsgRef);
+    const formData = {
+      IDRefs,
+    };
+    try {
+      const data = await poster(cpath("clear-getin"), formData);
+      if (data.error) {
+        message.error(data.error);
+        return;
+      }
+      load(store.getState().filterForm);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 export const cancelSending = async () => {
   const formData = { msgId: msgId };
 
-  const data = await poster(cpath("send-cancel"), formData);
-  return data;
+  try {
+    const data = await poster(cpath("cancel-sending"), formData);
+    if (data.deny) {
+      message.warning(data.deny);
+      return;
+    }
+    if (!data.success) {
+      message.warning("Không hủy được");
+      return;
+    }
+    message.success("Đã hủy!");
+    load(store.getState().filterForm);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const searchVessels = async ({ vesselName }) => {

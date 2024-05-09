@@ -3,12 +3,7 @@ import { Card, Col, Flex, Form, Row } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  cancelSending,
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_package/223.js";
+import { load, searchVessels, send } from "../../apis/message_package/223.js";
 import DataGrid, {
   columnTypes,
   selectionTypes,
@@ -25,6 +20,7 @@ import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 import dayjs from "dayjs";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import SearchBox from "../../global_component/SearchBox/index.jsx";
+import { cancelSending } from "../../apis/cancel_sending/message/package.js";
 
 export default function Msg223Package() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -218,8 +214,10 @@ export default function Msg223Package() {
         }
         break;
       case "cancel":
-        dispatch(updateForm(formData));
-        await cancelSending();
+        await cancelSending({
+          msgId: "223",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -338,7 +336,7 @@ export default function Msg223Package() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}
