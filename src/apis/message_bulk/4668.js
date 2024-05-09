@@ -3,19 +3,18 @@ import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "bulk";
-const msgId = "566";
+const msgId = "4668";
 const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
 };
 
 ///--process
 export const load = async (params) => {
-  const { voyagekey, isLF, marker, fe, billOfLading } = params;
+  const { voyagekey, isLF, billOfLading, imextype } = params;
   const formData = {
     voyagekey: voyagekey ?? "",
     isLF,
-    fe,
-    marker,
+    imextype,
     billOfLading,
   };
 
