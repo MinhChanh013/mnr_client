@@ -1,36 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Form, Flex } from "antd";
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
+import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
 import DataGrid, {
   columnTypes,
   selectionTypes,
+  paginationTypes,
 } from "../../../global_component/DataGrid/index.jsx";
-import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
-import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
+import { setLoading } from "../../../store/slices/LoadingSlices.js";
+import { showMessage } from "../../../store/slices/MessageSlices.js";
+import { searchVessels, load } from "../../../apis/Category/ContainerStock.js";
+import { v4 as uuidv4 } from "uuid";
+import SearchBox from "../../../global_component/SearchBox/index.jsx";
+
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
-import { getFormData } from "../../../utils/form.utils.js";
 export default function ContainerStock() {
   const onFocus = () => {};
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const [rows, setRows] = React.useState([]);
+  const dispatch = useDispatch();
+  const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [form] = Form.useForm();
 
   React.useEffect(() => {
-    try {
-      // const res = await searchVessels("");
-      // if (res) {
-      //   setDataViewsels(res.data);
-      // }
-    } catch (error) {
-      console.log(error);
+    async function fetchDataVessels() {
+      try {
+        const res = await searchVessels("");
+        if (res) {
+          setDataViewsels(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
+    fetchDataVessels();
   }, []);
   const NewItem = [
     {
+      ID: "",
       VesselName: "",
       InboundVoyage: "",
       OutboundVoyage: "",
@@ -57,39 +71,49 @@ export default function ContainerStock() {
   const columns = basicRenderColumns([
     {
       key: "ID",
+      name: "ID",
+      width: 80,
+      visible: true,
+    },
+    {
+      key: "STT",
       name: "STT",
       width: 80,
-      editable: false,
     },
     {
       key: "VesselName",
       name: "Tên Tàu",
       width: 200,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "InboundVoyage",
       name: "C.Nhập",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "OutboundVoyage",
       name: "C.Xuất",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "CntrNo",
       name: "Số Container",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "ImExType",
@@ -103,36 +127,42 @@ export default function ContainerStock() {
       name: "SizeType",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "CHK_FE",
       name: "Full/Empty",
       width: 200,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "SealNo",
       name: "Số Niêm chì",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "GetIn",
       name: "Ngày Vào Bãi",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "JobModeIn",
       name: "Phương Án Vào",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "NatureOfTransport",
       name: "Loại Hình VC",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "GetOut",
@@ -146,36 +176,42 @@ export default function ContainerStock() {
       name: "Phương Án Ra",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "CommodityDescription",
       name: "Mô Tả Hàng Hóa",
       width: 200,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "ContainerLocation",
       name: "Vị Trí Container",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "IsLocalForeign",
       name: "Nội/Ngoại",
       width: 180,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "CHK_LCL",
       name: "LCL",
       width: 180,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Checkbox,
+      editable: true,
     },
     {
       key: "CargoWeight",
       name: "Trọng Lượng",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "GetOutTruck",
@@ -189,25 +225,65 @@ export default function ContainerStock() {
       name: "Ghi chú",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
   ]);
 
-  function removeRow(index) {
-    const newRow = [...rows];
-    newRow.splice(index, 1);
-    setRows(newRow);
-  }
+  const removeRow = (index) => {
+    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
+    setRows(
+      newRow.map((item) => {
+        return {
+          ...item,
+        };
+      })
+    );
+  };
+
+  const handleLoadData = async (formData) => {
+    dispatch(setLoading(true));
+    try {
+      const resultDataCntrStock = await load(formData);
+      if (resultDataCntrStock) {
+        const newResultDataCntrStock = resultDataCntrStock.data.map((item) => {
+          return {
+            ...item,
+            ID: uuidv4(),
+          };
+        });
+        console.log(newResultDataCntrStock);
+        setDataTable(newResultDataCntrStock);
+        setRows(newResultDataCntrStock);
+        dispatch(
+          showMessage({
+            content: "Nạp dữ liệu thành công",
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+  };
+
   const buttonConfirm = (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+
+    const formData = {
+      ...dataFormFilter,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+    };
     switch (props.type) {
       case "load":
-        handleSelectFilterData();
-        // handleLoadData();
-        // console.log(vesselSelectRef.current?.getSelectedVessel());
+        console.log(formData);
+        handleLoadData(formData);
         break;
       case "delete":
-        removeRow(1);
+        removeRow([...gridRef.current.getSelectedRows()]);
         break;
       case "add":
+        NewItem["ID"] = uuidv4();
         setRows([NewItem, ...rows]);
         break;
       case "export_excel":
@@ -216,58 +292,6 @@ export default function ContainerStock() {
       default:
         break;
     }
-  };
-  // const handleLoadData = async () => {
-  //   try {
-  //     const resultDataMsg3668 = await load({
-  //       fromdate: "2023/03/13 00:00:00",
-  //       todate: "2024/03/01 00:00:00",
-  //     });
-  //     if (resultDataMsg3668) {
-  //       const dataMsg3668 = resultDataMsg3668.data.map((row) => {
-  //         return columns.reduce((acc, column) => {
-  //           // handle logic data
-  //           const keyValue = column.key;
-  //           const rowValue = row[keyValue];
-  //           switch (keyValue) {
-  //             case "ImExType":
-  //               acc[keyValue] =
-  //                 rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-  //               break;
-  //             case "StatusMarker":
-  //               if (row["SuccessMarker"]) {
-  //                 acc[keyValue] = "Thành công";
-  //               } else if (row["ErrorMarker"]) {
-  //                 acc[keyValue] = "Thất bại";
-  //               } else acc[keyValue] = "Chưa gửi";
-  //               break;
-  //             case "StatusOfGood":
-  //               rowValue === 1
-  //                 ? (acc[keyValue] = "Full")
-  //                 : (acc[keyValue] = "Empty");
-  //               break;
-  //             default:
-  //               keyValue === "Select"
-  //                 ? (acc[keyValue] = "select")
-  //                 : (acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "");
-  //               break;
-  //           }
-  //           return acc;
-  //         }, {});
-  //       });
-  //       setRows(dataMsg3668);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  //* CÁCH LẤY DỮ LIỆU TỪ FILTER.
-  const filterRef = React.useRef();
-  const handleSelectFilterData = () => {
-    console.log({
-      data: getFormData(filterRef.current),
-    });
   };
   return (
     <>
@@ -290,7 +314,7 @@ export default function ContainerStock() {
               </Col>
 
               <Filter
-                filterRef={filterRef}
+                form={form}
                 items={[
                   {
                     type: filterType.radio,
@@ -357,27 +381,36 @@ export default function ContainerStock() {
         <Col span={17}>
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
-            className="b-card"
+            className="main-card"
           >
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.add,
-                toolBarButtonTypes.delete,
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.save,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.add,
+                  toolBarButtonTypes.delete,
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.save,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              />
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
+              pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
               setRows={setRows}
               onFocus={onFocus}
+              limit={5}
             />
           </Card>
         </Col>
