@@ -95,6 +95,13 @@ export const send = async (rows = [], isLF, voyagekey, dispatch) => {
   return data;
 };
 
+export const cancelSending = async (rows = []) => {
+  const formData = { msgId: msgId };
+
+  const data = await poster(cpath("cancel-sending"), formData);
+  return data;
+};
+
 export const searchVessels = async ({ vesselName }) => {
   const formData = {
     vslname: vesselName,

@@ -1,6 +1,8 @@
+import { message } from "antd";
 import { ev_code } from "../../constants";
 import { poster } from "../../services/BaseService";
 import { socket } from "../../socket";
+import store from "../../store";
 const msgType = "cont";
 const msgId = "367";
 const cpath = (action) => {
@@ -36,11 +38,24 @@ export const send =  async (params) => {
   return data;
 };
 
-export const cancelSending = async (rows = []) => {
+export const cancelSending = async () => {
   const formData = { msgId: msgId };
 
-  const data = await poster(cpath("send-cancel"), formData);
-  return data;
+  try {
+    const data = await poster(cpath("cancel-sending"), formData);
+    if (data.deny) {
+      message.warning(data.deny);
+      return;
+    }
+    if (!data.success) {
+      message.warning("Không hủy được");
+      return;
+    }
+    message.success("Đã hủy!");
+    load(store.getState().filterForm);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const searchVessels = async ({ vesselName }) => {

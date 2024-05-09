@@ -4,8 +4,8 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import { cancelSending } from "../../apis/cancel_sending/message/package.js";
 import {
-  cancelSending,
   load,
   searchVessels,
   send,
@@ -17,6 +17,7 @@ import DataGrid, {
 } from "../../global_component/DataGrid/index.jsx";
 import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
 import ToolBar, {
   toolBarButtonTypes,
 } from "../../global_component/ToolbarButton/ToolBar.js";
@@ -24,7 +25,6 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
-import SearchBox from "../../global_component/SearchBox/index.jsx";
 
 export default function Msg215PackageCSHT() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -205,8 +205,10 @@ export default function Msg215PackageCSHT() {
         }
         break;
       case "cancel":
-        dispatch(updateForm(formData));
-        await cancelSending();
+        await cancelSending({
+          msgId: "CSHT215",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -383,7 +385,7 @@ export default function Msg215PackageCSHT() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}

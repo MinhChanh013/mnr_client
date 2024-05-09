@@ -1,4 +1,4 @@
-import { Card, Col, Row, Form, message } from "antd";
+import { Card, Col, Row, Form, message, Flex } from "antd";
 import { useState, useEffect } from "react";
 import * as React from "react";
 import VesselSelect from "../../global_component/Modal/VesselSelect.js";
@@ -10,15 +10,24 @@ import DataGrid, {
   columnTypes,
   selectionTypes,
 } from "../../global_component/DataGrid/index.jsx";
-import { searchVessels, load, send } from "../../apis/message_container/365.js";
+import {
+  searchVessels,
+  load,
+  send,
+  clearGetout,
+} from "../../apis/message_container/365.js";
 import { socket } from "../../socket.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import dayjs from "dayjs";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import SearchBox from "../../global_component/SearchBox/index.jsx";
+import { updateForm } from "../../store/slices/FilterFormSlices.js";
+import { cancelSending } from "../../apis/cancel_sending/message/container.js";
 
 const Msg365_container = () => {
+  const [dataTable, setDataTable] = React.useState([]);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const vesselSelectRef = React.useRef();
@@ -189,26 +198,26 @@ const Msg365_container = () => {
       width: 150,
       type: columnTypes.TextEditor,
     },
-  ])
+  ]);
 
   const buttonConfirm = async (props) => {
+    const dataFormFilter = form.getFieldsValue();
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    let fromdate, todate;
+    if (dataFormFilter.dateFromTo) {
+      fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
+      todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
+    }
+    let type = form.getFieldsValue();
+    delete dataFormFilter.dateFromTo;
+    const formData = {
+      ...dataFormFilter,
+      fromdate,
+      todate,
+      voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+      imextype: Number(type.imextype),
+    };
     if (props.type === "load") {
-      const dataFormFilter = form.getFieldsValue();
-      const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-      let fromdate, todate;
-      if (dataFormFilter.dateFromTo) {
-        fromdate = dayjs(dataFormFilter.dateFromTo[0]).format(FORMAT_DATETIME);
-        todate = dayjs(dataFormFilter.dateFromTo[1]).format(FORMAT_DATETIME);
-      }
-      let type = form.getFieldsValue();
-      delete dataFormFilter.dateFromTo;
-      const formData = {
-        ...dataFormFilter,
-        fromdate,
-        todate,
-        voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
-        imextype: Number(type.imextype),
-      };
       handleLoadData(formData);
     }
 
@@ -257,6 +266,18 @@ const Msg365_container = () => {
       }
     }
 
+    if (props.type === "cancel") {
+      await cancelSending({
+        msgId: "365",
+        handleLoad: () => handleLoadData(formData),
+      });
+    }
+
+    if (props.type === "delete getout") {
+      dispatch(updateForm(formData));
+      await clearGetout();
+    }
+
     if (props.type === "export_excel") {
       gridRef.current?.exportExcel();
     }
@@ -266,37 +287,9 @@ const Msg365_container = () => {
     try {
       dispatch(setLoading(true));
       const resultDataMsg365 = await load(formData);
-      if (resultDataMsg365.data.length > 0) {
-        const dataMsg365 = resultDataMsg365.data.map((row) => {
-          return columns.reduce((acc, column) => {
-            // handle logic data
-            const keyValue = column.key;
-            const rowValue = row[keyValue];
-            switch (keyValue) {
-              case "ImExType":
-                acc[keyValue] =
-                  rowValue === 1 ? "Nhập" : rowValue === 2 ? "Xuất" : "Nội Địa";
-                break;
-              case "StatusMarker":
-                if (row["SuccessMarker"]) {
-                  acc[keyValue] = "Thành công";
-                } else if (row["ErrorMarker"]) {
-                  acc[keyValue] = "Thất bại";
-                } else acc[keyValue] = "Chưa gửi";
-                break;
-              case "StatusOfGood":
-                rowValue === 1
-                  ? (acc[keyValue] = "Full")
-                  : (acc[keyValue] = "Empty");
-                break;
-              default:
-                acc[keyValue] = !!row[keyValue] ? `${row[keyValue]}` : "";
-                break;
-            }
-            return acc;
-          }, {});
-        });
-        setRows(dataMsg365);
+      if (resultDataMsg365?.data.length > 0) {
+        setRows(resultDataMsg365.data);
+        setDataTable(resultDataMsg365.data);
       } else {
         setRows([]);
         message.error("Không tìm thấy dữ liệu!");
@@ -421,21 +414,28 @@ const Msg365_container = () => {
         </Col>
         <Col span={18}>
           <Card className="main-card">
-            <ToolBar
-              buttonConfig={[
-                toolBarButtonTypes.load,
-                toolBarButtonTypes.send,
-                toolBarButtonTypes.deletegetout,
-                toolBarButtonTypes.cancel,
-                toolBarButtonTypes.exportexcel,
-              ]}
-              handleConfirm={buttonConfirm}
-            />
+            <Flex className="main-card-toolbar" justify="space-between">
+              <ToolBar
+                buttonConfig={[
+                  toolBarButtonTypes.load,
+                  toolBarButtonTypes.send,
+                  toolBarButtonTypes.deletegetout,
+                  toolBarButtonTypes.cancel,
+                  toolBarButtonTypes.exportexcel,
+                ]}
+                handleConfirm={buttonConfirm}
+              />
+              <SearchBox
+                style={{ width: "24%" }}
+                data={dataTable}
+                onChange={setRows}
+              ></SearchBox>
+            </Flex>
             <DataGrid
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               columns={columns}
               rows={rows}
               setRows={setRows}

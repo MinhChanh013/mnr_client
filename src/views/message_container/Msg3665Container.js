@@ -25,6 +25,7 @@ import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../global_component/SearchBox/index.jsx";
+import { cancelSending } from "../../apis/cancel_sending/message/container.js";
 
 export default function Msg3665Container() {
   const [dataTable, setDataTable] = React.useState([]);
@@ -255,7 +256,10 @@ export default function Msg3665Container() {
         }
         break;
       case "cancel":
-        // await cancelSending();
+        await cancelSending({
+          msgId: "3665",
+          handleLoad: () => handleLoadData(formData),
+        });
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -420,7 +424,7 @@ export default function Msg3665Container() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
