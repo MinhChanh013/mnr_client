@@ -101,6 +101,7 @@ import Msg141Liquid from "./views/message_liquid/Msg141Liquid.js";
 
 //===== MESSAGE LIQUID =======//
 import User from "./views/Settings/user.js";
+import UserDecent from "./views/Settings/UserDecent.js";
 
 const router = createBrowserRouter([
   {
@@ -203,7 +204,7 @@ const router = createBrowserRouter([
       { path: "/msg141_liquid", element: <Msg141Liquid /> },
 
       //===== SETTING =======//
-      { path: "/user_decent", element: <Msg253 /> },
+      { path: "/user_decent", element: <UserDecent /> },
       { path: "/user", element: <User /> },
 
     ],

@@ -4,11 +4,6 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -22,6 +17,7 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import {load, searchVessels, send} from "../../apis/message_bulk/216.js";
 
 export default function Msg216Bulk() {
   const onFocus = () => {};
@@ -225,7 +221,7 @@ export default function Msg216Bulk() {
       >
         <Col span={6}>
           <Card
-            title={"[215] \r\n DANH SÁCH HÀNG RỜI SAI KHÁC"}
+            title={"[216] \r\n DANH SÁCH HÀNG RỜI SAI KHÁC"}
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >

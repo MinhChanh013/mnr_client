@@ -3,7 +3,7 @@ import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
 const msgType = "bulk";
-const msgId = "566";
+const msgId = "441";
 const cpath = (action) => {
   return `/msg/${msgType}/${msgId}/${action}`;
 };

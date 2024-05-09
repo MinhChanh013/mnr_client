@@ -4,11 +4,6 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -21,12 +16,16 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { load, searchVessels, send } from "../../apis/message_bulk/4668.js";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
+import { Filter, filterType } from "../../global_component/Filter/index.jsx";
 
 export default function Msg4668Bulk() {
-  const onFocus = () => {};
+  const onFocus = () => { };
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
+  const filterRef = React.useRef();
   const [rows, setRows] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
   const [form] = Form.useForm();
@@ -191,6 +190,7 @@ export default function Msg4668Bulk() {
 
   const buttonConfirm = async (props) => {
     const dataFormFilter = form.getFieldsValue();
+    console.log(dataFormFilter)
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
     let fromdate, todate;
     if (dataFormFilter.dateFromTo) {
@@ -264,12 +264,65 @@ export default function Msg4668Bulk() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={24}>
+        <Col span={6}>
           <Card
             title={"[4668] \r\n GỬI GETIN HÀNG RỜI VÀO KVGS"}
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
+            <Row className="b-row" gutter={[16, 16]}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
+              <Col span={24}>
+                <Filter
+                  form={form}
+                  filterRef={filterRef}
+                  items={[
+                    {
+                      type: filterType.radio,
+                      label: "Hướng",
+                      config: {
+                        name: "imextype",
+                        defaultValue: "1",
+                        options: [
+                          {
+                            label: "Nhập",
+                            value: "1",
+                          },
+                          {
+                            label: "Xuất",
+                            value: "2",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: filterType.radio,
+                      label: "Loại hàng",
+                      config: {
+                        name: "isLF",
+                        defaultValue: "F",
+                        options: [
+                          {
+                            label: "Hàng ngoại",
+                            value: "F",
+                          },
+                          {
+                            label: "Hàng nội",
+                            value: "L",
+                          },
+                        ],
+                      },
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={18}>
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.load,

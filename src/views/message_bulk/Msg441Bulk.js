@@ -4,11 +4,6 @@ import dayjs from "dayjs";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import {
-  load,
-  searchVessels,
-  send,
-} from "../../apis/message_container/3668.js";
 import { FORMAT_DATETIME } from "../../constants/index.js";
 import DataGrid, {
   columnTypes,
@@ -21,9 +16,11 @@ import { updateForm } from "../../store/slices/FilterFormSlices.js";
 import { setLoading } from "../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../store/slices/MessageSlices.js";
 import { basicRenderColumns } from "../../utils/dataTable.utils.js";
+import { load, searchVessels, send } from "../../apis/message_bulk/441.js";
+import VesselSelect from "../../global_component/Modal/VesselSelect.js";
 
 export default function Msg441Bulk() {
-  const onFocus = () => {};
+  const onFocus = () => { };
   const gridRef = React.createRef();
   const vesselSelectRef = React.useRef();
   const dispatch = useDispatch();
@@ -246,12 +243,21 @@ export default function Msg441Bulk() {
         gutter={[8, 8]}
         style={{ marginTop: "8px", marginLeft: "4px", marginRight: "4px" }}
       >
-        <Col span={24}>
+        <Col span={6}>
           <Card
             title={"[441] \r\n GỬI GETOUT HÀNG RỜI QUA KVGS KHÔNG TKHQ"}
             style={{ borderRadius: "0px", height: "100%" }}
             className="b-card"
           >
+            <Row className="b-row" gutter={[16, 16]}>
+              <Col span={24}>
+                <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={18}>
+          <Card className="main-card">
             <ToolBar
               buttonConfig={[
                 toolBarButtonTypes.load,
