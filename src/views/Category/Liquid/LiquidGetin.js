@@ -146,12 +146,7 @@ export default function LiquidGetin() {
     try {
       const resultDataCntrMNF = await load(formData);
       if (resultDataCntrMNF) {
-        const newResultDataCntrMNF = resultDataCntrMNF.data.map((item) => {
-          return {
-            ...item,
-            ID: uuidv4(),
-          };
-        });
+        const newResultDataCntrMNF = resultDataCntrMNF.data;
         setDataTable(newResultDataCntrMNF);
         setRows(newResultDataCntrMNF);
         dispatch(

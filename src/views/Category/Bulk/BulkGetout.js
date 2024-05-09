@@ -109,14 +109,7 @@ export default function BulkGetout() {
     try {
       const resultDataBulkGetout = await load(formData);
       if (resultDataBulkGetout) {
-        const newResultDataBulkGetout = resultDataBulkGetout.data.map(
-          (item) => {
-            return {
-              ...item,
-              ID: uuidv4(),
-            };
-          }
-        );
+        const newResultDataBulkGetout = resultDataBulkGetout.data;
         console.log(newResultDataBulkGetout);
         setDataTable(newResultDataBulkGetout);
         setRows(newResultDataBulkGetout);

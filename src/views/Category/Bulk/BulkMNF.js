@@ -145,14 +145,7 @@ export default function BulkMNF() {
     try {
       const resultDataBulkMNF = await load(formData);
       if (resultDataBulkMNF) {
-        const newResultDataBulkMNF = resultDataBulkMNF.data.bulkList.map(
-          (item) => {
-            return {
-              ...item,
-              ID: uuidv4(),
-            };
-          }
-        );
+        const newResultDataBulkMNF = resultDataBulkMNF.data.bulkList;
         setDataTable(newResultDataBulkMNF);
         setRows(newResultDataBulkMNF);
         dispatch(

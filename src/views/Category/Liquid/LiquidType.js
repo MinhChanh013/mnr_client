@@ -27,14 +27,26 @@ export default function LiquidType() {
   const dispatch = useDispatch();
   const [dataTable, setDataTable] = React.useState([]);
   React.useEffect(() => {
-    try {
-      // const res = await searchVessels("");
-      // if (res) {
-      //   setDataViewsels(res.data);
-      // }
-    } catch (error) {
-      console.log(error);
+    async function fetchDataTable() {
+      dispatch(setLoading(true));
+      try {
+        const res = await load("");
+        if (res) {
+          const newResultDataLiquidType = res.data;
+          setRows(newResultDataLiquidType);
+          setDataTable(newResultDataLiquidType);
+          dispatch(
+            showMessage({
+              content: "Nạp dữ liệu thành công",
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      dispatch(setLoading(false));
     }
+    fetchDataTable();
   }, []);
   const NewItem = [
     {

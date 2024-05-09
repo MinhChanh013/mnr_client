@@ -105,13 +105,7 @@ export default function ContainerSizeType() {
 
   const removeRow = (index) => {
     const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(
-      newRow.map((item) => {
-        return {
-          ...item,
-        };
-      })
-    );
+    setRows(newRow);
   };
 
   const buttonConfirm = (props) => {
