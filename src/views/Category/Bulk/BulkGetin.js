@@ -170,13 +170,12 @@ export default function BulkGetin() {
   const handleDeleteData = async (index) => {
     dispatch(setLoading(true));
     try {
-      const listRowDel = rows.filter()
+      const listRowDel = rows.filter();
     } catch (error) {
       console.log(error);
     }
     dispatch(setLoading(false));
-
-  }
+  };
 
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();
@@ -316,7 +315,7 @@ export default function BulkGetin() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}

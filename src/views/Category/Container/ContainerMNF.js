@@ -43,24 +43,23 @@ export default function ContainerMNF() {
     fetchDataVessels();
   }, []);
 
-  const NewItem = [
-    {
-      ID: "",
-      BillOfLading: "",
-      CntrNo: "",
-      SealNo: "",
-      StatusOfGood: "",
-      ImExType: "",
-      IsLocalForeign: "",
-      CommodityDescription: "",
-    },
-  ];
+  const NewItem = {
+    BillOfLading: "",
+    CntrNo: "",
+    SealNo: "",
+    StatusOfGood: "",
+    ImExType: "",
+    IsLocalForeign: "",
+    CommodityDescription: "",
+    isNew: true,
+  };
+
   const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
       width: 80,
-      visible: true,
+      visible: false,
     },
     {
       key: "STT",
@@ -121,7 +120,7 @@ export default function ContainerMNF() {
       name: "isNew",
       width: 150,
       type: columnTypes.TextEditor,
-      visible: true,
+      visible: false,
     },
   ]);
 
@@ -156,6 +155,19 @@ export default function ContainerMNF() {
     dispatch(setLoading(false));
   };
 
+  const handleDeleteData = async (index) => {
+    dispatch(setLoading(true));
+    try {
+      console.log(index);
+      const RowDel = rows.find((obj) => obj.ID === index[0]);
+      console.log(rows);
+      console.log(RowDel.isNew ? "true" : "false");
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setLoading(false));
+  };
+
   const buttonConfirm = async (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -169,11 +181,11 @@ export default function ContainerMNF() {
         handleLoadData(formData);
         break;
       case "add":
-        NewItem["ID"] = uuidv4();
-        setRows([NewItem, ...rows]);
+        setRows([{ ...NewItem, "ID": uuidv4() }, ...rows]);
         break;
       case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
+        // removeRow([...gridRef.current.getSelectedRows()]);
+        handleDeleteData([...gridRef.current.getSelectedRows()]);
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
@@ -283,7 +295,7 @@ export default function ContainerMNF() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
