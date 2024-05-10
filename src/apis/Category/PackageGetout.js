@@ -3,7 +3,7 @@ import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
-const msgType = "cnt-mnf-ld";
+const msgType = "package-getout";
 const cpath = (action) => {
   return `/category/${msgType}/${action}`;
 };

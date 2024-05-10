@@ -302,7 +302,7 @@ export default function PackageGetin() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.multi}
+              selection={selectionTypes.single}
               pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
