@@ -91,12 +91,9 @@ export const save = async (rows = [], dispatch) => {
 };
 
 export const del = async (rows = []) => {
-  const idRefs = rows.map((p) => p.IDRef);
-
   const formData = {
-    IDRefs: idRefs,
+    datas: rows,
   };
-
   const data = await poster(cpath("delete"), formData);
   return data;
 };

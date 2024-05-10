@@ -14,7 +14,11 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { searchVessels, load } from "../../../apis/Category/ContainerMNF.js";
+import {
+  searchVessels,
+  load,
+  del,
+} from "../../../apis/Category/ContainerMNF.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
@@ -44,6 +48,7 @@ export default function ContainerMNF() {
   }, []);
 
   const NewItem = {
+    ID: "",
     BillOfLading: "",
     CntrNo: "",
     SealNo: "",
@@ -124,17 +129,6 @@ export default function ContainerMNF() {
     },
   ]);
 
-  const removeRow = (index) => {
-    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(
-      newRow.map((item) => {
-        return {
-          ...item,
-        };
-      })
-    );
-  };
-
   const handleLoadData = async (formData) => {
     dispatch(setLoading(true));
     try {
@@ -159,13 +153,29 @@ export default function ContainerMNF() {
     dispatch(setLoading(true));
     try {
       console.log(index);
-      const RowDel = rows.find((obj) => obj.ID === index[0]);
-      console.log(rows);
-      console.log(RowDel.isNew ? "true" : "false");
+      if(index.length){
+        const RowDel = rows.find((obj) => obj.ID === index[0]);
+        const newRow = rows.filter((e) => e !== RowDel);
+        setRows(newRow);
+        if (!RowDel.isNew) {
+          const result = await del([RowDel]);
+          console.log(result);
+        }
+      }
     } catch (error) {
       console.log(error);
     }
+    gridRef.current.ResetSelected();
     dispatch(setLoading(false));
+  };
+
+  const handleSaveData = async () => {
+    try {
+      const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const buttonConfirm = async (props) => {
@@ -184,7 +194,6 @@ export default function ContainerMNF() {
         setRows([{ ...NewItem, "ID": uuidv4() }, ...rows]);
         break;
       case "delete":
-        // removeRow([...gridRef.current.getSelectedRows()]);
         handleDeleteData([...gridRef.current.getSelectedRows()]);
         break;
       case "export_excel":
@@ -194,12 +203,7 @@ export default function ContainerMNF() {
         break;
     }
   };
-  const handleSaveData = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   return (
     <>
       <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
@@ -295,7 +299,7 @@ export default function ContainerMNF() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
               pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}

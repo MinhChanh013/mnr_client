@@ -151,17 +151,17 @@ const DataGrid = forwardRef(
     const dispatch = useDispatch();
 
     useEffect(() => {
-      if (selection === selectionTypes.multi) {
         dispatch(setSelectedQuantity([...selectedRows].length));
-      }
     }, [selectedRows]);
 
     const handleSelected = (idRowSelected) => {
+      console.log(idRowSelected)
       if (selection === selectionTypes.multi) {
         setSelectedRows(idRowSelected);
       }
       if (selection === selectionTypes.single) {
         let value = idRowSelected;
+        console.log(value);
         if (typeof value === "object") {
           const rowSelectedArr = [...value];
           value = rowSelectedArr[rowSelectedArr.length - 1];
@@ -281,6 +281,11 @@ const DataGrid = forwardRef(
       [rows]
     );
 
+    const handleResetSelected = useCallback(
+      () => setSelectedRows(new Set()),
+      [rows]
+    );
+
     useImperativeHandle(
       ref,
       () => {
@@ -292,6 +297,7 @@ const DataGrid = forwardRef(
             setSelectedRows(new Set());
           },
           exportExcel: () => handleExportExcel(),
+          ResetSelected: () => handleResetSelected(),
         };
       },
       [selectedRows]
