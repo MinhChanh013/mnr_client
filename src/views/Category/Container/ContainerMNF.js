@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row, Form, Flex } from "antd";
+import { Card, Col, Row, Form, Flex, message } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
@@ -18,6 +18,7 @@ import {
   searchVessels,
   load,
   del,
+  save,
 } from "../../../apis/Category/ContainerMNF.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
@@ -64,7 +65,7 @@ export default function ContainerMNF() {
       key: "ID",
       name: "ID",
       width: 80,
-      visible: false,
+      visible: true,
     },
     {
       key: "STT",
@@ -120,13 +121,6 @@ export default function ContainerMNF() {
       type: columnTypes.TextEditor,
       editable: true,
     },
-    {
-      key: "isNew",
-      name: "isNew",
-      width: 150,
-      type: columnTypes.TextEditor,
-      visible: false,
-    },
   ]);
 
   const handleLoadData = async (formData) => {
@@ -149,33 +143,63 @@ export default function ContainerMNF() {
     dispatch(setLoading(false));
   };
 
-  const handleDeleteData = async (index) => {
+  const handleDeleteData = (index) => {
     dispatch(setLoading(true));
     try {
-      console.log(index);
-      if(index.length){
-        const RowDel = rows.find((obj) => obj.ID === index[0]);
-        const newRow = rows.filter((e) => e !== RowDel);
+      if (index.length) {
+        const listRowDel = rows.filter((obj) =>
+          index.some((id) => obj.ID === id)
+        );
+        RemoveRow(listRowDel);
+        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        gridRef.current?.setSelectedRows([]);
         setRows(newRow);
-        if (!RowDel.isNew) {
-          const result = await del([RowDel]);
-          console.log(result);
-        }
       }
     } catch (error) {
       console.log(error);
     }
-    gridRef.current.ResetSelected();
+
     dispatch(setLoading(false));
   };
 
-  const handleSaveData = async () => {
+  const handleSaveData = async (index) => {
     try {
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-
+      const listRowNew = rows.filter((obj) =>
+        index.some((id) => obj.ID === id && obj.isNew)
+      );
+      const listRow = rows.filter((obj) => index.some((id) => obj.ID === id));
+      const datas = listRow.map((item) => {
+        if (item.isNew) {
+          return { ...item, ID: "" };
+        }
+        return item;
+      });
+      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0) {
+        message.warning("vui lòng chọn tàu trước!");
+        return;
+      }
+      const formData = {
+        voyagekey: dataVesselSelect.VoyageKey,
+        eta: dataVesselSelect.ETA,
+        etd: dataVesselSelect.ETD,
+        vesselname: dataVesselSelect.VesselName,
+        inboundvoyage: dataVesselSelect.InboundVoyage,
+        outboundvoyage: dataVesselSelect.OutboundVoyage,
+        callsign: dataVesselSelect.CallSign,
+        imo: dataVesselSelect.IMO,
+        datas: datas,
+      };
+      const result = await save(formData);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const RemoveRow = async (rowDel) => {
+    const listRowDel = rowDel.filter((obj) => !obj.isNew);
+    const result = await del(listRowDel);
+    return result;
   };
 
   const buttonConfirm = async (props) => {
@@ -198,6 +222,8 @@ export default function ContainerMNF() {
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
+      case "save":
+        handleSaveData([...gridRef.current.getSelectedRows()]);
         break;
       default:
         break;

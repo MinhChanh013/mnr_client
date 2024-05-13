@@ -15,7 +15,7 @@ export function renderCellEditDatePicker({ row, key, onRowChange }) {
       format={FORMAT_DATETIME}
       value={dayjs(row[key])}
       onChange={(date, dateString) => {
-        onRowChange({ ...row, [key]: dateString }, true);
+        onRowChange({ ...row, [key]: dateString, isEdit: true }, true);
       }}
       autoFocus
     />

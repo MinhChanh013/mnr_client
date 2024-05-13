@@ -17,7 +17,7 @@ const CertificateNo = (props) => {
         <Col>
           <Typography>Tên nhà cung cấp (Token Provider Name)</Typography>
           <Form.Item
-            name="portId"
+            name="tokenProviderName"
             rules={[
               {
                 required: true,

@@ -1346,7 +1346,7 @@ export const itemsMenu = [
               ></lord-icon>
             ),
           },
-          {
+          {href: "/SysConfig",
             label: "Cấu hình hệ thống",
             key: "system",
             icon: (
