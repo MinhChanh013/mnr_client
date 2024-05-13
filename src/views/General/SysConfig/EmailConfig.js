@@ -1,78 +1,57 @@
-import { Card, Typography, Form, Input, Col } from "antd";
+import { Card, Typography, Form, Input, Col, Row } from "antd";
 import React from "react";
 
 const EmailConfig = (props) => {
   const formInstance = Form.useFormInstance();
-  const onFieldsChange = (e, b) => {
-    const result = b.reduce((acc, item) => {
-      acc[item.name[0]] = item.value ?? "";
-      return acc;
-    }, {});
-    formInstance.setFieldValue(props.name, result);
-  };
-
+  const [outputs, setOutputs] = React.useState({});
   return (
     <Card>
-      <Form onFieldsChange={onFieldsChange} autoComplete="off">
-        <Col>
+      <Row gutter={[8, 24]}>
+        <Col span={24}>
           <Typography>Địa chỉ mail hệ thống</Typography>
-          <Form.Item
-            name="portId"
-            rules={[
-              {
-                required: true,
-                message: "không thể bỏ trống!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <Input
+            name={"sysMailAddr"}
+            placeholder={"Địa chỉ mail"}
+            onChange={(event) => {
+              setOutputs({ ...outputs, portId: event.target.value });
+              formInstance.setFieldValue(props.name, { ...outputs });
+            }}
+          />
         </Col>
-        <Col>
+        <Col span={24}>
           <Typography>Mật khẩu</Typography>
-          <Form.Item
-            name="portTaxCode"
-            rules={[
-              {
-                required: true,
-                message: "không thể bỏ trống!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <Input
+            name={"sysMailPass"}
+            placeholder={">Mật khẩu"}
+            onChange={(event) => {
+              setOutputs({ ...outputs, portId: event.target.value });
+              formInstance.setFieldValue(props.name, { ...outputs });
+            }}
+          />
         </Col>
-        <Col>
+        <Col span={24}>
           <Typography>Máy chủ mail</Typography>
-          <Form.Item
-            label=""
-            name="portName"
-            rules={[
-              {
-                required: true,
-                message: "không thể bỏ trống!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <Input
+            name={"sysMailHost"}
+            placeholder={"Máy chủ mail"}
+            onChange={(event) => {
+              setOutputs({ ...outputs, portId: event.target.value });
+              formInstance.setFieldValue(props.name, { ...outputs });
+            }}
+          />
         </Col>
-        <Col>
+        <Col span={24}>
           <Typography>Cổng (Port)</Typography>
-          <Form.Item
-            label=""
-            name="customsId"
-            rules={[
-              {
-                required: true,
-                message: "không thể bỏ trống!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <Input
+            name={"sysMailPort"}
+            placeholder={"Cổng"}
+            onChange={(event) => {
+              setOutputs({ ...outputs, portId: event.target.value });
+              formInstance.setFieldValue(props.name, { ...outputs });
+            }}
+          />
         </Col>
-      </Form>
+      </Row>
     </Card>
   );
 };

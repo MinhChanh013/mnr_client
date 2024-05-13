@@ -56,8 +56,10 @@ const getEditCell = (key, cellType, options = [], baseColumn) => {
         });
 
     default:
-      return textEditor;
-  }
+      return ({ row, onRowChange, column, onClose }) => {
+        if (!row.isNew) row.isEdit = true;
+        return textEditor({row, onRowChange, column, onClose});
+      }}
 };
 
 const handleRenderColumn = ({
@@ -155,7 +157,6 @@ const DataGrid = forwardRef(
     }, [selectedRows]);
 
     const handleSelected = (idRowSelected) => {
-      console.log(idRowSelected)
       if (selection === selectionTypes.multi) {
         setSelectedRows(idRowSelected);
       }
@@ -282,9 +283,41 @@ const DataGrid = forwardRef(
     );
 
     const handleResetSelected = useCallback(
-      () => setSelectedRows(new Set()),
+      () => setSelectedRows(() => new Set()),
       [rows]
     );
+
+    const handleValidate = (keyId = "ID") => {
+      const listRowsChange = rows.filter(
+        (row) => row?.isEdit || row?.isNew
+      );
+      const requiredFields = columns.filter(field => field.required)
+      const listValidate = listRowsChange.map(item => {
+        const errors = [];
+        requiredFields.forEach(field => {
+          if (field.required && !item.hasOwnProperty(field.key) || item[field.key] === "") {
+            errors.push(field.key);
+          }
+        });
+        return { [keyId]: item[keyId], isError: errors.length > 0, errors };
+      });
+
+      setRows(rows.map(row => {
+        const indexValidate = listValidate.findIndex(itemValidate => itemValidate[keyId] === row[keyId])
+        if (indexValidate !== -1) {
+          return {
+            ...row,
+            isError: listValidate[indexValidate].isError,
+            errors: listValidate[indexValidate].errors
+          }
+        } else
+          return {
+            ...row
+          }
+      }))
+
+      return { isCheck: !listValidate.some(item => item.isError), validate: listValidate }
+    }
 
     useImperativeHandle(
       ref,
@@ -298,6 +331,7 @@ const DataGrid = forwardRef(
           },
           exportExcel: () => handleExportExcel(),
           ResetSelected: () => handleResetSelected(),
+          Validate: () => handleValidate(),
         };
       },
       [selectedRows]

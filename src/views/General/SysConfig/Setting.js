@@ -1,20 +1,13 @@
-import { Card, Typography, Form, Input, Col } from "antd";
-import React from "react";
+import { Card, Typography, Form, Input, Col, Row, Flex } from "antd";
+import React, { useEffect } from "react";
 
 const Setting = (props) => {
   const formInstance = Form.useFormInstance();
-  const onFieldsChange = (e, b) => {
-    const result = b.reduce((acc, item) => {
-      acc[item.name[0]] = item.value ?? "";
-      return acc;
-    }, {});
-    formInstance.setFieldValue(props.name, result);
-  };
-
+  const [outputs, setOutputs] = React.useState({});
   return (
-    <Card>
-      <Form onFieldsChange={onFieldsChange} autoComplete="off">
-        <Col>
+    <Flex style={{ backgroundColor: "#cbdcf7", width: "100%", height: "100%" }}>
+      <Row gutter={[8, 24]}>
+        <Col span={24}>
           <Typography>Mã Doanh Nghiệp Kho/Bãi/Cảng</Typography>
           <Form.Item
             name="portId"
@@ -25,10 +18,10 @@ const Setting = (props) => {
               },
             ]}
           >
-            <Input placeholder="Mã Doanh Nghiệp Kho/Bãi/Cảng" />
+            <Input placeholder={"Mã Doanh Nghiệp Kho/Bãi/Cảng"} />
           </Form.Item>
         </Col>
-        <Col>
+        <Col span={24}>
           <Typography>Mã Số Thuế</Typography>
           <Form.Item
             name="portTaxCode"
@@ -39,13 +32,12 @@ const Setting = (props) => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Mã Số Thuế" />
           </Form.Item>
         </Col>
-        <Col>
+        <Col span={24}>
           <Typography>Tên Doanh Nghiệp Kho/Bãi/Cảng</Typography>
           <Form.Item
-            label=""
             name="portName"
             rules={[
               {
@@ -57,10 +49,9 @@ const Setting = (props) => {
             <Input />
           </Form.Item>
         </Col>
-        <Col>
+        <Col span={24}>
           <Typography>Mã Chi Cục HQ Giám Sát</Typography>
           <Form.Item
-            label=""
             name="customsId"
             rules={[
               {
@@ -72,10 +63,9 @@ const Setting = (props) => {
             <Input />
           </Form.Item>
         </Col>
-        <Col>
+        <Col span={24}>
           <Typography>Tên Chi Cục HQ Giám Sát</Typography>
           <Form.Item
-            label=""
             name="customsName"
             rules={[
               {
@@ -87,8 +77,8 @@ const Setting = (props) => {
             <Input />
           </Form.Item>
         </Col>
-      </Form>
-    </Card>
+      </Row>
+    </Flex>
   );
 };
 
