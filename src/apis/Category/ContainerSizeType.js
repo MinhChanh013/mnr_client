@@ -25,26 +25,18 @@ export const load = async (params) => {
   return data;
 };
 
-export const save = async (rows = [], dispatch) => {
-  if (rows.length === 0) {
-    dispatch(
-      showMessage({
-        type: "error",
-        content: "Vui lòng chọn tàu!",
-      })
-    );
-    return;
-  }
-};
-
-export const del = async (rows = []) => {
-  const idRefs = rows.map((p) => p.IDRef);
-  const formData = {
-    IDRefs: idRefs,
+export const save = async (formData = {}) => {
+  const result = await poster(cpath("save"), formData);
+  return result;
   };
-  const data = await poster(cpath("del-getin"), formData);
-  return data;
-};
+
+  export const del = async (rows = []) => {
+    const formData = {
+      datas: rows,
+    };
+    const result = await poster(cpath("delete"), formData);
+    return result;
+  };
 
 // socket.on("sock_to_client", (data) => {
 //   socketReceiveReponse(

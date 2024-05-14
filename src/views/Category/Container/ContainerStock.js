@@ -14,7 +14,12 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { searchVessels, load, save, del } from "../../../apis/Category/ContainerStock.js";
+import {
+  searchVessels,
+  load,
+  save,
+  del,
+} from "../../../apis/Category/ContainerStock.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
@@ -43,31 +48,31 @@ export default function ContainerStock() {
     fetchDataVessels();
   }, []);
   const NewItem = {
-      ID: "",
-      VesselName: "",
-      InboundVoyage: "",
-      OutboundVoyage: "",
-      BillOfLading: "",
-      CntrNo: "",
-      ImExType: "",
-      CntrSztp: "",
-      CHK_FE: "",
-      SealNo: "",
-      GetIn: "",
-      JobModeIn: "",
-      NatureOfTransport: "",
-      GetOut: "",
-      JobModeOut: "",
-      CommodityDescription: "",
-      ContainerLocation: "",
-      IsLocalForeign: "",
-      CHK_LCL: "",
-      CargoWeight: "",
-      GetOutTruck: "",
-      Remark: "",
-      VoyageKey: "",
-      isNew: true,
-    };
+    ID: "",
+    VesselName: "",
+    InboundVoyage: "",
+    OutboundVoyage: "",
+    BillOfLading: "",
+    CntrNo: "",
+    ImExType: "",
+    CntrSztp: "",
+    CHK_FE: "",
+    SealNo: "",
+    GetIn: "",
+    JobModeIn: "",
+    NatureOfTransport: "",
+    GetOut: "",
+    JobModeOut: "",
+    CommodityDescription: "",
+    ContainerLocation: "",
+    IsLocalForeign: "",
+    CHK_LCL: "",
+    CargoWeight: "",
+    GetOutTruck: "",
+    Remark: "",
+    VoyageKey: "",
+    isNew: true,
+  };
   const columns = basicRenderColumns([
     {
       key: "ID",
@@ -260,17 +265,19 @@ export default function ContainerStock() {
   const handleDeleteData = (index) => {
     dispatch(setLoading(true));
     try {
-      if(index.length){
-        const listRowDel = rows.filter((obj) => index.some((id) => obj.ID === id));
+      if (index.length) {
+        const listRowDel = rows.filter((obj) =>
+          index.some((id) => obj.ID === id)
+        );
         RemoveRow(listRowDel);
-        const newRow = rows.filter((obj) => !index.some((id) => obj.ID ===id)); 
+        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
         gridRef.current?.setSelectedRows([]);
         setRows(newRow);
       }
     } catch (error) {
       console.log(error);
     }
-    
+
     dispatch(setLoading(false));
   };
 
@@ -278,24 +285,30 @@ export default function ContainerStock() {
     try {
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       const dataFormFilter = form.getFieldsValue();
-      const listRowNew = rows.filter((obj) => index.some((id) => obj.ID === id && obj.isNew));
+      const listRowNew = rows.filter((obj) =>
+        index.some((id) => obj.ID === id && obj.isNew)
+      );
       const listRow = rows.filter((obj) => index.some((id) => obj.ID === id));
       const datas = listRow.map((item) => {
-        if(item.isNew){
-          return {...item, ID: ""};
+        if (item.isNew) {
+          return { ...item, ID: "" };
         }
         return item;
-      })
-      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0){
+      });
+      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0) {
         message.warning("vui lòng chọn tàu trước!");
         return;
       }
       const formData = {
-        voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
+        voyagekey: dataVesselSelect.length ? dataVesselSelect.VoyageKey : "",
         cntrclass: dataFormFilter ? dataFormFilter.imextype : "",
-        datas: datas
-      }
+        datas: datas,
+      };
+
+      console.log(formData);
+
       const result = await save(formData);
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -308,12 +321,12 @@ export default function ContainerStock() {
     const formData = {
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",
       cntrclass: dataFormFilter ? dataFormFilter.imextype : "",
-      datas: listRowDel
-    }
-    const result = await del(formData); 
-    //return result;
-  }
+      datas: listRowDel,
+    };
 
+    const result = await del(formData);
+    //return result;
+  };
 
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();

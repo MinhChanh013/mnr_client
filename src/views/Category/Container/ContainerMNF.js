@@ -78,6 +78,7 @@ export default function ContainerMNF() {
       width: 200,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "CntrNo",
@@ -85,6 +86,7 @@ export default function ContainerMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "SealNo",
@@ -92,6 +94,7 @@ export default function ContainerMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "StatusOfGood",
@@ -113,6 +116,7 @@ export default function ContainerMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "CommodityDescription",
@@ -162,23 +166,36 @@ export default function ContainerMNF() {
     dispatch(setLoading(false));
   };
 
-  const handleSaveData = async (index) => {
+  const handleSaveData = async () => {
     try {
+      const validate = gridRef.current?.Validate();
+      // console.log(validate);
+      if (!validate.isCheck) {
+        message.warning("vui lòng điền đầy đủ thông tin trước khi lưu !");
+        return;
+      }
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       const listRowNew = rows.filter((obj) =>
-        index.some((id) => obj.ID === id && obj.isNew)
+        validate.validate.some((val) => obj.ID === val.ID && obj.isNew)
       );
-      const listRow = rows.filter((obj) => index.some((id) => obj.ID === id));
+      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0) {
+        message.warning("vui lòng chọn tàu trước!");
+        return;
+      }
+      if (!validate.length) {
+        message.success("không có thay đổi mới");
+        return;
+      }
+
+      const listRow = rows.filter((obj) =>
+        validate.validate.some((val) => obj.ID === val.ID)
+      );
       const datas = listRow.map((item) => {
         if (item.isNew) {
           return { ...item, ID: "" };
         }
         return item;
       });
-      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0) {
-        message.warning("vui lòng chọn tàu trước!");
-        return;
-      }
       const formData = {
         voyagekey: dataVesselSelect.VoyageKey,
         eta: dataVesselSelect.ETA,
@@ -191,6 +208,7 @@ export default function ContainerMNF() {
         datas: datas,
       };
       const result = await save(formData);
+      if (result.success) message.success("lưu thành công");
     } catch (error) {
       console.log(error);
     }

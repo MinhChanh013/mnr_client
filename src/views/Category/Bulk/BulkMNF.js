@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row, Form, Flex } from "antd";
+import { Card, Col, Row, Form, Flex, message } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
@@ -14,7 +14,12 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { searchVessels, load } from "../../../apis/Category/BulkMNF.js";
+import {
+  searchVessels,
+  load,
+  del,
+  save,
+} from "../../../apis/Category/BulkMNF.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
@@ -43,21 +48,24 @@ export default function BulkMNF() {
     fetchDataVessels();
   }, []);
 
-  const NewItem = [
-    {
-      ID: "",
-      TransportIdentity: "",
-      NumberOfJourney: "",
-      ArrivalDeparture: "",
-      BillOfLading: "",
-      ImExType: "",
-      CargoPiece: "",
-      PieceUnitCode: "",
-      isLF: "",
-      CommodityDescription: "",
-      CntrNo: "",
-    },
-  ];
+  const NewItem = {
+    ID: "",
+    TransportIdentity: "",
+    NumberOfJourney: "",
+    ArrivalDeparture: "",
+    BillOfLading: "",
+    ImExType: "",
+    CargoPiece: "",
+    PieceUnitCode: "",
+    isLF: "",
+    CommodityDescription: "",
+    CntrNo: "",
+    VoyageKey: "",
+    CargoCtrlNo: "",
+    TransportCallSign: "",
+    TransportIMONumber: "",
+    isNew: true,
+  };
   const columns = basicRenderColumns([
     {
       key: "ID",
@@ -133,19 +141,62 @@ export default function BulkMNF() {
       type: columnTypes.TextEditor,
       editable: true,
     },
+    {
+      key: "CntrNo",
+      name: "CntrNo",
+      width: 150,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "VoyageKey",
+      name: "VoyageKey",
+      width: 150,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "CargoCtrlNo",
+      name: "CargoCtrlNo",
+      width: 150,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "TransportCallSign",
+      name: "TransportCallSign",
+      width: 150,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "TransportIMONumber",
+      name: "TransportIMONumber",
+      width: 150,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
   ]);
-
-  const removeRow = (index) => {
-    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(newRow);
-  };
 
   const handleLoadData = async (formData) => {
     dispatch(setLoading(true));
     try {
       const resultDataBulkMNF = await load(formData);
       if (resultDataBulkMNF) {
-        const newResultDataBulkMNF = resultDataBulkMNF.data.bulkList;
+        const newResultDataBulkMNF = resultDataBulkMNF.data.bulkList.map((item) => {
+          return {
+            ...item,
+            CargoCtrlNo: item.CargoCtrlNo
+            ? item.CargoCtrlNo
+            : "",
+          TransportCallSign: item.TransportCallSign
+            ? item.TransportCallSign
+            : "",
+          TransportIMONumber: item.TransportIMONumber
+            ? item.TransportIMONumber
+            : "",
+          }
+        });
         setDataTable(newResultDataBulkMNF);
         setRows(newResultDataBulkMNF);
         dispatch(
@@ -160,6 +211,66 @@ export default function BulkMNF() {
     dispatch(setLoading(false));
   };
 
+  const handleDeleteData = (index) => {
+    dispatch(setLoading(true));
+    try {
+      if (index.length) {
+        const listRowDel = rows.filter((obj) =>
+          index.some((id) => obj.ID === id)
+        );
+        RemoveRow(listRowDel);
+        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        gridRef.current?.setSelectedRows([]);
+        setRows(newRow);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    dispatch(setLoading(false));
+  };
+
+  const handleSaveData = async (index) => {
+    try {
+      const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+      const listRowNew = rows.filter((obj) =>
+        index.some((id) => obj.ID === id && obj.isNew)
+      );
+      const listRow = rows.filter((obj) => index.some((id) => obj.ID === id));
+      const datas = listRow.map((item) => {
+        if (item.isNew) {
+          return { ...item, ID: "" };
+        }
+        return item;
+      });
+      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0) {
+        message.warning("vui lòng chọn tàu trước!");
+        return;
+      }
+      const formData = {
+        voyagekey: dataVesselSelect.VoyageKey,
+        eta: dataVesselSelect.ETA,
+        etd: dataVesselSelect.ETD,
+        vesselname: dataVesselSelect.VesselName,
+        inboundvoyage: dataVesselSelect.InboundVoyage,
+        outboundvoyage: dataVesselSelect.OutboundVoyage,
+        callsign: dataVesselSelect.CallSign,
+        imo: dataVesselSelect.IMO,
+        datas: datas,
+      };
+      console.log(formData);
+      const result = await save(formData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const RemoveRow = async (rowDel) => {
+    const listRowDel = rowDel.filter((obj) => !obj.isNew);
+    const result = await del(listRowDel);
+    return result;
+  };
+
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -172,28 +283,19 @@ export default function BulkMNF() {
       case "load":
         handleLoadData(formData);
         break;
-      case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
-        break;
       case "add":
-        NewItem["ID"] = uuidv4();
-        setRows([NewItem, ...rows]);
+        setRows([{ ...NewItem, "ID": uuidv4() }, ...rows]);
         break;
-      case "save":
-        handleSaveData();
+      case "delete":
+        handleDeleteData([...gridRef.current.getSelectedRows()]);
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
+      case "save":
+        handleSaveData([...gridRef.current.getSelectedRows()]);
         break;
       default:
         break;
-    }
-  };
-
-  const handleSaveData = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -296,7 +398,7 @@ export default function BulkMNF() {
               ref={gridRef}
               direction="ltr"
               columnKeySelected="ID"
-              selection={selectionTypes.single}
+              selection={selectionTypes.multi}
               pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
