@@ -12,7 +12,12 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { load } from "../../../apis/Category/ContainerSizeType.js";
+import {
+  searchVessels,
+  load,
+  del,
+  save,
+} from "../../../apis/Category/ContainerSizeType.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
@@ -30,12 +35,7 @@ export default function ContainerSizeType() {
       try {
         const res = await load("");
         if (res) {
-          const newResultDataCntrSizeType = res.data.map((item) => {
-            return {
-              ...item,
-              ID: uuidv4(),
-            };
-          });
+          const newResultDataCntrSizeType = res.data;
           setRows(newResultDataCntrSizeType);
           setDataTable(newResultDataCntrSizeType);
           dispatch(
@@ -51,21 +51,20 @@ export default function ContainerSizeType() {
     }
     fetchDataTable();
   }, []);
-  const NewItem = [
-    {
-      ID: "",
-      CntrSztp: "",
-      IsoSztp: "",
-      ContType: "",
-      ContSize: "",
-    },
-  ];
+  const NewItem = {
+    ID: "",
+    CntrSztp: "",
+    IsoSztp: "",
+    ContType: "",
+    ContSize: "",
+    isNew: true,
+  };
   const columns = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
       width: 80,
-      visible: true,
+      visible: false,
     },
     {
       key: "STT",
@@ -103,22 +102,68 @@ export default function ContainerSizeType() {
     },
   ]);
 
-  const removeRow = (index) => {
-    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(newRow);
+  const handleDeleteData = (index) => {
+    dispatch(setLoading(true));
+    try {
+      if (index.length) {
+        const listRowDel = rows.filter((obj) =>
+          index.some((id) => obj.ID === id)
+        );
+        RemoveRow(listRowDel);
+        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        gridRef.current?.setSelectedRows([]);
+        setRows(newRow);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    dispatch(setLoading(false));
+  };
+
+  const handleSaveData = async (index) => {
+    try {
+      const listRowNew = rows.filter((obj) =>
+        index.some((id) => obj.ID === id && obj.isNew)
+      );
+      const listRow = rows.filter((obj) => index.some((id) => obj.ID === id));
+      const datas = listRow.map((item) => {
+        if (item.isNew) {
+          return { ...item, ID: "" };
+        }
+        return item;
+      });
+      console.log(datas);
+      const formData = {
+        datas: datas,
+      };
+      const result = await save(formData);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const RemoveRow = async (rowDel) => {
+    const listRowDel = rowDel.filter((obj) => !obj.isNew);
+    console.log(listRowDel);
+    const result = await del(listRowDel);
+    return result;
   };
 
   const buttonConfirm = (props) => {
     switch (props.type) {
-      case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
-        break;
       case "add":
-        NewItem["ID"] = uuidv4();
-        setRows([NewItem, ...rows]);
+        setRows([{ ...NewItem, "ID": uuidv4() }, ...rows]);
+        break;
+      case "delete":
+        handleDeleteData([...gridRef.current.getSelectedRows()]);
         break;
       case "export_excel":
         gridRef.current?.exportExcel();
+        break;
+      case "save":
+        handleSaveData([...gridRef.current.getSelectedRows()]);
         break;
       default:
         break;
@@ -164,7 +209,7 @@ export default function ContainerSizeType() {
                   ref={gridRef}
                   direction="ltr"
                   columnKeySelected="ID"
-                  selection={selectionTypes.single}
+                  selection={selectionTypes.multi}
                   pagination={paginationTypes.scroll}
                   columns={columns}
                   rows={rows}

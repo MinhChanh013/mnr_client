@@ -58,8 +58,9 @@ const getEditCell = (key, cellType, options = [], baseColumn) => {
     default:
       return ({ row, onRowChange, column, onClose }) => {
         if (!row.isNew) row.isEdit = true;
-        return textEditor({row, onRowChange, column, onClose});
-      }}
+        return textEditor({ row, onRowChange, column, onClose });
+      };
+  }
 };
 
 const handleRenderColumn = ({
@@ -142,6 +143,7 @@ const DataGrid = forwardRef(
       pagination = paginationTypes.scroll,
       onCellClick = false,
       onCellDoubleClick,
+      handleGetSelected = () =>{}
     },
     ref
   ) => {
@@ -153,7 +155,7 @@ const DataGrid = forwardRef(
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setSelectedQuantity([...selectedRows].length));
+      dispatch(setSelectedQuantity([...selectedRows].length));
     }, [selectedRows]);
 
     const handleSelected = (idRowSelected) => {
@@ -167,6 +169,7 @@ const DataGrid = forwardRef(
           const rowSelectedArr = [...value];
           value = rowSelectedArr[rowSelectedArr.length - 1];
         }
+        handleGetSelected(value);
         setSelectedRows(() => new Set([value]));
       }
     };
@@ -287,37 +290,45 @@ const DataGrid = forwardRef(
       [rows]
     );
 
-    const handleValidate = (keyId = "ID") => {
-      const listRowsChange = rows.filter(
-        (row) => row?.isEdit || row?.isNew
-      );
-      const requiredFields = columns.filter(field => field.required)
-      const listValidate = listRowsChange.map(item => {
+    const handleValidate = (keyId = columnKeySelected) => {
+      const listRowsChange = rows.filter((row) => row?.isEdit || row?.isNew);
+      const requiredFields = columns.filter((field) => field.required);
+      const listValidate = listRowsChange.map((item) => {
         const errors = [];
-        requiredFields.forEach(field => {
-          if (field.required && !item.hasOwnProperty(field.key) || item[field.key] === "") {
+        requiredFields.forEach((field) => {
+          if (
+            (field.required && !item.hasOwnProperty(field.key)) ||
+            item[field.key] === ""
+          ) {
             errors.push(field.key);
           }
         });
         return { [keyId]: item[keyId], isError: errors.length > 0, errors };
       });
 
-      setRows(rows.map(row => {
-        const indexValidate = listValidate.findIndex(itemValidate => itemValidate[keyId] === row[keyId])
-        if (indexValidate !== -1) {
-          return {
-            ...row,
-            isError: listValidate[indexValidate].isError,
-            errors: listValidate[indexValidate].errors
-          }
-        } else
-          return {
-            ...row
-          }
-      }))
+      setRows(
+        rows.map((row) => {
+          const indexValidate = listValidate.findIndex(
+            (itemValidate) => itemValidate[keyId] === row[keyId]
+          );
+          if (indexValidate !== -1) {
+            return {
+              ...row,
+              isError: listValidate[indexValidate].isError,
+              errors: listValidate[indexValidate].errors,
+            };
+          } else
+            return {
+              ...row,
+            };
+        })
+      );
 
-      return { isCheck: !listValidate.some(item => item.isError), validate: listValidate }
-    }
+      return {
+        isCheck: !listValidate.some((item) => item.isError),
+        validate: listValidate,
+      };
+    };
 
     useImperativeHandle(
       ref,
@@ -411,7 +422,7 @@ const DataGrid = forwardRef(
           }}
           onCellClick={(args) => {
             if (onCellClick && args.column.key !== "select-row") {
-              handleSelected(args.row.ID);
+              handleSelected(args.row[columnKeySelected]);
             }
           }}
           onCellDoubleClick={(args) => {

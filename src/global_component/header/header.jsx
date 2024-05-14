@@ -5,11 +5,24 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import "@silevis/reactgrid/styles.css";
-import { Avatar, Card, Drawer, Dropdown, Space, Typography } from "antd";
+import {
+  Avatar,
+  Card,
+  Drawer,
+  Dropdown,
+  Space,
+  Typography,
+  message,
+} from "antd";
+import { Link } from "react-router-dom";
 import * as React from "react";
 import { useActiveNav } from "../../hooks/useNav";
 import Nav from "../Nav/Nav";
 import NavMobile from "../Nav/NavMobile";
+
+const onClick = ({ key }) => {
+  if (key === "logout") localStorage.clear("token");
+};
 
 const items = [
   {
@@ -24,7 +37,7 @@ const items = [
 
 const itemsMenu = [
   {
-    label: "Logout",
+    label: <Link to="/login">đăng suất</Link>,
     key: "logout",
     icon: <LogoutOutlined />,
   },
@@ -32,8 +45,8 @@ const itemsMenu = [
 
 const Header = () => {
   const [activeMenuMobile, setActiveMenuMobile] = React.useState(false);
-  const [keySelected, setKeySelected] = React.useState()
-  const [defaultOpenKeys, setDefaultOpenKeys] = React.useState()
+  const [keySelected, setKeySelected] = React.useState();
+  const [defaultOpenKeys, setDefaultOpenKeys] = React.useState();
   React.useEffect(() => {
     window.addEventListener("resize", () => {
       const width = document.body.clientWidth;
@@ -44,13 +57,13 @@ const Header = () => {
   }, []);
 
   const handleCloseMenuMobile = () => {
-    setActiveMenuMobile(false)
-  }
+    setActiveMenuMobile(false);
+  };
 
   useActiveNav([activeMenuMobile], activeMenuMobile, (navActive) => {
-    setKeySelected(navActive)
-    setDefaultOpenKeys(navActive.slice(1))
-  })
+    setKeySelected(navActive);
+    setDefaultOpenKeys(navActive.slice(1));
+  });
 
   return (
     <>
@@ -85,7 +98,7 @@ const Header = () => {
                 </Space>
               </Dropdown>
               <Dropdown
-                menu={{ items: itemsMenu }}
+                menu={{ items: itemsMenu, onClick }}
                 trigger={["click"]}
                 style={{ zIndex: 50 }}
                 arrow={true}
@@ -117,7 +130,8 @@ const Header = () => {
                   <NavMobile
                     keySelected={keySelected}
                     defaultOpenKeys={defaultOpenKeys}
-                    funcClose={handleCloseMenuMobile} />
+                    funcClose={handleCloseMenuMobile}
+                  />
                 </Drawer>
               </Space>
             </Space>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row, Form, Flex } from "antd";
+import { Card, Col, Row, Form, Flex, message } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
@@ -14,16 +14,25 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { searchVessels, load } from "../../../apis/Category/PackageGetin.js";
+import {
+  searchVessels,
+  load,
+  loadDetail,
+  del,
+  save,
+} from "../../../apis/Category/PackageGetin.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
+import { retry } from "@reduxjs/toolkit/query";
 export default function PackageGetin() {
   const onFocus = () => {};
   const gridRef = React.createRef();
+  const gridRefDetail = React.createRef();
   const vesselSelectRef = React.useRef();
   const [rows, setRows] = React.useState([]);
+  const [rowsDetail, setRowsDetail] = React.useState([]);
   const dispatch = useDispatch();
   const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
@@ -43,22 +52,103 @@ export default function PackageGetin() {
     fetchDataVessels();
   }, []);
 
-  const NewItem = [
-    {
-      ID: "",
-      VesselName: "",
-      BillOfLading: "",
-      CargoPiece: "",
-      PieceUnitCode: "",
-      RealCargoPiece: "",
-      RealUnitCode: "",
-      IsLocalForeign: "",
-      JobModeIn: "",
-      StockLocation: "",
-      CommodityDescription: "",
-    },
-  ];
+  const NewItem = {
+    ID: "",
+    EirNo: "",
+    GetIn: "",
+    PieceUnitCode: "",
+    CargoPieceGetIn: "",
+    Seq: "",
+    IsOutOfGood: "",
+    isNew: true,
+  };
   const columns = basicRenderColumns([
+    {
+      key: "IDRef",
+      name: "ID",
+      width: 80,
+      visible: false,
+    },
+    {
+      key: "STT",
+      name: "STT",
+      width: 80,
+    },
+    {
+      key: "VesselName",
+      name: "Tên Tàu",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "BillOfLading",
+      name: "Số Vận Đơn",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CargoPiece",
+      name: "SL Dự Kiến",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "PieceUnitCode",
+      name: "DVT Dự Kiến",
+      width: 200,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "RealCargoPiece",
+      name: "SL Thực Tế",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "RealUnitCode",
+      name: "DVT Thực Tế",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "IsLocalForeign",
+      name: "Nội/Ngoại",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "JobModeIn",
+      name: "P/A Vào",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "StockLocation",
+      name: "Vị Trí HH",
+      width: 150,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "CommodityDescription",
+      name: "Mô Tả HH",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "VoyageKey",
+      name: "VoyageKey",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ImExType",
+      name: "ImExType",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+  ]);
+
+  const columnsDetail = basicRenderColumns([
     {
       key: "ID",
       name: "ID",
@@ -71,80 +161,58 @@ export default function PackageGetin() {
       width: 80,
     },
     {
-      key: "VesselName",
-      name: "Tên Tàu",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "BillOfLading",
-      name: "Số Vận Đơn",
-      width: 150,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "CargoPiece",
-      name: "SL Dự Kiến",
-      width: 150,
-      type: columnTypes.TextEditor,
-      editable: true,
-    },
-    {
-      key: "PieceUnitCode",
-      name: "DVT Dự Kiến",
+      key: "EirNo",
+      name: "Số Lệnh/ Số Tham Chiếu",
       width: 200,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
-      key: "RealCargoPiece",
-      name: "SL Thực Tế",
-      width: 150,
-      type: columnTypes.TextEditor,
+      key: "GetIn",
+      name: "Ngày Vào Cảng",
+      width: 200,
+      type: columnTypes.DatePicker,
       editable: true,
+      required: true,
     },
     {
-      key: "RealUnitCode",
-      name: "DVT Thực Tế",
-      width: 150,
+      key: "PieceUnitCode",
+      name: "ĐVT",
+      width: 200,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
-      key: "IsLocalForeign",
-      name: "Nội/Ngoại",
-      width: 150,
+      key: "CargoPieceGetIn",
+      name: "Số Lượng Vào",
+      width: 200,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
-      key: "JobModeIn",
-      name: "P/A Vào",
-      width: 180,
+      key: "Seq",
+      name: "Lần Vào",
+      width: 200,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
-      key: "StockLocation",
-      name: "Vị Trí HH",
-      width: 150,
+      key: "IsOutOfGood",
+      name: "Đã Hết Hàng",
+      width: 200,
       type: columnTypes.TextEditor,
       editable: true,
-    },
-    {
-      key: "CommodityDescription",
-      name: "Mô Tả HH",
-      width: 180,
-      type: columnTypes.TextEditor,
-      editable: true,
+      required: true,
     },
   ]);
 
-  const removeRow = (index) => {
-    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(newRow);
+  const handleConfirmsSelect = async (value) => {
+    const result = await loadDetail(value);
+    setRowsDetail(result.data);
+    console.log(result);
   };
 
   const handleLoadData = async (formData) => {
@@ -167,6 +235,67 @@ export default function PackageGetin() {
     dispatch(setLoading(false));
   };
 
+  const handleDeleteData = (index) => {
+    dispatch(setLoading(true));
+    try {
+      if (index.length) {
+        const listRowDel = rows.filter((obj) =>
+          index.some((id) => obj.ID === id)
+        );
+        RemoveRow(listRowDel);
+        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        gridRef.current?.setSelectedRows([]);
+        setRows(newRow);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    dispatch(setLoading(false));
+  };
+
+  const handleSaveData = async () => {
+    try {
+      const validate = gridRefDetail.current?.Validate();
+      console.log(validate);
+      if (!validate.validate.length) {
+        message.success("không có gì thay đổi");
+        return;
+      }
+      if (!validate.isCheck) {
+        message.warning("vui lòng điền đầy đủ thông tin !");
+        return;
+      }
+      const billData = rows.filter(
+        (obj) => obj.IDRef === [...gridRef.current.getSelectedRows()][0]
+      );
+      const listRow = rowsDetail.filter((obj) =>
+        validate.validate.some((val) => obj.ID === val.ID)
+      );
+      const datas = listRow.map((item) => {
+        if (item.isNew) {
+          return { ...item, ID: "" };
+        }
+        return item;
+      });
+      const formData = {
+        IDRef: [...gridRef.current.getSelectedRows()][0],
+        bill_datas: billData,
+        datas: datas,
+      };
+      const result = await save(formData);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const RemoveRow = async (rowDel) => {
+    const listRowDel = rowDel.filter((obj) => !obj.isNew);
+    const result = await del(listRowDel);
+    return result;
+  };
+
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -180,11 +309,12 @@ export default function PackageGetin() {
         handleLoadData(formData);
         break;
       case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
+        handleDeleteData([...gridRef.current.getSelectedRows()]);
         break;
       case "add":
-        NewItem["ID"] = uuidv4();
-        setRows([NewItem, ...rows]);
+        if ([...gridRef.current?.getSelectedRows()].length)
+          setRowsDetail([{ ...NewItem, "ID": uuidv4() }, ...rowsDetail]);
+        else message.warning("vui lòng chọn một thông tin vận đơn trước");
         break;
       case "save":
         handleSaveData();
@@ -194,12 +324,6 @@ export default function PackageGetin() {
         break;
       default:
         break;
-    }
-  };
-  const handleSaveData = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -222,7 +346,6 @@ export default function PackageGetin() {
               <Col span={24}>
                 <VesselSelect ref={vesselSelectRef} data={dataViewsels} />
               </Col>
-
               <Filter
                 form={form}
                 items={[
@@ -280,7 +403,10 @@ export default function PackageGetin() {
           </Card>
         </Col>
         <Col span={17}>
-          <Card className="main-card">
+          <Card
+            className="main-card"
+            style={{ minHeight: "300px", maxHeight: "500px" }}
+          >
             <Flex className="main-card-toolbar" justify="space-between">
               <ToolBar
                 buttonConfig={[
@@ -300,13 +426,31 @@ export default function PackageGetin() {
             </Flex>
             <DataGrid
               ref={gridRef}
+              maxHeight={400}
               direction="ltr"
-              columnKeySelected="ID"
+              columnKeySelected="IDRef"
               selection={selectionTypes.single}
               pagination={paginationTypes.scroll}
               columns={columns}
               rows={rows}
               setRows={setRows}
+              onFocus={onFocus}
+              limit={5}
+              onCellClick
+              handleGetSelected={handleConfirmsSelect}
+            />
+          </Card>
+          <Card style={{ marginTop: "10px", height: "300px", padding: "0" }}>
+            <DataGrid
+              style={{ height: "230px" }}
+              ref={gridRefDetail}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.multi}
+              pagination={paginationTypes.scroll}
+              columns={columnsDetail}
+              rows={rowsDetail}
+              setRows={setRowsDetail}
               onFocus={onFocus}
               limit={5}
             />

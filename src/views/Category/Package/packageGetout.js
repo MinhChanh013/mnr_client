@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row, Form, Flex } from "antd";
+import { Card, Col, Row, Form, Flex, message } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
@@ -14,7 +14,13 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { searchVessels, load } from "../../../apis/Category/PackageGetout.js";
+import {
+  searchVessels,
+  load,
+  loadDetail,
+  del,
+  save,
+} from "../../../apis/Category/PackageGetout.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
@@ -22,8 +28,10 @@ import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
 export default function PackageGetout() {
   const onFocus = () => {};
   const gridRef = React.createRef();
+  const gridRefDetail = React.createRef();
   const vesselSelectRef = React.useRef();
   const [rows, setRows] = React.useState([]);
+  const [rowsDetail, setRowsDetail] = React.useState([]);
   const dispatch = useDispatch();
   const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
@@ -76,49 +84,42 @@ export default function PackageGetout() {
       name: "PHương Án Ra",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "DeclareNo",
       name: "Số TK",
       width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "SumCargoPiece",
       name: "Trạng Thái TK",
       width: 200,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "CargoPieceInDeclare",
       name: "SL (Vận Đơn)",
       width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "Remaining",
       name: "SL (Tờ Khai)",
       width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
     {
       key: "PieceUnitCode",
       name: "SL (Còn Lại)",
       width: 150,
       type: columnTypes.TextEditor,
-      editable: true,
     },
 
     {
@@ -126,13 +127,74 @@ export default function PackageGetout() {
       name: "DVT",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
     },
   ]);
 
-  const removeRow = (index) => {
-    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(newRow);
+  const columnsDetail = basicRenderColumns([
+    {
+      key: "ID",
+      name: "ID",
+      width: 80,
+      visible: true,
+    },
+    {
+      key: "STT",
+      name: "STT",
+      width: 80,
+    },
+    {
+      key: "EirNo",
+      name: "Số Lệnh/ Số Tham Chiếu",
+      width: 200,
+      type: columnTypes.TextEditor,
+      editable: true,
+    },
+    {
+      key: "GetIn",
+      name: "Ngày Vào Cảng",
+      width: 200,
+      type: columnTypes.DatePicker,
+      editable: true,
+      required: true,
+    },
+    {
+      key: "PieceUnitCode",
+      name: "ĐVT",
+      width: 200,
+      type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
+    },
+    {
+      key: "CargoPieceGetIn",
+      name: "Số Lượng Vào",
+      width: 200,
+      type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
+    },
+    {
+      key: "Seq",
+      name: "Lần Vào",
+      width: 200,
+      type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
+    },
+    {
+      key: "IsOutOfGood",
+      name: "Đã Hết Hàng",
+      width: 200,
+      type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
+    },
+  ]);
+
+  const handleConfirmsSelect = async (value) => {
+    const result = await loadDetail(value);
+    setRowsDetail(result.data);
+    console.log(result);
   };
 
   const handleLoadData = async (formData) => {
@@ -161,6 +223,67 @@ export default function PackageGetout() {
     dispatch(setLoading(false));
   };
 
+  const handleDeleteData = (index) => {
+    dispatch(setLoading(true));
+    try {
+      if (index.length) {
+        const listRowDel = rows.filter((obj) =>
+          index.some((id) => obj.ID === id)
+        );
+        RemoveRow(listRowDel);
+        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        gridRef.current?.setSelectedRows([]);
+        setRows(newRow);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    dispatch(setLoading(false));
+  };
+
+  const handleSaveData = async () => {
+    try {
+      const validate = gridRefDetail.current?.Validate();
+      console.log(validate);
+      if (!validate.validate.length) {
+        message.success("không có gì thay đổi");
+        return;
+      }
+      if (!validate.isCheck) {
+        message.warning("vui lòng điền đầy đủ thông tin !");
+        return;
+      }
+      const billData = rows.filter(
+        (obj) => obj.IDRef === [...gridRef.current.getSelectedRows()][0]
+      );
+      const listRow = rowsDetail.filter((obj) =>
+        validate.validate.some((val) => obj.ID === val.ID)
+      );
+      const datas = listRow.map((item) => {
+        if (item.isNew) {
+          return { ...item, ID: "" };
+        }
+        return item;
+      });
+      const formData = {
+        IDRef: [...gridRef.current.getSelectedRows()][0],
+        bill_datas: billData,
+        datas: datas,
+      };
+      const result = await save(formData);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const RemoveRow = async (rowDel) => {
+    const listRowDel = rowDel.filter((obj) => !obj.isNew);
+    const result = await del(listRowDel);
+    return result;
+  };
+
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -174,11 +297,12 @@ export default function PackageGetout() {
         handleLoadData(formData);
         break;
       case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
+        handleDeleteData([...gridRef.current.getSelectedRows()]);
         break;
       case "add":
-        NewItem["ID"] = uuidv4();
-        setRows([NewItem, ...rows]);
+        if ([...gridRef.current?.getSelectedRows()].length)
+          setRowsDetail([{ ...NewItem, "ID": uuidv4() }, ...rowsDetail]);
+        else message.warning("vui lòng chọn một thông tin vận đơn trước");
         break;
       case "save":
         handleSaveData();
@@ -188,12 +312,6 @@ export default function PackageGetout() {
         break;
       default:
         break;
-    }
-  };
-  const handleSaveData = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -275,7 +393,7 @@ export default function PackageGetout() {
         </Col>
         <Col span={17}>
           <Card
-            style={{ borderRadius: "0px", height: "100%" }}
+            style={{ minHeight: "300px", maxHeight: "500px" }}
             className="main-card"
           >
             <Flex className="main-card-toolbar" justify="space-between">
@@ -297,6 +415,7 @@ export default function PackageGetout() {
             </Flex>
             <DataGrid
               ref={gridRef}
+              maxHeight={400}
               direction="ltr"
               columnKeySelected="ID"
               selection={selectionTypes.single}
@@ -304,6 +423,23 @@ export default function PackageGetout() {
               columns={columns}
               rows={rows}
               setRows={setRows}
+              onFocus={onFocus}
+              limit={5}
+              onCellClick
+              handleGetSelected={handleConfirmsSelect}
+            />
+          </Card>
+          <Card style={{ marginTop: "10px", height: "300px", padding: "0" }}>
+            <DataGrid
+              style={{ height: "230px" }}
+              ref={gridRefDetail}
+              direction="ltr"
+              columnKeySelected="ID"
+              selection={selectionTypes.multi}
+              pagination={paginationTypes.scroll}
+              columns={columnsDetail}
+              rows={rowsDetail}
+              setRows={setRowsDetail}
               onFocus={onFocus}
               limit={5}
             />

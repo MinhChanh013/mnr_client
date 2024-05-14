@@ -74,7 +74,22 @@ export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
     default:
       break;
   }
-  return dataConvert;
+  return (
+    <div
+      style={
+        row["isError"] && column.required
+          ? {
+              boxSizing: "border-box",
+              height: "41px",
+              padding: "0px 8px",
+              border: "1px solid red",
+            }
+          : { boxSizing: "border-box", height: "42px", padding: "0px 8px" }
+      }
+    >
+      {dataConvert}
+    </div>
+  );
 };
 
 export const basicRenderColumns = (columns = []) => {
