@@ -55,6 +55,11 @@ export const searchVessels = async ({ vesselName }) => {
   return data;
 };
 
+export const getJobmode = async () => {
+  const result = await poster(cpath("get-jobmode"));
+  return result;
+};
+
 // socket.on("sock_to_client", (data) => {
 //   socketReceiveReponse(
 //     data,

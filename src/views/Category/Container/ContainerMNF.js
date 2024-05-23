@@ -169,7 +169,7 @@ export default function ContainerMNF() {
   const handleSaveData = async () => {
     try {
       const validate = gridRef.current?.Validate();
-      // console.log(validate);
+      console.log(validate);
       if (!validate.isCheck) {
         message.warning("vui lòng điền đầy đủ thông tin trước khi lưu !");
         return;
@@ -182,7 +182,7 @@ export default function ContainerMNF() {
         message.warning("vui lòng chọn tàu trước!");
         return;
       }
-      if (!validate.length) {
+      if (!validate.validate.length) {
         message.success("không có thay đổi mới");
         return;
       }
