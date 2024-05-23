@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Col, Row, Form, Flex, message } from "antd";
 import * as React from "react";
+import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
 import { Filter, filterType } from "../../../global_component/Filter/index.jsx";
@@ -20,7 +21,9 @@ import {
   loadDetail,
   del,
   save,
+  getJobmode,
 } from "../../../apis/Category/PackageGetin.js";
+import { FORMAT_DATETIME } from "../../../constants";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
@@ -36,6 +39,7 @@ export default function PackageGetin() {
   const dispatch = useDispatch();
   const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [jobMode, setJobMode] = React.useState([]);
   const [form] = Form.useForm();
 
   React.useEffect(() => {
@@ -49,23 +53,40 @@ export default function PackageGetin() {
         console.log(error);
       }
     }
+    async function get_Jobmode() {
+      try {
+        const res = await getJobmode();
+        if (res) {
+          const result = res.data.map((item) => {
+            return {
+              value: item.JobMode,
+              label: item.JobMode,
+            };
+          });
+          setJobMode(result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    get_Jobmode();
     fetchDataVessels();
   }, []);
 
   const NewItem = {
     ID: "",
     EirNo: "",
-    GetIn: "",
+    GetIn: undefined,
     PieceUnitCode: "",
     CargoPieceGetIn: "",
     Seq: "",
-    IsOutOfGood: "",
+    IsOutOfGood: false,
     isNew: true,
   };
   const columns = basicRenderColumns([
     {
       key: "IDRef",
-      name: "ID",
+      name: "IDRef",
       width: 80,
       visible: false,
     },
@@ -120,17 +141,26 @@ export default function PackageGetin() {
       key: "JobModeIn",
       name: "P/A Vào",
       width: 180,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Select,
+      editable: true,
+      options: jobMode,
     },
     {
       key: "StockLocation",
       name: "Vị Trí HH",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
     {
       key: "CommodityDescription",
       name: "Mô Tả HH",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "DeclareContent",
+      name: "DS Tờ Khai",
       width: 180,
       type: columnTypes.TextEditor,
     },
@@ -143,6 +173,12 @@ export default function PackageGetin() {
     {
       key: "ImExType",
       name: "ImExType",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ID",
+      name: "ID",
       width: 180,
       type: columnTypes.TextEditor,
     },
@@ -203,49 +239,63 @@ export default function PackageGetin() {
       key: "IsOutOfGood",
       name: "Đã Hết Hàng",
       width: 200,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Checkbox,
       editable: true,
-      required: true,
     },
   ]);
 
-  const handleConfirmsSelect = async (value) => {
-    const result = await loadDetail(value);
-    setRowsDetail(result.data);
+  const checkVessel = () => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    if (!Object.keys(dataVesselSelect).length) {
+      message.warning("Vui lòng chọn tàu trước!");
+      return false;
+    }
+    return true;
+  };
+
+  const handleLoadDetail = async (value) => {
+    const IDRef = rows.find((item) => item.STT === value).IDRef;
+    const result = await loadDetail(IDRef);
     console.log(result);
+    setRowsDetail(result.data);
   };
 
   const handleLoadData = async (formData) => {
-    dispatch(setLoading(true));
-    try {
-      const resultDataCntrMNF = await load(formData);
-      if (resultDataCntrMNF) {
-        const newResultDataCntrMNF = resultDataCntrMNF.data;
-        setDataTable(newResultDataCntrMNF);
-        setRows(newResultDataCntrMNF);
-        dispatch(
-          showMessage({
-            content: "Nạp dữ liệu thành công",
-          })
-        );
+    if (checkVessel()) {
+      dispatch(setLoading(true));
+      try {
+        const resultDataCntrMNF = await load(formData);
+        if (resultDataCntrMNF) {
+          const newResultDataCntrMNF = resultDataCntrMNF.data;
+          console.log(newResultDataCntrMNF);
+          setDataTable(newResultDataCntrMNF);
+          setRows(newResultDataCntrMNF);
+          dispatch(
+            showMessage({
+              content: "Nạp dữ liệu thành công",
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+      dispatch(setLoading(false));
     }
-    dispatch(setLoading(false));
   };
 
   const handleDeleteData = (index) => {
     dispatch(setLoading(true));
     try {
       if (index.length) {
-        const listRowDel = rows.filter((obj) =>
+        const listRowDel = rowsDetail.filter((obj) =>
           index.some((id) => obj.ID === id)
         );
         RemoveRow(listRowDel);
-        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        const newRow = rowsDetail.filter(
+          (obj) => !index.some((id) => obj.ID === id)
+        );
         gridRef.current?.setSelectedRows([]);
-        setRows(newRow);
+        setRowsDetail(newRow);
       }
     } catch (error) {
       console.log(error);
@@ -256,22 +306,51 @@ export default function PackageGetin() {
 
   const handleSaveData = async () => {
     try {
-      const validate = gridRefDetail.current?.Validate();
-      console.log(validate);
-      if (!validate.validate.length) {
+      const validateDetail = gridRefDetail.current?.Validate();
+      const validate = gridRef.current?.Validate();
+      if (!validateDetail.validate.length && !validate.validate.length) {
         message.success("không có gì thay đổi");
         return;
       }
-      if (!validate.isCheck) {
+      if (!validate.isCheck || !validateDetail.isCheck) {
         message.warning("vui lòng điền đầy đủ thông tin !");
         return;
       }
-      const billData = rows.filter(
-        (obj) => obj.IDRef === [...gridRef.current.getSelectedRows()][0]
-      );
+      const STT = rows.find(
+        (item) => item.STT === [...gridRef.current.getSelectedRows()][0]
+      ).STT;
+      const billData = rows.filter((obj) => obj.STT === STT);
       const listRow = rowsDetail.filter((obj) =>
-        validate.validate.some((val) => obj.ID === val.ID)
+        validateDetail.validate.some((val) => obj.ID === val.ID)
       );
+      console.log(validateDetail);
+      console.log(listRow);
+      const check_validate_datein = validate_dateIn(listRow, billData[0]);
+      if (check_validate_datein.error !== "") {
+        message.warning(check_validate_datein.error);
+        return;
+      }
+      let getoutPiece = 0;
+      const pr_unit = billData[0].PieceUnitCode;
+      let rmk = [];
+      let zeroQTY = false;
+      rowsDetail.map((item) => {
+        console.log(item);
+        const units = item.PieceUnitCode;
+        const qty = item.CargoPieceGetIn;
+        if (pr_unit == units) {
+          if (!qty || qty == 0) {
+            zeroQTY = true;
+            return;
+          }
+          getoutPiece += qty;
+        } else rmk.push(`${qty}:${units}`);
+      });
+      const expected_qty = billData[0].CargoPiece;
+      if (getoutPiece > expected_qty) {
+        message.warning("Số lượng getin không hợp lý! Vui lòng kiểm tra lại!");
+        return;
+      }
       const datas = listRow.map((item) => {
         if (item.isNew) {
           return { ...item, ID: "" };
@@ -279,10 +358,14 @@ export default function PackageGetin() {
         return item;
       });
       const formData = {
-        IDRef: [...gridRef.current.getSelectedRows()][0],
-        bill_datas: billData,
+        IDRef: billData[0].IDRef ? billData[0].IDRef : "",
+        bill_datas: billData[0],
         datas: datas,
+        sumQty_Unit: getoutPiece,
+        expected_qty: expected_qty,
+        remarks: rmk,
       };
+      console.log(formData);
       const result = await save(formData);
       console.log(result);
     } catch (error) {
@@ -290,8 +373,50 @@ export default function PackageGetin() {
     }
   };
 
+  const validate_dateIn = (validate, billData) => {
+    let checkError = { error: "" };
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const etaTime = dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME);
+    const etdTime = dayjs(dataVesselSelect.ETD).format(FORMAT_DATETIME);
+    const now = dayjs().format(FORMAT_DATETIME);
+    console.log(billData);
+    validate.map((item) => {
+      if (billData.ImExType === 1)
+        if (item.GetIn <= etaTime)
+          checkError["error"] = "Thời gian GETIN phải lớn hơn ETA!";
+        else if (item.GetIn >= etdTime)
+          checkError["error"] = "Thời gian GETIN phải nhỏ hơn ETD!";
+      if (item.GetIn >= now)
+        checkError["error"] =
+          "Thời gian GETIN phải nhỏ hơn thời gian hiện tại!";
+    });
+    return checkError;
+  };
+
+  const handleAddData = () => {
+    if ([...gridRef.current.getSelectedRows()].length) {
+      console.log([...gridRef.current.getSelectedRows()]);
+      const STT = rows.find(
+        (item) => item.STT === [...gridRef.current.getSelectedRows()][0]
+      ).STT;
+      const billData = rows.filter((obj) => obj.STT === STT);
+      console.log(billData);
+      setRowsDetail([
+        ...rowsDetail,
+        {
+          ...NewItem,
+          "ID": uuidv4(),
+          "Seq": rowsDetail.length + 1,
+          "PieceUnitCode": billData[0].PieceUnitCode,
+          "CargoPieceGetIn": billData[0].CargoPiece,
+        },
+      ]);
+    } else message.warning("vui lòng chọn một thông tin vận đơn trước");
+  };
+
   const RemoveRow = async (rowDel) => {
     const listRowDel = rowDel.filter((obj) => !obj.isNew);
+    console.log(listRowDel);
     const result = await del(listRowDel);
     return result;
   };
@@ -309,12 +434,10 @@ export default function PackageGetin() {
         handleLoadData(formData);
         break;
       case "delete":
-        handleDeleteData([...gridRef.current.getSelectedRows()]);
+        handleDeleteData([...gridRefDetail.current.getSelectedRows()]);
         break;
       case "add":
-        if ([...gridRef.current?.getSelectedRows()].length)
-          setRowsDetail([{ ...NewItem, "ID": uuidv4() }, ...rowsDetail]);
-        else message.warning("vui lòng chọn một thông tin vận đơn trước");
+        handleAddData();
         break;
       case "save":
         handleSaveData();
@@ -428,7 +551,7 @@ export default function PackageGetin() {
               ref={gridRef}
               maxHeight={400}
               direction="ltr"
-              columnKeySelected="IDRef"
+              columnKeySelected="STT"
               selection={selectionTypes.single}
               pagination={paginationTypes.scroll}
               columns={columns}
@@ -437,7 +560,7 @@ export default function PackageGetin() {
               onFocus={onFocus}
               limit={5}
               onCellClick
-              handleGetSelected={handleConfirmsSelect}
+              handleGetSelected={handleLoadDetail}
             />
           </Card>
           <Card style={{ marginTop: "10px", height: "300px", padding: "0" }}>

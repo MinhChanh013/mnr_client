@@ -58,15 +58,13 @@ export const dataConverTable = ({ column, row, onRowChange }, itemColumn) => {
     case "Checkbox":
       dataConvert = MCheckBox({
         name: keyValue,
-        defaultChecked: !!parseInt(row[keyValue]),
-        value: !!parseInt(row[keyValue]),
+        defaultChecked: !!row[keyValue],
+        value: !!row[keyValue],
         onRowChange: onRowChange,
         onCellChange: itemColumn.onCellChange,
         row: row,
         key: keyValue,
       });
-      break;
-    case "Select":
       break;
     case "Password":
       dataConvert = "*".repeat(row[keyValue] ? row[keyValue].length : "");

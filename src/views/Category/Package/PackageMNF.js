@@ -24,6 +24,8 @@ import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../../constants/index.js";
 export default function PackageMNF() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -54,7 +56,7 @@ export default function PackageMNF() {
     NumberOfJourney: "",
     ArrivalDeparture: "",
     BillOfLading: "",
-    ImExType: "",
+    ImExType: 1,
     CargoPiece: "",
     PieceUnitCode: "",
     IsLocalForeign: "",
@@ -110,8 +112,18 @@ export default function PackageMNF() {
       key: "ImExType",
       name: "Hướng",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Select,
       editable: true,
+      options: [
+        {
+          value: 1,
+          label: "Nhập",
+        },
+        {
+          value: 2,
+          label: "Xuất",
+        },
+      ],
     },
     {
       key: "CargoPiece",
@@ -155,6 +167,7 @@ export default function PackageMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      visible: true,
     },
     {
       key: "CargoCtrlNo",
@@ -162,6 +175,7 @@ export default function PackageMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      visible: true,
     },
     {
       key: "CallSign",
@@ -169,13 +183,14 @@ export default function PackageMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      visible: true,
     },
     {
       key: "ImoNumber",
       name: "ImoNumber",
       width: 180,
       type: columnTypes.TextEditor,
-      editable: true,
+      visible: true,
     },
   ]);
 
@@ -221,37 +236,51 @@ export default function PackageMNF() {
   const handleSaveData = async (index) => {
     try {
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-      const listRowNew = rows.filter((obj) =>
-        index.some((id) => obj.ID === id && obj.isNew)
+      const validate = gridRef.current?.Validate();
+      const listRow = rows.filter((obj) =>
+        validate.validate.some((val) => obj.ID === val.ID)
       );
-      const listRow = rows.filter((obj) => index.some((id) => obj.ID === id));
-      const datas = listRow.map((item) => {
-        if (item.isNew) {
-          return { ...item, ID: "" };
-        }
-        return item;
-      });
-      console.log(listRowNew);
-      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0) {
-        message.warning("vui lòng chọn tàu trước!");
-        return;
-      }
+      console.log(dataVesselSelect);
       const formData = {
         voyagekey: dataVesselSelect.VoyageKey,
-        eta: dataVesselSelect.ETA,
-        etd: dataVesselSelect.ETD,
+        eta: dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME),
+        etd: dayjs(dataVesselSelect.ETD).format(FORMAT_DATETIME),
         vesselname: dataVesselSelect.VesselName,
         inboundvoyage: dataVesselSelect.InboundVoyage,
         outboundvoyage: dataVesselSelect.OutboundVoyage,
         callsign: dataVesselSelect.callsign,
         imo: dataVesselSelect.imo,
         imextype: dataVesselSelect.imextype,
-        datas: datas,
+        datas: listRow,
       };
+      console.log(formData);
       const result = await save(formData);
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleAddData = (index) => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    console.log(dataVesselSelect);
+    if (!Object.keys(dataVesselSelect).length) {
+      message.warning("vui lòng chọn tàu trước!");
+      return;
+    }
+    setRows([
+      {
+        ...NewItem,
+        "ID": uuidv4(),
+        "TransportIdentity": dataVesselSelect.VesselName,
+        "NumberOfJourney": dataVesselSelect.InboundVoyage,
+        "ArrivalDeparture": dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME),
+        "VoyageKey": dataVesselSelect.VoyageKey,
+        "CallSign": dataVesselSelect.CallSign,
+        "ImoNumber": dataVesselSelect.IMO,
+      },
+      ...rows,
+    ]);
   };
 
   const RemoveRow = async (rowDel) => {
@@ -273,7 +302,7 @@ export default function PackageMNF() {
         handleLoadData(formData);
         break;
       case "add":
-        setRows([{ ...NewItem, "ID": uuidv4() }, ...rows]);
+        handleAddData();
         break;
       case "delete":
         handleDeleteData([...gridRef.current.getSelectedRows()]);

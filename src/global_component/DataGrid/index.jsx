@@ -17,6 +17,7 @@ import { ExportExcel } from "../../assets/js/excelFunction";
 import { useDispatch } from "react-redux";
 import { setSelectedQuantity } from "../../store/slices/SelectedQuantitySlices.js";
 import { renderCellEditPassword } from "./MPassword.jsx";
+import { renderCellEditSelect } from "./MSelect.jsx";
 
 export const selectionTypes = {
   multi: "multi",
@@ -28,6 +29,7 @@ export const columnTypes = {
   TextEditor: "TextEditor",
   Checkbox: "Checkbox",
   Password: "Password",
+  Select: "Select",
 };
 export const paginationTypes = {
   none: "none",
@@ -54,7 +56,14 @@ const getEditCell = (key, cellType, options = [], baseColumn) => {
           row,
           onRowChange,
         });
-
+    case columnTypes.Select:
+      return ({ row, onRowChange }) =>
+        renderCellEditSelect({
+          row,
+          key,
+          options,
+          onRowChange,
+        });
     default:
       return ({ row, onRowChange, column, onClose }) => {
         if (!row.isNew) row.isEdit = true;
@@ -106,6 +115,8 @@ const getComparator = (sortColumn) => {
     case "ImExType":
     case "SumCargoWeight":
     case "ID":
+    case "IDRef":
+    case "STT":
       return (a, b) => {
         return a[sortColumn] - b[sortColumn];
       };
@@ -143,7 +154,7 @@ const DataGrid = forwardRef(
       pagination = paginationTypes.scroll,
       onCellClick = false,
       onCellDoubleClick,
-      handleGetSelected = () =>{}
+      handleGetSelected = () => {},
     },
     ref
   ) => {
@@ -163,8 +174,8 @@ const DataGrid = forwardRef(
         setSelectedRows(idRowSelected);
       }
       if (selection === selectionTypes.single) {
+        console.log(idRowSelected);
         let value = idRowSelected;
-        console.log(value);
         if (typeof value === "object") {
           const rowSelectedArr = [...value];
           value = rowSelectedArr[rowSelectedArr.length - 1];
