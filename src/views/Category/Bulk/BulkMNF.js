@@ -24,6 +24,8 @@ import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../../constants/index.js";
 export default function BulkMNF() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -54,7 +56,7 @@ export default function BulkMNF() {
     NumberOfJourney: "",
     ArrivalDeparture: "",
     BillOfLading: "",
-    ImExType: "",
+    ImExType: 1,
     CargoPiece: "",
     PieceUnitCode: "",
     isLF: "",
@@ -110,8 +112,18 @@ export default function BulkMNF() {
       key: "ImExType",
       name: "Hướng",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Select,
       editable: true,
+      options: [
+        {
+          value: 1,
+          label: "Nhập",
+        },
+        {
+          value: 2,
+          label: "Xuất",
+        },
+      ],
     },
     {
       key: "CargoWeight",
@@ -183,20 +195,21 @@ export default function BulkMNF() {
     try {
       const resultDataBulkMNF = await load(formData);
       if (resultDataBulkMNF) {
-        const newResultDataBulkMNF = resultDataBulkMNF.data.bulkList.map((item) => {
-          return {
-            ...item,
-            CargoCtrlNo: item.CargoCtrlNo
-            ? item.CargoCtrlNo
-            : "",
-          TransportCallSign: item.TransportCallSign
-            ? item.TransportCallSign
-            : "",
-          TransportIMONumber: item.TransportIMONumber
-            ? item.TransportIMONumber
-            : "",
+        const newResultDataBulkMNF = resultDataBulkMNF.data.bulkList.map(
+          (item) => {
+            return {
+              ...item,
+              CargoCtrlNo: item.CargoCtrlNo ? item.CargoCtrlNo : "",
+              TransportCallSign: item.TransportCallSign
+                ? item.TransportCallSign
+                : "",
+              TransportIMONumber: item.TransportIMONumber
+                ? item.TransportIMONumber
+                : "",
+            };
           }
-        });
+        );
+        console.log(newResultDataBulkMNF);
         setDataTable(newResultDataBulkMNF);
         setRows(newResultDataBulkMNF);
         dispatch(
@@ -233,20 +246,11 @@ export default function BulkMNF() {
   const handleSaveData = async (index) => {
     try {
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-      const listRowNew = rows.filter((obj) =>
-        index.some((id) => obj.ID === id && obj.isNew)
+      const validate = gridRef.current?.Validate();
+      const listRow = rows.filter((obj) =>
+        validate.validate.some((val) => obj.ID === val.ID)
       );
-      const listRow = rows.filter((obj) => index.some((id) => obj.ID === id));
-      const datas = listRow.map((item) => {
-        if (item.isNew) {
-          return { ...item, ID: "" };
-        }
-        return item;
-      });
-      if (listRowNew.length > 0 && Object.keys(dataVesselSelect).length === 0) {
-        message.warning("vui lòng chọn tàu trước!");
-        return;
-      }
+      console.log(dataVesselSelect);
       const formData = {
         voyagekey: dataVesselSelect.VoyageKey,
         eta: dataVesselSelect.ETA,
@@ -256,7 +260,7 @@ export default function BulkMNF() {
         outboundvoyage: dataVesselSelect.OutboundVoyage,
         callsign: dataVesselSelect.CallSign,
         imo: dataVesselSelect.IMO,
-        datas: datas,
+        datas: listRow,
       };
       console.log(formData);
       const result = await save(formData);
@@ -269,6 +273,28 @@ export default function BulkMNF() {
     const listRowDel = rowDel.filter((obj) => !obj.isNew);
     const result = await del(listRowDel);
     return result;
+  };
+
+  const handleAddData = () => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    console.log(dataVesselSelect);
+    if (!Object.keys(dataVesselSelect).length) {
+      message.warning("vui lòng chọn tàu trước!");
+      return;
+    }
+    setRows([
+      {
+        ...NewItem,
+        "ID": uuidv4(),
+        "TransportIdentity": dataVesselSelect.VesselName,
+        "NumberOfJourney": dataVesselSelect.InboundVoyage,
+        "ArrivalDeparture": dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME),
+        "VoyageKey": dataVesselSelect.VoyageKey,
+        "CallSign": dataVesselSelect.CallSign,
+        "ImoNumber": dataVesselSelect.IMO,
+      },
+      ...rows,
+    ]);
   };
 
   const buttonConfirm = (props) => {
@@ -284,7 +310,7 @@ export default function BulkMNF() {
         handleLoadData(formData);
         break;
       case "add":
-        setRows([{ ...NewItem, "ID": uuidv4() }, ...rows]);
+        handleAddData();
         break;
       case "delete":
         handleDeleteData([...gridRef.current.getSelectedRows()]);

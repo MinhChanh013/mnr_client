@@ -38,10 +38,7 @@ export const save = async (formData = {}) => {
   return result;
 };
 
-export const del = async (rows = []) => {
-  const formData = {
-    datas: rows,
-  };
+export const del = async (formData = {}) => {
   const result = await poster(cpath("delete"), formData);
   return result;
 };
