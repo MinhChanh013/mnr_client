@@ -20,11 +20,15 @@ import {
   loadDetail,
   save,
   del,
+  getJobmode,
 } from "../../../apis/Category/LiquidGetin.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../../constants";
+
 export default function LiquidGetin() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -35,6 +39,7 @@ export default function LiquidGetin() {
   const dispatch = useDispatch();
   const [dataTable, setDataTable] = React.useState([]);
   const [dataViewsels, setDataViewsels] = React.useState([]);
+  const [jobMode, setJobMode] = React.useState([]);
   const [form] = Form.useForm();
 
   React.useEffect(() => {
@@ -48,28 +53,40 @@ export default function LiquidGetin() {
         console.log(error);
       }
     }
+    async function get_Jobmode() {
+      try {
+        const res = await getJobmode();
+        if (res) {
+          const result = res.data.map((item) => {
+            return {
+              value: item.JobMode,
+              label: item.JobMode,
+            };
+          });
+          setJobMode(result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
     fetchDataVessels();
+    get_Jobmode();
   }, []);
 
-  const NewItem = [
-    {
-      ID: "",
-      TransportIdentity: "",
-      NumberOfJourney: "",
-      ArrivalDeparture: "",
-      BillOfLading: "",
-      ImExType: "",
-      CargoPiece: "",
-      PieceUnitCode: "",
-      isLF: "",
-      CommodityDescription: "",
-      CntrNo: "",
-    },
-  ];
+  const NewItem = {
+    ID: "",
+    EirNo: "",
+    GetIn: undefined,
+    WeightUnitCode: "",
+    CargoWeightGetIn: "",
+    Seq: "",
+    IsOutOfGood: false,
+    isNew: true,
+  };
   const columns = basicRenderColumns([
     {
-      key: "ID",
-      name: "ID",
+      key: "IDRef",
+      name: "IDRef",
       width: 80,
       visible: true,
     },
@@ -121,8 +138,9 @@ export default function LiquidGetin() {
       key: "JobModeIn",
       name: "P/A Vào",
       width: 180,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Select,
       editable: true,
+      options: jobMode,
     },
     {
       key: "ComTypeCode",
@@ -139,6 +157,34 @@ export default function LiquidGetin() {
     {
       key: "CommodityDescription",
       name: "Mô Tả HH",
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "DeclareContent",
+      name: "DS Tờ Khai",
+      width: 180,
+      visible: true,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "VoyageKey",
+      name: "VoyageKey",
+      visible: true,
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ImExType",
+      name: "ImExType",
+      visible: true,
+      width: 180,
+      type: columnTypes.TextEditor,
+    },
+    {
+      key: "ID",
+      name: "ID",
+      visible: true,
       width: 180,
       type: columnTypes.TextEditor,
     },
@@ -172,7 +218,7 @@ export default function LiquidGetin() {
       required: true,
     },
     {
-      key: "PieceUnitCode",
+      key: "WeightUnitCode",
       name: "ĐVT",
       width: 200,
       type: columnTypes.TextEditor,
@@ -180,8 +226,8 @@ export default function LiquidGetin() {
       required: true,
     },
     {
-      key: "CargoPieceGetIn",
-      name: "Số Lượng Vào",
+      key: "CargoWeightGetIn",
+      name: "Trọng Lượng Vào",
       width: 200,
       type: columnTypes.TextEditor,
       editable: true,
@@ -201,47 +247,124 @@ export default function LiquidGetin() {
       width: 200,
       type: columnTypes.TextEditor,
       editable: true,
-      required: true,
     },
   ]);
 
-  const handleConfirmsSelect = async (value) => {
-    const result = await loadDetail(value);
+  const checkVessel = () => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    if (!Object.keys(dataVesselSelect).length) {
+      message.warning("Vui lòng chọn tàu trước!");
+      return false;
+    }
+    return true;
+  };
+
+  const GetbillData = () => {
+    const STT = rows.find(
+      (item) => item.STT === [...gridRef.current.getSelectedRows()][0]
+    ).STT;
+    return rows.filter((obj) => obj.STT === STT)[0];
+  };
+
+  const validate_dateIn = (validate, billData) => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const etaTime = dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME);
+    const etdTime = dayjs(dataVesselSelect.ETD).format(FORMAT_DATETIME);
+    const now = dayjs().format(FORMAT_DATETIME);
+    validate.map((item) => {
+      if (billData.ImExType === 1)
+        if (item.GetIn <= etaTime) {
+          message.warning("Thời gian GETIN phải lớn hơn ETA!");
+          return false;
+        } else if (item.GetIn >= etdTime) {
+          message.warning("Thời gian GETIN phải nhỏ hơn ETD!");
+          return false;
+        }
+      if (item.GetIn >= now) {
+        message.warning("Thời gian GETIN phải nhỏ hơn thời gian hiện tại!");
+        return false;
+      }
+    });
+    return true;
+  };
+
+  const CheckValidate = (validateDetail) => {
+    const validate = gridRef.current?.Validate();
+    if (!validateDetail.validate.length && !validate.validate.length) {
+      message.success("không có gì thay đổi");
+      return false;
+    }
+    if (!validate.isCheck || !validateDetail.isCheck) {
+      message.warning("vui lòng điền đầy đủ thông tin!");
+      return false;
+    }
+    return true;
+  };
+
+  const handleLoadDetail = async (value) => {
+    const IDRef = rows.find((item) => item.STT === value).IDRef;
+    const result = await loadDetail(IDRef);
     setRowsDetail(result.data);
-    console.log(result);
   };
 
   const handleLoadData = async (formData) => {
-    dispatch(setLoading(true));
-    try {
-      const resultDataCntrMNF = await load(formData);
-      if (resultDataCntrMNF) {
-        const newResultDataCntrMNF = resultDataCntrMNF.data;
-        setDataTable(newResultDataCntrMNF);
-        setRows(newResultDataCntrMNF);
-        dispatch(
-          showMessage({
-            content: "Nạp dữ liệu thành công",
-          })
-        );
+    if (checkVessel()) {
+      dispatch(setLoading(true));
+      try {
+        const resultLiquidGetin = await load(formData);
+        if (resultLiquidGetin) {
+          const newResultLiquidGetin = resultLiquidGetin.data;
+          setDataTable(newResultLiquidGetin);
+          setRows(newResultLiquidGetin);
+          message.success("Nạp dữ liệu thành công");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+      dispatch(setLoading(false));
     }
-    dispatch(setLoading(false));
   };
 
-  const handleDeleteData = (index) => {
+  const handleDeleteData = async (index) => {
     dispatch(setLoading(true));
     try {
       if (index.length) {
-        const listRowDel = rows.filter((obj) =>
-          index.some((id) => obj.ID === id)
+        const billData = GetbillData();
+        const listRowDel = rowsDetail.filter(
+          (obj) => index.some((id) => obj.ID === id) && !obj.isNew
         );
-        RemoveRow(listRowDel);
-        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        const newRow = rowsDetail.filter(
+          (obj) => !index.some((id) => obj.ID === id)
+        );
+        let getoutWeight = 0;
+        const IDRef = billData.IDRef;
+        const pr_unit = billData.WeightUnitCode;
+        const mnf_Weight = billData.CargoWeight ? billData.CargoWeight : 0;
+        let rmk = [];
+
+        if (newRow.length) {
+          newRow.map((item) => {
+            const current = item.CargoWeightGetIn ? item.CargoWeightGetIn : 0;
+            if (item.WeightUnitCode == pr_unit) {
+              getoutWeight += current;
+            } else {
+              rmk.push(`${item.CargoWeightGetIn}:${item.WeightUnitCode}`);
+            }
+          });
+        }
+        const formData = {
+          "IDRef": IDRef,
+          "datas": listRowDel,
+          "sumQty_Unit": getoutWeight,
+          "remarks": rmk,
+          "mnf_Weight": mnf_Weight,
+        };
+
+        const result = await del(formData);
         gridRef.current?.setSelectedRows([]);
-        setRows(newRow);
+        setRowsDetail(newRow);
+
+        console.log(result);
       }
     } catch (error) {
       console.log(error);
@@ -252,33 +375,53 @@ export default function LiquidGetin() {
 
   const handleSaveData = async () => {
     try {
-      const validate = gridRefDetail.current?.Validate();
-      console.log(validate);
-      if (!validate.validate.length) {
-        message.success("không có gì thay đổi");
-        return;
-      }
-      if (!validate.isCheck) {
-        message.warning("vui lòng điền đầy đủ thông tin !");
-        return;
-      }
-      const billData = rows.filter(
-        (obj) => obj.IDRef === [...gridRef.current.getSelectedRows()][0]
-      );
+      const validateDetail = gridRefDetail.current?.Validate();
+      if (!CheckValidate(validateDetail)) return;
+
+      const billData = GetbillData();
       const listRow = rowsDetail.filter((obj) =>
-        validate.validate.some((val) => obj.ID === val.ID)
+        validateDetail.validate.some((val) => obj.ID === val.ID)
       );
+      if (!validate_dateIn(listRow, billData)) return;
+
+      let getoutWeight = 0;
+      const pr_unit = billData.WeightUnitCode;
+      let rmk = [];
+      let zeroQTY = false;
+
+      rowsDetail.map((item) => {
+        const units = item.WeightUnitCode;
+        const qty = Number(item.CargoWeightGetIn);
+        if (pr_unit === units) {
+          if (!qty || qty === 0) {
+            zeroQTY = true;
+            return;
+          }
+          getoutWeight += qty;
+        } else rmk.push(`${qty}:${units}`);
+      });
+      const expected_qty = billData.CargoWeight;
+      if (getoutWeight > expected_qty) {
+        message.warning("Số lượng getin không hợp lý! Vui lòng kiểm tra lại!");
+        return;
+      }
       const datas = listRow.map((item) => {
         if (item.isNew) {
           return { ...item, ID: "" };
         }
         return item;
       });
+
       const formData = {
-        IDRef: [...gridRef.current.getSelectedRows()][0],
+        IDRef: billData.IDRef ? billData.IDRef : "",
         bill_datas: billData,
         datas: datas,
+        sumQty_Unit: getoutWeight,
+        expected_qty: expected_qty,
+        remarks: rmk,
       };
+
+      console.log(formData);
       const result = await save(formData);
       console.log(result);
     } catch (error) {
@@ -286,10 +429,20 @@ export default function LiquidGetin() {
     }
   };
 
-  const RemoveRow = async (rowDel) => {
-    const listRowDel = rowDel.filter((obj) => !obj.isNew);
-    const result = await del(listRowDel);
-    return result;
+  const handleAddData = () => {
+    if ([...gridRef.current.getSelectedRows()].length) {
+      const billData = GetbillData();
+      setRowsDetail([
+        ...rowsDetail,
+        {
+          ...NewItem,
+          "ID": uuidv4(),
+          "Seq": rowsDetail.length + 1,
+          "WeightUnitCode": billData.WeightUnitCode,
+          "CargoWeightGetIn": billData.CargoWeight,
+        },
+      ]);
+    } else message.warning("vui lòng chọn một thông tin vận đơn trước");
   };
 
   const buttonConfirm = (props) => {
@@ -305,12 +458,10 @@ export default function LiquidGetin() {
         handleLoadData(formData);
         break;
       case "delete":
-        handleDeleteData([...gridRef.current.getSelectedRows()]);
+        handleDeleteData([...gridRefDetail.current.getSelectedRows()]);
         break;
       case "add":
-        if ([...gridRef.current?.getSelectedRows()].length)
-          setRowsDetail([{ ...NewItem, "ID": uuidv4() }, ...rowsDetail]);
-        else message.warning("vui lòng chọn một thông tin vận đơn trước");
+        handleAddData();
         break;
       case "save":
         handleSaveData();
@@ -425,7 +576,7 @@ export default function LiquidGetin() {
               ref={gridRef}
               maxHeight={400}
               direction="ltr"
-              columnKeySelected="ID"
+              columnKeySelected="STT"
               selection={selectionTypes.single}
               pagination={paginationTypes.scroll}
               columns={columns}
@@ -434,7 +585,7 @@ export default function LiquidGetin() {
               onFocus={onFocus}
               limit={5}
               onCellClick
-              handleGetSelected={handleConfirmsSelect}
+              handleGetSelected={handleLoadDetail}
             />
           </Card>
           <Card style={{ marginTop: "10px", height: "300px", padding: "0" }}>

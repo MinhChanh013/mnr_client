@@ -38,10 +38,7 @@ export const save = async (formData = {}) => {
   return result;
 };
 
-export const del = async (rows = []) => {
-  const formData = {
-    datas: rows,
-  };
+export const del = async (formData = {}) => {
   const result = await poster(cpath("delete"), formData);
   return result;
 };
@@ -53,6 +50,11 @@ export const searchVessels = async ({ vesselName }) => {
 
   const data = await poster(cpath("view-vessel"), formData);
   return data;
+};
+
+export const getJobmode = async () => {
+  const result = await poster(cpath("get-jobmode"));
+  return result;
 };
 
 // socket.on("sock_to_client", (data) => {

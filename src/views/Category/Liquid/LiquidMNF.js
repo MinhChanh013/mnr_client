@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Col, Row, Form, Flex } from "antd";
+import { Card, Col, Row, Form, Flex, message } from "antd";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import VesselSelect from "../../../global_component/Modal/VesselSelect.js";
@@ -14,11 +14,18 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { searchVessels, load } from "../../../apis/Category/LiquidMNF.js";
+import {
+  searchVessels,
+  load,
+  del,
+  save,
+} from "../../../apis/Category/LiquidMNF.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
+import dayjs from "dayjs";
+import { FORMAT_DATETIME } from "../../../constants/index.js";
 export default function LiquidMNF() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -43,21 +50,20 @@ export default function LiquidMNF() {
     fetchDataVessels();
   }, []);
 
-  const NewItem = [
-    {
-      ID: "",
-      TransportIdentity: "",
-      NumberOfJourney: "",
-      ArrivalDeparture: "",
-      BillOfLading: "",
-      ImExType: "",
-      CargoPiece: "",
-      PieceUnitCode: "",
-      isLF: "",
-      CommodityDescription: "",
-      CntrNo: "",
-    },
-  ];
+  const NewItem = {
+    ID: "",
+    TransportIdentity: "",
+    NumberOfJourney: "",
+    ArrivalDeparture: "",
+    BillOfLading: "",
+    ImExType: 1,
+    CargoPiece: "",
+    PieceUnitCode: "",
+    IsLocalForeign: "",
+    CommodityDescription: "",
+    CntrNo: "",
+    isNew: true,
+  };
   const columns = basicRenderColumns([
     {
       key: "ID",
@@ -69,7 +75,6 @@ export default function LiquidMNF() {
       key: "STT",
       name: "STT",
       width: 80,
-      editable: true,
     },
     {
       key: "TransportIdentity",
@@ -77,63 +82,83 @@ export default function LiquidMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "NumberOfJourney",
       name: "Số chuyến",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
     },
     {
       key: "ArrivalDeparture",
       name: "Ngày Tàu Đến",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
     },
     {
       key: "BillOfLading",
       name: "Số Vận Đơn",
       width: 200,
       type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
     },
     {
       key: "ImExType",
       name: "Hướng",
       width: 150,
-      type: columnTypes.TextEditor,
+      type: columnTypes.Select,
+      editable: true,
+      required: true,
+      options: [
+        {
+          value: 1,
+          label: "Nhập",
+        },
+        {
+          value: 2,
+          label: "Xuất",
+        },
+      ],
     },
     {
       key: "CargoWeight",
       name: "Trọng Lượng",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
     },
     {
       key: "WeightUnitCode",
       name: "DVT",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
+      required: true,
     },
 
     {
-      key: "isLF",
+      key: "IsLocalForeign",
       name: "Nội/ngoại",
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "CommodityDescription",
       name: "Mô Tả HH",
       width: 150,
       type: columnTypes.TextEditor,
+      editable: true,
     },
   ]);
-
-  const removeRow = (index) => {
-    const newRow = rows.filter((e) => !index.some((id) => e.ID === id));
-    setRows(newRow);
-  };
 
   const handleLoadData = async (formData) => {
     dispatch(setLoading(true));
@@ -155,6 +180,79 @@ export default function LiquidMNF() {
     dispatch(setLoading(false));
   };
 
+  const handleDeleteData = (index) => {
+    dispatch(setLoading(true));
+    try {
+      if (index.length) {
+        const listRowDel = rows.filter((obj) =>
+          index.some((id) => obj.ID === id)
+        );
+        RemoveRow(listRowDel);
+        const newRow = rows.filter((obj) => !index.some((id) => obj.ID === id));
+        gridRef.current?.setSelectedRows([]);
+        setRows(newRow);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    dispatch(setLoading(false));
+  };
+
+  const handleSaveData = async () => {
+    try {
+      const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+      const validate = gridRef.current?.Validate();
+      const listRow = rows.filter((obj) =>
+        validate.validate.some((val) => obj.ID === val.ID)
+      );
+      const formData = {
+        voyagekey: dataVesselSelect.VoyageKey,
+        eta: dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME),
+        etd: dayjs(dataVesselSelect.ETD).format(FORMAT_DATETIME),
+        vesselname: dataVesselSelect.VesselName,
+        inboundvoyage: dataVesselSelect.InboundVoyage,
+        outboundvoyage: dataVesselSelect.OutboundVoyage,
+        callsign: dataVesselSelect.callsign,
+        imo: dataVesselSelect.imo,
+        imextype: dataVesselSelect.imextype,
+        datas: listRow,
+      };
+      console.log(formData);
+      const result = await save(formData);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAddData = () => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    if (!Object.keys(dataVesselSelect).length) {
+      message.warning("vui lòng chọn tàu trước!");
+      return;
+    }
+    setRows([
+      {
+        ...NewItem,
+        "ID": uuidv4(),
+        "TransportIdentity": dataVesselSelect.VesselName,
+        "NumberOfJourney": dataVesselSelect.InboundVoyage,
+        "ArrivalDeparture": dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME),
+        "VoyageKey": dataVesselSelect.VoyageKey,
+        "CallSign": dataVesselSelect.CallSign,
+        "ImoNumber": dataVesselSelect.IMO,
+      },
+      ...rows,
+    ]);
+  };
+
+  const RemoveRow = async (rowDel) => {
+    const listRowDel = rowDel.filter((obj) => !obj.isNew);
+    const result = await del(listRowDel);
+    return result;
+  };
+
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
@@ -168,11 +266,10 @@ export default function LiquidMNF() {
         handleLoadData(formData);
         break;
       case "delete":
-        removeRow([...gridRef.current.getSelectedRows()]);
+        handleDeleteData([...gridRef.current.getSelectedRows()]);
         break;
       case "add":
-        NewItem["ID"] = uuidv4();
-        setRows([NewItem, ...rows]);
+        handleAddData();
         break;
       case "save":
         handleSaveData();
@@ -182,12 +279,6 @@ export default function LiquidMNF() {
         break;
       default:
         break;
-    }
-  };
-  const handleSaveData = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
     }
   };
 

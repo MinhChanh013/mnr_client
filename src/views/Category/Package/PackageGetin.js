@@ -14,7 +14,6 @@ import ToolBar, {
   toolBarButtonTypes,
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
-import { showMessage } from "../../../store/slices/MessageSlices.js";
 import {
   searchVessels,
   load,
@@ -26,9 +25,8 @@ import {
 import { FORMAT_DATETIME } from "../../../constants";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
-
 import { basicRenderColumns } from "../../../utils/dataTable.utils.js";
-import { retry } from "@reduxjs/toolkit/query";
+
 export default function PackageGetin() {
   const onFocus = () => {};
   const gridRef = React.createRef();
@@ -88,7 +86,7 @@ export default function PackageGetin() {
       key: "IDRef",
       name: "IDRef",
       width: 80,
-      visible: false,
+      visible: true,
     },
     {
       key: "STT",
@@ -253,10 +251,51 @@ export default function PackageGetin() {
     return true;
   };
 
+  const GetbillData = () => {
+    const STT = rows.find(
+      (item) => item.STT === [...gridRef.current.getSelectedRows()][0]
+    ).STT;
+    return rows.filter((obj) => obj.STT === STT)[0];
+  };
+
+  const validate_dateIn = (validate, billData) => {
+    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
+    const etaTime = dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME);
+    const etdTime = dayjs(dataVesselSelect.ETD).format(FORMAT_DATETIME);
+    const now = dayjs().format(FORMAT_DATETIME);
+    validate.map((item) => {
+      if (billData.ImExType === 1)
+        if (item.GetIn <= etaTime) {
+          message.warning("Thời gian GETIN phải lớn hơn ETA!");
+          return false;
+        } else if (item.GetIn >= etdTime) {
+          message.warning("Thời gian GETIN phải nhỏ hơn ETD!");
+          return false;
+        }
+      if (item.GetIn >= now) {
+        message.warning("Thời gian GETIN phải nhỏ hơn thời gian hiện tại!");
+        return false;
+      }
+    });
+    return true;
+  };
+
+  const CheckValidate = (validateDetail) => {
+    const validate = gridRef.current?.Validate();
+    if (!validateDetail.validate.length && !validate.validate.length) {
+      message.success("không có gì thay đổi");
+      return false;
+    }
+    if (!validate.isCheck || !validateDetail.isCheck) {
+      message.warning("vui lòng điền đầy đủ thông tin!");
+      return false;
+    }
+    return true;
+  };
+
   const handleLoadDetail = async (value) => {
     const IDRef = rows.find((item) => item.STT === value).IDRef;
     const result = await loadDetail(IDRef);
-    console.log(result);
     setRowsDetail(result.data);
   };
 
@@ -264,17 +303,13 @@ export default function PackageGetin() {
     if (checkVessel()) {
       dispatch(setLoading(true));
       try {
-        const resultDataCntrMNF = await load(formData);
-        if (resultDataCntrMNF) {
-          const newResultDataCntrMNF = resultDataCntrMNF.data;
-          console.log(newResultDataCntrMNF);
-          setDataTable(newResultDataCntrMNF);
-          setRows(newResultDataCntrMNF);
-          dispatch(
-            showMessage({
-              content: "Nạp dữ liệu thành công",
-            })
-          );
+        const resultPackageGetin = await load(formData);
+        if (resultPackageGetin) {
+          const newResultPackageGetin = resultPackageGetin.data;
+          setDataTable(newResultPackageGetin);
+          setRows(newResultPackageGetin);
+          message.success("Nạp dữ liệu thành công");
+          console.log(newResultPackageGetin);
         }
       } catch (error) {
         console.log(error);
@@ -283,70 +318,81 @@ export default function PackageGetin() {
     }
   };
 
-  const handleDeleteData = (index) => {
+  const handleDeleteData = async (index) => {
     dispatch(setLoading(true));
     try {
       if (index.length) {
-        const listRowDel = rowsDetail.filter((obj) =>
-          index.some((id) => obj.ID === id)
+        const billData = GetbillData();
+        const listRowDel = rowsDetail.filter(
+          (obj) => index.some((id) => obj.ID === id) && !obj.isNew
         );
-        RemoveRow(listRowDel);
         const newRow = rowsDetail.filter(
           (obj) => !index.some((id) => obj.ID === id)
         );
+        let getoutPiece = 0;
+        const IDRef = billData.IDRef;
+        const pr_unit = billData.PieceUnitCode;
+        const mnf_piece = billData.CargoPiece ? billData.CargoPiece : 0;
+        let rmk = [];
+
+        if (newRow.length) {
+          newRow.map((item) => {
+            const current = item.CargoPieceGetIn ? item.CargoPieceGetIn : 0;
+            if (item.PieceUnitCode == pr_unit) {
+              getoutPiece += current;
+            } else {
+              rmk.push(`${item.CargoPieceGetIn}:${item.PieceUnitCode}`);
+            }
+          });
+        }
+        const formData = {
+          "IDRef": IDRef,
+          "datas": listRowDel,
+          "sumQty_Unit": getoutPiece,
+          "remarks": rmk,
+          "mnf_piece": mnf_piece,
+        };
+
+        const result = await del(formData);
         gridRef.current?.setSelectedRows([]);
         setRowsDetail(newRow);
+
+        console.log(result);
       }
     } catch (error) {
       console.log(error);
     }
-
     dispatch(setLoading(false));
   };
 
   const handleSaveData = async () => {
     try {
       const validateDetail = gridRefDetail.current?.Validate();
-      const validate = gridRef.current?.Validate();
-      if (!validateDetail.validate.length && !validate.validate.length) {
-        message.success("không có gì thay đổi");
-        return;
-      }
-      if (!validate.isCheck || !validateDetail.isCheck) {
-        message.warning("vui lòng điền đầy đủ thông tin !");
-        return;
-      }
-      const STT = rows.find(
-        (item) => item.STT === [...gridRef.current.getSelectedRows()][0]
-      ).STT;
-      const billData = rows.filter((obj) => obj.STT === STT);
+      if (!CheckValidate(validateDetail)) return;
+
+      const billData = GetbillData();
       const listRow = rowsDetail.filter((obj) =>
         validateDetail.validate.some((val) => obj.ID === val.ID)
       );
-      console.log(validateDetail);
-      console.log(listRow);
-      const check_validate_datein = validate_dateIn(listRow, billData[0]);
-      if (check_validate_datein.error !== "") {
-        message.warning(check_validate_datein.error);
-        return;
-      }
+      if (!validate_dateIn(listRow, billData)) return;
+
       let getoutPiece = 0;
-      const pr_unit = billData[0].PieceUnitCode;
+      const pr_unit = billData.PieceUnitCode;
       let rmk = [];
       let zeroQTY = false;
+
       rowsDetail.map((item) => {
-        console.log(item);
         const units = item.PieceUnitCode;
-        const qty = item.CargoPieceGetIn;
-        if (pr_unit == units) {
-          if (!qty || qty == 0) {
+        const qty = Number(item.CargoPieceGetIn);
+        if (pr_unit === units) {
+          if (!qty || qty === 0) {
             zeroQTY = true;
             return;
           }
           getoutPiece += qty;
         } else rmk.push(`${qty}:${units}`);
       });
-      const expected_qty = billData[0].CargoPiece;
+      const expected_qty = billData.CargoPiece;
       if (getoutPiece > expected_qty) {
         message.warning("Số lượng getin không hợp lý! Vui lòng kiểm tra lại!");
         return;
@@ -357,15 +403,15 @@ export default function PackageGetin() {
         }
         return item;
       });
+
       const formData = {
-        IDRef: billData[0].IDRef ? billData[0].IDRef : "",
-        bill_datas: billData[0],
+        IDRef: billData.IDRef ? billData.IDRef : "",
+        bill_datas: billData,
         datas: datas,
         sumQty_Unit: getoutPiece,
         expected_qty: expected_qty,
         remarks: rmk,
       };
-      console.log(formData);
       const result = await save(formData);
       console.log(result);
     } catch (error) {
@@ -373,58 +419,25 @@ export default function PackageGetin() {
     }
   };
 
-  const validate_dateIn = (validate, billData) => {
-    let checkError = { error: "" };
-    const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-    const etaTime = dayjs(dataVesselSelect.ETA).format(FORMAT_DATETIME);
-    const etdTime = dayjs(dataVesselSelect.ETD).format(FORMAT_DATETIME);
-    const now = dayjs().format(FORMAT_DATETIME);
-    console.log(billData);
-    validate.map((item) => {
-      if (billData.ImExType === 1)
-        if (item.GetIn <= etaTime)
-          checkError["error"] = "Thời gian GETIN phải lớn hơn ETA!";
-        else if (item.GetIn >= etdTime)
-          checkError["error"] = "Thời gian GETIN phải nhỏ hơn ETD!";
-      if (item.GetIn >= now)
-        checkError["error"] =
-          "Thời gian GETIN phải nhỏ hơn thời gian hiện tại!";
-    });
-    return checkError;
-  };
-
   const handleAddData = () => {
     if ([...gridRef.current.getSelectedRows()].length) {
-      console.log([...gridRef.current.getSelectedRows()]);
-      const STT = rows.find(
-        (item) => item.STT === [...gridRef.current.getSelectedRows()][0]
-      ).STT;
-      const billData = rows.filter((obj) => obj.STT === STT);
-      console.log(billData);
+      const billData = GetbillData();
       setRowsDetail([
         ...rowsDetail,
         {
           ...NewItem,
           "ID": uuidv4(),
           "Seq": rowsDetail.length + 1,
-          "PieceUnitCode": billData[0].PieceUnitCode,
-          "CargoPieceGetIn": billData[0].CargoPiece,
+          "PieceUnitCode": billData.PieceUnitCode,
+          "CargoPieceGetIn": billData.CargoPiece,
         },
       ]);
     } else message.warning("vui lòng chọn một thông tin vận đơn trước");
   };
 
-  const RemoveRow = async (rowDel) => {
-    const listRowDel = rowDel.filter((obj) => !obj.isNew);
-    console.log(listRowDel);
-    const result = await del(listRowDel);
-    return result;
-  };
-
   const buttonConfirm = (props) => {
     const dataFormFilter = form.getFieldsValue();
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-
     const formData = {
       ...dataFormFilter,
       voyagekey: dataVesselSelect ? dataVesselSelect.VoyageKey : "",

@@ -73,7 +73,7 @@ export default function PackageMNF() {
       key: "ID",
       name: "ID",
       width: 80,
-      visible: false,
+      visible: true,
     },
     {
       key: "STT",
@@ -86,6 +86,7 @@ export default function PackageMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "NumberOfJourney",
@@ -93,6 +94,7 @@ export default function PackageMNF() {
       width: 150,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "ArrivalDeparture",
@@ -100,6 +102,7 @@ export default function PackageMNF() {
       width: 150,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "BillOfLading",
@@ -107,6 +110,7 @@ export default function PackageMNF() {
       width: 200,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "ImExType",
@@ -114,6 +118,7 @@ export default function PackageMNF() {
       width: 150,
       type: columnTypes.Select,
       editable: true,
+      required: true,
       options: [
         {
           value: 1,
@@ -131,6 +136,7 @@ export default function PackageMNF() {
       width: 150,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "PieceUnitCode",
@@ -138,6 +144,7 @@ export default function PackageMNF() {
       width: 150,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
 
     {
@@ -146,6 +153,7 @@ export default function PackageMNF() {
       width: 180,
       type: columnTypes.TextEditor,
       editable: true,
+      required: true,
     },
     {
       key: "CommodityDescription",
@@ -233,7 +241,7 @@ export default function PackageMNF() {
     dispatch(setLoading(false));
   };
 
-  const handleSaveData = async (index) => {
+  const handleSaveData = async () => {
     try {
       const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
       const validate = gridRef.current?.Validate();
@@ -261,9 +269,8 @@ export default function PackageMNF() {
     }
   };
 
-  const handleAddData = (index) => {
+  const handleAddData = () => {
     const dataVesselSelect = vesselSelectRef.current?.getSelectedVessel();
-    console.log(dataVesselSelect);
     if (!Object.keys(dataVesselSelect).length) {
       message.warning("vui lòng chọn tàu trước!");
       return;
@@ -310,7 +317,7 @@ export default function PackageMNF() {
       case "export_excel":
         gridRef.current?.exportExcel();
       case "save":
-        handleSaveData([...gridRef.current.getSelectedRows()]);
+        handleSaveData();
         break;
       default:
         break;
