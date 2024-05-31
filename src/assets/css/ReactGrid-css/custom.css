@@ -45,7 +45,7 @@
 }
 
 .main-card {
-  min-height: calc(100vh - 111px);
+  /* min-height: calc(100vh - 111px); */
   height: 100%;
   border-radius: 0px;
 

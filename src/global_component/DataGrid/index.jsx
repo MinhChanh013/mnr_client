@@ -206,8 +206,8 @@ const DataGrid = forwardRef(
             );
           } else {
             dataRowCurrentScroll = rows.slice(
-              rateScreen * start_index,
-              rateScreen * start_index + limit
+              limit * (rateScreen - 1) + start_index,
+              limit * rateScreen + start_index
             );
           }
           if (
@@ -458,7 +458,7 @@ const DataGrid = forwardRef(
                 color: "#555555",
               }}
             >
-              Số dòng: {summaryRows[0].totalCount}
+              Số dòng: {summaryRows[0].totalCount.toLocaleString("vi-VN")}
             </Typography>
             {rows.some((obj) => "CntrNo" in obj) ? (
               <>
@@ -471,7 +471,7 @@ const DataGrid = forwardRef(
                     color: "#555555",
                   }}
                 >
-                  Số công: {summaryRows[0].cntrNoCount}
+                  Số công: {summaryRows[0].cntrNoCount.toLocaleString("vi-VN")}
                 </Typography>
               </>
             ) : (

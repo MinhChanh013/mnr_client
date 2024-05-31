@@ -14,7 +14,7 @@ import ToolBar, {
 } from "../../../global_component/ToolbarButton/ToolBar.js";
 import { setLoading } from "../../../store/slices/LoadingSlices.js";
 import { showMessage } from "../../../store/slices/MessageSlices.js";
-import { searchVessels, load } from "../../../apis/Category/ContainerMNF.js";
+import { load } from "../../../apis/Category/LiquidType.js";
 import { v4 as uuidv4 } from "uuid";
 import SearchBox from "../../../global_component/SearchBox/index.jsx";
 
@@ -108,38 +108,26 @@ export default function LiquidType() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={24}>
-          <Title
-            level={2}
-            style={{
-              textAlign: "center",
-            }}
-          >
-            Danh Mục Loại Hàng Lỏng
-          </Title>
-        </Col>
+      <Row gutter={[8, 8]} style={{ margin: "8px 4px 0px 4px" }}>
         <Col span={24}>
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
             className="main-card"
           >
             <Row align={"midle"}>
+              <Col span={24}>
+                <Title
+                  level={3}
+                  style={{
+                    margin: "0px",
+                    textAlign: "center",
+                  }}
+                >
+                  Danh Mục Loại Hàng Lỏng
+                </Title>
+              </Col>
               <Col span={24} style={{ padding: "8px 12px" }}>
                 <Flex className="main-card-toolbar" justify="space-between">
-                  <Title
-                    level={3}
-                    style={{
-                      margin: "0px",
-                    }}
-                  >
-                    Kích cỡ và loại container
-                  </Title>
-                  <SearchBox
-                    style={{ width: "18%" }}
-                    data={dataTable}
-                    onChange={setRows}
-                  />
                   <ToolBar
                     buttonConfig={[
                       toolBarButtonTypes.add,
@@ -148,6 +136,11 @@ export default function LiquidType() {
                       toolBarButtonTypes.exportexcel,
                     ]}
                     handleConfirm={buttonConfirm}
+                  />
+                  <SearchBox
+                    style={{ width: "18%" }}
+                    data={dataTable}
+                    onChange={setRows}
                   />
                 </Flex>
               </Col>

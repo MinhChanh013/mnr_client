@@ -64,7 +64,7 @@ export default function ContainerSizeType() {
       key: "ID",
       name: "ID",
       width: 80,
-      visible: false,
+      visible: true,
     },
     {
       key: "STT",
@@ -74,29 +74,29 @@ export default function ContainerSizeType() {
     },
     {
       key: "CntrSztp",
-      name: "Số Vận Đơn",
-      width: 400,
+      name: "Mã Local",
+      width: 470,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "IsoSztp",
-      name: "Số Container",
-      width: 400,
+      name: "Mã ISO",
+      width: 470,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "ContType",
-      name: "Số Chì",
-      width: 400,
+      name: "Loại Container",
+      width: 470,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "ContSize",
-      name: "Full/Empty",
-      width: 400,
+      name: "Kích cỡ",
+      width: 470,
       type: columnTypes.TextEditor,
       editable: true,
     },
@@ -171,28 +171,26 @@ export default function ContainerSizeType() {
   };
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row gutter={[8, 8]} style={{ margin: "8px 4px 0px 4px" }}>
         <Col span={24}>
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
             className="main-card"
           >
             <Row align={"midle"}>
+              <Col span={24}>
+                <Title
+                  level={3}
+                  style={{
+                    margin: "0px",
+                    textAlign: "center"
+                  }}
+                >
+                  Kích cỡ và loại container
+                </Title>
+              </Col>
               <Col span={24} style={{ padding: "8px 12px" }}>
                 <Flex className="main-card-toolbar" justify="space-between">
-                  <Title
-                    level={3}
-                    style={{
-                      margin: "0px",
-                    }}
-                  >
-                    Kích cỡ và loại container
-                  </Title>
-                  <SearchBox
-                    style={{ width: "18%" }}
-                    data={dataTable}
-                    onChange={setRows}
-                  />
                   <ToolBar
                     buttonConfig={[
                       toolBarButtonTypes.add,
@@ -201,6 +199,11 @@ export default function ContainerSizeType() {
                       toolBarButtonTypes.exportexcel,
                     ]}
                     handleConfirm={buttonConfirm}
+                  />
+                  <SearchBox
+                    style={{ width: "18%" }}
+                    data={dataTable}
+                    onChange={setRows}
                   />
                 </Flex>
               </Col>
