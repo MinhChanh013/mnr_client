@@ -3,7 +3,7 @@ import { poster } from "../../services/BaseService";
 import { socket, socketReceiveReponse } from "../../socket";
 import store from "../../store";
 import { showMessage } from "../../store/slices/MessageSlices";
-const msgType = "cnt-size-type";
+const msgType = "liquid-type";
 const cpath = (action) => {
   return `/category/${msgType}/${action}`;
 };
@@ -21,7 +21,8 @@ export const load = async (params) => {
     cntrclass: imextype,
     isLF: isLF,
   };
-  const data = await poster(cpath("view"), formData);
+  const data = await poster(cpath("get-liquid-type"), formData);
+  console.log("data", data);
   return data;
 };
 

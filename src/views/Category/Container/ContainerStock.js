@@ -360,8 +360,8 @@ export default function ContainerStock() {
   };
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+      <Row gutter={[8, 8]} style={{ margin: "8px 4px 0px 4px" }}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -443,7 +443,7 @@ export default function ContainerStock() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Card
             style={{ borderRadius: "0px", height: "100%" }}
             className="main-card"

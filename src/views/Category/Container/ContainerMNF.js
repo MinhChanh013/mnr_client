@@ -83,7 +83,7 @@ export default function ContainerMNF() {
     {
       key: "CntrNo",
       name: "Số Container",
-      width: 180,
+      width: 200,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -91,7 +91,7 @@ export default function ContainerMNF() {
     {
       key: "SealNo",
       name: "Số Chì",
-      width: 180,
+      width: 200,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -99,21 +99,21 @@ export default function ContainerMNF() {
     {
       key: "StatusOfGood",
       name: "Full/Empty",
-      width: 180,
+      width: 200,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "ImExType",
       name: "Hướng",
-      width: 150,
+      width: 220,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "IsLocalForeign",
       name: "Nội/ngoại",
-      width: 180,
+      width: 210,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -121,7 +121,7 @@ export default function ContainerMNF() {
     {
       key: "CommodityDescription",
       name: "Mô Tả HH",
-      width: 150,
+      width: 240,
       type: columnTypes.TextEditor,
       editable: true,
     },
@@ -250,7 +250,7 @@ export default function ContainerMNF() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
+      <Row gutter={[8, 8]} style={{ margin: "8px 4px 0px 4px" }}>
         <Col span={6}>
           <Card
             styles={{
@@ -320,7 +320,7 @@ export default function ContainerMNF() {
             </Row>
           </Card>
         </Col>
-        <Col span={18}>
+        <Col span={18} style={{minHeight:"calc(100vh - 111px)"}}>
           <Card className="main-card">
             <Flex className="main-card-toolbar" justify="space-between">
               <ToolBar

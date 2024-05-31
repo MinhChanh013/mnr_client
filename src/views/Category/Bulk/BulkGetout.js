@@ -122,14 +122,14 @@ export default function BulkGetout() {
     {
       key: "EirNo",
       name: "Số Lệnh/ Số Tham Chiếu",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "GetIn",
       name: "Ngày Vào Cảng",
-      width: 200,
+      width: 242,
       type: columnTypes.DatePicker,
       editable: true,
       required: true,
@@ -137,7 +137,7 @@ export default function BulkGetout() {
     {
       key: "PieceUnitCode",
       name: "ĐVT",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -145,7 +145,7 @@ export default function BulkGetout() {
     {
       key: "CargoPieceGetIn",
       name: "Số Lượng Vào",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -153,7 +153,7 @@ export default function BulkGetout() {
     {
       key: "Seq",
       name: "Lần Vào",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -161,7 +161,7 @@ export default function BulkGetout() {
     {
       key: "IsOutOfGood",
       name: "Đã Hết Hàng",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -289,8 +289,8 @@ export default function BulkGetout() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+      <Row gutter={[8, 8]} style={{ margin: "8px 4px 0px 4px" }}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -363,9 +363,9 @@ export default function BulkGetout() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18} style={{ minHeight: "calc(100vh - 111px)" }}>
           <Card
-            style={{ minHeight: "300px", maxHeight: "500px" }}
+            style={{ height: "calc(100vh - 111px - 300px)" }}
             className="main-card"
           >
             <Flex className="main-card-toolbar" justify="space-between">
@@ -401,7 +401,7 @@ export default function BulkGetout() {
               handleGetSelected={handleConfirmsSelect}
             />
           </Card>
-          <Card style={{ marginTop: "10px", height: "300px", padding: "0" }}>
+          <Card className="b-card" style={{ marginTop: "10px", height: "300px", padding: "0" }}>
             <DataGrid
               style={{ height: "230px" }}
               ref={gridRefDetail}

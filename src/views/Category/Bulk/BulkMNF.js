@@ -327,8 +327,8 @@ export default function BulkMNF() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+      <Row gutter={[8, 8]} style={{ margin: "8px 4px 0px 4px" }}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -401,7 +401,7 @@ export default function BulkMNF() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18}  style={{minHeight:"calc(100vh - 111px)"}}>
           <Card className="main-card">
             <Flex className="main-card-toolbar" justify="space-between">
               <ToolBar

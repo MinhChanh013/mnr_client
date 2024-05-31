@@ -95,7 +95,6 @@ export default function LiquidGetin() {
       name: "STT",
       width: 80,
       editable: false,
-      visible: true,
     },
     {
       key: "BillOfLading",
@@ -166,6 +165,7 @@ export default function LiquidGetin() {
       width: 180,
       visible: true,
       type: columnTypes.TextEditor,
+      visible: true,
     },
     {
       key: "VoyageKey",
@@ -173,6 +173,7 @@ export default function LiquidGetin() {
       visible: true,
       width: 180,
       type: columnTypes.TextEditor,
+      visible: true,
     },
     {
       key: "ImExType",
@@ -180,13 +181,16 @@ export default function LiquidGetin() {
       visible: true,
       width: 180,
       type: columnTypes.TextEditor,
+      visible: true,
     },
+
     {
       key: "ID",
       name: "ID",
       visible: true,
       width: 180,
       type: columnTypes.TextEditor,
+      visible: true,
     },
   ]);
 
@@ -205,14 +209,14 @@ export default function LiquidGetin() {
     {
       key: "EirNo",
       name: "Số Lệnh/ Số Tham Chiếu",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
     },
     {
       key: "GetIn",
       name: "Ngày Vào Cảng",
-      width: 200,
+      width: 242,
       type: columnTypes.DatePicker,
       editable: true,
       required: true,
@@ -220,7 +224,7 @@ export default function LiquidGetin() {
     {
       key: "WeightUnitCode",
       name: "ĐVT",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -228,7 +232,7 @@ export default function LiquidGetin() {
     {
       key: "CargoWeightGetIn",
       name: "Trọng Lượng Vào",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -236,7 +240,7 @@ export default function LiquidGetin() {
     {
       key: "Seq",
       name: "Lần Vào",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
       required: true,
@@ -244,7 +248,7 @@ export default function LiquidGetin() {
     {
       key: "IsOutOfGood",
       name: "Đã Hết Hàng",
-      width: 200,
+      width: 242,
       type: columnTypes.TextEditor,
       editable: true,
     },
@@ -476,8 +480,8 @@ export default function LiquidGetin() {
 
   return (
     <>
-      <Row gutter={[8, 8]} style={{ marginTop: "8px" }}>
-        <Col span={7}>
+      <Row gutter={[8, 8]} style={{ margin: "8px 4px 0px 4px" }}>
+        <Col span={6}>
           <Card
             styles={{
               title: {
@@ -550,10 +554,10 @@ export default function LiquidGetin() {
             </Row>
           </Card>
         </Col>
-        <Col span={17}>
+        <Col span={18} style={{ minHeight: "calc(100vh - 111px)" }}>
           <Card
             className="main-card"
-            style={{ minHeight: "300px", maxHeight: "500px" }}
+            style={{ height: "calc(100vh - 111px - 300px)" }}
           >
             <Flex className="main-card-toolbar" justify="space-between">
               <ToolBar
@@ -588,7 +592,7 @@ export default function LiquidGetin() {
               handleGetSelected={handleLoadDetail}
             />
           </Card>
-          <Card style={{ marginTop: "10px", height: "300px", padding: "0" }}>
+          <Card className="b-card" style={{ marginTop: "10px", height: "300px", padding: "0" }}>
             <DataGrid
               style={{ height: "230px" }}
               ref={gridRefDetail}
