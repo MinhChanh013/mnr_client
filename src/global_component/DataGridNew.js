@@ -75,24 +75,24 @@ const DataGridNew = ({
 
 
 
-      renderers={{
-        noRowsFallback: (
-          <Title
-            level={5}
-            style={{ color: "#818181", gridColumn: "1/-1", margin: "10px" }}
-          >
-            --- Không có dữ liệu ---
-          </Title>
-        ),
-      }}
+    //   renderers={{
+    //     noRowsFallback: (
+    //       <Title
+    //         level={5}
+    //         style={{ color: "#818181", gridColumn: "1/-1", margin: "10px" }}
+    //       >
+    //         --- Không có dữ liệu ---
+    //       </Title>
+    //     ),
+    //   }}
 
-    //   defaultColumnOptions={{ sortable: true, resizable: true }}
+      defaultColumnOptions={{ sortable: true, resizable: true }}
 
     //   sortColumns={sortColumns}
     //   onSortColumnsChange={setSortColumns}
 
 
-      rows={sortedRows}
+      rows={rows}
       columns={columns}
     />
   );
