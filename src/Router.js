@@ -102,6 +102,7 @@ import Msg141Liquid from "./views/message_liquid/Msg141Liquid.js";
 //===== MESSAGE LIQUID =======//
 import User from "./views/Settings/user.js";
 import UserDecent from "./views/Settings/UserDecent.js";
+import { removeErrorResizeObserver } from "./utils/resizeObserver.js";
 
 const router = createBrowserRouter([
   {
@@ -206,7 +207,6 @@ const router = createBrowserRouter([
       //===== SETTING =======//
       { path: "/user_decent", element: <UserDecent /> },
       { path: "/user", element: <User /> },
-
     ],
   },
   { path: "/login", element: <Login /> },
@@ -216,6 +216,7 @@ export default function Router() {
   React.useEffect(() => {
     socket.connect();
     reConnect();
+    removeErrorResizeObserver();
   }, []);
   return <RouterProvider router={router} />;
 }
