@@ -4,9 +4,9 @@ import reportWebVitals from "./reportWebVitals";
 
 import Router from "./Router";
 
-import "../src/assets/css/ReactGrid-css/custom.css";
-import "./styles/global.scss";
-import "./index.css";
+// import "../src/assets/css/ReactGrid-css/custom.css";
+// import "./styles/global.scss";
+// import "./index.css";
 import { Provider } from "react-redux";
 import store from "./store";
 import 'react-data-grid/lib/styles.css';
