@@ -85,7 +85,9 @@ const DataGridNew = ({
           </Title>
         ),
       }}
-      defaultColumnOptions={{ sortable: true, resizable: true }}
+
+    //   defaultColumnOptions={{ sortable: true, resizable: true }}
+
     //   sortColumns={sortColumns}
     //   onSortColumnsChange={setSortColumns}
 
