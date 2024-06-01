@@ -413,9 +413,8 @@ const DataGrid = forwardRef(
           }}
           defaultColumnOptions={{
             sortable: true,
-            resizable: true,
-            minWidth: 100,
-            width: "auto",
+            // resizable: true,
+            // minWidth: 100,
           }}
           sortColumns={sortColumns}
           onSortColumnsChange={setSortColumns}
