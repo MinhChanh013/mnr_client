@@ -392,25 +392,25 @@ const DataGrid = forwardRef(
     return (
       <>
         <ReactDataGrid
-          renderers={{
-            noRowsFallback: (
-              <Title
-                level={5}
-                style={{ color: "#818181", gridColumn: "1/-1", margin: "10px" }}
-              >
-                --- Không có dữ liệu ---
-              </Title>
-            ),
-          }}
+          // renderers={{
+          //   noRowsFallback: (
+          //     <Title
+          //       level={5}
+          //       style={{ color: "#818181", gridColumn: "1/-1", margin: "10px" }}
+          //     >
+          //       --- Không có dữ liệu ---
+          //     </Title>
+          //   ),
+          // }}
           ref={reactDataGridRef}
-          className={`rdg-light ${className} ${
-            pagination === "scroll" ? "fill-grid" : ""
-          }`}
-          style={{
-            height: "calc(100% - var(--height-toolbar) - 40px)",
-            maxHeight: maxHeight,
-            ...style,
-          }}
+          // className={`rdg-light ${className} ${
+          //   pagination === "scroll" ? "fill-grid" : ""
+          // }`}
+          // style={{
+          //   height: "calc(100% - var(--height-toolbar) - 40px)",
+          //   maxHeight: maxHeight,
+          //   ...style,
+          // }}
           defaultColumnOptions={{ sortable: true, resizable: true }}
           sortColumns={sortColumns}
           onSortColumnsChange={setSortColumns}
