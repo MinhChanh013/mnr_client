@@ -7,19 +7,17 @@ const DataGridNew = ({
   columns = [],
   className,
   maxHeight = 720,
-  style
+  style,
 }) => {
   const reactDataGridRef = useRef();
   const [sortColumns, setSortColumns] = useState([]);
   const [currentRows, setCurrenRows] = useState([]);
   const [currentPage, setCurrenPage] = useState(1);
 
-
   useEffect(() => {
     setCurrenRows([]);
     setCurrenPage(1);
   }, [rows]);
-
 
   const getComparator = (sortColumn) => {
     switch (sortColumn) {
@@ -48,8 +46,7 @@ const DataGridNew = ({
         };
     }
   };
-  
-  
+
   const sortedRows = useMemo(() => {
     if (sortColumns.length === 0) return currentRows;
 
@@ -65,7 +62,6 @@ const DataGridNew = ({
     });
   }, [currentRows, sortColumns]);
 
-
   return (
     <ReactDataGrid
       renderers={{
@@ -78,13 +74,13 @@ const DataGridNew = ({
           </Title>
         ),
       }}
-      ref={reactDataGridRef}
-      className={`rdg-light ${className}`}
-      style={{
-        height: "calc(100% - var(--height-toolbar) - 40px)",
-        maxHeight: maxHeight,
-        ...style,
-      }}
+    //   ref={reactDataGridRef}
+    //   className={`rdg-light ${className}`}
+    //   style={{
+    //     height: "calc(100% - var(--height-toolbar) - 40px)",
+    //     maxHeight: maxHeight,
+    //     ...style,
+    //   }}
       defaultColumnOptions={{ sortable: true, resizable: true }}
       sortColumns={sortColumns}
       onSortColumnsChange={setSortColumns}
