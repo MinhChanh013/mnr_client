@@ -415,6 +415,8 @@ const DataGrid = forwardRef(
           sortColumns={sortColumns}
           onSortColumnsChange={setSortColumns}
           rows={sortedRows}
+
+
           columns={columnsCombined}
           selectedRows={selectedRows}
           rowHeight={42}
@@ -424,6 +426,8 @@ const DataGrid = forwardRef(
           onSelectedCellChange={
             typeof onFocus === "function" ? onFocus : () => {}
           }
+
+          
           enableVirtualization
           onFill={handleFill}
           onCopy={handleCopy}
