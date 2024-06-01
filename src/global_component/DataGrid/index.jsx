@@ -403,15 +403,20 @@ const DataGrid = forwardRef(
           //   ),
           // }}
           ref={reactDataGridRef}
-          // className={`rdg-light ${className} ${
-          //   pagination === "scroll" ? "fill-grid" : ""
-          // }`}
-          // style={{
-          //   height: "calc(100% - var(--height-toolbar) - 40px)",
-          //   maxHeight: maxHeight,
-          //   ...style,
-          // }}
-          defaultColumnOptions={{ sortable: true, resizable: true }}
+          className={`rdg-light ${className} ${
+            pagination === "scroll" ? "fill-grid" : ""
+          }`}
+          style={{
+            height: "calc(100% - var(--height-toolbar) - 40px)",
+            maxHeight: maxHeight,
+            ...style,
+          }}
+          defaultColumnOptions={{
+            sortable: true,
+            resizable: true,
+            minWidth: 100,
+            width: "auto",
+          }}
           sortColumns={sortColumns}
           onSortColumnsChange={setSortColumns}
           rows={sortedRows}
